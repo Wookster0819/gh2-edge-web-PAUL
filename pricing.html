@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index,follow" />
+  <title>GH2 EDGE™ — Choose Your Plan</title>
+  <meta name="description" content="Turn your retirement ballpark into a real plan. Pick the GH2 EDGE™ tier that fits how often you want to revisit your numbers." />
+  <style>
+    :root {
+      /* ===== THEME: Trust (default) ===== */
+      --brand-blue: #1B4F72;
+      --brand-blue-dark: #143A56;
+      --bg: #F7F9FB;
+      --card-bg: #FFFFFF;
+      --text: #1A2733;
+      --text-muted: #5A6B7B;
+      --text-faint: #8A98A8;
+      --border: #D6DDE4;
+      --shadow: 0 1px 3px rgba(20,40,60,0.06), 0 4px 12px rgba(20,40,60,0.05);
+      --card-radius: 14px;
+      --button-radius: 10px;
+      --field-radius: 10px;
+      --chip-radius: 999px;
+      --hero-grad-start: #143A56;
+      --hero-grad-end: #1B4F72;
+      --hero-accent: #FFD96B;
+      --section-accent: #1B4F72;
+      --green: #1F7A4D;
+      --green-bg: #E8F4EC;
+      --amber: #B8860B;
+      --amber-bg: #FFF8E6;
+      --red: #B33A3A;
+    }
+    body[data-theme="warm"] {
+      --brand-blue: #0D5C63; --brand-blue-dark: #084043; --bg: #FAF6F0; --card-bg: #FFFEFB;
+      --text: #2A2520; --text-muted: #6B5F52; --text-faint: #A89B8B; --border: #E8DFD3;
+      --shadow: 0 2px 4px rgba(80,50,20,0.05), 0 8px 20px rgba(80,50,20,0.06);
+      --card-radius: 18px; --button-radius: 14px; --field-radius: 12px;
+      --hero-grad-start: #084043; --hero-grad-end: #0D5C63; --hero-accent: #F5C16C; --section-accent: #E8826B;
+      --green: #2A7A5C; --green-bg: #EAF3EE; --amber: #B8860B; --amber-bg: #FFF5E1;
+    }
+    body[data-theme="fresh"] {
+      --brand-blue: #06A77D; --brand-blue-dark: #048963; --bg: #F4FAF7; --card-bg: #FFFFFF;
+      --text: #1A2E2A; --text-muted: #5A6F6A; --text-faint: #93A6A1; --border: #DCE9E4;
+      --shadow: 0 2px 6px rgba(6,167,125,0.05), 0 10px 24px rgba(6,167,125,0.08);
+      --card-radius: 22px; --button-radius: 16px; --field-radius: 14px;
+      --hero-grad-start: #048963; --hero-grad-end: #06A77D; --hero-accent: #FFE07A; --section-accent: #48ACF0;
+    }
+    body[data-theme="calm"] {
+      --brand-blue: #5B6EAE; --brand-blue-dark: #3F5191; --bg: #F6F4EE; --card-bg: #FFFFFF;
+      --text: #2C2E3A; --text-muted: #6E707F; --text-faint: #A0A2B0; --border: #E1DFD7;
+      --shadow: 0 1px 2px rgba(60,60,80,0.04), 0 12px 32px rgba(60,60,80,0.06);
+      --card-radius: 16px; --button-radius: 12px; --field-radius: 12px;
+      --hero-grad-start: #3F5191; --hero-grad-end: #5B6EAE; --hero-accent: #F2C28B; --section-accent: #D4A5A5;
+    }
+
+    /* Theme selector */
+    .theme-bar {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px;
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+    }
+    .theme-bar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+    .theme-bar-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
+    .theme-btn {
+      padding: 6px 14px; font-size: 13px; font-weight: 600;
+      border: 1px solid var(--border); background: #FFF; color: var(--text);
+      border-radius: 999px; cursor: pointer; font-family: inherit; transition: all 0.18s ease;
+    }
+    .theme-btn:hover { border-color: var(--brand-blue); }
+    .theme-btn[aria-pressed="true"] { background: var(--brand-blue); color: #FFF; border-color: var(--brand-blue); }
+    .theme-btn .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.08); }
+    .theme-btn[data-theme=""] .swatch      { background: #1B4F72; }
+    .theme-btn[data-theme="warm"] .swatch  { background: #0D5C63; }
+    .theme-btn[data-theme="fresh"] .swatch { background: #06A77D; }
+    .theme-btn[data-theme="calm"] .swatch  { background: #5B6EAE; }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 48px; }
+    header { text-align: center; margin-bottom: 32px; }
+    .brand { font-size: 13px; letter-spacing: 0.12em; color: var(--brand-blue); font-weight: 600; text-transform: uppercase; }
+    h1 { font-size: 32px; line-height: 1.15; margin: 8px 0 6px; color: var(--text); font-weight: 700; letter-spacing: -0.01em; }
+    .sub { color: var(--text-muted); font-size: 16px; margin: 0 auto; max-width: 64ch; }
+
+    /* Result teaser card (carried over from ballpark.html sessionStorage) */
+    #teaser {
+      max-width: 720px; margin: 0 auto 32px;
+      background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: var(--card-radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    #teaser.empty { display: none; }
+    .teaser-hero {
+      background: linear-gradient(135deg, var(--hero-grad-start), var(--hero-grad-end));
+      color: #FFF; padding: 26px 28px 22px;
+    }
+    .teaser-eyebrow {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      font-weight: 700; opacity: 0.85; margin-bottom: 6px;
+    }
+    .teaser-eyebrow strong { color: var(--hero-accent); }
+    .teaser-label { font-size: 13px; font-weight: 600; opacity: 0.92; margin-bottom: 4px; }
+    .teaser-value {
+      font-size: 48px; font-weight: 800; line-height: 1;
+      letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+      margin: 4px 0 10px;
+    }
+    .teaser-value.small { font-size: 24px; }
+    .teaser-tagline { font-size: 13px; opacity: 0.85; line-height: 1.45; max-width: 52ch; }
+    .teaser-row {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 14px;
+      padding: 14px 28px; background: var(--bg);
+      border-top: 1px solid var(--border);
+    }
+    .tier-pill {
+      display: inline-block; padding: 7px 14px; border-radius: var(--chip-radius);
+      font-size: 13px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #FFF;
+    }
+    .tier-pill.well_funded { background: var(--green); }
+    .tier-pill.conservative { background: #2E7D8F; }
+    .tier-pill.moderate { background: var(--amber); }
+    .tier-pill.aggressive { background: #C9540B; }
+    .tier-pill.extremely_aggressive { background: var(--red); }
+    .teaser-outcome { font-size: 13px; font-weight: 600; color: var(--text); }
+    .teaser-outcome.good { color: var(--green); }
+    .teaser-outcome.bad { color: var(--red); }
+
+    .back-link {
+      display: inline-block; font-size: 13px; font-weight: 600;
+      color: var(--brand-blue); text-decoration: none;
+      padding: 8px 14px; border: 1px solid var(--border); border-radius: var(--button-radius);
+      background: var(--card-bg);
+    }
+    .back-link:hover { background: var(--brand-blue); color: #FFF; border-color: var(--brand-blue); }
+    .teaser-row-actions { margin-left: auto; }
+
+    /* No-teaser fallback */
+    #ballparkPrompt {
+      max-width: 720px; margin: 0 auto 32px;
+      padding: 22px 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      display: none; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    #ballparkPrompt.visible { display: flex; }
+    #ballparkPrompt .pp-text { font-size: 15px; color: var(--text); }
+
+    /* ===== Pricing section ===== */
+    .pricing-intro { text-align: center; margin: 8px auto 24px; max-width: 60ch; }
+    .pricing-intro h2 { font-size: 22px; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.01em; }
+    .pricing-intro p { color: var(--text-muted); margin: 0; font-size: 15px; }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+      align-items: stretch;
+      margin: 24px 0 32px;
+    }
+    .tier-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding: 28px 26px 26px;
+      display: flex; flex-direction: column;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+    .tier-card:hover { transform: translateY(-2px); box-shadow: 0 4px 14px rgba(20,40,60,0.08), 0 16px 40px rgba(20,40,60,0.08); }
+    .tier-card.popular {
+      border: 2px solid var(--brand-blue);
+      box-shadow: 0 4px 12px rgba(27,79,114,0.10), 0 16px 36px rgba(27,79,114,0.10);
+    }
+    .tier-badge {
+      position: absolute; top: -12px; right: 18px;
+      background: var(--brand-blue); color: #FFF;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 999px;
+    }
+    .tier-name { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+    .tier-tagline { font-size: 13px; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4; min-height: 36px; }
+    .tier-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
+    .tier-price-amount { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
+    .tier-price-unit { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+    .tier-cadence { font-size: 12px; color: var(--text-faint); margin-top: -10px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .tier-features { list-style: none; padding: 0; margin: 0 0 22px; flex: 1; }
+    .tier-features li {
+      padding: 8px 0 8px 26px; position: relative;
+      font-size: 14px; color: var(--text);
+      border-bottom: 1px solid var(--border); line-height: 1.45;
+    }
+    .tier-features li:last-child { border-bottom: none; }
+    .tier-features li::before {
+      content: '';
+      position: absolute; left: 0; top: 13px;
+      width: 14px; height: 14px;
+      background: var(--brand-blue);
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' fill='%23000'/%3E%3C/svg%3E") center/contain no-repeat;
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' fill='%23000'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+    .tier-cta {
+      display: block; text-align: center;
+      padding: 13px 16px; font-size: 15px; font-weight: 700;
+      border-radius: var(--button-radius); cursor: pointer;
+      text-decoration: none; transition: all 0.18s ease;
+      font-family: inherit;
+    }
+    .tier-cta.primary {
+      background: var(--brand-blue); color: #FFF; border: 1.5px solid var(--brand-blue);
+    }
+    .tier-cta.primary:hover { background: var(--brand-blue-dark); border-color: var(--brand-blue-dark); }
+    .tier-cta.secondary {
+      background: var(--card-bg); color: var(--brand-blue); border: 1.5px solid var(--brand-blue);
+    }
+    .tier-cta.secondary:hover { background: var(--brand-blue); color: #FFF; }
+
+    /* Tier value-block + value/cost ratio */
+    .tier-value-block {
+      background: linear-gradient(135deg, var(--hero-grad-start), var(--hero-grad-end));
+      color: #FFF;
+      padding: 16px 18px;
+      border-radius: var(--field-radius);
+      margin: 4px 0 14px;
+    }
+    .tier-value-label {
+      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+      font-weight: 700; opacity: 0.85;
+    }
+    .tier-value-amount {
+      font-size: 28px; font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin: 4px 0 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .tier-value-note {
+      font-size: 12px; opacity: 0.9; line-height: 1.4;
+    }
+    .tier-ratio {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 10px 0; margin-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .tier-ratio-label {
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 600; color: var(--text-muted);
+    }
+    .tier-ratio-value {
+      font-size: 22px; font-weight: 800; color: var(--brand-blue);
+      letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+    }
+
+    /* "What we do that nobody else does" comparison table */
+    .vs-section { margin: 32px 0 24px; }
+    .vs-title {
+      text-align: center; font-size: 24px; font-weight: 700;
+      letter-spacing: -0.01em; margin: 0 0 18px;
+    }
+    .vs-table-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--border); border-radius: var(--card-radius);
+      box-shadow: var(--shadow); overflow: hidden;
+    }
+    .vs-table { width: 100%; border-collapse: collapse; }
+    .vs-table th {
+      font-size: 12px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 14px 18px; text-align: left;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+    .vs-table th.col-edge,
+    .vs-table th.col-other { text-align: center; width: 18%; }
+    .vs-table th.col-edge { color: var(--brand-blue); }
+    .vs-table td {
+      padding: 14px 18px; font-size: 15px; color: var(--text);
+      border-bottom: 1px solid var(--border); line-height: 1.4;
+    }
+    .vs-table tr:last-child td { border-bottom: none; }
+    .vs-table td.check, .vs-table td.cross {
+      text-align: center; font-size: 22px; font-weight: 800;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    .vs-table td.check { color: var(--green); }
+    .vs-table td.cross { color: var(--red); opacity: 0.55; }
+    .vs-footnote {
+      font-size: 12px; color: var(--text-muted); line-height: 1.6;
+      margin: 16px 4px 0; font-style: italic;
+    }
+
+    /* B2B section */
+    .b2b-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      padding: 24px 28px;
+      margin-top: 8px;
+    }
+    .b2b-card h3 {
+      margin: 0 0 8px; font-size: 16px; font-weight: 700;
+      color: var(--text);
+    }
+    .b2b-card p { margin: 0 0 14px; color: var(--text-muted); font-size: 14px; line-height: 1.55; }
+    .b2b-tiers {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+    }
+    .b2b-tier {
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      border-radius: var(--field-radius);
+      background: var(--bg);
+    }
+    .b2b-tier h4 { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+    .b2b-tier .price { font-size: 14px; font-weight: 700; color: var(--brand-blue); margin: 0 0 8px; }
+    .b2b-tier p { font-size: 13px; color: var(--text-muted); margin: 0 0 10px; line-height: 1.5; }
+    .b2b-tier a { font-size: 13px; font-weight: 600; color: var(--brand-blue); text-decoration: none; }
+    .b2b-tier a:hover { text-decoration: underline; }
+
+    footer {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    footer p { margin: 0 0 8px; }
+    footer p:last-child { margin-bottom: 0; }
+
+    @media (max-width: 880px) {
+      .tier-grid { grid-template-columns: 1fr; }
+      .b2b-tiers { grid-template-columns: 1fr; }
+      .tier-card.popular { transform: none; }
+      h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="theme-bar" role="region" aria-label="Design preview">
+    <span class="theme-bar-label">Design preview</span>
+    <div class="theme-bar-buttons" role="group" aria-label="Pick a theme">
+      <button type="button" class="theme-btn" data-theme=""      aria-pressed="false"><span class="swatch"></span>Trust</button>
+      <button type="button" class="theme-btn" data-theme="warm"  aria-pressed="false"><span class="swatch"></span>Warm</button>
+      <button type="button" class="theme-btn" data-theme="fresh" aria-pressed="false"><span class="swatch"></span>Fresh</button>
+      <button type="button" class="theme-btn" data-theme="calm"  aria-pressed="false"><span class="swatch"></span>Calm</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">GH2 EDGE&trade;</div>
+      <h1>You have your number. Now act on it.</h1>
+      <p class="sub">Three tiers, each running on the same patent-pending engine. Pick the cadence that fits your life.</p>
+    </header>
+
+    <!-- Carried over from ballpark.html via sessionStorage -->
+    <div id="teaser" class="empty">
+      <div class="teaser-hero">
+        <div class="teaser-eyebrow"><strong>GH2 EDGE&trade;</strong> &middot; your ballpark result</div>
+        <div class="teaser-label">Required Portfolio Return</div>
+        <div class="teaser-value" id="teaserIrr"></div>
+        <div class="teaser-tagline" id="teaserTagline"></div>
+      </div>
+      <div class="teaser-row">
+        <div id="teaserPill" class="tier-pill"></div>
+        <div class="teaser-outcome" id="teaserOutcome"></div>
+        <div class="teaser-row-actions">
+          <a href="/ballpark.html" class="back-link">Adjust inputs</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="ballparkPrompt">
+      <div class="pp-text">Start with the ballpark check to see your Required Portfolio Return, then pick a tier.</div>
+      <a href="/ballpark.html" class="back-link">Take the ballpark &rarr;</a>
+    </div>
+
+    <div class="pricing-intro">
+      <h2>Pick your tier</h2>
+      <p>All consumer tiers include the full federal + state + Medicare tax math, year-by-year projections, and a downloadable PDF plan.</p>
+    </div>
+
+    <div class="tier-grid">
+      <!-- Jae's Corner -->
+      <div class="tier-card">
+        <h3 class="tier-name">Jae&rsquo;s Corner</h3>
+        <div class="tier-price">
+          <span class="tier-price-amount">$50</span>
+          <span class="tier-price-unit">/ year</span>
+        </div>
+        <div class="tier-cadence">Weekly newsletter + annual rerun</div>
+
+        <div class="tier-value-block">
+          <div class="tier-value-label">What you save this year</div>
+          <div class="tier-value-amount">Unbounded</div>
+          <div class="tier-value-note">One article that helps you dodge one tax mistake pays for 100 years.</div>
+        </div>
+
+        <div class="tier-ratio">
+          <span class="tier-ratio-label">Value for what you pay</span>
+          <span class="tier-ratio-value">&infin;</span>
+        </div>
+
+        <ul class="tier-features">
+          <li>Jae&rsquo;s working notes on the tax law and rule changes that matter</li>
+          <li>One EDGE recommendation per year, run on your numbers</li>
+          <li><strong>Best for:</strong> anyone retired, planning to retire, or curious</li>
+        </ul>
+
+        <a href="mailto:jae@gh2benefits.com?subject=Jae%27s%20Corner%20inquiry" class="tier-cta secondary">Get Jae&rsquo;s Corner</a>
+      </div>
+
+      <!-- GH2 EDGE -->
+      <div class="tier-card popular">
+        <span class="tier-badge">Most popular</span>
+        <h3 class="tier-name">GH2 EDGE&trade;</h3>
+        <div class="tier-price">
+          <span class="tier-price-amount">$250</span>
+          <span class="tier-price-unit">/ year</span>
+        </div>
+        <div class="tier-cadence">Quarterly + every life event</div>
+
+        <div class="tier-value-block">
+          <div class="tier-value-label">What you save this year</div>
+          <div class="tier-value-amount">~$10,000</div>
+          <div class="tier-value-note">100 bp of Required IRR saved on a $1M household. Math is public.</div>
+        </div>
+
+        <div class="tier-ratio">
+          <span class="tier-ratio-label">Value for what you pay</span>
+          <span class="tier-ratio-value">40&times;</span>
+        </div>
+
+        <ul class="tier-features">
+          <li>All 80 retirement strategies ranked for your household</li>
+          <li>Email when the answer changes (market, tax law, life event)</li>
+          <li><strong>Best for:</strong> $500K&ndash;$2M households with life events ahead</li>
+        </ul>
+
+        <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry" class="tier-cta primary">Get GH2 EDGE&trade;</a>
+      </div>
+
+      <!-- GH2 EDGE Ultra -->
+      <div class="tier-card">
+        <h3 class="tier-name">GH2 EDGE&trade; Ultra</h3>
+        <div class="tier-price">
+          <span class="tier-price-amount">$2,500</span>
+          <span class="tier-price-unit">/ year</span>
+        </div>
+        <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
+
+        <div class="tier-value-block">
+          <div class="tier-value-label">What you save this year</div>
+          <div class="tier-value-amount">~$30,000</div>
+          <div class="tier-value-note">150 bp on a $2M household, monitored continuously. Itemized as it happens.</div>
+        </div>
+
+        <div class="tier-ratio">
+          <span class="tier-ratio-label">Value for what you pay</span>
+          <span class="tier-ratio-value">12&times;</span>
+        </div>
+
+        <ul class="tier-features">
+          <li>All 80 strategies + 4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</li>
+          <li>Direct access to Jae once a year</li>
+          <li><strong>Best for:</strong> $2M+ households with IRMAA and SECURE-Act-heir-tax exposure</li>
+        </ul>
+
+        <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20Ultra%20inquiry" class="tier-cta secondary">Get GH2 EDGE&trade; Ultra</a>
+      </div>
+    </div>
+
+    <!-- What we do that nobody else does -->
+    <section class="vs-section">
+      <h2 class="vs-title">What we do that nobody else does</h2>
+      <div class="vs-table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th class="col-edge">GH2 EDGE&trade;</th>
+              <th class="col-other">Everyone else</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ranks every retirement strategy for <strong>your</strong> household</td>
+              <td class="check">&#10003;</td>
+              <td class="cross">&#10007;</td>
+            </tr>
+            <tr>
+              <td>Tells you the return your portfolio actually needs</td>
+              <td class="check">&#10003;</td>
+              <td class="cross">&#10007;</td>
+            </tr>
+            <tr>
+              <td>Adjusts for <strong>your</strong> state, health, and life events</td>
+              <td class="check">&#10003;</td>
+              <td class="cross">&#10007;</td>
+            </tr>
+            <tr>
+              <td>Updates the moment the answer changes</td>
+              <td class="check">&#10003;</td>
+              <td class="cross">&#10007;</td>
+            </tr>
+            <tr>
+              <td>Patent-pending</td>
+              <td class="check">&#10003;</td>
+              <td class="cross">&#10007;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="vs-footnote">
+        <em>Everyone else = Target Date Funds (Vanguard, Fidelity, T.&nbsp;Rowe Price, BlackRock, State Street, Schwab, American Funds), traditional human advisors (running eMoney, MoneyGuidePro, RightCapital, NaviPlan, Holistiplan), wirehouses (Merrill, Morgan Stanley, UBS, Wells&nbsp;Fargo), robo-advisors (Betterment, Wealthfront, Schwab Intelligent Portfolios, Vanguard Digital Advisor, Fidelity Go), free planners (Personal Capital&nbsp;/&nbsp;Empower, Mint successors, Boldin, NewRetirement, ProjectionLab), recordkeeper tools (Fidelity NetBenefits, Empower, Principal, Voya, Alight, TIAA), and frontier conversational AI (ChatGPT, Claude, Gemini, Copilot, Grok).</em>
+      </p>
+    </section>
+
+    <div class="b2b-card">
+      <h3>For advisors, plan sponsors, and enterprises</h3>
+      <p>If you serve households at scale &mdash; an RIA practice, broker-dealer, recordkeeper, carrier, asset manager, or large employer plan &mdash; the consumer tiers aren&rsquo;t the right fit. We offer two B2B configurations.</p>
+      <div class="b2b-tiers">
+        <div class="b2b-tier">
+          <h4>GH2 EDGE&trade; Advisor</h4>
+          <p class="price">Contact for pricing</p>
+          <p>For RIAs and brokers. Includes the Strategy Builder, grid-scored book review, and the full client-facing planner experience for unlimited households.</p>
+          <a href="mailto:traci@gh2benefits.com?subject=GH2%20EDGE%20Advisor%20inquiry">Contact us &rarr;</a>
+        </div>
+        <div class="b2b-tier">
+          <h4>GH2 EDGE&trade; Enterprise</h4>
+          <p class="price">Contact for pricing</p>
+          <p>Exclusive license for one firm in a vertical. Full grid access, the 437-parameter dashboard, bespoke regime customization, three-year minimum commitment.</p>
+          <a href="mailto:traci@gh2benefits.com?subject=GH2%20EDGE%20Enterprise%20inquiry">Contact us &rarr;</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Jae&rsquo;s Corner, 80+ for GH2 EDGE&trade;, 80+ proprietary for Ultra), how often the plan is rerun (annual / quarterly / continuous), and whether the firm gets the Strategy Builder and full grid access.</p>
+      <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      // ===== Theme selector (shared with ballpark.html via localStorage) =====
+      var THEME_KEY = 'gh2_ballpark_theme';
+      var savedTheme = '';
+      try { savedTheme = localStorage.getItem(THEME_KEY) || ''; } catch (e) {}
+      if (savedTheme && ['warm', 'fresh', 'calm'].indexOf(savedTheme) !== -1) {
+        document.body.setAttribute('data-theme', savedTheme);
+      }
+      var themeBtns = document.querySelectorAll('.theme-btn');
+      themeBtns.forEach(function (btn) {
+        var t = btn.getAttribute('data-theme') || '';
+        btn.setAttribute('aria-pressed', t === savedTheme ? 'true' : 'false');
+        btn.addEventListener('click', function () {
+          var newTheme = btn.getAttribute('data-theme') || '';
+          if (newTheme) document.body.setAttribute('data-theme', newTheme);
+          else document.body.removeAttribute('data-theme');
+          try { localStorage.setItem(THEME_KEY, newTheme); } catch (e) {}
+          themeBtns.forEach(function (b) {
+            b.setAttribute('aria-pressed', (b.getAttribute('data-theme') || '') === newTheme ? 'true' : 'false');
+          });
+        });
+      });
+
+      // ===== Restore ballpark result from sessionStorage =====
+      var RESULT_KEY = 'gh2_ballpark_last_result';
+      var raw = null;
+      try { raw = sessionStorage.getItem(RESULT_KEY); } catch (e) {}
+      var data = null;
+      if (raw) { try { data = JSON.parse(raw); } catch (e) { data = null; } }
+
+      var teaser = document.getElementById('teaser');
+      var prompt = document.getElementById('ballparkPrompt');
+
+      var TIER_LABEL = {
+        well_funded: 'Well Funded', conservative: 'On Track', moderate: 'Feasible',
+        aggressive: 'Stretch', extremely_aggressive: 'At Risk'
+      };
+      function fmt$(n) { return Number.isFinite(n) ? ('$' + Math.round(n).toLocaleString('en-US')) : '$0'; }
+
+      if (data && data.result) {
+        var r = data.result;
+        var inp = data.inputs || {};
+        var retAge = parseInt(inp.retirementAge, 10) || 65;
+        var yearsOfRet = (r.assumptions && r.assumptions.yearsOfRetirement) || 25;
+        var endAge = retAge + yearsOfRet;
+
+        var irrEl = document.getElementById('teaserIrr');
+        var tagEl = document.getElementById('teaserTagline');
+        if (typeof r.requiredIRR === 'number' && r.requiredIRR < 0) {
+          irrEl.textContent = 'Any positive return';
+          irrEl.classList.add('small');
+          tagEl.textContent = 'Your projected balance covers ' + yearsOfRet +
+            ' years of retirement spending at any reasonable rate of return.';
+        } else {
+          irrEl.textContent = (r.requiredIRR * 100).toFixed(2) + '%';
+          tagEl.textContent = 'This is the return your portfolio has to earn every year of retirement for your plan to last to age ' + endAge + '.';
+        }
+
+        var pill = document.getElementById('teaserPill');
+        pill.className = 'tier-pill ' + r.feasibilityRating;
+        pill.textContent = TIER_LABEL[r.feasibilityRating] || r.feasibilityRating;
+
+        var outc = document.getElementById('teaserOutcome');
+        if (r.depletionAge && r.depletionAge < endAge) {
+          outc.className = 'teaser-outcome bad';
+          outc.textContent = 'Savings run out at age ' + r.depletionAge + '.';
+        } else {
+          outc.className = 'teaser-outcome good';
+          outc.textContent = 'Savings last through age ' + endAge +
+            (r.terminalBalance > 0 ? ' (' + fmt$(r.terminalBalance) + ' remaining).' : '.');
+        }
+
+        teaser.classList.remove('empty');
+      } else {
+        prompt.classList.add('visible');
+      }
+    })();
+  </script>
+</body>
+</html>

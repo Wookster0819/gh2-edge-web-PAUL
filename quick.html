@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#06080C" />
+  <title>EDGE — Am I On Track?</title>
+  <meta name="description" content="Five questions. Three numbers. About 10 seconds. A first look at whether your retirement savings will last." />
+  <style>
+    :root {
+      --bg: #06080C;
+      --card-bg: #11161F;
+      --card-bg-2: #161C27;
+      --card-border: rgba(255,255,255,0.06);
+      --text: #FFFFFF;
+      --text-muted: #8A98A8;
+      --text-faint: #5A6B7B;
+
+      --icon-purple: #A78BFA;
+      --icon-purple-bg: rgba(167,139,250,0.14);
+      --icon-blue: #60A5FA;
+      --icon-blue-bg: rgba(96,165,250,0.14);
+      --icon-green: #34D399;
+      --icon-green-bg: rgba(52,211,153,0.14);
+
+      --red: #FF3B30;
+      --red-bg: rgba(255,59,48,0.16);
+      --green: #4ADE80;
+      --green-bg: rgba(74,222,128,0.16);
+      --amber: #FBBF24;
+      --amber-bg: rgba(251,191,36,0.16);
+
+      --cta-grad: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
+
+      --field-radius: 16px;
+      --button-radius: 14px;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Text", Roboto, Inter, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .wrap { max-width: 480px; margin: 0 auto; padding: 24px 18px 48px; }
+
+    /* ==== HEADER ROW ==== */
+    .top {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      gap: 12px; margin-bottom: 28px;
+    }
+    .wordmark {
+      font-size: 16px; font-weight: 800; letter-spacing: 0.18em;
+      color: var(--text);
+    }
+    .secure-chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card-bg-2); border: 1px solid var(--card-border);
+      padding: 8px 12px; border-radius: 10px;
+      font-size: 11px; line-height: 1.3; color: var(--text-muted);
+      text-align: left;
+    }
+    .secure-chip svg { flex: none; width: 16px; height: 16px; opacity: 0.85; }
+
+    /* ==== HEADLINE ==== */
+    h1 {
+      font-size: 36px; line-height: 1.1; letter-spacing: -0.02em;
+      font-weight: 800; margin: 6px 0 10px;
+    }
+    .sub { color: var(--text-muted); font-size: 16px; margin: 0 0 22px; }
+
+    /* ==== FORM ROWS ==== */
+    form { display: block; }
+    .row {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--field-radius);
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      display: flex; align-items: center; gap: 12px;
+      transition: background 0.18s ease, border-color 0.18s ease;
+    }
+    .row:focus-within { background: var(--card-bg-2); border-color: rgba(167,139,250,0.35); }
+    .row.with-sub { align-items: flex-start; padding: 12px 14px 12px; }
+
+    .ico {
+      flex: none;
+      width: 34px; height: 34px;
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ico svg { width: 18px; height: 18px; }
+    .ico.purple { background: var(--icon-purple-bg); color: var(--icon-purple); }
+    .ico.blue   { background: var(--icon-blue-bg);   color: var(--icon-blue); }
+    .ico.green  { background: var(--icon-green-bg);  color: var(--icon-green); }
+
+    .row-main { flex: 1 1 0; min-width: 0; }
+    .row-label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; overflow-wrap: break-word; }
+    .row-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; overflow-wrap: break-word; }
+
+    .row-control {
+      flex: 0 0 auto;
+      margin-left: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .row-value {
+      font-size: 15px; font-weight: 700; color: var(--text);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+      white-space: nowrap;
+    }
+
+    /* Inputs on the right; transparent for value-like display.
+       Selector covers both legacy type="number" and the iOS-autofill-
+       hardened type="text" inputmode="numeric" pattern. */
+    .row input,
+    .row select {
+      background: transparent;
+      border: 0;
+      color: var(--text);
+      font: inherit;
+      font-size: 15px; font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+      text-align: right;
+      outline: none;
+      padding: 2px 0;
+      min-width: 0;
+    }
+    .row input#age { width: 38px; }
+    .row input#totalSavings, .row input#annualExpenses { width: 96px; }
+    .row select { -webkit-appearance: none; appearance: none; padding-right: 4px; cursor: pointer; width: 92px; }
+
+    /* Hide any native spinner Safari/Edge may add */
+    .row input::-webkit-outer-spin-button,
+    .row input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+    .row select option { background: var(--card-bg-2); color: var(--text); }
+    .row input::placeholder { color: var(--text-faint); }
+
+    /* The chevron (decorative) */
+    .chev { flex: none; color: var(--text-faint); }
+    .chev svg { width: 16px; height: 16px; }
+
+    /* Filing status segmented inline picker */
+    .seg { display: inline-flex; background: var(--card-bg-2); border-radius: 8px; padding: 2px; }
+    .seg button {
+      background: transparent; border: 0; color: var(--text-muted);
+      font: inherit; font-size: 13px; font-weight: 600;
+      padding: 5px 10px; border-radius: 6px; cursor: pointer;
+    }
+    .seg button[aria-pressed="true"] {
+      background: rgba(167,139,250,0.18);
+      color: #DDD6FE;
+    }
+
+    /* ==== CTA ==== */
+    .submit {
+      margin-top: 18px; width: 100%;
+      padding: 16px;
+      font-size: 16px; font-weight: 700; color: #FFF;
+      background: var(--cta-grad);
+      border: 0; border-radius: var(--button-radius);
+      cursor: pointer;
+      font-family: inherit;
+      letter-spacing: 0.01em;
+      box-shadow: 0 8px 32px rgba(139,92,246,0.25);
+      transition: transform 0.12s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+    .submit:hover { transform: translateY(-1px); box-shadow: 0 12px 36px rgba(139,92,246,0.35); }
+    .submit:active { transform: translateY(0); }
+    .submit:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .err { color: var(--red); font-size: 14px; margin-top: 12px; min-height: 18px; }
+
+    /* ==== ARROW DOWN ==== */
+    .arrow-down {
+      display: flex; justify-content: center;
+      margin: 22px 0 14px;
+    }
+    .arrow-down-circle {
+      width: 38px; height: 38px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+    }
+    .arrow-down-circle svg { width: 18px; height: 18px; }
+
+    /* ==== RESULT CARD ==== */
+    #result {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--field-radius);
+      padding: 22px 20px 20px;
+    }
+    #result.visible { display: block; }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    /* Ring */
+    .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .ring { position: relative; width: 138px; height: 138px; }
+    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 11; }
+    .ring-fill {
+      fill: none; stroke-width: 11; stroke-linecap: round;
+      transition: stroke-dashoffset 1.1s cubic-bezier(0.22, 1, 0.36, 1), stroke 0.4s ease;
+      filter: drop-shadow(0 0 10px currentColor);
+    }
+    .ring-fill.at-risk { stroke: var(--red); color: var(--red); }
+    .ring-fill.on-track { stroke: var(--green); color: var(--green); }
+    .ring-fill.middle { stroke: var(--amber); color: var(--amber); }
+
+    .ring-center {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ring-pct {
+      font-size: 26px; font-weight: 800; letter-spacing: -0.02em;
+      font-variant-numeric: tabular-nums;
+    }
+    .ring-pct.small { font-size: 16px; line-height: 1.1; max-width: 110px; text-align: center; }
+    .ring-unit { font-size: 11px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.02em; }
+
+    .status-pill {
+      display: inline-block;
+      padding: 6px 12px; border-radius: 8px;
+      font-size: 12px; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .status-pill.at-risk { background: var(--red-bg); color: var(--red); }
+    .status-pill.on-track { background: var(--green-bg); color: var(--green); }
+    .status-pill.middle { background: var(--amber-bg); color: var(--amber); }
+
+    .result-right { min-width: 0; }
+    .rr-label {
+      font-size: 12px; color: var(--text-muted);
+      margin-top: 14px;
+    }
+    .rr-value {
+      font-size: 32px; font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.1; margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .rr-value.small { font-size: 22px; }
+    .rr-unit { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+    .result-divider {
+      border: 0; border-top: 1px solid var(--card-border);
+      margin: 18px 0 14px;
+    }
+
+    .outcome-label { font-size: 12px; color: var(--text-muted); margin-bottom: 6px; }
+    .outcome-text { font-size: 16px; font-weight: 600; line-height: 1.35; }
+    .outcome-text.at-risk { color: var(--red); }
+    .outcome-text.on-track { color: var(--green); }
+    .outcome-amount {
+      display: block; font-size: 14px; font-weight: 600; margin-top: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+    .outcome-amount.at-risk { color: var(--red); }
+    .outcome-amount.on-track { color: var(--green); }
+
+    .see-full {
+      display: flex; justify-content: center;
+      margin-top: 20px;
+    }
+    .see-full a {
+      color: #C4B5FD; text-decoration: none; font-weight: 600; font-size: 15px;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .see-full a:hover { color: #DDD6FE; }
+
+    /* ==== HOW TO READ ==== */
+    .how {
+      display: flex; gap: 14px; align-items: flex-start;
+      margin-top: 22px; padding: 16px 8px 4px;
+      font-size: 13px; color: var(--text-muted); line-height: 1.55;
+    }
+    .how svg { flex: none; width: 22px; height: 22px; opacity: 0.55; }
+    .how strong { color: var(--text); font-weight: 700; }
+
+    footer {
+      margin-top: 24px; padding-top: 16px;
+      border-top: 1px solid var(--card-border);
+      font-size: 11px; color: var(--text-faint); line-height: 1.55;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <span class="wordmark">EDGE</span>
+      <div class="secure-chip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/></svg>
+        <span>Secure. Private.<br/>No login required.</span>
+      </div>
+    </div>
+
+    <h1>Am I On Track?</h1>
+    <p class="sub">Five questions. Three numbers.<br/>About 10 seconds.</p>
+
+    <form id="quickForm" novalidate autocomplete="off" data-form-type="other"
+          autocapitalize="off" autocorrect="off" spellcheck="false">
+      <!-- iOS Safari autofill honeypot: absorbs the first autofill attempt
+           before it reaches a real field. Off-screen, not tab-stoppable, not
+           submitted. -->
+      <input type="text" name="username" autocomplete="username"
+             tabindex="-1" aria-hidden="true"
+             style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
+      <input type="password" name="password" autocomplete="current-password"
+             tabindex="-1" aria-hidden="true"
+             style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
+
+      <!-- Age -->
+      <div class="row">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Your age</div>
+        </div>
+        <div class="row-control">
+          <input type="text" id="age" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_age" data-lpignore="true" data-form-type="other"
+            readonly onfocus="this.removeAttribute('readonly')" />
+        </div>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
+      </div>
+
+      <!-- Filing status -->
+      <div class="row">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M3 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M14 21c0-2.5 1.5-4.5 4-4.5s3 2 3 4.5"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Filing status</div>
+        </div>
+        <div class="row-control">
+          <div class="seg" role="group" aria-label="Filing status">
+            <button type="button" data-filing="single" aria-pressed="true">Single</button>
+            <button type="button" data-filing="mfj" aria-pressed="false">Married</button>
+          </div>
+        </div>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
+      </div>
+
+      <!-- State -->
+      <div class="row">
+        <div class="ico blue" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-6.5-7-12a7 7 0 1 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">State</div>
+        </div>
+        <div class="row-control">
+          <select id="state" required
+            autocomplete="new-password" name="qa_state"
+            data-lpignore="true" data-form-type="other"></select>
+        </div>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
+      </div>
+
+      <!-- Savings -->
+      <div class="row with-sub">
+        <div class="ico green" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Total retirement savings</div>
+          <div class="row-sub">All accounts combined &mdash; 401(k), IRA, Roth, taxable, cash.</div>
+        </div>
+        <div class="row-control">
+          <input type="text" id="totalSavings" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="500000"
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_savings" data-lpignore="true" data-form-type="other"
+            readonly onfocus="this.removeAttribute('readonly')" />
+        </div>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
+      </div>
+
+      <!-- Annual spending -->
+      <div class="row with-sub">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="3.5" height="8" rx="1"/><rect x="10" y="9" width="3.5" height="12" rx="1"/><rect x="17" y="5" width="3.5" height="16" rx="1"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Annual spending in retirement</div>
+          <div class="row-sub">How much do you expect to spend per year, in today&rsquo;s dollars?</div>
+        </div>
+        <div class="row-control">
+          <input type="text" id="annualExpenses" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="60000"
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_spending" data-lpignore="true" data-form-type="other"
+            readonly onfocus="this.removeAttribute('readonly')" />
+        </div>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+
+      <!-- Still working? -->
+      <div class="row">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Still working?</div>
+        </div>
+        <div class="seg" role="group" aria-label="Still working">
+          <button type="button" class="seg-btn" data-work="no" aria-pressed="false">No</button>
+          <button type="button" class="seg-btn" data-work="yes" aria-pressed="true">Yes</button>
+        </div>
+      </div>
+
+      <!-- Annual salary (working only) -->
+      <div class="row with-sub work-only" id="salaryRow">
+        <div class="ico green" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Annual salary</div>
+          <div class="row-sub">Your pre-tax pay today. We assume you save about 8% of it.</div>
+        </div>
+        <div class="row-control">
+          <input type="text" id="salary" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="100000"
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_salary" data-lpignore="true" data-form-type="other"
+            readonly onfocus="this.removeAttribute('readonly')" />
+        </div>
+      </div>
+
+      <!-- Retirement age (working only) -->
+      <div class="row with-sub work-only" id="retAgeRow">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Retirement age</div>
+          <div class="row-sub">When do you plan to stop working?</div>
+        </div>
+        <div class="row-control">
+          <input type="text" id="retAge" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_retage" data-lpignore="true" data-form-type="other"
+            readonly onfocus="this.removeAttribute('readonly')" />
+        </div>
+      </div>
+
+      <button type="submit" class="submit" id="submitBtn">Check my plan</button>
+      <div id="formErr" class="err" role="alert" aria-live="polite"></div>
+    </form>
+
+    <div class="arrow-down" id="arrowDown" style="display:none;">
+      <div class="arrow-down-circle">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
+
+    <div id="result" aria-live="polite">
+      <div class="result-grid">
+        <div class="ring-wrap">
+          <div class="ring">
+            <svg viewBox="0 0 180 180" aria-hidden="true">
+              <circle class="ring-track" cx="90" cy="90" r="76"/>
+              <circle class="ring-fill" id="ringFill" cx="90" cy="90" r="76"
+                stroke-dasharray="477.5" stroke-dashoffset="477.5" />
+            </svg>
+            <div class="ring-center">
+              <div class="ring-pct" id="ringPct">&mdash;</div>
+              <div class="ring-unit">per year</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-right">
+          <div id="rightPill" class="status-pill at-risk">&mdash;</div>
+          <div class="rr-label">Required portfolio return</div>
+          <div class="rr-value" id="reqIrr">&mdash;</div>
+          <div class="rr-unit">per year</div>
+          <div class="rr-ss-note" id="ssNote" style="margin-top:8px;font-size:13px;color:var(--text-muted);"></div>
+
+          <hr class="result-divider"/>
+
+          <div class="outcome-label">Plan outcome</div>
+          <div class="outcome-text" id="outcomeText">&mdash;</div>
+        </div>
+      </div>
+
+      <div class="see-full">
+        <a href="/planner.html">See the full plan
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 19 12 13 19"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="how">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      <p style="margin:0;"><strong>How to read this.</strong> The required portfolio return is the annual return your savings need to earn each year for your plan to last to age 95 at the spending level you entered. Lower is safer.</p>
+    </div>
+
+    <footer>
+      <p style="margin:0;">EDGE is a financial analysis tool for educational and informational purposes only. Not investment, tax, or legal advice. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      var STATES = [
+        ['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],
+        ['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],
+        ['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],
+        ['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],
+        ['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],
+        ['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],
+        ['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],
+        ['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],
+        ['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],
+        ['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
+        ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
+      ];
+      var sel = document.getElementById('state');
+      STATES.forEach(function (s) {
+        var opt = document.createElement('option');
+        opt.value = s[0]; opt.textContent = s[1];
+        sel.appendChild(opt);
+      });
+      sel.value = 'FL';
+
+      // Filing status segmented control
+      var filing = 'single';
+      var filingBtns = document.querySelectorAll('[data-filing]');
+      filingBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          filing = btn.getAttribute('data-filing');
+          filingBtns.forEach(function (b) {
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+        });
+      });
+
+      // "Still working?" segmented control — defaults to Yes (working). When Yes,
+      // the salary + retirement-age rows show and are sent to the engine so it
+      // projects savings + ~8% contributions forward to retirement instead of
+      // assuming retire-now. When No, those rows hide and the original
+      // retire-now payload is sent.
+      var working = true;
+      var workBtns = document.querySelectorAll('[data-work]');
+      function syncWorkRows() {
+        document.querySelectorAll('.work-only').forEach(function (el) {
+          el.style.display = working ? '' : 'none';
+        });
+      }
+      workBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          working = btn.getAttribute('data-work') === 'yes';
+          workBtns.forEach(function (b) {
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+          syncWorkRows();
+        });
+      });
+      syncWorkRows();
+
+      function fmt$(n) {
+        if (!Number.isFinite(n)) return '$0';
+        return '$' + Math.round(n).toLocaleString('en-US');
+      }
+      function showError(msg) {
+        document.getElementById('formErr').textContent = msg || '';
+      }
+
+      // Map engine feasibility tier → display bucket
+      // well_funded / conservative          → on-track (green)
+      // moderate                            → middle   (amber)
+      // aggressive / extremely_aggressive    → at-risk  (red)
+      function bucketFor(tier) {
+        if (tier === 'well_funded' || tier === 'conservative') return 'on-track';
+        if (tier === 'moderate') return 'middle';
+        return 'at-risk';
+      }
+      function pillLabelFor(bucket) {
+        if (bucket === 'on-track') return 'ON TRACK';
+        if (bucket === 'middle') return 'FEASIBLE';
+        return 'AT RISK';
+      }
+
+      // Ring sized at r=76 → circumference = 2πr ≈ 477.52
+      var RING_C = 2 * Math.PI * 76;
+
+      function renderResult(data) {
+        var bucket = bucketFor(data.feasibilityRating);
+        var ringFillEl = document.getElementById('ringFill');
+        var ringPctEl = document.getElementById('ringPct');
+        var rightPillEl = document.getElementById('rightPill');
+        var reqIrrEl = document.getElementById('reqIrr');
+        var outcomeTextEl = document.getElementById('outcomeText');
+
+        // Required IRR — same value in the ring center and the right column.
+        var irr = data.requiredIRR;
+        var irrText, ringPctText;
+        if (typeof irr !== 'number') {
+          irrText = '—';
+          ringPctText = '—';
+        } else if (irr < 0) {
+          // Over-funded: any positive return works
+          irrText = 'Any positive return';
+          ringPctText = 'Any positive';
+          reqIrrEl.classList.add('small');
+          ringPctEl.classList.add('small');
+        } else {
+          irrText = (irr * 100).toFixed(2) + '%';
+          ringPctText = irrText;
+          reqIrrEl.classList.remove('small');
+          ringPctEl.classList.remove('small');
+        }
+        ringPctEl.textContent = ringPctText;
+        reqIrrEl.textContent = irrText;
+
+        // Disclose the Social Security assumption already baked into the estimate
+        // (salary-derived bend-point PIA when working, spending-derived when
+        // retired; engine adds the 50% spousal benefit for MFJ on top).
+        var ssNoteEl = document.getElementById('ssNote');
+        if (ssNoteEl) {
+          ssNoteEl.textContent = (Number.isFinite(data.estimatedAnnualSS) && data.estimatedAnnualSS > 0)
+            ? 'Assumes about ' + fmt$(data.estimatedAnnualSS) + '/yr in Social Security.'
+            : '';
+        }
+
+        // Ring fill: percentage of bracket [0, 10%] consumed
+        var rawIrr = (typeof irr === 'number' && irr > 0) ? irr : 0;
+        var rawPct = Math.max(0, Math.min(1, rawIrr / 0.10));
+        var dashOffset = RING_C * (1 - rawPct);
+        // Force a reflow so transition fires from the initial offset
+        ringFillEl.classList.remove('at-risk', 'on-track', 'middle');
+        // Color by bucket
+        ringFillEl.classList.add(bucket);
+        // Set dashoffset (animates due to CSS transition)
+        requestAnimationFrame(function () {
+          ringFillEl.setAttribute('stroke-dashoffset', String(dashOffset));
+        });
+
+        // Status pill (right column only)
+        var pillLabel = pillLabelFor(bucket);
+        rightPillEl.className = 'status-pill ' + bucket;
+        rightPillEl.textContent = pillLabel;
+
+        // Plan outcome
+        outcomeTextEl.className = 'outcome-text ' + bucket;
+        if (data.depletionAge && data.depletionAge < 95) {
+          var shortfallStr = '';
+          if (Number.isFinite(data.terminalBalance) && data.terminalBalance < 0) {
+            shortfallStr = '<span class="outcome-amount at-risk">(' + fmt$(-data.terminalBalance) + ' shortfall)</span>';
+          }
+          outcomeTextEl.innerHTML = 'You may run short of money at age ' + data.depletionAge + '.' + shortfallStr;
+        } else {
+          var remainStr = '';
+          if (Number.isFinite(data.terminalBalance) && data.terminalBalance > 0) {
+            remainStr = '<span class="outcome-amount on-track">(' + fmt$(data.terminalBalance) + ' remaining).</span>';
+          }
+          outcomeTextEl.innerHTML = 'Savings last past age 95 ' + remainStr;
+        }
+
+        // Show + scroll
+        document.getElementById('arrowDown').style.display = 'flex';
+        var result = document.getElementById('result');
+        result.classList.add('visible');
+        result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      document.getElementById('quickForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        showError('');
+
+        var age = parseInt(document.getElementById('age').value, 10);
+        var state = document.getElementById('state').value;
+        var totalSavings = parseFloat(document.getElementById('totalSavings').value);
+        var annualExpenses = parseFloat(document.getElementById('annualExpenses').value);
+
+        if (!Number.isFinite(age) || age < 50 || age > 80) {
+          showError('Enter an age between 50 and 80.'); return;
+        }
+        if (!state) { showError('Choose your state.'); return; }
+        if (!Number.isFinite(totalSavings) || totalSavings < 0) {
+          showError('Enter your total retirement savings.'); return;
+        }
+        if (!Number.isFinite(annualExpenses) || annualExpenses <= 0) {
+          showError('Enter your annual spending.'); return;
+        }
+
+        // "Still working?" — when Yes, read salary + retirement age and let the
+        // engine project savings + contributions forward. When No, send the
+        // original retire-now payload (salary 0, retire at current age).
+        var salaryVal = 0;
+        var retAgeVal = age;
+        var contribRate = 0;
+        if (working) {
+          salaryVal = parseInt(document.getElementById('salary').value, 10);
+          retAgeVal = parseInt(document.getElementById('retAge').value, 10);
+          if (!Number.isFinite(salaryVal) || salaryVal <= 0) {
+            showError('Enter your annual salary, or set Still working to No.'); return;
+          }
+          if (!Number.isFinite(retAgeVal) || retAgeVal < age || retAgeVal > 80) {
+            showError('Enter a retirement age between your current age and 80.'); return;
+          }
+          contribRate = 0.08; // assume ~8% of salary saved (disclosed in the salary sub-label)
+        }
+
+        var btn = document.getElementById('submitBtn');
+        var orig = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Calculating…';
+
+        // Conservative explicit return/inflation defaults so the engine produces
+        // realistic terminal-balance numbers instead of inflating a low-spending
+        // household to absurd nine-figure remaining balances:
+        //   - postRetReturn 4%  (matches EBRI conservative; engine default 6% inflates)
+        //   - postRetInflation 3.5%
+        //   - yearsOfRetirement = max(5, 95 - retirementAge)  → plan to age 95
+        var yorTarget = Math.max(5, 95 - retAgeVal);
+        fetch('/api/optimize-quick', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            mode: 'ballpark',
+            age: age,
+            retirementAge: retAgeVal,
+            filingStatus: filing,
+            state: state,
+            currentSalary: salaryVal,
+            currentSavings: totalSavings,
+            contributionRate: contribRate,
+            spendingProfile: 'custom',
+            customSpending: annualExpenses,
+            monthlyPension: 0,
+            postRetReturn: 0.04,
+            postRetInflation: 0.035,
+            preRetReturn: 0.06,
+            preRetInflation: 0.035,
+            salaryGrowth: 0.035,
+            yearsOfRetirement: yorTarget
+          })
+        }).then(function (r) {
+          if (r.status === 401) {
+            window.location.href = '/login.html?next=' + encodeURIComponent('/quick.html');
+            return null;
+          }
+          return r.json().then(function (j) { return { status: r.status, body: j }; });
+        }).then(function (out) {
+          if (out === null) return;
+          btn.disabled = false;
+          btn.textContent = orig;
+          if (out.status !== 200) {
+            showError((out.body && (out.body.message || out.body.error)) || 'Something went wrong. Try again.');
+            return;
+          }
+          renderResult(out.body);
+        }).catch(function () {
+          btn.disabled = false;
+          btn.textContent = orig;
+          showError('Network error. Please try again.');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
