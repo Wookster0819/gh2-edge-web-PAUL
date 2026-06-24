@@ -69,10 +69,17 @@
 
     /* ==== HEADLINE ==== */
     h1 {
-      font-size: 36px; line-height: 1.1; letter-spacing: -0.02em;
+      font-size: clamp(28px, 8vw, 36px); line-height: 1.1; letter-spacing: -0.02em;
       font-weight: 800; margin: 6px 0 10px;
     }
-    .sub { color: var(--text-muted); font-size: 16px; margin: 0 0 22px; }
+    .sub { color: var(--text-muted); font-size: clamp(15px, 4vw, 16px); margin: 0 0 22px; }
+
+    /* Smallest phones */
+    @media (max-width: 380px) {
+      .wrap { padding: 20px 14px 40px; }
+      .ring { width: 120px; height: 120px; }
+      .result-grid { gap: 10px; }
+    }
 
     /* ==== FORM ROWS ==== */
     form { display: block; }

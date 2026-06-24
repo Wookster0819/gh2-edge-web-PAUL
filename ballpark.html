@@ -184,7 +184,7 @@
     }
     h1.page-title {
       text-align: center;
-      font-size: 44px;
+      font-size: clamp(27px, 5.2vw, 44px);
       font-weight: 700;
       letter-spacing: -0.01em;
       margin: 8px 0 14px;
@@ -194,7 +194,7 @@
     .page-sub {
       text-align: center;
       color: var(--text-dim);
-      font-size: 17px;
+      font-size: clamp(15px, 2.2vw, 17px);
       max-width: 720px;
       margin: 0 auto 36px;
       line-height: 1.55;
@@ -214,6 +214,7 @@
       gap: 22px;
     }
     .form-grid > .span2 { grid-column: span 2; }
+    .spouse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .section-card {
       background: var(--card-bg);
@@ -827,7 +828,7 @@
       .stepper { justify-content: flex-start; overflow-x: auto; }
       .secure-chip { justify-self: flex-start; }
       .wrap { padding: 24px 20px 40px; }
-      h1.page-title, .results-title { font-size: 30px; }
+      .results-title { font-size: 30px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid > .span2 { grid-column: span 1; }
       .profiles { grid-template-columns: repeat(2, 1fr); }
@@ -836,6 +837,21 @@
       .result-readout .result-value { font-size: 64px; }
       .tier-grid { grid-template-columns: 1fr; }
       .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Phones ===== */
+    @media (max-width: 560px) {
+      .topbar { padding: 14px 14px 0; }
+      .stepper .step { padding: 0 12px; font-size: 12.5px; gap: 7px; }
+      .wrap { padding: 20px 14px 36px; }
+      .card { padding: 20px 16px; }
+      .section-card { padding: 18px 16px; }
+      .profiles { gap: 10px; }
+      .profile-card { padding: 16px 8px 14px; }
+      .profile-card .pf-dollars { font-size: 15px; }
+      .result-readout .result-value { font-size: 48px; }
+      .tier-prices { grid-template-columns: 1fr; }
+      .spouse-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -894,7 +910,7 @@
             </div>
             <!-- Spouse fields: hidden by default, revealed on "Married" -->
             <div class="field span2" id="spouseFields" style="display:none;">
-              <div style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="spouse-grid" style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px;">
                 <div class="field" style="margin:0;">
                   <label for="spouseAge" style="font-size:13px;">Spouse&rsquo;s current age</label>
                   <select id="spouseAge" autocomplete="off">
