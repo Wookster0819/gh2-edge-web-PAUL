@@ -184,7 +184,7 @@
     }
     h1.page-title {
       text-align: center;
-      font-size: 44px;
+      font-size: clamp(27px, 5.2vw, 44px);
       font-weight: 700;
       letter-spacing: -0.01em;
       margin: 8px 0 14px;
@@ -194,7 +194,7 @@
     .page-sub {
       text-align: center;
       color: var(--text-dim);
-      font-size: 17px;
+      font-size: clamp(15px, 2.2vw, 17px);
       max-width: 720px;
       margin: 0 auto 36px;
       line-height: 1.55;
@@ -214,6 +214,7 @@
       gap: 22px;
     }
     .form-grid > .span2 { grid-column: span 2; }
+    .spouse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .section-card {
       background: var(--card-bg);
@@ -291,13 +292,18 @@
       position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
       color: var(--text-muted); font-size: 15px; pointer-events: none;
     }
-    .input-with-prefix input { padding-left: 28px; text-align: right; }
+    .input-with-prefix input { padding-left: 28px; text-align: left; }
     .input-with-suffix { position: relative; }
     .input-with-suffix .suffix {
       position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
       color: var(--text-muted); font-size: 14px; pointer-events: none;
     }
-    .input-with-suffix input { padding-right: 30px; text-align: right; }
+    .input-with-suffix input { padding-right: 30px; text-align: left; }
+
+    /* No spinner arrows on number inputs — users type the value */
+    input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
     /* Toggle (Single/Married) */
     .toggle {
@@ -330,6 +336,7 @@
     /* Lifestyle target cards */
     .lifestyle-prompt { font-size: 15px; font-weight: 600; color: var(--text); }
     .lifestyle-sub { font-size: 13px; color: var(--text-muted); margin-top: -6px; }
+    .lifestyle-note { font-size: 11.5px; color: var(--text-faint); margin-top: 2px; line-height: 1.35; }
     .profiles {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -339,7 +346,7 @@
       background: var(--bg-soft);
       border: 1.5px solid var(--border);
       border-radius: 14px;
-      padding: 18px 14px 16px;
+      padding: 18px 14px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -360,13 +367,20 @@
       display: inline-flex; align-items: center; justify-content: center;
       color: var(--text-dim);
     }
-    .profile-card[data-profile="struggling"]  .pf-icon { color: #EC4899; }
+    .profile-card[data-profile="struggling"]  .pf-icon { color: #94A3B8; }
     .profile-card[data-profile="average"]     .pf-icon { color: #60A5FA; }
-    .profile-card[data-profile="comfortable"] .pf-icon { color: #14B8A6; }
+    .profile-card[data-profile="comfortable"] .pf-icon { color: #22C55E; }
     .profile-card[data-profile="affluent"]    .pf-icon { color: #F59E0B; }
     .profile-card .pf-label { font-size: 15px; font-weight: 700; color: var(--text); }
     .profile-card .pf-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
-    .profile-card .pf-dollars { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 4px; }
+    .profile-card .pf-dollars { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 4px; letter-spacing: -0.01em; }
+    .profile-card .pf-name { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.03em; margin-top: 1px; }
+    .profile-card .pf-accent {
+      width: 30px; height: 2px; border-radius: 2px;
+      background: var(--border); margin-top: 4px;
+      transition: background 120ms;
+    }
+    .profile-card[aria-checked="true"] .pf-accent { background: var(--accent-purple); }
     .profile-card .pf-badge {
       font-size: 11.5px;
       font-weight: 700;
@@ -814,7 +828,7 @@
       .stepper { justify-content: flex-start; overflow-x: auto; }
       .secure-chip { justify-self: flex-start; }
       .wrap { padding: 24px 20px 40px; }
-      h1.page-title, .results-title { font-size: 30px; }
+      .results-title { font-size: 30px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid > .span2 { grid-column: span 1; }
       .profiles { grid-template-columns: repeat(2, 1fr); }
@@ -823,6 +837,21 @@
       .result-readout .result-value { font-size: 64px; }
       .tier-grid { grid-template-columns: 1fr; }
       .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Phones ===== */
+    @media (max-width: 560px) {
+      .topbar { padding: 14px 14px 0; }
+      .stepper .step { padding: 0 12px; font-size: 12.5px; gap: 7px; }
+      .wrap { padding: 20px 14px 36px; }
+      .card { padding: 20px 16px; }
+      .section-card { padding: 18px 16px; }
+      .profiles { gap: 10px; }
+      .profile-card { padding: 16px 8px 14px; }
+      .profile-card .pf-dollars { font-size: 15px; }
+      .result-readout .result-value { font-size: 48px; }
+      .tier-prices { grid-template-columns: 1fr; }
+      .spouse-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -881,7 +910,7 @@
             </div>
             <!-- Spouse fields: hidden by default, revealed on "Married" -->
             <div class="field span2" id="spouseFields" style="display:none;">
-              <div style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="spouse-grid" style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px;">
                 <div class="field" style="margin:0;">
                   <label for="spouseAge" style="font-size:13px;">Spouse&rsquo;s current age</label>
                   <select id="spouseAge" autocomplete="off">
@@ -915,11 +944,12 @@
             </div>
             <span class="section-num">3. LIFESTYLE TARGET</span>
           </div>
-          <div class="lifestyle-prompt">Which retirement lifestyle best describes you?</div>
-          <div class="lifestyle-sub">This helps us estimate your future spending needs.</div>
+          <div class="lifestyle-prompt">What yearly spending should we plan for in retirement?*</div>
+          <div class="lifestyle-sub">Pick the yearly spending that fits the retirement you want.</div>
           <div class="profiles" id="profileGroup" role="radiogroup" aria-label="Spending profile">
             <!-- injected by JS -->
           </div>
+          <div class="lifestyle-note">*Projected from your current salary at typical wage growth through retirement.</div>
           <div class="lifestyle-foot">
             <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             Your lifestyle target drives your Required Portfolio Return&trade;.
@@ -1274,12 +1304,12 @@
         stateSel.appendChild(opt);
       });
 
-      // Ages 50-80 — populate all four age selects (primary + spouse)
+      // Ages 18-100 — populate all four age selects (primary + spouse)
       var ageSel = document.getElementById('age');
       var retSel = document.getElementById('retirementAge');
       var spouseAgeSel = document.getElementById('spouseAge');
       var spouseRetSel = document.getElementById('spouseRetirementAge');
-      for (var a = 50; a <= 80; a++) {
+      for (var a = 18; a <= 100; a++) {
         var o1 = document.createElement('option'); o1.value = a; o1.textContent = a; ageSel.appendChild(o1);
         var o2 = document.createElement('option'); o2.value = a; o2.textContent = a; retSel.appendChild(o2);
         var o3 = document.createElement('option'); o3.value = a; o3.textContent = a; spouseAgeSel.appendChild(o3);
@@ -1300,22 +1330,27 @@
       ];
 
       // ===== 4 profiles =====
+      // Cards show a live dollar target = pct of the user's age-adjusted
+      // salary (see projectedSalary / refreshProfileAmounts below) plus a
+      // small tier label. Keys/order are preserved so the selected tier still
+      // maps to the engine.
       var PROFILES = [
-        { key: 'struggling',  label: 'Struggling',  desc: 'Lowest spending quartile.',         dollars: 28000, bp: '' },
-        { key: 'average',     label: 'Average',     desc: 'Second-lowest spending quartile.',  dollars: 45000, bp: '' },
-        { key: 'comfortable', label: 'Comfortable', desc: 'Second-highest spending quartile.', dollars: 60000, bp: '' },
-        { key: 'affluent',    label: 'Affluent',    desc: 'Highest spending quartile.',        dollars: 80000, bp: '150+ bp' }
+        { key: 'struggling',  pct: 0.25, label: 'Essentials' },
+        { key: 'average',     pct: 0.50, label: 'Secure' },
+        { key: 'comfortable', pct: 0.75, label: 'Comfortable' },
+        { key: 'affluent',    pct: 1.00, plus: true, label: 'Premium' }
       ];
 
       var PROFILE_ICONS = {
-        struggling:  '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="6"/><circle cx="9" cy="11" r="0.8" fill="currentColor"/><circle cx="15" cy="11" r="0.8" fill="currentColor"/><path d="M9.5 14a3 3 0 0 0 5 0"/></svg>',
-        average:     '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"/><path d="M5 12V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4"/><line x1="7" y1="20" x2="7" y2="22"/><line x1="17" y1="20" x2="17" y2="22"/></svg>',
-        comfortable: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M21 16H3"/><path d="M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/><circle cx="12" cy="3" r="1" fill="currentColor"/></svg>',
+        struggling:  '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>',
+        average:     '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>',
+        comfortable: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4Z"/><path d="M21 14 10 2 3 14h18Z"/><path d="M10 2v16"/></svg>',
         affluent:    '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>'
       };
 
       var grp = document.getElementById('profileGroup');
       var selectedProfile = null;
+      var profileAmtEls = []; // { p, el, card } for live dollar updates
       PROFILES.forEach(function (p) {
         var card = document.createElement('button');
         card.type = 'button';
@@ -1323,11 +1358,21 @@
         card.setAttribute('role', 'radio');
         card.setAttribute('aria-checked', 'false');
         card.setAttribute('data-profile', p.key);
-        var html = '<div class="pf-icon">' + (PROFILE_ICONS[p.key] || '') + '</div>' +
-                   '<div class="pf-label">' + p.label + '</div>' +
-                   '<div class="pf-desc">' + p.desc + '</div>';
-        if (p.bp) html += '<div class="pf-badge">' + p.bp + '</div>';
-        card.innerHTML = html;
+        var amt = document.createElement('div');
+        amt.className = 'pf-dollars';
+        amt.textContent = '—';
+        card.innerHTML = '<div class="pf-icon">' + (PROFILE_ICONS[p.key] || '') + '</div>';
+        card.appendChild(amt);
+        if (p.label) {
+          var name = document.createElement('div');
+          name.className = 'pf-name';
+          name.textContent = p.label;
+          card.appendChild(name);
+        }
+        var accent = document.createElement('div');
+        accent.className = 'pf-accent';
+        card.appendChild(accent);
+        profileAmtEls.push({ p: p, el: amt, card: card });
         card.addEventListener('click', function () {
           selectedProfile = p.key;
           Array.prototype.forEach.call(grp.querySelectorAll('.profile-card'), function (c) {
@@ -1336,6 +1381,53 @@
         });
         grp.appendChild(card);
       });
+
+      // ===== Age-adjusted salary → live dollar targets on the profile cards =====
+      // "Salary progression over time": real wage growth is steep early in a
+      // career and decelerates with age, but never fully stops (modeled on
+      // average age–earnings profiles). We compound current salary year-by-year
+      // from current age to retirement age to get a representative future salary,
+      // then each card is a fixed % of it. Display-only — selecting a card still
+      // sends its profile key to the engine.
+      function realWageGrowth(a) {
+        if (a < 30) return 0.040;
+        if (a < 40) return 0.025;
+        if (a < 50) return 0.015;
+        if (a < 55) return 0.010;
+        if (a < 60) return 0.006;
+        if (a < 65) return 0.003;
+        return 0.001;
+      }
+      function projectedSalary(salary, ageNow, retAge) {
+        if (!Number.isFinite(salary) || salary <= 0) return NaN;
+        var s = salary;
+        if (Number.isFinite(ageNow)) {
+          var end = (Number.isFinite(retAge) && retAge > ageNow) ? retAge : 65;
+          for (var a = ageNow; a < end; a++) s *= (1 + realWageGrowth(a));
+        }
+        return s;
+      }
+      function refreshProfileAmounts() {
+        var salary = parseFloat(document.getElementById('currentSalary').value);
+        var ageNow = parseInt(document.getElementById('age').value, 10);
+        var retAge = parseInt(document.getElementById('retirementAge').value, 10);
+        var base = projectedSalary(salary, ageNow, retAge);
+        profileAmtEls.forEach(function (item) {
+          if (!Number.isFinite(base)) {
+            item.el.textContent = '—';
+            item.card.setAttribute('aria-label', 'Spending target');
+            return;
+          }
+          var dollars = base * item.p.pct;
+          var text = fmt$(dollars) + (item.p.plus ? '+' : '');
+          item.el.textContent = text;
+          item.card.setAttribute('aria-label', 'Annual spending target ' + text);
+        });
+      }
+      document.getElementById('currentSalary').addEventListener('input', refreshProfileAmounts);
+      document.getElementById('age').addEventListener('change', refreshProfileAmounts);
+      document.getElementById('retirementAge').addEventListener('change', refreshProfileAmounts);
+      refreshProfileAmounts();
 
       // ===== Filing toggle (toggles spouse fields visibility) =====
       var filing = null;
@@ -1559,8 +1651,8 @@
         var monthlyPensionRaw = document.getElementById('monthlyPension').value;
         var monthlyPension = monthlyPensionRaw === '' ? 0 : parseFloat(monthlyPensionRaw);
 
-        if (!Number.isFinite(age) || age < 50 || age > 80) { showError('Enter a current age between 50 and 80.'); return; }
-        if (!Number.isFinite(retirementAge) || retirementAge < 50 || retirementAge > 80) { showError('Enter a retirement age between 50 and 80 (use the age you retired if already retired).'); return; }
+        if (!Number.isFinite(age) || age < 18 || age > 100) { showError('Enter a current age between 18 and 100.'); return; }
+        if (!Number.isFinite(retirementAge) || retirementAge < 18 || retirementAge > 100) { showError('Enter a retirement age between 18 and 100 (use the age you retired if already retired).'); return; }
         if (filing === null) { showError('Choose a filing status.'); return; }
 
         // Spouse fields required when MFJ
@@ -1569,11 +1661,11 @@
         if (filing === 'mfj') {
           spouseAge = parseInt(document.getElementById('spouseAge').value, 10);
           spouseRetirementAge = parseInt(document.getElementById('spouseRetirementAge').value, 10);
-          if (!Number.isFinite(spouseAge) || spouseAge < 50 || spouseAge > 80) {
-            showError("Enter your spouse's current age between 50 and 80."); return;
+          if (!Number.isFinite(spouseAge) || spouseAge < 18 || spouseAge > 100) {
+            showError("Enter your spouse's current age between 18 and 100."); return;
           }
-          if (!Number.isFinite(spouseRetirementAge) || spouseRetirementAge < 50 || spouseRetirementAge > 80) {
-            showError("Enter your spouse's retirement age between 50 and 80 (use the age they retired if already retired)."); return;
+          if (!Number.isFinite(spouseRetirementAge) || spouseRetirementAge < 18 || spouseRetirementAge > 100) {
+            showError("Enter your spouse's retirement age between 18 and 100 (use the age they retired if already retired)."); return;
           }
         }
 
