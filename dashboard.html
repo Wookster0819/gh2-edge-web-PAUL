@@ -719,7 +719,7 @@
       //
       // Jae / Paul: to connect, implement the endpoint below. The panel
       // POSTs:  { messages: [{role:'user'|'assistant', content:'…'}, …],
-      //           context: { page:'dashboard' } }
+      //           context: { page:'dashboard', access:'subscriber' } }
       // and expects JSON back:  { reply: '…' }
       // Then set CHAT_CONFIG.connected = true — nothing else changes.
       // While connected=false, the panel answers with a canned preview reply.
@@ -727,7 +727,7 @@
       var CHAT_CONFIG = {
         endpoint: '/api/edge-chat',
         connected: false,               // <— flip when the endpoint is live
-        context: { page: 'dashboard' }
+        context: { page: 'dashboard', access: 'subscriber' }
       };
 
       // Mascot poses: waving = idle; abacus = "thinking" while a reply is

@@ -93,9 +93,20 @@ Request the page sends:
     { "role": "user", "content": "What should I do before Dec 31?" },
     { "role": "assistant", "content": "..." }
   ],
-  "context": { "page": "dashboard" }   // or "heatmap" — extend freely
+  "context": {
+    "page": "dashboard",               // dashboard | heatmap | ballpark
+    "access": "subscriber"             // subscriber | public — see below
+  }
 }
 ```
+
+**Capability tiers:** the chat's capability varies by subscription level,
+decided entirely server-side. `context.access` tells you which surface the
+request came from: `ballpark.html` (the only non-subscriber surface — chat
+added on the `PAUL/web-edits` branch / PR #1) sends `access: "public"`;
+`dashboard.html` and `heatmap.html` send `access: "subscriber"`. Combine
+with the authenticated user's actual tier on your side to set the reply
+capability — the front-end needs no changes as tiers evolve.
 
 Expected response: `{ "reply": "..." }` (plain text; the page renders it as
 one assistant bubble). Non-200 or network failure shows a friendly retry
