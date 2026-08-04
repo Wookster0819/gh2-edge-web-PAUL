@@ -823,6 +823,76 @@
     footer.page-footer p { margin: 0 0 8px; }
     footer.page-footer p:last-child { margin-bottom: 0; }
 
+    /* ===== Ask Edge (floating chat launcher) ===== */
+    .ask-edge {
+      position: fixed; right: 22px; bottom: 22px; z-index: 60;
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--grad-cta);
+      color: #FFF; border: 0; cursor: pointer; font-family: inherit;
+      font-size: 14.5px; font-weight: 700; letter-spacing: 0.01em;
+      padding: 11px 18px 11px 12px; border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(139,92,246,0.45);
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    .ask-edge:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(139,92,246,0.55); }
+    .ask-edge .mascot { width: 30px; height: 30px; flex: none; }
+    img.mascot {
+      object-fit: contain;
+      /* soft white glow around the transparent cutout */
+      filter: drop-shadow(0 0 3px rgba(255,255,255,0.75)) drop-shadow(0 0 7px rgba(255,255,255,0.35));
+    }
+
+    /* Chat panel */
+    .chat-panel {
+      position: fixed; right: 22px; bottom: 84px; z-index: 61;
+      width: 360px; max-width: calc(100vw - 32px);
+      max-height: min(560px, calc(100vh - 120px));
+      display: none; flex-direction: column;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 18px; box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+    .chat-panel.open { display: flex; }
+    .chat-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 16px; border-bottom: 1px solid var(--border-soft);
+      background: var(--card-bg-2);
+    }
+    .chat-head .mascot { width: 56px; height: 56px; }
+    .chat-head-name { font-size: 14.5px; font-weight: 800; }
+    .chat-head-sub { font-size: 11px; color: var(--text-muted); }
+    .chat-close {
+      margin-left: auto; background: transparent; border: 0; cursor: pointer;
+      color: var(--text-muted); padding: 6px; border-radius: 8px; line-height: 0;
+    }
+    .chat-close:hover { background: var(--card-bg); color: var(--text); }
+    .chat-msgs {
+      flex: 1 1 auto; overflow-y: auto;
+      padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      min-height: 180px;
+    }
+    .msg { max-width: 85%; padding: 10px 13px; border-radius: 14px; font-size: 13.5px; line-height: 1.5; }
+    .msg.edge { background: var(--card-bg-2); border: 1px solid var(--border-soft); border-bottom-left-radius: 5px; align-self: flex-start; }
+    .msg.user { background: var(--accent-purple); color: #FFF; border-bottom-right-radius: 5px; align-self: flex-end; }
+    .msg.typing { color: var(--text-muted); font-style: italic; }
+    .chat-inputbar {
+      display: flex; gap: 8px; padding: 12px;
+      border-top: 1px solid var(--border-soft); background: var(--card-bg-2);
+    }
+    .chat-inputbar input {
+      flex: 1 1 auto; min-width: 0;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font: inherit; font-size: 13.5px; padding: 10px 12px;
+    }
+    .chat-inputbar input:focus { outline: none; border-color: var(--accent-purple); }
+    .chat-send {
+      flex: none; background: var(--accent-purple); color: #FFF;
+      border: 0; border-radius: 10px; cursor: pointer;
+      padding: 0 14px; font-family: inherit; font-size: 13.5px; font-weight: 700;
+    }
+    .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
     @media (max-width: 880px) {
       .topbar { grid-template-columns: 1fr; gap: 14px; padding: 18px 20px 0; }
       .stepper { justify-content: flex-start; overflow-x: auto; }
@@ -852,6 +922,8 @@
       .result-readout .result-value { font-size: 48px; }
       .tier-prices { grid-template-columns: 1fr; }
       .spouse-grid { grid-template-columns: 1fr; }
+      .chat-panel { right: 8px; bottom: 78px; }
+      .ask-edge { right: 14px; bottom: 14px; }
     }
   </style>
 </head>
@@ -1731,6 +1803,216 @@
           showError('Network error. Please try again.');
         });
       });
+    })();
+  </script>
+
+  <!-- ===== EDGE MASCOT (shared symbol) =====
+       Placeholder drawn to match the brand reference (fuzzy purple square,
+       big eyes, navy "E" chest patch, white/purple sneakers, waving).
+       Auto-upgraded to assets/edge-wave.png by the script below when the
+       real render is present. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="edgeMascot" viewBox="0 0 76 84">
+      <g stroke-linecap="round" stroke-linejoin="round">
+        <!-- waving arm (raised, viewer LEFT) with open hand -->
+        <path d="M16 36 C9 30 6 22 8 13" stroke="#8465E6" stroke-width="7" fill="none"/>
+        <path d="M8 13 l-4.6 -2.6 M8 13 l-1.8 -5.4 M8 13 l2.2 -5.2 M8 13 l5 -3.4" stroke="#8465E6" stroke-width="4.2" fill="none"/>
+        <!-- hip arm (viewer right, bent akimbo) -->
+        <path d="M62 44 C70 47 70 57 61 60" stroke="#8465E6" stroke-width="7" fill="none"/>
+        <!-- legs -->
+        <path d="M29 70 L29 75 M47 70 L47 75" stroke="#8465E6" stroke-width="7"/>
+        <!-- sneakers: white with purple toe cap + stripes -->
+        <path d="M20 79 q0 -5 6 -5 h4 q4 0 4 4 v2 q0 1.6 -1.6 1.6 h-10.8 q-1.6 0 -1.6 -1.6 z" fill="#FFFFFF"/>
+        <path d="M20.5 80.5 q0 -3.5 3 -4.5" stroke="#6D4FD4" stroke-width="2.4" fill="none"/>
+        <path d="M27 75 l2.6 3.8 M30.5 74.5 l2 3.6" stroke="#6D4FD4" stroke-width="1.6"/>
+        <path d="M42 79 q0 -5 6 -5 h4 q4 0 4 4 v2 q0 1.6 -1.6 1.6 h-10.8 q-1.6 0 -1.6 -1.6 z" fill="#FFFFFF"/>
+        <path d="M42.5 80.5 q0 -3.5 3 -4.5" stroke="#6D4FD4" stroke-width="2.4" fill="none"/>
+        <path d="M49 75 l2.6 3.8 M52.5 74.5 l2 3.6" stroke="#6D4FD4" stroke-width="1.6"/>
+        <!-- fuzzy body -->
+        <rect x="13" y="10" width="50" height="60" rx="17" fill="#A18BEB"/>
+        <rect x="13" y="10" width="50" height="60" rx="17" fill="none" stroke="#8F76E4" stroke-width="2.4"/>
+        <!-- eyebrows (thick, dark) -->
+        <path d="M22 22.5 Q28 18.5 34 21.5" stroke="#3D2E7C" stroke-width="4" fill="none"/>
+        <path d="M42 21.5 Q48 18.5 54 22.5" stroke="#3D2E7C" stroke-width="4" fill="none"/>
+        <!-- eyes: whites + purple iris + dark pupil + glint -->
+        <ellipse cx="30" cy="33" rx="8" ry="8.6" fill="#FFFFFF"/>
+        <ellipse cx="47" cy="33" rx="8" ry="8.6" fill="#FFFFFF"/>
+        <circle cx="31.5" cy="34" r="4.8" fill="#7C5CD6"/>
+        <circle cx="48.5" cy="34" r="4.8" fill="#7C5CD6"/>
+        <circle cx="31.5" cy="34" r="2.5" fill="#241A4E"/>
+        <circle cx="48.5" cy="34" r="2.5" fill="#241A4E"/>
+        <circle cx="33.2" cy="32.2" r="1.2" fill="#FFFFFF"/>
+        <circle cx="50.2" cy="32.2" r="1.2" fill="#FFFFFF"/>
+        <!-- huge open smile: dark mouth, top+bottom teeth, tongue -->
+        <path d="M24 44 Q38.5 48 53 44 Q51 60 38.5 60 Q26 60 24 44 Z" fill="#3A2361"/>
+        <path d="M25.5 44.6 Q38.5 48 51.5 44.6 L50.7 49.6 Q38.5 52.6 26.3 49.6 Z" fill="#FFFFFF"/>
+        <path d="M30 58.2 Q38.5 60.6 47 58.2 L46.2 55.6 Q38.5 57.6 30.8 55.6 Z" fill="#FFFFFF"/>
+        <path d="M32.5 55.5 Q38.5 58.5 44.5 55.5 Q42.5 52.5 38.5 52.5 Q34.5 52.5 32.5 55.5 Z" fill="#C0546F"/>
+        <!-- dark purple E chest patch (low, slightly left like the reference) -->
+        <text x="33" y="68.8" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="900" fill="#3D2E7C">E</text>
+      </g>
+    </symbol>
+  </svg>
+
+  <!-- ===== ASK EDGE ===== -->
+  <button type="button" class="ask-edge" id="askEdgeBtn" aria-expanded="false" aria-controls="chatPanel">
+    <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
+    Ask Edge
+  </button>
+
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Ask Edge chat" aria-modal="false">
+    <div class="chat-head">
+      <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
+      <div>
+        <div class="chat-head-name">Ask Edge</div>
+        <div class="chat-head-sub" id="chatStatus">Preview — not connected yet</div>
+      </div>
+      <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <form class="chat-inputbar" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Ask about your plan…" autocomplete="off" />
+      <button type="submit" class="chat-send" id="chatSend">Send</button>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // =====================================================================
+      // ASK EDGE — CHAT (connect-ready, NOT wired to a model yet).
+      //
+      // Jae: same contract as dashboard.html / heatmap.html — the panel
+      // POSTs:  { messages: [{role:'user'|'assistant', content:'…'}, …],
+      //           context: { page:'ballpark', access:'public' } }
+      // and expects JSON back:  { reply: '…' }
+      // Then set CHAT_CONFIG.connected = true — nothing else changes.
+      //
+      // `context.access` tells the backend which capability tier applies:
+      // this is the one PUBLIC (non-subscriber) surface — dashboard.html and
+      // heatmap.html send access:'subscriber'. Capability rules live entirely
+      // server-side.
+      // =====================================================================
+      var CHAT_CONFIG = {
+        endpoint: '/api/edge-chat',
+        connected: false,               // <— flip when the endpoint is live
+        context: { page: 'ballpark', access: 'public' }
+      };
+
+      // Mascot poses: waving = idle; abacus = "thinking" while a reply is
+      // being generated (real images only — the SVG stand-in doesn't swap).
+      var MASCOT_IDLE = 'assets/edge-wave.png';
+      var MASCOT_THINKING = 'assets/edge-abacus.png';
+      var thinkingPoseReady = false;
+      (function () {
+        var p = new Image();
+        p.onload = function () { thinkingPoseReady = true; };
+        p.src = MASCOT_THINKING;
+      })();
+      function setHeadMascot(src) {
+        var el = document.querySelector('.chat-head img.mascot');
+        if (el) el.src = src;
+      }
+
+      var chatHistory = [];             // {role, content}
+      var panel = document.getElementById('chatPanel');
+      var btn = document.getElementById('askEdgeBtn');
+      var msgs = document.getElementById('chatMsgs');
+      var input = document.getElementById('chatInput');
+      var sendBtn = document.getElementById('chatSend');
+
+      function addMsg(role, text) {
+        var el = document.createElement('div');
+        el.className = 'msg ' + (role === 'user' ? 'user' : 'edge');
+        el.textContent = text;
+        msgs.appendChild(el);
+        msgs.scrollTop = msgs.scrollHeight;
+        return el;
+      }
+
+      function openChat() {
+        panel.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        if (!chatHistory.length) {
+          addMsg('assistant', 'Hi, I’m Edge! 👋 Ask me anything about your ballpark plan — what the inputs mean, how to read your Required Portfolio Return™, or what to try next.');
+          chatHistory.push({ role: 'assistant', content: '(greeting)' });
+        }
+        input.focus();
+      }
+      function closeChat() {
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      btn.addEventListener('click', function () {
+        panel.classList.contains('open') ? closeChat() : openChat();
+      });
+      document.getElementById('chatClose').addEventListener('click', closeChat);
+
+      document.getElementById('chatForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        addMsg('user', text);
+        chatHistory.push({ role: 'user', content: text });
+        sendBtn.disabled = true;
+
+        var typing = addMsg('assistant', 'Edge is thinking…');
+        typing.classList.add('typing');
+        if (thinkingPoseReady) setHeadMascot(MASCOT_THINKING);
+
+        function finish(reply) {
+          typing.classList.remove('typing');
+          typing.textContent = reply;
+          chatHistory.push({ role: 'assistant', content: reply });
+          setHeadMascot(MASCOT_IDLE);
+          sendBtn.disabled = false;
+          input.focus();
+          msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        if (CHAT_CONFIG.connected) {
+          // Live path — used once the endpoint exists.
+          fetch(CHAT_CONFIG.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: chatHistory.filter(function (m) { return m.content !== '(greeting)'; }), context: CHAT_CONFIG.context })
+          }).then(function (r) { return r.json(); })
+            .then(function (j) { finish(j.reply || 'Sorry — I didn’t catch that. Try again?'); })
+            .catch(function () { finish('I couldn’t reach my brain just now. Please try again in a moment.'); });
+        } else {
+          // Preview path — canned reply until the endpoint is connected.
+          setTimeout(function () {
+            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I’ll help you understand your inputs, your Required Portfolio Return™, and what to try next.');
+          }, 700);
+        }
+      });
+
+      // Esc closes the chat
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && panel.classList.contains('open')) closeChat();
+      });
+
+      // ===== Real mascot auto-swap =====
+      // The inline SVG mascot is a stand-in. When the official character
+      // render exists at assets/edge-wave.png, every mascot on this page
+      // upgrades to it automatically — no code change.
+      (function () {
+        var probe = new Image();
+        probe.onload = function () {
+          Array.prototype.forEach.call(document.querySelectorAll('svg.mascot'), function (svg) {
+            var img = document.createElement('img');
+            img.className = 'mascot';
+            img.src = probe.src;
+            img.alt = '';
+            svg.parentNode.replaceChild(img, svg);
+          });
+        };
+        probe.src = 'assets/edge-wave.png';
+      })();
     })();
   </script>
 </body>
