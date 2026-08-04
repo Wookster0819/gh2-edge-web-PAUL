@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Subscriber-only page: keep out of search indexes -->
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0A0E1A" />
+  <title>EDGE — Heat Map</title>
+  <meta name="description" content="At-a-glance view of your seven wealth regimes." />
+  <style>
+    :root {
+      --bg: #0A0E1A;
+      --bg-soft: #0E1424;
+      --card-bg: #11172A;
+      --card-bg-2: #161D33;
+      --border: #1F2940;
+      --border-soft: #18213B;
+      --text: #F5F7FA;
+      --text-dim: #B6BFD0;
+      --text-muted: #8693AC;
+      --text-faint: #5A6680;
+      --accent-purple: #8B5CF6;
+      --accent-purple-soft: rgba(139,92,246,0.14);
+      --accent-blue: #3B82F6;
+      --accent-green: #22C55E;
+      --accent-green-soft: rgba(34,197,94,0.12);
+      --accent-amber: #F97316;
+      --accent-amber-soft: rgba(249,115,22,0.12);
+      --accent-red: #FF3B30;
+      --accent-red-soft: rgba(255,59,48,0.12);
+      --na: #8693AC;
+      --na-soft: rgba(134,147,172,0.14);
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Text", Roboto, Inter, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+
+    /* ===== Top bar (shared shell) ===== */
+    .topbar {
+      display: flex; align-items: center; gap: 20px;
+      max-width: 1180px; margin: 0 auto;
+      padding: 20px 28px 0;
+    }
+    .wordmark { font-size: 17px; font-weight: 800; letter-spacing: 0.3em; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
+    .nav a {
+      font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; padding: 7px 12px; border-radius: 8px;
+    }
+    .nav a:hover { color: var(--text); background: var(--card-bg-2); }
+    .nav a.active { color: var(--text); background: var(--accent-purple-soft); }
+
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 26px 28px 96px; }
+
+    /* ===== Heat map header ===== */
+    .hm-head { display: flex; align-items: flex-start; gap: 18px; flex-wrap: wrap; margin-bottom: 22px; }
+    .hm-logo {
+      flex: none; width: 44px; height: 44px; border-radius: 12px;
+      background: var(--accent-purple-soft);
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #A78BFA;
+    }
+    .hm-logo svg { width: 24px; height: 24px; }
+    .hm-title { font-size: clamp(22px, 3.4vw, 30px); font-weight: 800; letter-spacing: 0.01em; line-height: 1.15; }
+    .hm-sub { font-size: 14px; color: var(--text-muted); margin-top: 3px; }
+    .legend {
+      margin-left: auto;
+      display: flex; gap: 22px; flex-wrap: wrap; align-items: flex-start;
+      padding-top: 4px;
+    }
+    .legend-item { display: flex; align-items: flex-start; gap: 8px; }
+    .legend-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; margin-top: 4px; }
+    .legend-name { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; }
+    .legend-desc { font-size: 11.5px; color: var(--text-muted); }
+
+    /* ===== Regime grid ===== */
+    .row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+    .row-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+    .regime {
+      position: relative;
+      background: var(--card-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      padding: 20px 22px;
+      display: flex; flex-direction: column; gap: 6px;
+      text-align: left; cursor: pointer;
+      color: inherit; font-family: inherit; text-decoration: none;
+    }
+    .regime[data-status="risk"]      { border-color: rgba(255,59,48,0.5); }
+    .regime[data-status="attention"] { border-color: rgba(249,115,22,0.45); }
+    .regime[data-status="ontrack"]   { border-color: rgba(34,197,94,0.45); }
+    .regime[data-status="na"]        { border-color: var(--border); }
+
+    .regime-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
+    .regime-num {
+      width: 30px; height: 30px; border-radius: 9px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800;
+    }
+    .regime[data-status="risk"]      .regime-num { background: var(--accent-red-soft);   color: var(--accent-red); }
+    .regime[data-status="attention"] .regime-num { background: var(--accent-amber-soft); color: var(--accent-amber); }
+    .regime[data-status="ontrack"]   .regime-num { background: var(--accent-green-soft); color: var(--accent-green); }
+    .regime[data-status="na"]        .regime-num { background: var(--na-soft);           color: var(--na); }
+    .regime-ico { color: var(--text-muted); }
+    .regime-ico svg { width: 22px; height: 22px; }
+
+    .regime-name { font-size: 16.5px; font-weight: 700; line-height: 1.25; }
+
+    .regime-metric { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 2px; flex-wrap: wrap; }
+    .regime-value { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; font-variant-numeric: tabular-nums; }
+    .row-4 .regime-value { font-size: 30px; }
+    .regime[data-status="risk"]      .regime-value { color: var(--accent-red); }
+    .regime[data-status="attention"] .regime-value { color: var(--accent-amber); }
+    .regime[data-status="ontrack"]   .regime-value { color: var(--accent-green); }
+    .regime[data-status="na"]        .regime-value { color: var(--text-muted); }
+    .regime-unit { font-size: 13.5px; font-weight: 600; line-height: 1.3; }
+    .regime[data-status="risk"]      .regime-unit { color: var(--accent-red); }
+    .regime[data-status="attention"] .regime-unit { color: var(--accent-amber); }
+    .regime[data-status="ontrack"]   .regime-unit { color: var(--accent-green); }
+    .regime[data-status="na"]        .regime-unit { color: var(--text-muted); }
+
+    .regime-note {
+      font-size: 13px; color: var(--text-dim);
+      padding-top: 10px; margin-top: auto;
+      border-top: 1px solid var(--border-soft);
+      line-height: 1.45;
+    }
+    .regime-pill {
+      margin-top: 12px; align-self: flex-start;
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em;
+      padding: 6px 12px; border-radius: 999px;
+    }
+    .regime-pill .pdot { width: 7px; height: 7px; border-radius: 50%; }
+    .regime[data-status="risk"]      .regime-pill { background: rgba(255,59,48,0.18);   color: #FF8A84; }
+    .regime[data-status="risk"]      .pdot { background: var(--accent-red); }
+    .regime[data-status="attention"] .regime-pill { background: rgba(249,115,22,0.16);  color: #FDBA74; }
+    .regime[data-status="attention"] .pdot { background: var(--accent-amber); }
+    .regime[data-status="ontrack"]   .regime-pill { background: rgba(34,197,94,0.16);   color: #86EFAC; }
+    .regime[data-status="ontrack"]   .pdot { background: var(--accent-green); }
+    .regime[data-status="na"]        .regime-pill { background: var(--na-soft);         color: var(--text-dim); }
+    .regime[data-status="na"]        .pdot { background: var(--na); }
+
+    /* ===== Key principle footer ===== */
+    .principle {
+      margin-top: 22px;
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 22px;
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    }
+    .principle-ico {
+      flex: none; width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--accent-purple); color: #A78BFA;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .principle-ico svg { width: 16px; height: 16px; }
+    .principle-main { flex: 1 1 260px; }
+    .principle-title { font-size: 13.5px; font-weight: 700; color: #A78BFA; }
+    .principle-sub { font-size: 13px; color: var(--text-muted); }
+    .principle-right {
+      flex: 1 1 260px; font-size: 13px; color: var(--text-muted); line-height: 1.5;
+      border-left: 1px solid var(--border-soft); padding-left: 22px;
+    }
+
+    /* ===== Hover glow (cursor devices only) — brightens each card's own color ===== */
+    @media (hover: hover) and (pointer: fine) {
+      .regime, .principle { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+      .regime[data-status="risk"]:hover      { border-color: var(--accent-red);   box-shadow: 0 0 22px rgba(255,59,48,0.22); }
+      .regime[data-status="attention"]:hover { border-color: var(--accent-amber); box-shadow: 0 0 22px rgba(249,115,22,0.22); }
+      .regime[data-status="ontrack"]:hover   { border-color: var(--accent-green); box-shadow: 0 0 22px rgba(34,197,94,0.22); }
+      .regime[data-status="na"]:hover        { border-color: rgba(139,92,246,0.55); box-shadow: 0 0 22px rgba(139,92,246,0.18); }
+      .principle:hover { border-color: rgba(139,92,246,0.55); box-shadow: 0 0 22px rgba(139,92,246,0.16); }
+    }
+
+    /* ===== Ask Edge (same shared pattern as dashboard.html) ===== */
+    .ask-edge {
+      position: fixed; right: 22px; bottom: 22px; z-index: 60;
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--grad-cta);
+      color: #FFF; border: 0; cursor: pointer; font-family: inherit;
+      font-size: 14.5px; font-weight: 700; letter-spacing: 0.01em;
+      padding: 11px 18px 11px 12px; border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(139,92,246,0.45);
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    .ask-edge:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(139,92,246,0.55); }
+    .ask-edge .mascot { width: 30px; height: 30px; flex: none; }
+    img.mascot {
+      object-fit: contain;
+      /* soft white glow around the transparent cutout */
+      filter: drop-shadow(0 0 3px rgba(255,255,255,0.75)) drop-shadow(0 0 7px rgba(255,255,255,0.35));
+    }
+    .chat-panel {
+      position: fixed; right: 22px; bottom: 84px; z-index: 61;
+      width: 360px; max-width: calc(100vw - 32px);
+      max-height: min(560px, calc(100vh - 120px));
+      display: none; flex-direction: column;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 18px; box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+    .chat-panel.open { display: flex; }
+    .chat-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 16px; border-bottom: 1px solid var(--border-soft);
+      background: var(--card-bg-2);
+    }
+    .chat-head .mascot { width: 56px; height: 56px; }
+    .chat-head-name { font-size: 14.5px; font-weight: 800; }
+    .chat-head-sub { font-size: 11px; color: var(--text-muted); }
+    .chat-close {
+      margin-left: auto; background: transparent; border: 0; cursor: pointer;
+      color: var(--text-muted); padding: 6px; border-radius: 8px; line-height: 0;
+    }
+    .chat-close:hover { background: var(--card-bg); color: var(--text); }
+    .chat-msgs {
+      flex: 1 1 auto; overflow-y: auto;
+      padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      min-height: 180px;
+    }
+    .msg { max-width: 85%; padding: 10px 13px; border-radius: 14px; font-size: 13.5px; line-height: 1.5; }
+    .msg.edge { background: var(--card-bg-2); border: 1px solid var(--border-soft); border-bottom-left-radius: 5px; align-self: flex-start; }
+    .msg.user { background: var(--accent-purple); color: #FFF; border-bottom-right-radius: 5px; align-self: flex-end; }
+    .msg.typing { color: var(--text-muted); font-style: italic; }
+    .chat-inputbar {
+      display: flex; gap: 8px; padding: 12px;
+      border-top: 1px solid var(--border-soft); background: var(--card-bg-2);
+    }
+    .chat-inputbar input {
+      flex: 1 1 auto; min-width: 0;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font: inherit; font-size: 13.5px; padding: 10px 12px;
+    }
+    .chat-inputbar input:focus { outline: none; border-color: var(--accent-purple); }
+    .chat-send {
+      flex: none; background: var(--accent-purple); color: #FFF;
+      border: 0; border-radius: 10px; cursor: pointer;
+      padding: 0 14px; font-family: inherit; font-size: 13.5px; font-weight: 700;
+    }
+    .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 980px) {
+      .row-3 { grid-template-columns: 1fr; }
+      .row-4 { grid-template-columns: repeat(2, 1fr); }
+      .legend { margin-left: 0; }
+    }
+    @media (max-width: 560px) {
+      .topbar { flex-wrap: wrap; gap: 10px; padding: 16px 16px 0; }
+      .wrap { padding: 18px 16px 110px; }
+      .row-4 { grid-template-columns: 1fr; }
+      .regime { padding: 18px 16px; }
+      .legend { gap: 14px; }
+      .principle-right { border-left: 0; padding-left: 0; }
+      .chat-panel { right: 8px; bottom: 78px; }
+      .ask-edge { right: 14px; bottom: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Top bar ===== -->
+  <div class="topbar">
+    <div class="wordmark">EDGE</div>
+    <nav class="nav" aria-label="Dashboard sections">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="heatmap.html" class="active" aria-current="page">Heat Map</a>
+    </nav>
+  </div>
+
+  <main class="wrap">
+
+    <!-- ===== Header + legend ===== -->
+    <div class="hm-head">
+      <div class="hm-logo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 17 10 5"/><path d="M9 17 15 5"/><path d="M14 17 20 5"/></svg>
+      </div>
+      <div>
+        <div class="hm-title">EDGE HEAT MAP</div>
+        <div class="hm-sub">At-a-glance view of your seven wealth regimes</div>
+      </div>
+      <div class="legend" aria-label="Status legend">
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-red)"></span><span><span class="legend-name">RISK</span><br/><span class="legend-desc">Action required</span></span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-amber)"></span><span><span class="legend-name">ATTENTION</span><br/><span class="legend-desc">Monitor closely</span></span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--accent-green)"></span><span><span class="legend-name">ON TRACK</span><br/><span class="legend-desc">No action needed</span></span></div>
+        <div class="legend-item"><span class="legend-dot" style="background:var(--na)"></span><span><span class="legend-name">N/A</span><br/><span class="legend-desc">Not relevant</span></span></div>
+      </div>
+    </div>
+
+    <!-- ===== Regimes (injected) ===== -->
+    <div class="row-3" id="rowTop"></div>
+    <div class="row-4" id="rowBottom"></div>
+
+    <!-- ===== Key principle ===== -->
+    <div class="principle">
+      <div class="principle-ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <div class="principle-main">
+        <div class="principle-title">Heat Map Key Principle</div>
+        <div class="principle-sub">Click any regime to see trigger, impact, and recommended actions.</div>
+      </div>
+      <div class="principle-right">
+        Only the items relevant to your household are shown.<br/>
+        Irrelevant regimes are marked N/A.
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== EDGE MASCOT (shared symbol — same as dashboard.html) ===== -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="edgeMascot" viewBox="0 0 76 84">
+      <g stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 36 C9 30 6 22 8 13" stroke="#8465E6" stroke-width="7" fill="none"/>
+        <path d="M8 13 l-4.6 -2.6 M8 13 l-1.8 -5.4 M8 13 l2.2 -5.2 M8 13 l5 -3.4" stroke="#8465E6" stroke-width="4.2" fill="none"/>
+        <path d="M62 44 C70 47 70 57 61 60" stroke="#8465E6" stroke-width="7" fill="none"/>
+        <path d="M29 70 L29 75 M47 70 L47 75" stroke="#8465E6" stroke-width="7"/>
+        <path d="M20 79 q0 -5 6 -5 h4 q4 0 4 4 v2 q0 1.6 -1.6 1.6 h-10.8 q-1.6 0 -1.6 -1.6 z" fill="#FFFFFF"/>
+        <path d="M20.5 80.5 q0 -3.5 3 -4.5" stroke="#6D4FD4" stroke-width="2.4" fill="none"/>
+        <path d="M27 75 l2.6 3.8 M30.5 74.5 l2 3.6" stroke="#6D4FD4" stroke-width="1.6"/>
+        <path d="M42 79 q0 -5 6 -5 h4 q4 0 4 4 v2 q0 1.6 -1.6 1.6 h-10.8 q-1.6 0 -1.6 -1.6 z" fill="#FFFFFF"/>
+        <path d="M42.5 80.5 q0 -3.5 3 -4.5" stroke="#6D4FD4" stroke-width="2.4" fill="none"/>
+        <path d="M49 75 l2.6 3.8 M52.5 74.5 l2 3.6" stroke="#6D4FD4" stroke-width="1.6"/>
+        <rect x="13" y="10" width="50" height="60" rx="17" fill="#A18BEB"/>
+        <rect x="13" y="10" width="50" height="60" rx="17" fill="none" stroke="#8F76E4" stroke-width="2.4"/>
+        <path d="M22 22.5 Q28 18.5 34 21.5" stroke="#3D2E7C" stroke-width="4" fill="none"/>
+        <path d="M42 21.5 Q48 18.5 54 22.5" stroke="#3D2E7C" stroke-width="4" fill="none"/>
+        <ellipse cx="30" cy="33" rx="8" ry="8.6" fill="#FFFFFF"/>
+        <ellipse cx="47" cy="33" rx="8" ry="8.6" fill="#FFFFFF"/>
+        <circle cx="31.5" cy="34" r="4.8" fill="#7C5CD6"/>
+        <circle cx="48.5" cy="34" r="4.8" fill="#7C5CD6"/>
+        <circle cx="31.5" cy="34" r="2.5" fill="#241A4E"/>
+        <circle cx="48.5" cy="34" r="2.5" fill="#241A4E"/>
+        <circle cx="33.2" cy="32.2" r="1.2" fill="#FFFFFF"/>
+        <circle cx="50.2" cy="32.2" r="1.2" fill="#FFFFFF"/>
+        <path d="M24 44 Q38.5 48 53 44 Q51 60 38.5 60 Q26 60 24 44 Z" fill="#3A2361"/>
+        <path d="M25.5 44.6 Q38.5 48 51.5 44.6 L50.7 49.6 Q38.5 52.6 26.3 49.6 Z" fill="#FFFFFF"/>
+        <path d="M30 58.2 Q38.5 60.6 47 58.2 L46.2 55.6 Q38.5 57.6 30.8 55.6 Z" fill="#FFFFFF"/>
+        <path d="M32.5 55.5 Q38.5 58.5 44.5 55.5 Q42.5 52.5 38.5 52.5 Q34.5 52.5 32.5 55.5 Z" fill="#C0546F"/>
+        <text x="33" y="68.8" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="900" fill="#3D2E7C">E</text>
+      </g>
+    </symbol>
+  </svg>
+
+  <!-- ===== ASK EDGE ===== -->
+  <button type="button" class="ask-edge" id="askEdgeBtn" aria-expanded="false" aria-controls="chatPanel">
+    <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
+    Ask Edge
+  </button>
+
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Ask Edge chat" aria-modal="false">
+    <div class="chat-head">
+      <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
+      <div>
+        <div class="chat-head-name">Ask Edge</div>
+        <div class="chat-head-sub" id="chatStatus">Preview — not connected yet</div>
+      </div>
+      <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <form class="chat-inputbar" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Ask about your Heat Map…" autocomplete="off" />
+      <button type="submit" class="chat-send" id="chatSend">Send</button>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // =====================================================================
+      // SUBSCRIBER GATE — connect-ready, currently DISABLED (same as
+      // dashboard.html). Jae: set AUTH_ENABLED = true when /api/me is live.
+      // =====================================================================
+      var AUTH_ENABLED = false;
+      var AUTH_ENDPOINT = '/api/me';
+      function requireSubscriber() {
+        fetch(AUTH_ENDPOINT).then(function (r) {
+          if (r.status === 401 || r.status === 403) {
+            window.location.href = '/login.html?next=' + encodeURIComponent('/heatmap.html');
+          }
+        }).catch(function () { /* fail open for now */ });
+      }
+      if (AUTH_ENABLED) requireSubscriber();
+
+      // =====================================================================
+      // LIVE SCORING — connect-ready, currently on demo data.
+      //
+      // The status of each regime (risk / attention / ontrack / na) is scored
+      // by the EDGE engine, which lives in the private repo — this public page
+      // deliberately contains NO scoring logic. It renders whatever the engine
+      // returns.
+      //
+      // Jae: expose the engine's regime scoring at HEATMAP_ENDPOINT returning
+      //   { regimes: [ { n, name, icon, status, value, unit, unitBelow?,
+      //                  note, row, href? }, ... ] }
+      //   status: 'risk' | 'attention' | 'ontrack' | 'na'   (pill label is
+      //   derived from status here — the API doesn't send display text)
+      //   icon:   'calendar' | 'shield' | 'runner' | 'heart' | 'bank' |
+      //           'people' | 'lock'  (see ICONS below)
+      // then set LIVE_SCORING = true. If the fetch fails, the page falls back
+      // to DEMO_REGIMES so it never renders empty.
+      // =====================================================================
+      var LIVE_SCORING = false;          // <— flip when /api/heatmap is live
+      var HEATMAP_ENDPOINT = '/api/heatmap';
+
+      var DEMO_REGIMES = [
+        { n: 1, name: 'Roth Conversion Window', icon: 'calendar', status: 'risk',
+          value: '47', unit: 'Days\nremaining', note: 'Action by Dec 31', row: 'top', href: '#' },
+        { n: 2, name: 'IRMAA Tier Margin', icon: 'shield', status: 'attention',
+          value: '$14,000', unit: 'headroom', unitBelow: true, note: 'Stay under 2027 thresholds', row: 'top', href: '#' },
+        { n: 3, name: 'RMD Runway', icon: 'runner', status: 'attention',
+          value: '8', unit: 'Years\nto first RMD', note: 'Plan ahead for tax efficiency', row: 'top', href: '#' },
+        { n: 4, name: 'SS Claiming Window', icon: 'heart', status: 'ontrack',
+          value: '7', unit: 'Years\nout', note: 'Optionality preserved', row: 'bottom', href: '#' },
+        { n: 5, name: 'State Tax Exposure', icon: 'bank', status: 'attention',
+          value: 'Moderate', unit: 'NJ resident', unitBelow: true, note: 'Monitor legislation & residency', row: 'bottom', href: '#' },
+        { n: 6, name: 'ACA PTC', icon: 'people', status: 'na',
+          value: 'N/A', unit: 'Employer coverage', unitBelow: true, note: 'Not relevant to your household', row: 'bottom', href: '#' },
+        { n: 7, name: '72(t) Window', icon: 'lock', status: 'na',
+          value: 'Closed', unit: 'Past 59½', unitBelow: true, note: 'No penalty exposure', row: 'bottom', href: '#' }
+      ];
+
+      // Pill label is a pure function of engine status — display only.
+      var PILL_LABELS = { risk: 'RISK', attention: 'ATTENTION', ontrack: 'ON TRACK', na: 'N/A' };
+
+      var ICONS = {
+        calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+        shield:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="10" y1="11" x2="14" y2="11"/></svg>',
+        runner:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="4" r="2"/><path d="M14 8.5 10.5 11l1.5 4-3 5"/><path d="M14 8.5 17 10l3 1"/><path d="M12 15l3 2 1 5"/><path d="M10.5 11 7 10l-3 2"/></svg>',
+        heart:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+        bank:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M4 18h16"/><path d="M6 18v-7M10 18v-7M14 18v-7M18 18v-7"/><path d="M12 3 3 8h18z"/></svg>',
+        people:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        lock:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>'
+      };
+
+      function regimeCard(r) {
+        var unitHtml = r.unit.split('\n').join('<br/>');
+        var metric;
+        if (r.unitBelow) {
+          metric = '<div class="regime-metric" style="flex-direction:column;align-items:flex-start;gap:2px;">' +
+                   '<span class="regime-value">' + r.value + '</span>' +
+                   '<span class="regime-unit">' + unitHtml + '</span></div>';
+        } else {
+          metric = '<div class="regime-metric">' +
+                   '<span class="regime-value">' + r.value + '</span>' +
+                   '<span class="regime-unit">' + unitHtml + '</span></div>';
+        }
+        var pill = PILL_LABELS[r.status] || 'N/A';
+        return '<a class="regime" data-status="' + r.status + '" href="' + (r.href || '#') + '" aria-label="' + r.name + ' — ' + pill + '">' +
+          '<div class="regime-top"><span class="regime-num">' + r.n + '</span><span class="regime-ico">' + (ICONS[r.icon] || '') + '</span></div>' +
+          '<div class="regime-name">' + r.name + '</div>' +
+          metric +
+          '<div class="regime-note">' + r.note + '</div>' +
+          '<span class="regime-pill"><span class="pdot"></span>' + pill + '</span>' +
+          '</a>';
+      }
+
+      function renderRegimes(regimes) {
+        var top = '', bottom = '';
+        regimes.forEach(function (r) {
+          if (r.row === 'top') top += regimeCard(r); else bottom += regimeCard(r);
+        });
+        document.getElementById('rowTop').innerHTML = top;
+        document.getElementById('rowBottom').innerHTML = bottom;
+      }
+
+      if (LIVE_SCORING) {
+        // Live path: engine-scored regimes; demo fallback on any failure.
+        fetch(HEATMAP_ENDPOINT)
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (j) { renderRegimes((j && j.regimes && j.regimes.length) ? j.regimes : DEMO_REGIMES); })
+          .catch(function () { renderRegimes(DEMO_REGIMES); });
+      } else {
+        renderRegimes(DEMO_REGIMES);
+      }
+
+      // =====================================================================
+      // ASK EDGE — CHAT (connect-ready, same contract as dashboard.html):
+      // POST { messages, context } → { reply }.  Flip connected when live.
+      // =====================================================================
+      var CHAT_CONFIG = {
+        endpoint: '/api/edge-chat',
+        connected: false,
+        context: { page: 'heatmap' }
+      };
+
+      // Mascot poses: waving = idle; abacus = "thinking" while a reply is
+      // being generated. The header swaps to the abacus pose during the wait
+      // and back to the wave when the reply lands (real images only).
+      var MASCOT_IDLE = 'assets/edge-wave.png';
+      var MASCOT_THINKING = 'assets/edge-abacus.png';
+      var thinkingPoseReady = false;
+      (function () {
+        var p = new Image();
+        p.onload = function () { thinkingPoseReady = true; };
+        p.src = MASCOT_THINKING;
+      })();
+      function setHeadMascot(src) {
+        var el = document.querySelector('.chat-head img.mascot');
+        if (el) el.src = src;
+      }
+
+      var chatHistory = [];
+      var panel = document.getElementById('chatPanel');
+      var btn = document.getElementById('askEdgeBtn');
+      var msgs = document.getElementById('chatMsgs');
+      var input = document.getElementById('chatInput');
+      var sendBtn = document.getElementById('chatSend');
+
+      function addMsg(role, text) {
+        var el = document.createElement('div');
+        el.className = 'msg ' + (role === 'user' ? 'user' : 'edge');
+        el.textContent = text;
+        msgs.appendChild(el);
+        msgs.scrollTop = msgs.scrollHeight;
+        return el;
+      }
+      function openChat() {
+        panel.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        if (!chatHistory.length) {
+          addMsg('assistant', 'Hi, I’m Edge! 👋 Ask me about any regime on your Heat Map — what it means, why it’s flagged, or what to do next.');
+          chatHistory.push({ role: 'assistant', content: '(greeting)' });
+        }
+        input.focus();
+      }
+      function closeChat() {
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      btn.addEventListener('click', function () {
+        panel.classList.contains('open') ? closeChat() : openChat();
+      });
+      document.getElementById('chatClose').addEventListener('click', closeChat);
+
+      document.getElementById('chatForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        addMsg('user', text);
+        chatHistory.push({ role: 'user', content: text });
+        sendBtn.disabled = true;
+        var typing = addMsg('assistant', 'Edge is thinking…');
+        typing.classList.add('typing');
+        if (thinkingPoseReady) setHeadMascot(MASCOT_THINKING);
+        function finish(reply) {
+          typing.classList.remove('typing');
+          typing.textContent = reply;
+          chatHistory.push({ role: 'assistant', content: reply });
+          setHeadMascot(MASCOT_IDLE);
+          sendBtn.disabled = false;
+          input.focus();
+          msgs.scrollTop = msgs.scrollHeight;
+        }
+        if (CHAT_CONFIG.connected) {
+          fetch(CHAT_CONFIG.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: chatHistory.filter(function (m) { return m.content !== '(greeting)'; }), context: CHAT_CONFIG.context })
+          }).then(function (r) { return r.json(); })
+            .then(function (j) { finish(j.reply || 'Sorry — I didn’t catch that. Try again?'); })
+            .catch(function () { finish('I couldn’t reach my brain just now. Please try again in a moment.'); });
+        } else {
+          setTimeout(function () {
+            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I’ll explain any regime here and what to do about it.');
+          }, 700);
+        }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && panel.classList.contains('open')) closeChat();
+      });
+
+      // ===== Real mascot auto-swap =====
+      // The inline SVG mascot is a stand-in. Drop the official character
+      // render (transparent background) at assets/edge-wave.png and every
+      // mascot on this page upgrades to it automatically — no code change.
+      (function () {
+        var probe = new Image();
+        probe.onload = function () {
+          Array.prototype.forEach.call(document.querySelectorAll('svg.mascot'), function (svg) {
+            var img = document.createElement('img');
+            img.className = 'mascot';
+            img.src = probe.src;
+            img.alt = '';
+            svg.parentNode.replaceChild(img, svg);
+          });
+        };
+        probe.src = 'assets/edge-wave.png';
+      })();
+    })();
+  </script>
+</body>
+</html>
