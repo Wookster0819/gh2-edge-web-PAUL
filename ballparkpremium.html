@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index,follow" />
-  <title>GH2 EDGE™ — Discover Your Required Portfolio Return</title>
+  <title>GH2 EDGE™ — Ballpark Premium</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/favicon.svg" />
   <meta name="description" content="A friendly retirement ballpark check, with the GH2 EDGE™ Required Portfolio Return — the one number most calculators don't compute." />
@@ -889,6 +889,90 @@
       .spouse-grid { grid-template-columns: 1fr; }
     }
   </style>
+<style id="pp-style">
+#premiumPanel{--pp-panel:#161922;--pp-panel2:#12151d;--pp-card:#20242e;--pp-cardlock:#191c24;
+  --pp-line:#2a2f3a;--pp-text:#e9ecf2;--pp-muted:#9aa2af;--pp-dim:#6b7280;
+  --pp-green:#4ade80;--pp-teal:#2ee6c6;--pp-purple:#7c6cf0;--pp-amber:#f5b74d;
+  max-width:100%;margin:24px auto 0;padding:0;
+  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+#premiumPanel[hidden]{display:none}
+#premiumPanel .pp-card{background:linear-gradient(180deg,var(--pp-panel),var(--pp-panel2));border:1px solid var(--pp-line);
+  border-radius:18px;padding:20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.45);color:var(--pp-text)}
+#premiumPanel .pp-eyebrow{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--pp-teal);margin-bottom:14px}
+#premiumPanel .pp-phead{display:flex;justify-content:space-between;align-items:baseline}
+#premiumPanel .pp-lbl{font-size:15px;font-weight:600}
+#premiumPanel .pp-pct{font-size:15px;font-weight:700;color:var(--pp-teal)}
+#premiumPanel .pp-pbar{position:relative;height:6px;border-radius:6px;background:#242a35;margin:10px 0 4px;overflow:hidden}
+#premiumPanel .pp-pbar>i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;
+  background:linear-gradient(90deg,var(--pp-teal),var(--pp-green));transition:width .35s cubic-bezier(.4,0,.2,1)}
+#premiumPanel .pp-pticks{display:flex;justify-content:space-between;font-size:11px;color:var(--pp-dim);margin-top:6px}
+#premiumPanel .pp-pticks .pp-cur{color:var(--pp-muted)}
+#premiumPanel .pp-sub{font-size:13px;color:var(--pp-muted);margin:20px 0 9px}
+#premiumPanel .pp-pills{display:flex;flex-wrap:wrap;gap:7px}
+#premiumPanel .pp-pill{display:inline-flex;align-items:center;gap:5px;background:#173322;border:1px solid #245c39;
+  color:#9ff0b6;font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:20px}
+#premiumPanel .pp-rows{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+#premiumPanel .pp-row{display:block;background:var(--pp-card);border:1px solid var(--pp-line);
+  border-radius:12px;padding:13px 14px;transition:background .2s,border-color .2s}
+#premiumPanel .pp-row.pp-locked{background:var(--pp-cardlock)}
+#premiumPanel .pp-row.pp-done{border-color:#2c5c3e}
+#premiumPanel .pp-row.pp-inert{opacity:.55}
+#premiumPanel .pp-txt{flex:1;min-width:0}
+#premiumPanel .pp-t1{font-size:14px;font-weight:600}
+#premiumPanel .pp-t2{font-size:12px;color:var(--pp-muted);margin-top:2px}
+#premiumPanel .pp-t2 b{color:var(--pp-teal);font-weight:600}
+#premiumPanel .pp-row.pp-locked .pp-t1,#premiumPanel .pp-row.pp-locked .pp-t2{color:var(--pp-dim)}
+#premiumPanel select{appearance:none;background:#2a2f3a url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239aa2af'/></svg>") no-repeat right 10px center;
+  color:var(--pp-text);border:1px solid #363c48;border-radius:9px;padding:9px 30px 9px 12px;font-size:13px;font-family:inherit;min-width:118px;cursor:pointer}
+#premiumPanel select.pp-set{border-color:#2c5c3e;color:#bff3cf}
+#premiumPanel .pp-fp{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid #3a3f66;
+  color:#a9a5f5;font-size:12px;font-weight:600;padding:8px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;font-family:inherit}
+#premiumPanel .pp-fp:hover{background:#20213a}
+/* Locked tier affordance. Carries the .pp-fp shape so the row reads as a real control the
+   user does not have yet, but is inert by construction — no hover lift, no pointer. The
+   only path to resolving these is the Full-profile tier named in the tick strip above. */
+#premiumPanel .pp-fp-locked{cursor:default;color:var(--pp-dim);border-color:#2f3350}
+#premiumPanel .pp-fp-locked:hover{background:transparent}
+#premiumPanel .pp-row select,#premiumPanel .pp-row .pp-fp{width:100%;margin-top:10px;box-sizing:border-box}
+#premiumPanel .pp-row .pp-fp{justify-content:center}
+#premiumPanel .pp-rr{margin-top:24px}
+#premiumPanel .pp-cap{font-size:13px;color:var(--pp-muted);margin-bottom:6px}
+#premiumPanel .pp-val{font-size:34px;font-weight:800;letter-spacing:-.5px}
+#premiumPanel .pp-val .pp-u{font-size:15px;font-weight:600;color:var(--pp-muted);margin-left:6px}
+#premiumPanel .pp-center{font-size:12.5px;color:var(--pp-dim);margin-top:4px}
+#premiumPanel .pp-band{position:relative;height:12px;border-radius:8px;margin-top:16px;
+  background:linear-gradient(90deg,#1c6f4a,#2e7d5c 40%,#8a6a2e 72%,#8a3b3b);opacity:.35}
+#premiumPanel .pp-bandhi{position:absolute;top:-3px;height:18px;border-radius:6px;background:rgba(124,108,240,.85);
+  box-shadow:0 0 0 1px rgba(124,108,240,.5),0 4px 14px rgba(124,108,240,.4);transition:left .4s,width .4s}
+#premiumPanel .pp-bandhi>i{position:absolute;top:2px;bottom:2px;width:4px;border-radius:3px;background:#c7bffb}
+#premiumPanel .pp-bandhi>i.l{left:0}#premiumPanel .pp-bandhi>i.r{right:0}
+#premiumPanel .pp-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--pp-dim);margin-top:8px}
+#premiumPanel .pp-note{margin-top:16px;font-size:12.5px;color:var(--pp-muted);line-height:1.5}
+#premiumPanel .pp-note .pp-dark{color:#c7bffb;font-weight:600}
+#premiumPanel .pp-warn{display:flex;gap:7px;margin-top:9px;font-size:12.5px;color:var(--pp-amber);line-height:1.45}
+#premiumPanel .pp-warn.pp-hidden{display:none}
+#premiumPanel .pp-warn svg{flex:none;width:15px;height:15px;margin-top:1px}
+#premiumPanel .pp-infeasible{font-size:13px;color:var(--pp-muted);line-height:1.55;margin-top:6px}
+#premiumPanel .pp-flag{margin:14px auto 0;font-size:11px;color:var(--pp-dim);text-align:center}
+#premiumPanel .pp-loading{text-align:center;color:var(--pp-muted);padding:30px 0;font-size:13px}
+/* result hero keeps its native responsive layout: side-by-side on desktop, stacks under 880px */
+#premiumPanel #resultHero{width:100%;max-width:100%;margin:16px 0 6px}
+#premiumPanel .pp-card{max-width:100%}
+#premiumPanel .result-foot{flex-wrap:wrap;gap:10px}
+#premiumPanel img,#premiumPanel svg{max-width:100%}
+#premiumPanel .pp-txt{min-width:0}
+/* Keep the sharpen section a readable width even when the panel fills the full wrap */
+#premiumPanel .pp-sub,#premiumPanel .pp-pills,#premiumPanel .pp-rows,#premiumPanel .pp-rr{max-width:100%}
+@media (max-width:560px){
+  #premiumPanel .pp-card{padding:16px 13px}
+  #premiumPanel .pp-val{font-size:26px}
+  #premiumPanel .result-readout .result-value{font-size:44px}
+  #premiumPanel .result-status .status-headline{font-size:21px;line-height:1.2}
+  #premiumPanel .result-ring{width:126px;height:126px}
+  #premiumPanel .pp-row{padding:11px 12px;gap:8px}
+  #premiumPanel select{font-size:12.5px}
+}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -1380,6 +1464,39 @@
       <footer class="page-footer">
         <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
       </footer>
+    </section>
+
+    <section id="premiumPanel" hidden aria-live="polite">
+      <div class="pp-card">
+        <div class="pp-eyebrow">GH2 EDGE™ · PRECISION</div>
+        <div class="pp-phead"><span class="pp-lbl">Precision</span><span class="pp-pct" id="ppPct">—</span></div>
+        <div class="pp-pbar"><i id="ppBar" style="width:71%"></i></div>
+        <div class="pp-pticks"><span>Quick check</span><span class="pp-cur">Ballpark</span><span class="pp-lock">🔒 Full profile</span></div>
+
+        <div class="pp-sub">From your ballpark — confirmed</div>
+        <div class="pp-pills" id="ppPills"></div>
+
+        <div id="ppResultHost"></div>
+
+        <!-- The range sits immediately below the required-return figure (#irr, inside the
+             hero folded into #ppResultHost) so the number and its range read as one unit.
+             IDs unchanged — the premium script addresses these by id, not position. -->
+        <div class="pp-rr">
+          <div class="pp-cap">Your required portfolio return</div>
+          <div class="pp-val"><span id="ppRrlo">—</span><span id="ppDash"> – </span><span id="ppRrhi">—</span><span class="pp-u" id="ppU">per year</span></div>
+          <div class="pp-center" id="ppRrcenter"></div>
+          <div class="pp-band" id="ppBandRow"><div class="pp-bandhi" id="ppBandhi" style="left:0;width:0"><i class="l"></i><i class="r"></i></div></div>
+          <div class="pp-scale" id="ppScaleRow"><span id="ppSl">3%</span><span id="ppSm">7%</span><span id="ppSh">11%</span></div>
+          <div class="pp-note" id="ppNoteRow">Full profile pinpoints this to <span class="pp-dark">±0.2% — the dark band</span>. Where you actually sit depends on the locked inputs.</div>
+          <div class="pp-warn pp-hidden" id="ppWarnbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span id="ppWarn"></span></div>
+          <div class="pp-infeasible" id="ppInfeasible" style="display:none"></div>
+        </div>
+
+        <div class="pp-sub">Sharpen your number — each field tightens your range</div>
+        <div class="pp-rows" id="ppRows"><div class="pp-loading">Computing your sensitivity…</div></div>
+
+        <div class="pp-flag">Every number is live GH2 EDGE™ engine output · Patent Pending</div>
+      </div>
     </section>
   </main>
 
@@ -1927,10 +2044,7 @@
         btn.disabled = true;
         btn.innerHTML = 'Calculating…';
 
-        fetch('/api/optimize-quick', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        var reqBody = {
             mode: 'ballpark',
             age: age, retirementAge: retirementAge, ssClaimAge: ssClaimAge, filingStatus: filing,
             spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge, spouseSsClaimAge: spouseSsClaimAge,
@@ -1941,7 +2055,12 @@
             salaryGrowth: salaryGrowth, preRetReturn: preRetReturn, preRetInflation: preRetInflation,
             postRetReturn: postRetReturn, postRetInflation: postRetInflation, targetEndAge: planThroughAge,
             ssMonthlyFRA: ssMonthlyFRA
-          })
+        };
+
+        fetch('/api/optimize-quick', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reqBody)
         }).then(function (r) {
           if (r.status === 401) { window.location.href = '/login.html?next=' + encodeURIComponent('/ballpark.html'); return null; }
           return r.json().then(function (j) { return { status: r.status, body: j }; });
@@ -1965,6 +2084,7 @@
             }));
           } catch (e) {}
           renderResult(out.body);
+          if (window.__initPremium) { try { window.__initPremium(reqBody, out.body); } catch (e) {} }
         }).catch(function () {
           btn.disabled = false; btn.innerHTML = orig;
           showError('Network error. Please try again.');
@@ -1972,6 +2092,146 @@
       });
     })();
   </script>
+<script>
+/* Ballpark Premium — Stage 2 precision layer. Seeded from the user's own ballpark
+   inputs + result (no hardcoded sample). Center is anchored to the exact required
+   return Stage 1 displayed, so the two stages never disagree; Premium only adds the
+   band + per-field tighteners around it. GH2 EDGE™ · Patent Pending. */
+window.__initPremium = (function(){
+  var ROW_META = {
+    // All six render LOCKED. The household SEES every variable and what each is worth
+    // in precision, but resolves none of them at this tier — the lock is the upsell to
+    // Full profile. `opts` retained (unused while locked) so this is one-line reversible.
+    spouse:{kind:'lock',t1:"🔒 Spouse's income and Social Security",opts:['Select…','Similar earner','Lower earner','Not working']},
+    mix:{kind:'lock',t1:'🔒 Account mix (pre-tax / Roth / taxable)',opts:['Select…','Mostly pre-tax','Even split','Mostly Roth']},
+    other:{kind:'lock',t1:'🔒 Other retirement income',opts:['Select…','None','Some ($10–30k)','Meaningful ($30k+)']},
+    roth:{kind:'lock',t1:'🔒 Roth conversion modeling'},
+    ssopt:{kind:'lock',t1:'🔒 Social Security claiming optimizer'},
+    hcltc:{kind:'lock',t1:'🔒 Healthcare and long-term care'}
+  };
+  // Founder-set order. NOT sorted by tightening size — this is the sequence a planner
+  // works the household in, so it stays fixed regardless of each row's measured value.
+  // spouse leads: it is the household-structure question everything else depends on, and
+  // for MFJ it is usually the largest single unknown. It self-labels "not applicable" for
+  // single filers rather than showing a fabricated zero.
+  var ORDER=['spouse','ssopt','hcltc','mix','roth','other'];
+  var MODEL=null, locked={}, AXIS={lo:3,hi:11}, REQ={};
+  function $(id){return document.getElementById(id);}
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+  function pctToX(p){return ((p-AXIS.lo)/(AXIS.hi-AXIS.lo))*100;}
+  function tier(pp){var g=pp-MODEL.expected;return g<=0?'well funded':g<=1?'conservative':g<=2?'moderate':g<=3?'aggressive':'extremely aggressive';}
+  function render(){
+    // NOTE ON `locked`: at the Ballpark tier nothing is resolvable, so `locked` stays empty
+    // for the life of the panel — the band renders at full RSS width and Precision holds at
+    // the 71% "Ballpark" tick. The shrink path below is intentionally KEPT INTACT but
+    // UNREACHABLE here: it is the Full-profile tier's math, and it is the same code that
+    // proves the ±X% per-field figures are real rather than decorative. Do not read this as
+    // a control the user can reach at this tier — no row writes to `locked` (see buildRows).
+    var rss2=0,i,k;
+    for(i=0;i<ORDER.length;i++){k=ORDER[i];if(!(k in locked))rss2+=MODEL.fields[k]*MODEL.fields[k];}
+    var half=Math.max(MODEL.floor,Math.sqrt(rss2));
+    var lo=clamp(MODEL.center-half,0,30),hi=Math.max(lo,clamp(MODEL.center+half,0,30));
+    $('ppRrlo').textContent=lo.toFixed(1)+'%';$('ppRrhi').textContent=hi.toFixed(1)+'%';
+    var xl=pctToX(lo),xr=pctToX(hi),b=$('ppBandhi');
+    b.style.left=clamp(xl,0,100)+'%';b.style.width=clamp(xr-xl,0,100)+'%';
+    var resolvedT=0,kk;for(kk in locked)resolvedT+=locked[kk];
+    var base=71,span=100-base,prog=MODEL.totalT>0?resolvedT/MODEL.totalT:0,pct=Math.round(base+span*prog);
+    $('ppPct').textContent=pct+'%';$('ppBar').style.width=pct+'%';
+    var flips=tier(lo)!==tier(hi),wb=$('ppWarnbox');
+    if(flips){wb.classList.remove('pp-hidden');$('ppWarn').textContent='Your feasibility verdict flips inside this range ('+tier(lo)+' → '+tier(hi)+').';}
+    else wb.classList.add('pp-hidden');
+  }
+  function buildRows(){
+    var host=$('ppRows');host.innerHTML='';
+    ORDER.forEach(function(key){
+      // EVERY variable renders LOCKED at this tier. The user sees all six unknowns and what
+      // each one is worth in precision — that measured ±X% IS the product being sold here —
+      // but cannot resolve any of them. Resolution is the Full-profile tier (tick strip above).
+      // Nothing here writes to `locked`: these rows are un-settable by design, not by omission.
+      // ROW_META.opts is deliberately unused at this tier — retained for Full profile, which
+      // is where those choices actually get made.
+      var meta=ROW_META[key],t=MODEL.fields[key]||0,zero=t<=0;
+      // A variable that cannot apply to this household at all (spouse row, single filer).
+      var na=(key==='spouse'&&MODEL.filingStatus!=='mfj');
+      var row=document.createElement('div');row.className='pp-row pp-locked';
+      var txt=document.createElement('div');txt.className='pp-txt';
+      var t1=document.createElement('div');t1.className='pp-t1';
+      // ROW_META already prefixes the three original lock rows; prefix the rest so all six match.
+      t1.textContent=(meta.t1.charAt(0)==='\uD83D'?meta.t1:'🔒 '+meta.t1);
+      var t2=document.createElement('div');t2.className='pp-t2';
+      if(na)        t2.textContent='Not applicable — you filed as single';
+      else if(zero) t2.textContent="Doesn't change your number for this household";
+      else          t2.innerHTML='Tightens range by <b>±'+t.toFixed(1)+'%</b>';
+      txt.appendChild(t1);txt.appendChild(t2);row.appendChild(txt);
+      // A variable worth nothing for this household is not an upsell — state the fact and show
+      // no CTA. Only variables that would actually buy precision carry the Full-profile
+      // affordance, so the tease is never manufactured.
+      if(!zero&&!na){
+        var cta=document.createElement('div');cta.className='pp-fp pp-fp-locked';
+        cta.setAttribute('aria-disabled','true');
+        cta.textContent='🔒 Unlock with Full profile';
+        row.appendChild(cta);
+      }
+      host.appendChild(row);
+    });
+  }
+  function chrome(on){
+    ['ppBandRow','ppScaleRow','ppNoteRow','ppRows'].forEach(function(id){$(id).style.display=on?'':'none';});
+    $('ppDash').style.display=on?'':'none';$('ppRrhi').style.display=on?'':'none';$('ppU').style.display=on?'':'none';
+    $('ppInfeasible').style.display=on?'none':'block';
+  }
+  function paintFeasible(prem,anchorPP,mixPP){
+    chrome(true);
+    var fields={},totalT=0;(prem.fields||[]).forEach(function(f){fields[f.key]=f.tighten;totalT+=Math.max(0,f.tighten);});
+    var bh=(prem.bandHigh!=null?prem.bandHigh:anchorPP),bl=(prem.bandLow!=null?prem.bandLow:anchorPP);
+    var half=Math.max(0,(bh-bl)/2);
+    MODEL={center:anchorPP,expected:mixPP,floor:prem.floor||0.2,fields:fields,totalT:totalT,filingStatus:REQ.filingStatus};
+    AXIS.lo=clamp(Math.floor(anchorPP-half-1),0,30);AXIS.hi=clamp(Math.ceil(anchorPP+half+1),0,30);
+    if(AXIS.hi-AXIS.lo<4)AXIS.hi=Math.min(30,AXIS.lo+4);
+    $('ppSl').textContent=AXIS.lo+'%';$('ppSm').textContent=Math.round((AXIS.lo+AXIS.hi)/2)+'%';$('ppSh').textContent=AXIS.hi+'%';
+    $('ppRrcenter').textContent='Your ballpark: '+anchorPP.toFixed(1)+'%/yr — the range is how far that could move as the locked inputs resolve.';
+    buildRows();render();
+  }
+  function paintInfeasible(){
+    chrome(false);$('ppWarnbox').classList.add('pp-hidden');
+    $('ppRrlo').textContent='30%+';$('ppRrcenter').textContent='';$('ppPct').textContent='—';$('ppBar').style.width='0%';
+    $('ppInfeasible').textContent="At these inputs the plan isn't fundable at a realistic return, so there's no range to tighten yet. The precision layer sharpens feasible plans — spend less, work longer, or add savings above and it will pinpoint your number.";
+  }
+  function pills(req){
+    var host=$('ppPills');host.innerHTML='';
+    var items=['Age '+req.age, req.filingStatus==='mfj'?'Married':'Single'];
+    if(req.currentSavings!=null)items.push('$'+Math.round(req.currentSavings/1000)+'k saved');
+    if(req.customSpending!=null)items.push('$'+Math.round(req.customSpending/1000)+'k spend');
+    if(req.state)items.push(req.state);
+    var shown=items.slice(0,4),extra=items.length-shown.length;
+    shown.forEach(function(x){var s=document.createElement('span');s.className='pp-pill';s.textContent='✓ '+x;host.appendChild(s);});
+    if(extra>0){var e=document.createElement('span');e.className='pp-pill';e.textContent='✓ +'+extra+' more';host.appendChild(e);}
+  }
+  return function(reqBody,ballparkBody){
+    locked={};REQ=reqBody||{};
+    var panel=$('premiumPanel');panel.hidden=false;
+    // Fold the full ballpark result (verdict, ring, required return, gap, levers, assumptions)
+    // into the precision panel, and hide the rest of the standalone result section. On Ballpark
+    // Premium the precision panel is the single, complete deliverable.
+    var hero=$('resultHero'),host=$('ppResultHost'),rs=$('resultsSection');
+    if(hero&&host&&hero.parentNode!==host){host.innerHTML='';host.appendChild(hero);hero.style.margin='16px 0 2px';}
+    if(rs)rs.style.display='none';
+    $('ppRows').innerHTML='<div class="pp-loading">Computing your sensitivity…</div>';
+    pills(reqBody);
+    setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'});},80);
+    var irr=Number(ballparkBody.requiredIRR);
+    var anchorPP=clamp((isFinite(irr)?irr:0)*100,0,30);
+    var mixFrac=Number(ballparkBody.expectedPortfolioReturn);
+    var mixPP=(isFinite(mixFrac)&&mixFrac>0)?mixFrac*100:0;
+    // Always render the full precision layout (rows + band), feasible or not.
+    var body=Object.assign({},reqBody,{mode:'premium'});
+    fetch('/api/optimize-quick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(prem){paintFeasible(prem||{},anchorPP,mixPP>0?mixPP:(Number((prem||{}).expectedPortfolioReturn)||anchorPP));})
+      .catch(function(){paintFeasible({fields:[]},anchorPP,mixPP||anchorPP);});
+  };
+})();
+</script>
 <script>try{history.scrollRestoration="manual";}catch(e){}addEventListener("load",function(){window.scrollTo(0,0);});</script>
 </body>
 </html>
