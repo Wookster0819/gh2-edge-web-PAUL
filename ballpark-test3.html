@@ -1670,7 +1670,7 @@
             <span class="rz-card-title">SHARPEN YOUR NUMBER &mdash; WHAT&rsquo;S STILL LOCKED</span>
             <a href="pricing.html">See all items &rarr;</a>
           </div>
-          <div class="rz-acc">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
+          <div class="rz-acc">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b><span id="rzAccDollar"></span>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
           <div id="rzSharpenList"></div>
           <div class="rz-total"><span>Unlock all four and your number is accurate to within</span><b id="rzTotalPts">0.2%</b></div>
         </div>
@@ -2297,6 +2297,16 @@
         pool.forEach(function (it) { it.scaled = Math.max(0.1, Math.round(avail * it.impact / wsum * 10) / 10); });
 
         document.getElementById('rzAccNow').textContent = accNow.toFixed(1);
+        // Translate the abstract percentage into dollars on THEIR balance —
+        // "off by 2.6%" reads like nothing; "$23,000 a year" doesn't.
+        (function () {
+          var el = document.getElementById('rzAccDollar');
+          var proj = data.projectedRetirementBalance;
+          if (el && typeof proj === 'number' && proj > 0) {
+            var swing = Math.round(accNow / 100 * proj / 1000) * 1000;
+            el.innerHTML = ' — about <b class="now">' + fmt$(swing) + ' a year</b> on the savings you’re projected to have';
+          } else if (el) { el.textContent = ''; }
+        })();
 
         var listEl = document.getElementById('rzSharpenList');
         listEl.innerHTML = pool.map(function (it) {
