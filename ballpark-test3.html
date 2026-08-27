@@ -728,6 +728,13 @@
     }
 
 
+    /* Compact convenience CTA (precision card) */
+    .rz-cta-sm {
+      font-size: 14px; font-weight: 700; padding: 11px 20px; border-radius: 11px;
+      align-self: flex-start; margin-top: 10px; gap: 7px;
+      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
+    }
+
     /* --- Bottom cleanup --- */
     .detail-panel { margin-top: 26px; }
     .rz-adjust-link { background: none; border: 0; cursor: pointer; font-family: inherit; font-size: 13.5px; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; padding: 2px; }
@@ -1551,6 +1558,7 @@
           <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
           <div class="rz-note" id="rzPrecisionNote"></div>
           <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
+          <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
           <div class="rz-mini-steps">
             <span class="ms done">&#10003; Quick Check</span><i></i>
             <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
@@ -2079,7 +2087,7 @@
         var vc = document.getElementById('rzVerdict');
         vc.setAttribute('data-tier', tier);
         document.getElementById('rzVerdictPill').textContent =
-          tier === 'at_risk' ? 'AT RISK' : tier === 'stretch' ? 'A REACH' : 'ON TRACK';
+          tier === 'at_risk' ? 'AT RISK' : tier === 'stretch' ? 'NEEDS ATTENTION' : 'ON TRACK';
         var glyphEl = document.getElementById('rzVerdictGlyph');
         if (tier === 'stretch') {
           glyphEl.innerHTML = '<svg viewBox="0 0 24 24" style="width:88px;height:88px;display:block;"><path d="M12 2.6 L22.6 20.6 H1.4 Z" fill="#F59E0B" stroke="#F59E0B" stroke-width="2.6" stroke-linejoin="round"/><rect x="10.9" y="8.6" width="2.2" height="6.4" rx="1.1" fill="#3A2703"/><circle cx="12" cy="17.5" r="1.35" fill="#3A2703"/></svg>';
