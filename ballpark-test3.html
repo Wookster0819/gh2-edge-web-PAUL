@@ -740,7 +740,8 @@
     .rz-vnav a.cur { color: var(--text); pointer-events: none; }
     @media (max-width: 880px) { .rz-resources { grid-template-columns: 1fr; } }
 
-    /* V3: original geometry + sizes; hierarchy via surface elevation only */
+    /* V3: original sizes; hierarchy via surface elevation + verdict leads (LTR) */
+    .rz-top { grid-template-columns: 2.15fr 1.32fr 1fr; }
     .rz-precision-pct { font-size: 64px; background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
     .rz-irr { font-size: 64px; }
     .rz-card { background: #0D1220; }
@@ -1517,19 +1518,14 @@
         Preview mode: the live engine couldn&rsquo;t be reached, so these are <strong>sample numbers</strong> to show the layout. Hit &ldquo;Adjust inputs&rdquo; and try again for your real result.
       </div>
       <div class="rz-top">
-        <!-- 1. Ballpark precision -->
-        <div class="rz-card">
-          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
-          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
-          <div class="rz-note" id="rzPrecisionNote"></div>
-          <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
-          <div class="rz-mini-steps">
-            <span class="ms done">&#10003; Quick Check</span><i></i>
-            <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
-            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
-          </div>
+        <!-- 3. Verdict (dominant) -->
+        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
+          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
+          <div class="rz-verdict-head" id="rzVerdictHead"></div>
+          <div class="rz-verdict-body" id="rzVerdictBody"></div>
+          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
+          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
         </div>
-
         <!-- 2. Required return + possible range -->
         <div class="rz-card" id="rzCard2" data-tier="on_track">
           <div class="rz-card-title">REQUIRED PORTFOLIO RETURN <span class="rz-info" title="The average annual return your whole portfolio needs.">&#9432;</span></div>
@@ -1549,14 +1545,19 @@
           <div class="rz-target-fixed">&#9650; Target: 5.0% <span>(safe zone)</span></div>
         </div>
 
-        <!-- 3. Verdict (dominant) -->
-        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
-          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
-          <div class="rz-verdict-head" id="rzVerdictHead"></div>
-          <div class="rz-verdict-body" id="rzVerdictBody"></div>
-          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
-          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
+        <!-- 1. Ballpark precision -->
+        <div class="rz-card">
+          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
+          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
+          <div class="rz-note" id="rzPrecisionNote"></div>
+          <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
+          <div class="rz-mini-steps">
+            <span class="ms done">&#10003; Quick Check</span><i></i>
+            <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
+            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
+          </div>
         </div>
+
       </div>
 
       <!-- Recommended action bar -->
