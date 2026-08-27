@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index,follow" />
-  <title>GH2 EDGE™ — Discover Your Required Portfolio Return</title>
+  <title>GH2 EDGE™ — Ballpark Premium</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/favicon.svg" />
   <meta name="description" content="A friendly retirement ballpark check, with the GH2 EDGE™ Required Portfolio Return — the one number most calculators don't compute." />
@@ -483,422 +483,6 @@
     .persist-note { color: var(--text-faint); font-size: 12px; margin: 14px 0 0; text-align: center; }
 
     /* ===== RESULTS PAGE (hidden until submit) ===== */
-    /* ===== Results v2 — precision / range / verdict bento (concept: FOMO hierarchy) ===== */
-    /* Break the results out of the narrow form column: the reference is a
-       full-viewport dashboard. */
-    #resultsSection.visible {
-      display: block;
-      position: relative;
-      width: min(1520px, calc(100vw - 44px));
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .rz-top { display: grid; grid-template-columns: 1fr 1.32fr 2.15fr; gap: 22px; }
-    .rz-card {
-      background: var(--card-bg); border: 1px solid var(--border-soft);
-      border-radius: 16px; padding: 26px 30px; position: relative;
-      display: flex; flex-direction: column; gap: 12px;
-    }
-    .rz-card-title {
-      font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em;
-      color: var(--text-dim); display: flex; align-items: center; gap: 7px;
-    }
-    .rz-info { opacity: 0.5; font-size: 13px; cursor: help; font-weight: 400; }
-    .rz-note { font-size: 15px; color: var(--text-muted); line-height: 1.55; }
-    .rz-note strong { color: var(--text); }
-
-    /* Card 1 — precision */
-    .rz-precision-pct {
-      font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
-      color: var(--text-dim);
-    }
-    .rz-mini-steps { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 7px; font-size: 12px; color: var(--text-muted); }
-    .rz-mini-steps .ms { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-    .rz-mini-steps .ms.done { color: var(--text); }
-    .rz-mini-steps .ms.cur  { color: var(--text); font-weight: 700; }
-    .rz-mini-steps .ms.cur .msdot { width: 13px; height: 13px; border-radius: 50%; background: #FFF; box-shadow: 0 0 0 3px rgba(255,255,255,0.18); display: inline-block; }
-    .rz-mini-steps .ms.lock { color: var(--text-faint); }
-    .rz-mini-steps i { display: none; }
-    .rz-mini-steps i.off { background: var(--border); }
-
-    /* Card 2 — required return + range */
-    .rz-irr { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
-    #rzCard2[data-tier="at_risk"]  .rz-irr { color: #FF3B30; }
-    #rzCard2[data-tier="stretch"]  .rz-irr { color: #F97316; }
-    #rzCard2[data-tier="on_track"] .rz-irr { color: #22C55E; }
-    .rz-range-label { font-size: 13px; font-weight: 500; color: var(--text-faint); margin-top: 10px; }
-    .rz-range-row { display: flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 700; margin: 6px 0 40px; }
-    .rz-range-track {
-      flex: 1 1 auto; height: 8px; border-radius: 99px; position: relative;
-      background: linear-gradient(90deg, #3B4BD8 0%, #7C3AED 40%, #C0264B 75%, #FF3B30 100%);
-    }
-    .rz-range-marker {
-      position: absolute; top: 50%; transform: translate(-50%, -50%);
-      width: 19px; height: 19px; border-radius: 50%;
-      background: #16060A; border: 4px solid #FF3B30;
-      box-shadow: 0 0 12px rgba(255,59,48,0.7);
-    }
-    #rzCard2[data-tier="stretch"]  .rz-range-marker { border-color: #F97316; box-shadow: 0 0 12px rgba(249,115,22,0.7); }
-    #rzCard2[data-tier="on_track"] .rz-range-marker { border-color: #22C55E; box-shadow: 0 0 12px rgba(34,197,94,0.7); }
-    .rz-range-your-wrap {
-      position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; line-height: 1.3; white-space: nowrap;
-    }
-    .rz-range-your-wrap span { font-size: 15px; font-weight: 800; }
-    #rzCard2[data-tier="at_risk"]  .rz-range-your-wrap span { color: #FF3B30; }
-    #rzCard2[data-tier="stretch"]  .rz-range-your-wrap span { color: #F97316; }
-    #rzCard2[data-tier="on_track"] .rz-range-your-wrap span { color: #22C55E; }
-    .rz-range-your-wrap em { font-style: normal; font-size: 12px; color: var(--text-muted); }
-    .rz-target { display: none; }
-    .rz-target-fixed { font-size: 13px; color: var(--text-dim); margin-top: auto; }
-    .rz-target-fixed span { color: var(--text-faint); }
-
-    /* Card 3 — verdict (the loudest thing on screen) */
-    .rz-verdict { padding: 30px 34px; padding-right: 205px; overflow: hidden; justify-content: center; gap: 14px; }
-    .rz-verdict[data-tier="at_risk"] {
-      border: 1.5px solid rgba(255,59,48,0.55);
-      background: radial-gradient(ellipse at 88% 45%, rgba(255,59,48,0.16) 0%, rgba(30,6,10,0.5) 45%, var(--card-bg) 75%);
-      box-shadow: 0 0 40px rgba(255,59,48,0.10);
-    }
-    .rz-verdict[data-tier="stretch"] {
-      border: 1.5px solid rgba(249,115,22,0.5);
-      background: radial-gradient(ellipse at 88% 45%, rgba(249,115,22,0.15) 0%, rgba(28,12,3,0.5) 45%, var(--card-bg) 75%);
-      box-shadow: 0 0 40px rgba(249,115,22,0.09);
-    }
-    .rz-verdict[data-tier="on_track"] {
-      border: 1.5px solid rgba(34,197,94,0.5);
-      background: radial-gradient(ellipse at 88% 45%, rgba(34,197,94,0.14) 0%, rgba(4,24,12,0.5) 45%, var(--card-bg) 75%);
-      box-shadow: 0 0 40px rgba(34,197,94,0.09);
-    }
-    .rz-pill {
-      display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
-      background: rgba(0,0,0,0.45); border-radius: 99px; padding: 7px 16px;
-      font-size: 13px; font-weight: 800; letter-spacing: 0.06em; color: var(--text);
-    }
-    .rz-pill .dot { width: 9px; height: 9px; border-radius: 50%; }
-    .rz-verdict[data-tier="at_risk"]  .rz-pill .dot { background: #FF3B30; box-shadow: 0 0 9px #FF3B30; }
-    .rz-verdict[data-tier="stretch"]  .rz-pill .dot { background: #F97316; box-shadow: 0 0 9px #F97316; }
-    .rz-verdict[data-tier="on_track"] .rz-pill .dot { background: #22C55E; box-shadow: 0 0 9px #22C55E; }
-    .rz-verdict-head { font-size: clamp(28px, 2.9vw, 42px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.12; }
-    .rz-verdict[data-tier="at_risk"]  .rz-verdict-head { color: #FF453A; }
-    .rz-verdict[data-tier="stretch"]  .rz-verdict-head { color: #F97316; }
-    .rz-verdict[data-tier="on_track"] .rz-verdict-head { color: #22C55E; }
-    .rz-verdict-body { font-size: 15.5px; color: var(--text-dim); line-height: 1.55; max-width: 52ch; }
-    .rz-verdict-cta { font-size: 15.5px; font-weight: 700; text-decoration: none; padding-top: 4px; }
-    .rz-verdict[data-tier="at_risk"]  .rz-verdict-cta { color: #FF453A; }
-    .rz-verdict[data-tier="stretch"]  .rz-verdict-cta { color: #F97316; }
-    .rz-verdict[data-tier="on_track"] .rz-verdict-cta { color: #22C55E; }
-    .rz-verdict-cta:hover { text-decoration: underline; }
-    .rz-verdict-badge {
-      position: absolute; right: 34px; top: 50%; transform: translateY(-50%);
-      width: 150px; height: 150px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .rz-verdict[data-tier="at_risk"] .rz-verdict-badge { background: radial-gradient(circle, rgba(255,59,48,0.38) 0%, rgba(255,59,48,0.10) 55%, transparent 72%); }
-    .rz-verdict[data-tier="stretch"] .rz-verdict-badge { background: radial-gradient(circle, rgba(249,115,22,0.34) 0%, rgba(249,115,22,0.09) 55%, transparent 72%); }
-    .rz-verdict[data-tier="on_track"] .rz-verdict-badge { background: radial-gradient(circle, rgba(34,197,94,0.32) 0%, rgba(34,197,94,0.09) 55%, transparent 72%); }
-    .rz-verdict-badge .ring {
-      width: 96px; height: 96px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 48px; font-weight: 900; color: #FFF; line-height: 1;
-    }
-    .rz-verdict[data-tier="at_risk"]  .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #FF5147, #D31408); box-shadow: 0 0 55px rgba(255,59,48,0.6); }
-    .rz-verdict[data-tier="stretch"]  .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #FB8B3C, #CE5A05); box-shadow: 0 0 55px rgba(249,115,22,0.55); }
-    .rz-verdict[data-tier="on_track"] .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #34D871, #12933F); box-shadow: 0 0 55px rgba(34,197,94,0.55); }
-
-    /* Recommended action bar */
-    .rz-action {
-      display: grid; grid-template-columns: auto auto 1fr auto auto; align-items: center; gap: 34px;
-      margin-top: 22px; padding: 20px 30px;
-      background: linear-gradient(90deg, rgba(59,60,200,0.16) 0%, rgba(89,60,200,0.10) 50%, rgba(59,60,200,0.14) 100%);
-      border: 1px solid rgba(120,110,255,0.45); border-radius: 14px;
-    }
-    .rz-action-ico {
-      width: 56px; height: 56px; border-radius: 13px; flex: none;
-      background: rgba(99,102,241,0.16); color: #818CF8;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .rz-action-amt { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; margin-top: 4px; }
-    .rz-action-exp { font-size: 15.5px; color: var(--text-dim); line-height: 1.5; border-left: 1px solid rgba(255,255,255,0.09); padding-left: 34px; }
-    .rz-action-nums { display: grid; grid-template-columns: auto auto auto; align-items: center; column-gap: 18px; border-left: 1px solid rgba(255,255,255,0.09); padding-left: 34px; }
-    .rz-action-nums .cur { font-size: 27px; font-weight: 800; color: var(--text); }
-    .rz-action-nums .arr { color: var(--text); font-size: 22px; }
-    .rz-action-nums .tgt { font-size: 27px; font-weight: 800; color: #22C55E; }
-    .rz-action-nums .lbls { grid-column: 1 / span 3; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-muted); margin-top: 3px; }
-    .rz-action[data-ok="1"] .rz-action-nums .cur { color: #22C55E; }
-    .rz-action-note { font-size: 14.5px; color: var(--text-dim); max-width: 26ch; line-height: 1.5; }
-
-    /* Bottom row */
-    .rz-bottom { display: block; margin-top: 46px; }
-    .rz-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
-    .rz-chip {
-      display: inline-flex; align-items: center; gap: 7px;
-      background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.4);
-      color: #6EE7A0; border-radius: 99px; padding: 7px 15px;
-      font-size: 13.5px; font-weight: 700;
-    }
-    .rz-sharpen-title { margin-top: 22px; }
-    .rz-row {
-      display: flex; align-items: center; gap: 16px;
-      padding: 13px 16px; border-radius: 10px; margin-top: 9px;
-      background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
-    }
-    .rz-row-main { flex: 1 1 auto; min-width: 0; }
-    .rz-row-name { font-size: 15px; font-weight: 700; }
-    .rz-row-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
-    .rz-row-sub b { font-weight: 700; }
-    .rz-row.na { background: rgba(255,255,255,0.012); }
-    .rz-row.na .rz-row-name { color: var(--text-muted); }
-    .rz-row.na .rz-row-sub { color: var(--text-faint); }
-    .rz-lock {
-      flex: none; display: inline-flex; align-items: center; gap: 8px;
-      font-size: 13.5px; font-weight: 600; color: var(--text-muted);
-      text-decoration: none; white-space: nowrap;
-      transition: color 0.15s ease;
-    }
-    .rz-lock:hover { color: var(--text); }
-    .rz-lock svg { width: 14px; height: 14px; color: #FBBF24; filter: drop-shadow(0 0 4px rgba(251,191,36,0.45)); }
-    .imp-purple { color: #A78BFA; } .imp-blue { color: #60A5FA; }
-    .imp-green { color: #4ADE80; } .imp-amber { color: #FBBF24; }
-    .bg-purple { background: rgba(139,92,246,0.16); }
-    .bg-blue   { background: rgba(59,130,246,0.16); }
-    .bg-green  { background: rgba(34,197,94,0.14); }
-    .bg-amber  { background: rgba(245,158,11,0.14); }
-
-    .rz-impact-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .rz-impact-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
-    .rz-impact-head a:hover { text-decoration: underline; }
-    .rz-imp {
-      display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 18px;
-      padding: 17px 2px; border-bottom: 1px solid var(--border-soft);
-    }
-    .rz-imp:last-of-type { border-bottom: 0; padding-bottom: 6px; }
-    .rz-imp-ico {
-      width: 52px; height: 52px; border-radius: 50%; flex: none;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .rz-imp-ico svg { width: 24px; height: 24px; }
-    .rz-imp-main { min-width: 0; }
-    .rz-imp-name { font-size: 16px; font-weight: 700; }
-    .rz-imp-sub { font-size: 13.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.45; max-width: 34ch; }
-    .rz-imp-val { text-align: left; }
-    .rz-imp-val .lab { font-size: 13px; color: var(--text-dim); display: block; }
-    .rz-imp-val .num { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; }
-    .rz-imp-lk { color: #FBBF24; opacity: 0.95; padding-left: 4px; filter: drop-shadow(0 0 4px rgba(251,191,36,0.4)); }
-    .rz-imp-lk svg { width: 16px; height: 16px; }
-
-    /* Page footer: assumptions left, adjust right */
-    .rz-pagefoot { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 24px; }
-    .rz-foot-tax { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-muted); }
-    .rz-foot-tax svg { width: 16px; height: 16px; color: var(--text-faint); flex: none; }
-    .rz-adjust {
-      display: inline-flex; align-items: center; gap: 9px;
-      font-size: 15px; font-weight: 700; color: var(--text); font-family: inherit;
-      background: transparent; border: 1.5px solid var(--accent-purple);
-      border-radius: 11px; padding: 12px 22px; cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    .rz-adjust:hover { background: rgba(139,92,246,0.12); }
-
-    /* R4: one-time badge pulse on reveal (two beats, then still) */
-    @keyframes rzPulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.07); }
-    }
-    .rz-verdict-badge .ring { animation: rzPulse 0.85s ease-in-out 0.3s 2; }
-    /* ...and pulse while the cursor is anywhere over the verdict card */
-    @media (hover: hover) and (pointer: fine) {
-      .rz-verdict:hover .rz-verdict-badge .ring { animation: rzPulse 0.85s ease-in-out infinite; }
-    }
-
-    /* Hover glow — same treatment as the dashboard cards (cursor devices only) */
-    @media (hover: hover) and (pointer: fine) {
-      .rz-card, .rz-row, .rz-action { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
-      .rz-card:not(.rz-verdict):hover {
-        border-color: rgba(139,92,246,0.55);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3), 0 0 22px rgba(139,92,246,0.20);
-      }
-      .rz-row:hover { border-color: rgba(139,92,246,0.45); }
-      .rz-action:hover {
-        border-color: rgba(139,92,246,0.65);
-        box-shadow: 0 0 26px rgba(139,92,246,0.22);
-      }
-      .rz-item:hover { border-color: rgba(139,92,246,0.5); box-shadow: 0 0 18px rgba(139,92,246,0.15); }
-    }
-
-    /* Stretch tier: amber warning triangle instead of a circle */
-    .rz-verdict[data-tier="stretch"] .rz-verdict-badge .ring {
-      background: transparent; box-shadow: none;
-      filter: drop-shadow(0 0 26px rgba(249,115,22,0.65));
-    }
-
-
-    /* Premium blur: computed magnitudes locked behind Full Profile */
-    .rz-blurwrap { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
-    .rz-blur { filter: blur(8px); user-select: none; pointer-events: none; }
-    .rz-blur-sm { filter: blur(6px); }
-    .rz-blur-lock { color: #FBBF24; display: inline-flex; filter: drop-shadow(0 0 5px rgba(251,191,36,0.5)); }
-    .rz-blurwrap:hover .rz-blur-lock { transform: scale(1.12); transition: transform 0.15s ease; }
-
-    /* Compact convenience CTA (precision card) */
-    .rz-cta-btn.rz-cta-sm {
-      display: inline-flex; width: auto; font-size: 13px; font-weight: 700; padding: 9px 14px; border-radius: 10px;
-      align-self: flex-start; margin-top: 4px; gap: 6px; white-space: nowrap;
-      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
-      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
-    }
-
-    /* --- Bottom cleanup --- */
-    .detail-panel { margin-top: 26px; }
-    .rz-adjust-link { background: none; border: 0; cursor: pointer; font-family: inherit; font-size: 13.5px; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; padding: 2px; }
-    .rz-adjust-link:hover { color: var(--text); }
-    .rz-resources { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 42px; align-items: stretch; }
-    .rz-callout { padding: 20px 22px; border-left: 3px solid var(--accent-purple); background: rgba(139,92,246,0.06); border-radius: 12px; font-size: 14.5px; line-height: 1.55; color: var(--text-muted); }
-    .rz-resources .ebook-cta { margin: 0; }
-    @media (max-width: 880px) { .rz-resources { grid-template-columns: 1fr; } }
-
-    /* V3: original sizes; hierarchy via surface elevation + verdict leads (LTR) */
-    .rz-top { grid-template-columns: 1.9fr 1.3fr 1.15fr; }
-    .rz-precision-pct { font-size: 64px; background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
-    .rz-irr { font-size: 64px; }
-    .rz-card { background: #0D1220; }
-    .rz-card .rz-card-title { color: var(--text-faint); }
-    .rz-verdict .rz-card-title { color: var(--text-dim); }
-    /* Demo-fallback banner (localhost preview only) */
-    .rz-demo-note {
-      margin-bottom: 16px; padding: 11px 16px; border-radius: 10px;
-      background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.45);
-      color: #FBBF24; font-size: 13.5px; font-weight: 600;
-    }
-
-    /* Precision progress bar (endowed progress) */
-    /* Precision as a journey axis (same grammar as the return range bar) */
-    .rz-prec-axis { margin: 12px 0 38px; }
-    .rz-prec-axis .ends { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 7px; }
-    .rz-prec-axis .pend { font-size: 11.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
-    .rz-prec-axis .pend.lock { color: var(--text-faint); }
-    .rz-prec-track { width: 100%; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
-    .rz-prec-track i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #8B5CF6, #A78BFA); transition: width 0.8s ease; }
-    .rz-prec-marker {
-      position: absolute; top: 50%; transform: translate(-50%, -50%);
-      width: 17px; height: 17px; border-radius: 50%;
-      background: #100A24; border: 3.5px solid #A78BFA;
-      box-shadow: 0 0 10px rgba(167,139,250,0.65);
-    }
-    .rz-prec-you {
-      position: absolute; top: 19px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; line-height: 1.25; white-space: nowrap;
-    }
-    .rz-prec-you span { font-size: 13.5px; font-weight: 800; color: #C4B5FD; }
-    .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
-
-    /* Plain-language accuracy line (replaces the second range bar) */
-    .rz-acc { margin-top: 26px; margin-bottom: 10px; font-size: 18px; color: var(--text-dim); line-height: 1.7; max-width: 72ch; }
-    .rz-acc b.now { font-size: 28px; font-weight: 800; color: #FBBF24; line-height: 1; }
-    .rz-acc b.full { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
-    .rz-acc b.money { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
-
-    /* Merged section head + one-bar comparison */
-    .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
-    .rz-merge-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
-    .rz-merge-head a:hover { text-decoration: underline; }
-    .rz-onebar { margin: 14px 2px 6px; }
-    .ob-labels { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
-    .ob-note { display: inline-flex; align-items: center; gap: 7px; color: #4ADE80; }
-    .ob-note i { width: 18px; height: 8px; border-radius: 99px; background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
-    .ob-row { display: flex; align-items: center; gap: 12px; }
-    .ob-row .cv { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
-    .ob-track { flex: 1 1 auto; height: 10px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); position: relative; }
-    .ob-band { position: absolute; top: -3px; bottom: -3px; border-radius: 99px; background: #22C55E; border: 2px solid #0B0F1E; box-shadow: 0 0 10px rgba(34,197,94,0.7); }
-    .rz-item {
-      display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 18px;
-      padding: 14px 16px; border-radius: 12px; margin-top: 10px;
-      background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
-      text-decoration: none; color: inherit;
-    }
-    .rz-item-main { min-width: 0; }
-    .rz-item-name { font-size: 15.5px; font-weight: 700; }
-    .rz-item-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
-
-    /* Legacy two-bar styles (superseded) */
-    /* Section thesis: today's span vs the Full Profile band, to scale */
-    .rz-compare { margin: 10px 0 6px; display: flex; flex-direction: column; gap: 9px; }
-    .rz-cmp-row { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
-    .rz-cmp-row .cmpwrap { display: flex; align-items: center; gap: 10px; }
-    .rz-cmp-row .cv { font-size: 12px; font-weight: 700; white-space: nowrap; }
-    .rz-cmp-row .cv.green { color: #4ADE80; }
-    .rz-cmp-row .cv.ghost { visibility: hidden; }
-    .rz-cmp-row .bar { flex: 1 1 auto; height: 8px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); }
-    .rz-cmp-row .trk { flex: 1 1 auto; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
-    .rz-cmp-row .trk i {
-      position: absolute; top: 0; height: 100%; border-radius: 99px;
-      background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.6);
-    }
-
-    .rz-total {
-      display: flex; justify-content: space-between; align-items: center; gap: 12px;
-      margin-top: 14px; padding: 13px 16px; border-radius: 10px;
-      background: rgba(139,92,246,0.10); border: 1px solid rgba(139,92,246,0.4);
-      font-size: 14.5px; font-weight: 700;
-    }
-    .rz-total b { font-size: 17px; color: #C4B5FD; white-space: nowrap; }
-    .rz-chips-note { font-size: 12.5px; color: var(--text-faint); margin-top: 9px; }
-
-    /* Primary CTA + trust microcopy */
-    .rz-cta-block { margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 11px; }
-    .rz-cta-btn {
-      display: inline-flex; align-items: center; gap: 10px;
-      background: var(--grad-cta); color: #FFF;
-      font-size: 17px; font-weight: 800; text-decoration: none;
-      padding: 17px 42px; border-radius: 13px;
-      box-shadow: 0 10px 36px rgba(139,92,246,0.42);
-      transition: transform 0.12s ease, box-shadow 0.2s ease;
-    }
-    .rz-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 42px rgba(139,92,246,0.55); }
-    .rz-trust { font-size: 12.5px; color: var(--text-muted); text-align: center; }
-
-    /* "Computing" overlay (labor illusion — honest steps, ~2.5s) */
-    .rz-calc {
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(4,6,14,0.88);
-      display: none; align-items: center; justify-content: center;
-    }
-    .rz-calc.on { display: flex; }
-    .rz-calc-card {
-      background: var(--card-bg); border: 1px solid var(--border);
-      border-radius: 16px; padding: 30px 36px; width: min(440px, 90vw);
-    }
-    .rz-calc-title { font-weight: 800; font-size: 16.5px; margin-bottom: 14px; }
-    .rz-calc-step { font-size: 14px; color: var(--text-muted); padding: 5.5px 0; opacity: 0; transition: opacity 0.35s ease; }
-    .rz-calc-step.on { opacity: 1; }
-    .rz-calc-step.warn { color: #FBBF24; font-weight: 600; }
-
-    @media (max-width: 1180px) {
-      .rz-top { grid-template-columns: 1fr 1.35fr; }
-      .rz-verdict { grid-column: 1 / -1; }
-    }
-    @media (max-width: 880px) {
-      .rz-top, .rz-bottom { grid-template-columns: 1fr; }
-      .rz-action { grid-template-columns: auto 1fr; row-gap: 16px; }
-      .rz-action-exp, .rz-action-nums { border-left: 0; padding-left: 0; }
-      .rz-action-exp { grid-column: 1 / -1; }
-      .rz-action-note { max-width: none; grid-column: 1 / -1; }
-      .rz-verdict { padding-right: 34px; }
-      .rz-verdict-badge { display: none; }
-      .rz-verdict-head { max-width: none; }
-      .rz-imp { grid-template-columns: auto 1fr auto; }
-      .rz-imp-lk { display: none; }
-      .rz-item { grid-template-columns: auto 1fr auto; }
-      .rz-pagefoot { flex-direction: column; align-items: flex-start; }
-    }
-    @media (max-width: 560px) {
-      .rz-action { grid-template-columns: 1fr; gap: 14px; padding: 18px 20px; }
-      .rz-action-ico { display: none; }
-      .rz-card { padding: 20px 18px; }
-      .rz-verdict { padding: 22px 20px; }
-      .rz-precision-pct, .rz-irr { font-size: 48px; }
-    }
-
     #resultsSection { display: none; }
     #resultsSection.visible { display: block; }
 
@@ -1305,6 +889,90 @@
       .spouse-grid { grid-template-columns: 1fr; }
     }
   </style>
+<style id="pp-style">
+#premiumPanel{--pp-panel:#161922;--pp-panel2:#12151d;--pp-card:#20242e;--pp-cardlock:#191c24;
+  --pp-line:#2a2f3a;--pp-text:#e9ecf2;--pp-muted:#9aa2af;--pp-dim:#6b7280;
+  --pp-green:#4ade80;--pp-teal:#2ee6c6;--pp-purple:#7c6cf0;--pp-amber:#f5b74d;
+  max-width:100%;margin:24px auto 0;padding:0;
+  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+#premiumPanel[hidden]{display:none}
+#premiumPanel .pp-card{background:linear-gradient(180deg,var(--pp-panel),var(--pp-panel2));border:1px solid var(--pp-line);
+  border-radius:18px;padding:20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.45);color:var(--pp-text)}
+#premiumPanel .pp-eyebrow{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--pp-teal);margin-bottom:14px}
+#premiumPanel .pp-phead{display:flex;justify-content:space-between;align-items:baseline}
+#premiumPanel .pp-lbl{font-size:15px;font-weight:600}
+#premiumPanel .pp-pct{font-size:15px;font-weight:700;color:var(--pp-teal)}
+#premiumPanel .pp-pbar{position:relative;height:6px;border-radius:6px;background:#242a35;margin:10px 0 4px;overflow:hidden}
+#premiumPanel .pp-pbar>i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;
+  background:linear-gradient(90deg,var(--pp-teal),var(--pp-green));transition:width .35s cubic-bezier(.4,0,.2,1)}
+#premiumPanel .pp-pticks{display:flex;justify-content:space-between;font-size:11px;color:var(--pp-dim);margin-top:6px}
+#premiumPanel .pp-pticks .pp-cur{color:var(--pp-muted)}
+#premiumPanel .pp-sub{font-size:13px;color:var(--pp-muted);margin:20px 0 9px}
+#premiumPanel .pp-pills{display:flex;flex-wrap:wrap;gap:7px}
+#premiumPanel .pp-pill{display:inline-flex;align-items:center;gap:5px;background:#173322;border:1px solid #245c39;
+  color:#9ff0b6;font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:20px}
+#premiumPanel .pp-rows{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+#premiumPanel .pp-row{display:block;background:var(--pp-card);border:1px solid var(--pp-line);
+  border-radius:12px;padding:13px 14px;transition:background .2s,border-color .2s}
+#premiumPanel .pp-row.pp-locked{background:var(--pp-cardlock)}
+#premiumPanel .pp-row.pp-done{border-color:#2c5c3e}
+#premiumPanel .pp-row.pp-inert{opacity:.55}
+#premiumPanel .pp-txt{flex:1;min-width:0}
+#premiumPanel .pp-t1{font-size:14px;font-weight:600}
+#premiumPanel .pp-t2{font-size:12px;color:var(--pp-muted);margin-top:2px}
+#premiumPanel .pp-t2 b{color:var(--pp-teal);font-weight:600}
+#premiumPanel .pp-row.pp-locked .pp-t1,#premiumPanel .pp-row.pp-locked .pp-t2{color:var(--pp-dim)}
+#premiumPanel select{appearance:none;background:#2a2f3a url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239aa2af'/></svg>") no-repeat right 10px center;
+  color:var(--pp-text);border:1px solid #363c48;border-radius:9px;padding:9px 30px 9px 12px;font-size:13px;font-family:inherit;min-width:118px;cursor:pointer}
+#premiumPanel select.pp-set{border-color:#2c5c3e;color:#bff3cf}
+#premiumPanel .pp-fp{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid #3a3f66;
+  color:#a9a5f5;font-size:12px;font-weight:600;padding:8px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;font-family:inherit}
+#premiumPanel .pp-fp:hover{background:#20213a}
+/* Locked tier affordance. Carries the .pp-fp shape so the row reads as a real control the
+   user does not have yet, but is inert by construction — no hover lift, no pointer. The
+   only path to resolving these is the Full-profile tier named in the tick strip above. */
+#premiumPanel .pp-fp-locked{cursor:default;color:var(--pp-dim);border-color:#2f3350}
+#premiumPanel .pp-fp-locked:hover{background:transparent}
+#premiumPanel .pp-row select,#premiumPanel .pp-row .pp-fp{width:100%;margin-top:10px;box-sizing:border-box}
+#premiumPanel .pp-row .pp-fp{justify-content:center}
+#premiumPanel .pp-rr{margin-top:24px}
+#premiumPanel .pp-cap{font-size:13px;color:var(--pp-muted);margin-bottom:6px}
+#premiumPanel .pp-val{font-size:34px;font-weight:800;letter-spacing:-.5px}
+#premiumPanel .pp-val .pp-u{font-size:15px;font-weight:600;color:var(--pp-muted);margin-left:6px}
+#premiumPanel .pp-center{font-size:12.5px;color:var(--pp-dim);margin-top:4px}
+#premiumPanel .pp-band{position:relative;height:12px;border-radius:8px;margin-top:16px;
+  background:linear-gradient(90deg,#1c6f4a,#2e7d5c 40%,#8a6a2e 72%,#8a3b3b);opacity:.35}
+#premiumPanel .pp-bandhi{position:absolute;top:-3px;height:18px;border-radius:6px;background:rgba(124,108,240,.85);
+  box-shadow:0 0 0 1px rgba(124,108,240,.5),0 4px 14px rgba(124,108,240,.4);transition:left .4s,width .4s}
+#premiumPanel .pp-bandhi>i{position:absolute;top:2px;bottom:2px;width:4px;border-radius:3px;background:#c7bffb}
+#premiumPanel .pp-bandhi>i.l{left:0}#premiumPanel .pp-bandhi>i.r{right:0}
+#premiumPanel .pp-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--pp-dim);margin-top:8px}
+#premiumPanel .pp-note{margin-top:16px;font-size:12.5px;color:var(--pp-muted);line-height:1.5}
+#premiumPanel .pp-note .pp-dark{color:#c7bffb;font-weight:600}
+#premiumPanel .pp-warn{display:flex;gap:7px;margin-top:9px;font-size:12.5px;color:var(--pp-amber);line-height:1.45}
+#premiumPanel .pp-warn.pp-hidden{display:none}
+#premiumPanel .pp-warn svg{flex:none;width:15px;height:15px;margin-top:1px}
+#premiumPanel .pp-infeasible{font-size:13px;color:var(--pp-muted);line-height:1.55;margin-top:6px}
+#premiumPanel .pp-flag{margin:14px auto 0;font-size:11px;color:var(--pp-dim);text-align:center}
+#premiumPanel .pp-loading{text-align:center;color:var(--pp-muted);padding:30px 0;font-size:13px}
+/* result hero keeps its native responsive layout: side-by-side on desktop, stacks under 880px */
+#premiumPanel #resultHero{width:100%;max-width:100%;margin:16px 0 6px}
+#premiumPanel .pp-card{max-width:100%}
+#premiumPanel .result-foot{flex-wrap:wrap;gap:10px}
+#premiumPanel img,#premiumPanel svg{max-width:100%}
+#premiumPanel .pp-txt{min-width:0}
+/* Keep the sharpen section a readable width even when the panel fills the full wrap */
+#premiumPanel .pp-sub,#premiumPanel .pp-pills,#premiumPanel .pp-rows,#premiumPanel .pp-rr{max-width:100%}
+@media (max-width:560px){
+  #premiumPanel .pp-card{padding:16px 13px}
+  #premiumPanel .pp-val{font-size:26px}
+  #premiumPanel .result-readout .result-value{font-size:44px}
+  #premiumPanel .result-status .status-headline{font-size:21px;line-height:1.2}
+  #premiumPanel .result-ring{width:126px;height:126px}
+  #premiumPanel .pp-row{padding:11px 12px;gap:8px}
+  #premiumPanel select{font-size:12.5px}
+}
+</style>
 </head>
 <body>
   <header class="topbar">
@@ -1585,153 +1253,68 @@
 
     <!-- ============== RESULTS (hidden until submit) ============== -->
     <section id="resultsSection" aria-live="polite">
-      <!-- ===== Results v2: precision / range / verdict bento ===== -->
-      <div class="rz-demo-note" id="rzDemoNote" style="display:none;">
-        Preview mode: the live engine couldn&rsquo;t be reached, so these are <strong>sample numbers</strong> to show the layout. Hit &ldquo;Adjust inputs&rdquo; and try again for your real result.
-      </div>
-      <div class="rz-top">
-        <!-- 3. Verdict (dominant) -->
-        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
-          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
-          <div class="rz-verdict-head" id="rzVerdictHead"></div>
-          <div class="rz-verdict-body" id="rzVerdictBody"></div>
-          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
-          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
-        </div>
-        <!-- 2. Required return + possible range -->
-        <div class="rz-card" id="rzCard2" data-tier="on_track">
-          <div class="rz-card-title">REQUIRED PORTFOLIO RETURN <span class="rz-info" title="The average annual return your whole portfolio needs.">&#9432;</span></div>
-          <div class="rz-irr" id="rzIrr">&mdash;</div>
-          <div class="rz-note" id="rzIrrSub"></div>
-          <div class="rz-range-label">Current possible range</div>
-          <div class="rz-range-row">
-            <span id="rzRangeLo">&mdash;</span>
-            <div class="rz-range-track">
-              <div class="rz-range-marker" id="rzRangeMarker">
-                <span class="rz-range-your-wrap"><span id="rzRangeYour"></span><em>Your ballpark</em></span>
-              </div>
-            </div>
-            <span id="rzRangeHi">&mdash;</span>
-          </div>
-          <div class="rz-target" id="rzMixNote"></div>
-          <div class="rz-target-fixed">&#9650; Target: 5.0% <span>(safe zone)</span></div>
-        </div>
+      <h1 class="results-title">Here&rsquo;s Your <span class="accent purple" id="resultsAccent">Required Portfolio Return<sup>™</sup></span></h1>
+      <p class="results-sub">This is the average annual return your portfolio needs to earn to support your lifestyle through retirement.</p>
 
-        <!-- 1. Ballpark precision -->
-        <div class="rz-card">
-          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
-          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
-          <div class="rz-note" id="rzPrecisionNote"></div>
-          <div class="rz-prec-axis">
-            <div class="ends">
-              <span class="pend">&#10003; Quick Check</span>
-              <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
-            </div>
-            <div class="rz-prec-track">
-              <i id="rzPrecBarFill" style="width:0%"></i>
-              <div class="rz-prec-marker" id="rzPrecMarker">
-                <span class="rz-prec-you"><span id="rzPrecYou">&mdash;</span><em>You &mdash; Ballpark</em></span>
-              </div>
-            </div>
-          </div>
-          <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
-        </div>
-
-      </div>
-
-      <!-- Recommended action bar -->
-      <div class="rz-action" id="rzAction">
-        <div class="rz-action-ico">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-        </div>
-        <div class="rz-action-main">
-          <div class="rz-card-title">RECOMMENDED ACTION <span class="rz-info" title="The single move that brings your plan to the safe zone.">&#9432;</span></div>
-          <div class="rz-action-amt" id="rzActionAmt">&mdash;</div>
-        </div>
-        <div class="rz-action-exp" id="rzActionExplainer"></div>
-        <div class="rz-action-nums">
-          <span class="cur" id="rzActionCur">&mdash;</span>
-          <span class="arr">&rarr;</span>
-          <span class="tgt" id="rzActionTgt">5.0%</span>
-          <div class="lbls"><span>Current</span><span>Target (safe zone)</span></div>
-        </div>
-        <div class="rz-action-note" id="rzActionNote">This gets you to a safe 5% return with more margin for the future.</div>
-      </div>
-
-      <!-- Bottom: confirmed + sharpen | impact column -->
-      <div class="rz-bottom">
-        <div class="rz-card">
-          <div class="rz-card-title">FROM YOUR BALLPARK &mdash; CONFIRMED</div>
-          <div class="rz-chips" id="rzChips"></div>
-          <div class="rz-chips-note" id="rzChipsNote"></div>
-          <div class="rz-acc">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b><span id="rzAccDollar"></span>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
-          <div id="rzSharpenList"></div>
-          <div class="rz-total"><span>Unlock all four and your number is accurate to within</span><b id="rzTotalPts">0.2%</b></div>
-        </div>
-      </div>
-
-      <div class="detail-panel">
-        <details class="details">
-          <summary>
-            <span>See the math behind your number</span>
-            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-
-          <div id="ebriCard" class="ebri-card">
-            <div class="ebri-headline">Additional savings per year</div>
-            <div class="ebri-value" id="ebriValue"></div>
-            <div class="ebri-sub" id="ebriSub"></div>
-          </div>
-
-          <div class="detail-grid">
-            <div class="detail-cell">
-              <div class="dl">Projected balance at retirement</div>
-              <div class="dv" id="projBalance"></div>
-              <div class="ds" id="projBalanceSub"></div>
-            </div>
-            <div class="detail-cell">
-              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
-              <div class="dv" id="ssAnnual"></div>
-              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
+      <div class="result-hero" id="resultHero" data-tier="on_track">
+        <div class="result-hero-grid">
+          <div class="result-ring" id="resultRing" data-tier="on_track">
+            <svg viewBox="0 0 200 200">
+              <circle class="ring-track" cx="100" cy="100" r="85"/>
+              <circle class="ring-arc" cx="100" cy="100" r="85"/>
+            </svg>
+            <div class="ring-check">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
             </div>
           </div>
 
-          <table class="spending-table" id="spendingTable">
-            <thead>
-              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
-            </thead>
-            <tbody id="spendingTbody"></tbody>
-            <tfoot>
-              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
-              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
-            </tfoot>
-          </table>
-        </details>
+          <div class="result-readout" id="resultReadout" data-tier="on_track">
+            <div class="result-eyebrow"><strong>GH2 EDGE&trade;</strong> <span class="you">YOUR RESULT</span></div>
+            <div class="result-label">Required Portfolio Return</div>
+            <div class="result-value" id="irr">0.00%</div>
+            <div class="result-explainer" id="irrTagline">This is the return your portfolio has to earn every year of retirement for your plan to last to age <span class="age-accent" id="endAgeLabel">100</span>.</div>
+            <!-- The same requirement in dollars. Filled by the three verdict branches in
+                 renderResult so a solver-bound sentinel is never printed as a dollar figure. -->
+            <div class="result-explainer result-dollars" id="irrDollars"></div>
+            <div class="result-explainer result-dollars" id="irrGapDollars"></div>
+          </div>
+
+          <div class="result-status">
+            <div class="status-row">
+              <div class="status-pill" id="statusPill"><span class="pill-dot"></span><span id="statusPillLabel">ON TRACK</span></div>
+              <div class="status-cta" id="statusCta">Let&rsquo;s keep it that way. &darr;</div>
+            </div>
+            <div class="status-headline" id="statusHeadline">Savings last through age 100.</div>
+            <div class="status-body" id="statusBody">Your plan looks good. You have a healthy margin for market ups and downs and unexpected costs.</div>
+          </div>
+        </div>
+
+        <div class="result-move" id="resultMove" data-tier="on_track">
+          <span class="rm-arrow" aria-hidden="true">&rarr;</span>
+          <span class="rm-text" id="resultMoveText">&mdash;</span>
+        </div>
+
+        <div class="result-foot">
+          <div class="result-foot-tax">
+            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Assumptions include the full federal + state + Medicare tax math.
+          </div>
+          <button type="button" class="adjust-inputs-btn" id="adjustInputsBtn">Adjust inputs</button>
+        </div>
       </div>
 
-      <!-- Primary CTA (first-person + trust microcopy) -->
-      <div class="rz-cta-block">
-        <a class="rz-cta-btn" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
-        <div class="rz-trust">Cancel anytime &middot; Clear pricing, no surprise charges &middot; Your data is never sold.</div>
-        <button type="button" class="rz-adjust-link" id="adjustInputsBtn">or adjust your inputs</button>
-      </div>
-
-
-
-      <div class="rz-resources">
-      <div class="rz-callout">
+      <div style="max-width:560px;margin:20px auto 0;padding:13px 18px;border-left:3px solid var(--accent-purple,#8B5CF6);background:rgba(139,92,246,0.06);border-radius:8px;font-size:14.5px;line-height:1.5;color:var(--text-muted);">
         <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
       </div>
 
       <!-- Free beginner's e-book -->
-      <div class="ebook-cta rz-res-card">
+      <div class="ebook-cta">
         <div class="ec-text"><strong>New to all this?</strong> The free <em>GH2 EDGE&trade; Beginner&rsquo;s Guide</em> walks you through your number in plain English &mdash; no login, no jargon.</div>
         <div class="ec-actions">
           <a class="ec-dl" href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener">Download the guide (PDF)</a>
           <span class="ec-email">Questions? <a href="mailto:info@gh2benefits.com">info@gh2benefits.com</a></span>
         </div>
       </div>
-      </div><!-- /rz-resources -->
 
       <!-- Cadence pricing — hidden for now -->
       <div class="cadence-head" style="display:none">
@@ -1829,10 +1412,49 @@
       </div>
 
       <!-- Details collapsible (projected balance, SS, spending) -->
+      <div class="detail-panel">
+        <details class="details">
+          <summary>
+            <span>See the math behind your number</span>
+            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+
+          <div id="ebriCard" class="ebri-card">
+            <div class="ebri-headline">Additional savings per year</div>
+            <div class="ebri-value" id="ebriValue"></div>
+            <div class="ebri-sub" id="ebriSub"></div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-cell">
+              <div class="dl">Projected balance at retirement</div>
+              <div class="dv" id="projBalance"></div>
+              <div class="ds" id="projBalanceSub"></div>
+            </div>
+            <div class="detail-cell">
+              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
+              <div class="dv" id="ssAnnual"></div>
+              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
+            </div>
+          </div>
+
+          <table class="spending-table" id="spendingTable">
+            <thead>
+              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
+            </thead>
+            <tbody id="spendingTbody"></tbody>
+            <tfoot>
+              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
+              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
+            </tfoot>
+          </table>
+        </details>
+      </div>
+
       <div class="results-foot">
         <div class="left">
           <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Assumptions include the full federal + state + Medicare tax math &middot; Your data is secure, encrypted, and never sold.
+          Your data is secure and encrypted. We never sell your information.
         </div>
         <div class="right">
           Required Portfolio Return&trade; is a patent-pending retirement metric developed by GH2 EDGE.
@@ -1842,6 +1464,39 @@
       <footer class="page-footer">
         <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
       </footer>
+    </section>
+
+    <section id="premiumPanel" hidden aria-live="polite">
+      <div class="pp-card">
+        <div class="pp-eyebrow">GH2 EDGE™ · PRECISION</div>
+        <div class="pp-phead"><span class="pp-lbl">Precision</span><span class="pp-pct" id="ppPct">—</span></div>
+        <div class="pp-pbar"><i id="ppBar" style="width:71%"></i></div>
+        <div class="pp-pticks"><span>Quick check</span><span class="pp-cur">Ballpark</span><span class="pp-lock">🔒 Full profile</span></div>
+
+        <div class="pp-sub">From your ballpark — confirmed</div>
+        <div class="pp-pills" id="ppPills"></div>
+
+        <div id="ppResultHost"></div>
+
+        <!-- The range sits immediately below the required-return figure (#irr, inside the
+             hero folded into #ppResultHost) so the number and its range read as one unit.
+             IDs unchanged — the premium script addresses these by id, not position. -->
+        <div class="pp-rr">
+          <div class="pp-cap">Your required portfolio return</div>
+          <div class="pp-val"><span id="ppRrlo">—</span><span id="ppDash"> – </span><span id="ppRrhi">—</span><span class="pp-u" id="ppU">per year</span></div>
+          <div class="pp-center" id="ppRrcenter"></div>
+          <div class="pp-band" id="ppBandRow"><div class="pp-bandhi" id="ppBandhi" style="left:0;width:0"><i class="l"></i><i class="r"></i></div></div>
+          <div class="pp-scale" id="ppScaleRow"><span id="ppSl">3%</span><span id="ppSm">7%</span><span id="ppSh">11%</span></div>
+          <div class="pp-note" id="ppNoteRow">Full profile pinpoints this to <span class="pp-dark">±0.2% — the dark band</span>. Where you actually sit depends on the locked inputs.</div>
+          <div class="pp-warn pp-hidden" id="ppWarnbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span id="ppWarn"></span></div>
+          <div class="pp-infeasible" id="ppInfeasible" style="display:none"></div>
+        </div>
+
+        <div class="pp-sub">Sharpen your number — each field tightens your range</div>
+        <div class="pp-rows" id="ppRows"><div class="pp-loading">Computing your sensitivity…</div></div>
+
+        <div class="pp-flag">Every number is live GH2 EDGE™ engine output · Patent Pending</div>
+      </div>
     </section>
   </main>
 
@@ -2054,266 +1709,181 @@
       function showError(msg) { document.getElementById('formErr').textContent = msg || ''; }
 
       // ===== Render results =====
-      function fmtK$(n) { if (!Number.isFinite(n)) return '\u2014'; return n >= 1e6 ? '$' + (n/1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : '$' + Math.round(n/1000) + 'k'; }
-
       function renderResult(data) {
         var irr = Number(data.requiredIRR);
         var feas = data.feasibilityRating;
         var tier = visualTier(feas, irr);
         var copy = TIER_COPY[tier];
-        var v = data.verdict || {};
-        var endAge = (data.assumptions && data.assumptions.targetEndAge) || 100;
 
         // Update stepper
         var stepper = document.getElementById('stepper');
         stepper.className = 'stepper ' + copy.stepperLine;
         document.getElementById('stepProfile').className = 'step done';
-        document.getElementById('stepResults').className = 'step active ' + copy.stepperState;
+        var resStep = document.getElementById('stepResults');
+        resStep.className = 'step active ' + copy.stepperState;
 
-        // Displayed return — mirrors the verdict branches so a solver-bound
-        // sentinel is never printed as "the return you need".
-        var irrPct, irrText;
+        // Update accent on title
+        var accent = document.getElementById('resultsAccent');
+        accent.className = 'accent ' + copy.accentClass;
+
+        // Hero / ring / readout / status — set data-tier so CSS applies
+        document.getElementById('resultHero').setAttribute('data-tier', tier);
+        var ring = document.getElementById('resultRing');
+        ring.setAttribute('data-tier', tier);
+        // Ring badge icon by tier: on_track = check, stretch = !, at_risk = X (color keys off data-tier)
+        var ringCheckSvg = ring.querySelector('.ring-check svg');
+        if (ringCheckSvg) {
+          ringCheckSvg.innerHTML = tier === 'on_track' ? '<polyline points="20 6 9 17 4 12"></polyline>'
+            : tier === 'at_risk' ? '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
+            : '<line x1="12" y1="7" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line>';
+        }
+        document.getElementById('resultReadout').setAttribute('data-tier', tier);
+
+        // Ring arc: longer arc for higher IRR (more "filling")
+        var arc = ring.querySelector('.ring-arc');
+        var circumference = 2 * Math.PI * 85; // ~534
+        var pct = tier === 'on_track' ? 0.25 : tier === 'stretch' ? 0.6 : 0.92;
+        var dashOffset = circumference * (1 - pct);
+        arc.setAttribute('stroke-dasharray', circumference);
+        arc.setAttribute('stroke-dashoffset', dashOffset);
+
+        // IRR number — driven by the verdict so an unachievable solver-ceiling rate is
+        // never shown as "the return you need". showReturn=false means either over-funded
+        // (on track) or not fundable at any realistic return (not feasible).
+        var v = data.verdict || {};
+        var irrEl = document.getElementById('irr');
         if (v.showReturn) {
-          irrPct = irr * 100; irrText = irrPct.toFixed(1) + '%';
+          irrEl.textContent = (irr * 100).toFixed(1) + '%';
+          irrEl.style.fontSize = '';
         } else if (v.feasible === false) {
-          irrPct = Math.min(irr, 0.30) * 100;
-          irrText = (irr >= 0.2999) ? '30%+' : irrPct.toFixed(1) + '%';
+          // Ballpark is the "Required Portfolio Return" tool — show the actual number even when
+          // it's unrealistically high. At the solver's +30% ceiling the true figure is "≥30%"
+          // (even 30% won't carry the plan), so show 30%+. The red tier + "Savings may not last"
+          // context makes the infeasibility clear.
+          irrEl.textContent = (irr >= 0.2999) ? '30%+' : (irr * 100).toFixed(1) + '%';
+          irrEl.style.fontSize = '';
         } else {
-          irrPct = 0; irrText = '0%';
+          // Over-funded: savings + SS fund the plan with no market growth. The engine
+          // returns its -10% solver floor here (a sentinel, not a real "required" return),
+          // so report the meaningful actual number: 0% (you need no positive return).
+          irrEl.textContent = '0%';
+          irrEl.style.fontSize = '';
         }
 
-        // ===================================================================
-        // PRECISION + RANGE — display-only placeholder math.
-        // Jae: when the engine can own these, return e.g.
-        //   { precisionPct, requiredIRRLow, requiredIRRHigh }
-        // and replace the two blocks below with pass-throughs. Until then:
-        // precision reflects how many of this surface's optional inputs were
-        // filled, and the range is an uncertainty band around the point
-        // estimate that narrows as precision rises. Their job is to visualize
-        // what Full Profile buys — not to be exact.
-        // ===================================================================
-        var precision = (function () {
-          var p = 62;
-          var el;
-          el = document.getElementById('ssBenefit');
-          if (el && el.value.trim() !== '') p += 6;
-          el = document.getElementById('customSpendOverride');
-          if (el && el.value.trim() !== '') p += 5;
-          el = document.getElementById('monthlyPension');
-          if (el && parseFloat(el.value) > 0) p += 4;
-          if (filing === 'mfj') p += 2;
-          return Math.min(p, 78);
+        // The same requirement, in dollars. A percentage is abstract; the dollars on the
+        // household's own balance are not. Mirrors the three branches above exactly, so a
+        // solver-bound sentinel is never multiplied out into a dollar figure: at the -10%
+        // floor that would print a negative requirement, and at the +30% ceiling a precise-
+        // looking number that is really "off the top of the scale".
+        //
+        // Base is projectedRetirementBalance, NOT today's savings: the required return
+        // applies to the retirement-phase portfolio, and for anyone still working those
+        // differ. It is a first-year figure — the balance moves every year after that —
+        // and the copy says so rather than implying a fixed annual obligation.
+        (function(){
+          var dolEl = document.getElementById('irrDollars');
+          var gapDolEl = document.getElementById('irrGapDollars');
+          var proj = data.projectedRetirementBalance;
+          var haveProj = (typeof proj === 'number' && proj > 0);
+
+          if (dolEl) {
+            if (v.showReturn && haveProj) {
+              dolEl.innerHTML = 'That is about <strong>' + fmt$(Math.round(irr * proj)) +
+                '</strong> in the first year, on the <strong>' + fmt$(proj) +
+                '</strong> your savings are projected to reach by retirement.';
+            } else if (v.feasible === false && haveProj) {
+              // Cap the multiplier at the solver ceiling — beyond it the rate is not a
+              // measured number, so neither is any dollar figure derived from it.
+              dolEl.innerHTML = 'That is more than <strong>' + fmt$(Math.round(Math.min(irr, 0.30) * proj)) +
+                '</strong> in the first year. No portfolio earns that reliably.';
+            } else if (!v.showReturn && v.feasible !== false) {
+              dolEl.textContent = 'Your savings and Social Security carry this plan without any market growth.';
+            } else {
+              dolEl.textContent = '';
+            }
+          }
+
+          // Second figure: the gap the household can actually act on. additionalAnnualDollars
+          // is contribution-rate x CURRENT SALARY, so it is 0 for an already-retired household
+          // as well as for an on-track one. Suppress on 0 rather than print "save $0 more" —
+          // for a retiree the real lever is spending, which this surface does not yet size.
+          if (gapDolEl) {
+            var addg = data.additionalSavings || {};
+            var addDollars = addg.additionalAnnualDollars;
+            if (!addg.onTrack && typeof addDollars === 'number' && addDollars > 0) {
+              gapDolEl.innerHTML = 'To close the gap: about <strong>' + fmt$(addDollars) +
+                ' a year</strong> more saved' + (addg.capped ? ', and even the maximum does not fully close it.' : '.');
+            } else {
+              gapDolEl.textContent = '';
+            }
+          }
         })();
-        var spread = Math.max(1.6, (100 - precision) * 0.16); // percentage points
-        var rangeLo = Math.max(0, irrPct - spread * 0.55);
-        var rangeHi = Math.min(30, irrPct + spread * 0.85);
-        if (irrPct <= 0) { rangeLo = 0; rangeHi = Math.max(rangeHi, 2.0); }
 
-        document.getElementById('rzPrecisionPct').textContent = precision + '%';
-        // Goal-gradient framing: progress already earned + concrete distance to goal
-        var lockedCount = (filing === 'mfj') ? 5 : 4; // sharpenable full-profile inputs
-        document.getElementById('rzPrecisionNote').innerHTML =
-          'You’re ' + precision + '% of the way to your exact number — <strong>' + lockedCount +
-          ' more inputs close the gap</strong>.';
-        var precPos = Math.max(4, Math.min(96, precision / 96 * 100));
-        document.getElementById('rzPrecBarFill').style.width = precPos + '%';
-        document.getElementById('rzPrecMarker').style.left = precPos + '%';
-        document.getElementById('rzPrecYou').textContent = precision + '%';
+        // §4 gap vs the plan's assumed return (ballpark uses a default mix, not a user allocation)
+        (function(){
+          var gapEl = document.getElementById('irrGap');
+          if (!gapEl && irrEl && irrEl.parentNode) { gapEl = document.createElement('div'); gapEl.id = 'irrGap'; gapEl.style.cssText = 'font-size:0.8rem;opacity:0.72;margin-top:6px;'; irrEl.parentNode.appendChild(gapEl); }
+          var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
+          if (gapEl && v.showReturn && typeof g === 'number' && typeof mx === 'number') {
+            var mp = (mx*100).toFixed(1), gp = Math.abs(g*100).toFixed(1);
+            gapEl.textContent = g > 0.001 ? ('your mix is priced for ~' + mp + '% — short ~' + gp + '%')
+                              : g < -0.001 ? ('your mix is priced for ~' + mp + '% — ahead ~' + gp + '%')
+                              : ('right on what your mix is priced for (~' + mp + '%)');
+          } else if (gapEl) { gapEl.textContent = ''; }
+        })();
 
-        // Required-return card + range bar
-        document.getElementById('rzCard2').setAttribute('data-tier', tier);
-        document.getElementById('rzIrr').textContent = irrText;
-        document.getElementById('rzIrrSub').textContent =
-          'That’s the return your whole portfolio needs every year for the plan to last to age ' + endAge + '.';
-        document.getElementById('rzRangeLo').textContent = rangeLo.toFixed(1) + '%';
-        document.getElementById('rzRangeHi').textContent = rangeHi.toFixed(1) + '%';
-        document.getElementById('rzRangeYour').textContent = irrText;
-        var rSpan = rangeHi - rangeLo;
-        var rPos = rSpan > 0 ? ((irrPct - rangeLo) / rSpan) * 100 : 50;
-        document.getElementById('rzRangeMarker').style.left = Math.max(3, Math.min(97, rPos)) + '%';
+        // Tagline — the verdict's plain-English detail (no "earn 30%" nonsense).
+        var endAge = (data.assumptions && data.assumptions.targetEndAge) || 100;
+        var _endLbl = document.getElementById('endAgeLabel'); if (_endLbl) _endLbl.textContent = endAge;
+        document.getElementById('irrTagline').textContent = v.detail || '';
 
-        // Mix-priced note (Path B): how the requirement compares to what the
-        // household's mix is priced to earn.
-        var mixNote = document.getElementById('rzMixNote');
-        var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
-        if (v.showReturn && typeof g === 'number' && typeof mx === 'number') {
-          var mp = (mx * 100).toFixed(1), gp = Math.abs(g * 100).toFixed(1);
-          mixNote.textContent = g > 0.001 ? ('Your mix is priced for ~' + mp + '% — short ~' + gp + ' pp.')
-                              : g < -0.001 ? ('Your mix is priced for ~' + mp + '% — ahead ~' + gp + ' pp.')
-                              : ('Right on what your mix is priced for (~' + mp + '%).');
-        } else { mixNote.textContent = ''; }
-        // Mix note now lives in the card's tooltip instead of a visible line
-        var infoEl = document.querySelector('#rzCard2 .rz-info');
-        if (infoEl && mixNote.textContent) infoEl.title = infoEl.title.split(' — ')[0] + ' — ' + mixNote.textContent;
+        // Status pill / CTA / headline / body
+        var pill = document.getElementById('statusPill');
+        pill.className = 'status-pill ' + tier;
+        document.getElementById('statusPillLabel').textContent = copy.pill;
+        var cta = document.getElementById('statusCta');
+        cta.className = 'status-cta ' + tier;
+        cta.textContent = copy.cta;
+        var hl = document.getElementById('statusHeadline');
+        hl.className = 'status-headline ' + tier;
+        var body = document.getElementById('statusBody');
 
-        // Verdict card — the emotional centerpiece.
-        var vc = document.getElementById('rzVerdict');
-        vc.setAttribute('data-tier', tier);
-        document.getElementById('rzVerdictPill').textContent =
-          tier === 'at_risk' ? 'AT RISK' : tier === 'stretch' ? 'NEEDS ATTENTION' : 'ON TRACK';
-        var glyphEl = document.getElementById('rzVerdictGlyph');
-        if (tier === 'stretch') {
-          glyphEl.innerHTML = '<svg viewBox="0 0 24 24" style="width:88px;height:88px;display:block;"><path d="M12 2.6 L22.6 20.6 H1.4 Z" fill="#F59E0B" stroke="#F59E0B" stroke-width="2.6" stroke-linejoin="round"/><rect x="10.9" y="8.6" width="2.2" height="6.4" rx="1.1" fill="#3A2703"/><circle cx="12" cy="17.5" r="1.35" fill="#3A2703"/></svg>';
-        } else {
-          glyphEl.textContent = tier === 'on_track' ? '✓' : '!';
-        }
-        var vh = document.getElementById('rzVerdictHead');
-        var vb = document.getElementById('rzVerdictBody');
-        var vcta = document.getElementById('rzVerdictCta');
         if (tier === 'at_risk') {
-          vh.textContent = 'Savings may not last to age ' + endAge + '.';
-          vb.innerHTML = '<strong style="color:var(--text);">The good news: this is fixable.</strong> Your plan could fall short if markets underperform, inflation runs higher, or unexpected costs arise. Let’s close the gap and strengthen your plan.';
-          vcta.innerHTML = 'Let’s close the gap &nbsp;&rarr;';
+          hl.textContent = 'Savings may not last to age ' + endAge + '.';
+          body.textContent = 'Your plan could fall short if markets underperform, inflation runs higher, or unexpected costs arise. Let’s close the gap and strengthen your plan.';
         } else if (tier === 'stretch') {
           if (data.depletionAge && data.depletionAge < endAge) {
-            vh.textContent = 'Savings may run out by age ' + data.depletionAge + '.';
+            hl.textContent = 'Savings run out at age ' + data.depletionAge + '.';
           } else {
-            vh.textContent = 'Savings last through age ' + endAge + ' — barely.';
+            hl.textContent = 'Savings last through age ' + endAge + '.';
           }
-          vb.textContent = 'Your plan looks solid, but there’s not much room for error. Let’s make sure it stays on solid ground — no matter what the markets do.';
-          vcta.innerHTML = 'Let’s strengthen the plan &nbsp;&rarr;';
+          body.textContent = 'Your plan looks solid, but there’s not much room for error. Let’s make sure your plan stays on solid ground—no matter what the markets do.';
         } else {
-          vh.textContent = 'Savings last through age ' + endAge + '.';
-          vb.textContent = 'Your plan looks good — within the range we can see. A healthy margin for market swings and unexpected costs, worth confirming with the full picture.';
-          vcta.innerHTML = 'Let’s make it bulletproof &nbsp;&rarr;';
+          hl.textContent = 'Savings last through age ' + endAge + '.';
+          body.textContent = 'Your plan looks good. You have a healthy margin for market ups and downs and unexpected costs.';
         }
 
-        // Recommended action bar — reuses the engine's additionalSavings.
-        (function () {
-          var bar = document.getElementById('rzAction');
-          var amt = document.getElementById('rzActionAmt');
-          var exp = document.getElementById('rzActionExplainer');
-          var cur = document.getElementById('rzActionCur');
-          var note = document.getElementById('rzActionNote');
-          var add = data.additionalSavings || {};
-          bar.style.display = '';
-          bar.setAttribute('data-ok', add.onTrack ? '1' : '0');
-          cur.textContent = irrText;
-          if (add.onTrack) {
-            amt.textContent = '$0 / year';
-            exp.textContent = (add.currentContributionRate > 0)
-              ? 'You’re set — your current ' + fmtPct(add.currentContributionRate) + ' savings rate is enough. No extra saving needed.'
-              : 'You’re set — your plan is funded as it stands. No extra saving needed.';
-            note.textContent = 'Already at or below the safe 5% return — with margin for the future.';
-          } else if (add.capped) {
-            var lockSm2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
-            var cappedAmt = Number.isFinite(add.additionalAnnualDollars) ? fmt$(add.additionalAnnualDollars) : '$—,———';
-            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
-              '<span class="rz-blur">+ ' + cappedAmt + ' / year</span>' +
-              '<span class="rz-blur-lock">' + lockSm2 + '</span></a>';
-            exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending, working longer, or both.';
-            note.textContent = 'A full profile finds which combination gets you there.';
-          } else if (Number.isFinite(add.additionalAnnualDollars) && Number.isFinite(add.additionalRate)) {
-            // Computed magnitudes are premium: blurred with an amber lock,
-            // clicking through to pricing. The user's own input (current
-            // contribution rate) and the current/target returns stay visible.
-            var lockSm = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
-            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
-              '<span class="rz-blur">+ ' + fmt$(add.additionalAnnualDollars) + ' / year</span>' +
-              '<span class="rz-blur-lock">' + lockSm + '</span></a>';
-            exp.innerHTML = 'Increase savings by <span class="rz-blur rz-blur-sm">' + fmtPct(add.additionalRate) +
-              '</span> of salary on top of your current ' + fmtPct(add.currentContributionRate) + '.';
-            note.textContent = 'This gets you to a safe 5% return with more margin for the future.';
-          } else {
-            bar.style.display = 'none';
-          }
-        })();
-
-        // Confirmed chips — what they already gave us (progress framing).
-        (function () {
-          var chips = [];
-          var ageV = parseInt(document.getElementById('age').value, 10);
-          if (Number.isFinite(ageV)) chips.push('Age ' + ageV);
-          chips.push(filing === 'mfj' ? 'Married' : 'Single');
-          var sav = parseFloat(document.getElementById('currentSavings').value);
-          if (Number.isFinite(sav)) chips.push(fmtK$(sav) + ' saved');
-          var spendToday = data.currentSpendingEstimate || data.projectedRetirementSpending;
-          if (Number.isFinite(spendToday)) chips.push(fmtK$(spendToday) + ' spend');
-          var extra = 3; // state, retirement age, contribution rate
-          var el = document.getElementById('ssBenefit');
-          if (el && el.value.trim() !== '') extra++;
-          el = document.getElementById('monthlyPension');
-          if (el && parseFloat(el.value) > 0) extra++;
-          el = document.getElementById('customSpendOverride');
-          if (el && el.value.trim() !== '') extra++;
-          chips.push('+' + extra + ' more');
-          document.getElementById('rzChips').innerHTML = chips.map(function (c) {
-            return '<span class="rz-chip">✓ ' + c + '</span>';
-          }).join('');
-          // Ledger framing: inputs already given → value already delivered.
-          // Placeholder pts (Jae: engine can size this per household).
-          document.getElementById('rzChipsNote').textContent =
-            'These confirmed inputs built the first ' + precision + '% of your precision.';
-        })();
-
-        // ===================================================================
-        // SHARPEN / IMPACT — the locked value, quantified.
-        // Jae: impacts are placeholder ±pp figures for now. When the engine
-        // can size per-input sensitivity for a household, return them (e.g.
-        // { sharpen: [{key, impactPp}] }) and replace RZ_SHARPEN's numbers.
-        // Listed in the reference order; the right column re-ranks by impact.
-        // ===================================================================
-        var RZ_SHARPEN = [
-          { key: 'spouse', name: 'Spouse’s income and Social Security', short: 'Spouse’s income & Social Security', impact: 1.1, color: 'imp-blue', bg: 'bg-blue',
-            desc: 'Joint timing and benefits change the math.',
-            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
-          { key: 'ssopt',  name: 'Social Security claiming optimizer', short: 'Social Security claiming', impact: 0.9, color: 'imp-blue', bg: 'bg-blue',
-            desc: 'Choosing when to claim can move your outcome.',
-            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
-          { key: 'health', name: 'Healthcare and long-term care', short: 'Healthcare & long-term care', impact: 0.8, color: 'imp-green', bg: 'bg-green',
-            desc: 'Costs and coverage choices create uncertainty.',
-            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
-          { key: 'mix',    name: 'Account mix (pre-tax / Roth / taxable)', short: 'Account mix', impact: 4.1, color: 'imp-purple', bg: 'bg-purple',
-            desc: 'This input has the largest impact on narrowing your range.',
-            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>' },
-          { key: 'roth',   name: 'Roth conversion modeling', short: 'Roth conversion modeling', impact: 0, na: true, color: 'imp-purple', bg: 'bg-purple',
-            naText: 'Doesn’t change your number for this household',
-            desc: 'Timing conversions can cut lifetime taxes.',
-            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>' },
-          { key: 'other',  name: 'Other retirement income', short: 'Other retirement income', impact: 0.3, color: 'imp-amber', bg: 'bg-amber',
-            desc: 'Pensions, rental income, part-time work and other sources.',
-            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' }
-        ];
-        var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
-
-        // ONE unit system: accuracy in ±percentage-points of required return.
-        // Today's ± is half the current range; the four locked impacts are the
-        // RZ_SHARPEN weights rescaled so they sum EXACTLY to the improvement
-        // (today's ± minus the ±0.2 Full Profile floor). Every number on the
-        // card reconciles. (Jae: replace weights with engine sensitivities.)
-        var accNow = Math.max(0.4, (rangeHi - rangeLo) / 2);
-        var avail = Math.max(0.2, accNow - 0.2);
-        var pool = RZ_SHARPEN.filter(function (it) {
-          return !it.na && !(it.key === 'spouse' && filing !== 'mfj');
-        }).slice().sort(function (a, b) { return b.impact - a.impact; });
-        var wsum = 0;
-        pool.forEach(function (it) { wsum += it.impact; });
-        pool.forEach(function (it) { it.scaled = Math.max(0.1, Math.round(avail * it.impact / wsum * 10) / 10); });
-
-        document.getElementById('rzAccNow').textContent = accNow.toFixed(1);
-        // Translate the abstract percentage into dollars on THEIR balance —
-        // "off by 2.6%" reads like nothing; "$23,000 a year" doesn't.
-        (function () {
-          var el = document.getElementById('rzAccDollar');
-          var proj = data.projectedRetirementBalance;
-          if (el && typeof proj === 'number' && proj > 0) {
-            var swing = Math.round(accNow / 100 * proj / 1000) * 1000;
-            el.innerHTML = ' — about <b class="money">' + fmt$(swing) + ' a year</b> on the savings you’re projected to have';
-          } else if (el) { el.textContent = ''; }
-        })();
-
-        var listEl = document.getElementById('rzSharpenList');
-        listEl.innerHTML = pool.map(function (it) {
-          return '<a class="rz-item" href="pricing.html" title="Unlock with Full Profile">' +
-            '<div class="rz-imp-ico ' + it.color + ' ' + it.bg + '">' + it.ico + '</div>' +
-            '<div class="rz-item-main"><div class="rz-item-name">' + it.name + '</div>' +
-            '<div class="rz-item-sub">' + it.desc + '</div></div>' +
-            '<div class="rz-imp-val"><span class="lab">Sharpens by</span>' +
-            '<span class="num ' + it.color + '">' + it.scaled.toFixed(1) + '%</span></div>' +
-            '<span class="rz-imp-lk">' + lockSvg + '</span></a>';
-        }).join('');
-
-
+        // ===== Your move — the single statement, in the hero =====
+        var move = document.getElementById('resultMove');
+        var moveText = document.getElementById('resultMoveText');
+        move.setAttribute('data-tier', tier);
+        var addMv = data.additionalSavings || {};
+        if (addMv.onTrack) {
+          moveText.textContent = (addMv.currentContributionRate > 0)
+            ? 'You’re set — your current ' + fmtPct(addMv.currentContributionRate) + ' savings rate is enough. No extra saving needed.'
+            : 'You’re set — your plan is funded as it stands. No extra saving needed.';
+          move.style.display = '';
+        } else if (addMv.capped) {
+          moveText.textContent = 'Saving alone won’t close the gap — the levers are lower spending or working longer.';
+          move.style.display = '';
+        } else if (Number.isFinite(addMv.additionalAnnualDollars) && Number.isFinite(addMv.additionalRate)) {
+          moveText.innerHTML = 'Save <strong>' + fmt$(addMv.additionalAnnualDollars) + '/yr</strong> more (' +
+            fmtPct(addMv.additionalRate) + ' of salary, on top of your ' + fmtPct(addMv.currentContributionRate) +
+            ') to reach a safe 5% return.';
+          move.style.display = '';
+        } else {
+          move.style.display = 'none';
+        }
 
         // ===== Detail panel =====
         var ebriCard = document.getElementById('ebriCard');
@@ -2389,61 +1959,9 @@
         }
 
         // Show results section
-        var demoNote = document.getElementById('rzDemoNote');
-        if (demoNote) demoNote.style.display = data.__demo ? '' : 'none';
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('resultsSection').classList.add('visible');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      // ===== Local-preview fallback =====
-      // On localhost only: if the live engine is unreachable (wifi blip,
-      // API down), render representative SAMPLE numbers through the normal
-      // pipeline with a visible banner, instead of a dead error. Production
-      // keeps the real error message.
-      var DEMO_RESULT = {
-        __demo: true,
-        requiredIRR: 0.066,
-        feasibilityRating: 'aggressive',
-        verdict: { showReturn: true, feasible: true, detail: 'Sample projection for layout preview.' },
-        projectedRetirementBalance: 890000,
-        requiredReturnGap: 0.017,
-        expectedPortfolioReturn: 0.049,
-        additionalSavings: { onTrack: false, capped: false, additionalAnnualDollars: 7813, additionalRate: 0.031, currentContributionRate: 0.10 },
-        assumptions: { targetEndAge: 100, preRetReturn: 0.06 },
-        yearsToRetirement: 13,
-        estimatedAnnualSS: 32000,
-        ssClaimAgeUsed: 67,
-        depletionAge: 88,
-        projectedRetirementSpending: 82000,
-        currentSpendingEstimate: 62000,
-        spendingBreakdown: { housing: 21000, food: 10500, healthCare: 12000, transportation: 7500, entertainment: 6000, gifts: 3500, clothing: 2500, other: 6500, taxes: 12500 }
-      };
-      // Anything that isn't the deployed site counts as local preview —
-      // covers 127.0.0.1, localhost, LAN IPs, and file:// (empty hostname).
-      var IS_LOCAL_PREVIEW = (location.hostname !== 'edge.gh2benefits.com');
-
-      // ===== "Computing" theater (labor illusion — honest steps, ~2.6s) =====
-      // Ends on "some inputs unavailable — using wide estimates", pre-seeding
-      // the Full Profile upsell before the verdict appears.
-      function runCalcTheater(payload) {
-        var ov = document.getElementById('rzCalc');
-        if (!ov) { renderResult(payload); return; }
-        var steps = ov.querySelectorAll('.rz-calc-step');
-        ov.classList.add('on');
-        var i = 0;
-        (function next() {
-          if (i < steps.length) {
-            steps[i].classList.add('on'); i++;
-            setTimeout(next, 560);
-          } else {
-            setTimeout(function () {
-              ov.classList.remove('on');
-              Array.prototype.forEach.call(steps, function (s) { s.classList.remove('on'); });
-              renderResult(payload);
-            }, 520);
-          }
-        })();
       }
 
       // ===== Adjust inputs =====
@@ -2526,14 +2044,7 @@
         btn.disabled = true;
         btn.innerHTML = 'Calculating…';
 
-        // Local preview has no /api — use the public CORS-open production API
-        // there (per README); same-origin relative path everywhere else.
-        var API_BASE = (location.hostname === '127.0.0.1' || location.hostname === 'localhost')
-          ? 'https://edge.gh2benefits.com' : '';
-        fetch(API_BASE + '/api/optimize-quick', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
+        var reqBody = {
             mode: 'ballpark',
             age: age, retirementAge: retirementAge, ssClaimAge: ssClaimAge, filingStatus: filing,
             spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge, spouseSsClaimAge: spouseSsClaimAge,
@@ -2544,7 +2055,12 @@
             salaryGrowth: salaryGrowth, preRetReturn: preRetReturn, preRetInflation: preRetInflation,
             postRetReturn: postRetReturn, postRetInflation: postRetInflation, targetEndAge: planThroughAge,
             ssMonthlyFRA: ssMonthlyFRA
-          })
+        };
+
+        fetch('/api/optimize-quick', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reqBody)
         }).then(function (r) {
           if (r.status === 401) { window.location.href = '/login.html?next=' + encodeURIComponent('/ballpark.html'); return null; }
           return r.json().then(function (j) { return { status: r.status, body: j }; });
@@ -2567,30 +2083,155 @@
               result: out.body, savedAt: Date.now()
             }));
           } catch (e) {}
-          runCalcTheater(out.body);
+          renderResult(out.body);
+          if (window.__initPremium) { try { window.__initPremium(reqBody, out.body); } catch (e) {} }
         }).catch(function () {
           btn.disabled = false; btn.innerHTML = orig;
-          if (IS_LOCAL_PREVIEW) {
-            showError('');
-            runCalcTheater(DEMO_RESULT);
-            return;
-          }
           showError('Network error. Please try again.');
         });
       });
     })();
   </script>
+<script>
+/* Ballpark Premium — Stage 2 precision layer. Seeded from the user's own ballpark
+   inputs + result (no hardcoded sample). Center is anchored to the exact required
+   return Stage 1 displayed, so the two stages never disagree; Premium only adds the
+   band + per-field tighteners around it. GH2 EDGE™ · Patent Pending. */
+window.__initPremium = (function(){
+  var ROW_META = {
+    // All six render LOCKED. The household SEES every variable and what each is worth
+    // in precision, but resolves none of them at this tier — the lock is the upsell to
+    // Full profile. `opts` retained (unused while locked) so this is one-line reversible.
+    spouse:{kind:'lock',t1:"🔒 Spouse's income and Social Security",opts:['Select…','Similar earner','Lower earner','Not working']},
+    mix:{kind:'lock',t1:'🔒 Account mix (pre-tax / Roth / taxable)',opts:['Select…','Mostly pre-tax','Even split','Mostly Roth']},
+    other:{kind:'lock',t1:'🔒 Other retirement income',opts:['Select…','None','Some ($10–30k)','Meaningful ($30k+)']},
+    roth:{kind:'lock',t1:'🔒 Roth conversion modeling'},
+    ssopt:{kind:'lock',t1:'🔒 Social Security claiming optimizer'},
+    hcltc:{kind:'lock',t1:'🔒 Healthcare and long-term care'}
+  };
+  // Founder-set order. NOT sorted by tightening size — this is the sequence a planner
+  // works the household in, so it stays fixed regardless of each row's measured value.
+  // spouse leads: it is the household-structure question everything else depends on, and
+  // for MFJ it is usually the largest single unknown. It self-labels "not applicable" for
+  // single filers rather than showing a fabricated zero.
+  var ORDER=['spouse','ssopt','hcltc','mix','roth','other'];
+  var MODEL=null, locked={}, AXIS={lo:3,hi:11}, REQ={};
+  function $(id){return document.getElementById(id);}
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+  function pctToX(p){return ((p-AXIS.lo)/(AXIS.hi-AXIS.lo))*100;}
+  function tier(pp){var g=pp-MODEL.expected;return g<=0?'well funded':g<=1?'conservative':g<=2?'moderate':g<=3?'aggressive':'extremely aggressive';}
+  function render(){
+    // NOTE ON `locked`: at the Ballpark tier nothing is resolvable, so `locked` stays empty
+    // for the life of the panel — the band renders at full RSS width and Precision holds at
+    // the 71% "Ballpark" tick. The shrink path below is intentionally KEPT INTACT but
+    // UNREACHABLE here: it is the Full-profile tier's math, and it is the same code that
+    // proves the ±X% per-field figures are real rather than decorative. Do not read this as
+    // a control the user can reach at this tier — no row writes to `locked` (see buildRows).
+    var rss2=0,i,k;
+    for(i=0;i<ORDER.length;i++){k=ORDER[i];if(!(k in locked))rss2+=MODEL.fields[k]*MODEL.fields[k];}
+    var half=Math.max(MODEL.floor,Math.sqrt(rss2));
+    var lo=clamp(MODEL.center-half,0,30),hi=Math.max(lo,clamp(MODEL.center+half,0,30));
+    $('ppRrlo').textContent=lo.toFixed(1)+'%';$('ppRrhi').textContent=hi.toFixed(1)+'%';
+    var xl=pctToX(lo),xr=pctToX(hi),b=$('ppBandhi');
+    b.style.left=clamp(xl,0,100)+'%';b.style.width=clamp(xr-xl,0,100)+'%';
+    var resolvedT=0,kk;for(kk in locked)resolvedT+=locked[kk];
+    var base=71,span=100-base,prog=MODEL.totalT>0?resolvedT/MODEL.totalT:0,pct=Math.round(base+span*prog);
+    $('ppPct').textContent=pct+'%';$('ppBar').style.width=pct+'%';
+    var flips=tier(lo)!==tier(hi),wb=$('ppWarnbox');
+    if(flips){wb.classList.remove('pp-hidden');$('ppWarn').textContent='Your feasibility verdict flips inside this range ('+tier(lo)+' → '+tier(hi)+').';}
+    else wb.classList.add('pp-hidden');
+  }
+  function buildRows(){
+    var host=$('ppRows');host.innerHTML='';
+    ORDER.forEach(function(key){
+      // EVERY variable renders LOCKED at this tier. The user sees all six unknowns and what
+      // each one is worth in precision — that measured ±X% IS the product being sold here —
+      // but cannot resolve any of them. Resolution is the Full-profile tier (tick strip above).
+      // Nothing here writes to `locked`: these rows are un-settable by design, not by omission.
+      // ROW_META.opts is deliberately unused at this tier — retained for Full profile, which
+      // is where those choices actually get made.
+      var meta=ROW_META[key],t=MODEL.fields[key]||0,zero=t<=0;
+      // A variable that cannot apply to this household at all (spouse row, single filer).
+      var na=(key==='spouse'&&MODEL.filingStatus!=='mfj');
+      var row=document.createElement('div');row.className='pp-row pp-locked';
+      var txt=document.createElement('div');txt.className='pp-txt';
+      var t1=document.createElement('div');t1.className='pp-t1';
+      // ROW_META already prefixes the three original lock rows; prefix the rest so all six match.
+      t1.textContent=(meta.t1.charAt(0)==='\uD83D'?meta.t1:'🔒 '+meta.t1);
+      var t2=document.createElement('div');t2.className='pp-t2';
+      if(na)        t2.textContent='Not applicable — you filed as single';
+      else if(zero) t2.textContent="Doesn't change your number for this household";
+      else          t2.innerHTML='Tightens range by <b>±'+t.toFixed(1)+'%</b>';
+      txt.appendChild(t1);txt.appendChild(t2);row.appendChild(txt);
+      // A variable worth nothing for this household is not an upsell — state the fact and show
+      // no CTA. Only variables that would actually buy precision carry the Full-profile
+      // affordance, so the tease is never manufactured.
+      if(!zero&&!na){
+        var cta=document.createElement('div');cta.className='pp-fp pp-fp-locked';
+        cta.setAttribute('aria-disabled','true');
+        cta.textContent='🔒 Unlock with Full profile';
+        row.appendChild(cta);
+      }
+      host.appendChild(row);
+    });
+  }
+  function chrome(on){
+    ['ppBandRow','ppScaleRow','ppNoteRow','ppRows'].forEach(function(id){$(id).style.display=on?'':'none';});
+    $('ppDash').style.display=on?'':'none';$('ppRrhi').style.display=on?'':'none';$('ppU').style.display=on?'':'none';
+    $('ppInfeasible').style.display=on?'none':'block';
+  }
+  function paintFeasible(prem,anchorPP,mixPP){
+    chrome(true);
+    var fields={},totalT=0;(prem.fields||[]).forEach(function(f){fields[f.key]=f.tighten;totalT+=Math.max(0,f.tighten);});
+    var bh=(prem.bandHigh!=null?prem.bandHigh:anchorPP),bl=(prem.bandLow!=null?prem.bandLow:anchorPP);
+    var half=Math.max(0,(bh-bl)/2);
+    MODEL={center:anchorPP,expected:mixPP,floor:prem.floor||0.2,fields:fields,totalT:totalT,filingStatus:REQ.filingStatus};
+    AXIS.lo=clamp(Math.floor(anchorPP-half-1),0,30);AXIS.hi=clamp(Math.ceil(anchorPP+half+1),0,30);
+    if(AXIS.hi-AXIS.lo<4)AXIS.hi=Math.min(30,AXIS.lo+4);
+    $('ppSl').textContent=AXIS.lo+'%';$('ppSm').textContent=Math.round((AXIS.lo+AXIS.hi)/2)+'%';$('ppSh').textContent=AXIS.hi+'%';
+    $('ppRrcenter').textContent='Your ballpark: '+anchorPP.toFixed(1)+'%/yr — the range is how far that could move as the locked inputs resolve.';
+    buildRows();render();
+  }
+  function paintInfeasible(){
+    chrome(false);$('ppWarnbox').classList.add('pp-hidden');
+    $('ppRrlo').textContent='30%+';$('ppRrcenter').textContent='';$('ppPct').textContent='—';$('ppBar').style.width='0%';
+    $('ppInfeasible').textContent="At these inputs the plan isn't fundable at a realistic return, so there's no range to tighten yet. The precision layer sharpens feasible plans — spend less, work longer, or add savings above and it will pinpoint your number.";
+  }
+  function pills(req){
+    var host=$('ppPills');host.innerHTML='';
+    var items=['Age '+req.age, req.filingStatus==='mfj'?'Married':'Single'];
+    if(req.currentSavings!=null)items.push('$'+Math.round(req.currentSavings/1000)+'k saved');
+    if(req.customSpending!=null)items.push('$'+Math.round(req.customSpending/1000)+'k spend');
+    if(req.state)items.push(req.state);
+    var shown=items.slice(0,4),extra=items.length-shown.length;
+    shown.forEach(function(x){var s=document.createElement('span');s.className='pp-pill';s.textContent='✓ '+x;host.appendChild(s);});
+    if(extra>0){var e=document.createElement('span');e.className='pp-pill';e.textContent='✓ +'+extra+' more';host.appendChild(e);}
+  }
+  return function(reqBody,ballparkBody){
+    locked={};REQ=reqBody||{};
+    var panel=$('premiumPanel');panel.hidden=false;
+    // Fold the full ballpark result (verdict, ring, required return, gap, levers, assumptions)
+    // into the precision panel, and hide the rest of the standalone result section. On Ballpark
+    // Premium the precision panel is the single, complete deliverable.
+    var hero=$('resultHero'),host=$('ppResultHost'),rs=$('resultsSection');
+    if(hero&&host&&hero.parentNode!==host){host.innerHTML='';host.appendChild(hero);hero.style.margin='16px 0 2px';}
+    if(rs)rs.style.display='none';
+    $('ppRows').innerHTML='<div class="pp-loading">Computing your sensitivity…</div>';
+    pills(reqBody);
+    setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'});},80);
+    var irr=Number(ballparkBody.requiredIRR);
+    var anchorPP=clamp((isFinite(irr)?irr:0)*100,0,30);
+    var mixFrac=Number(ballparkBody.expectedPortfolioReturn);
+    var mixPP=(isFinite(mixFrac)&&mixFrac>0)?mixFrac*100:0;
+    // Always render the full precision layout (rows + band), feasible or not.
+    var body=Object.assign({},reqBody,{mode:'premium'});
+    fetch('/api/optimize-quick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(prem){paintFeasible(prem||{},anchorPP,mixPP>0?mixPP:(Number((prem||{}).expectedPortfolioReturn)||anchorPP));})
+      .catch(function(){paintFeasible({fields:[]},anchorPP,mixPP||anchorPP);});
+  };
+})();
+</script>
 <script>try{history.scrollRestoration="manual";}catch(e){}addEventListener("load",function(){window.scrollTo(0,0);});</script>
-  <!-- "Computing" overlay -->
-  <div class="rz-calc" id="rzCalc" aria-hidden="true">
-    <div class="rz-calc-card">
-      <div class="rz-calc-title">Running your projection&hellip;</div>
-      <div class="rz-calc-step">Projecting your portfolio year by year&hellip;</div>
-      <div class="rz-calc-step">Applying federal + state + Medicare tax math&hellip;</div>
-      <div class="rz-calc-step">Checking your confirmed inputs&hellip;</div>
-      <div class="rz-calc-step warn" id="rzCalcWarn">&#9888; Some inputs unavailable &mdash; using wide estimates.</div>
-    </div>
-  </div>
-
 </body>
 </html>

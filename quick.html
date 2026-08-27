@@ -6,6 +6,8 @@
   <meta name="robots" content="index,follow" />
   <meta name="theme-color" content="#06080C" />
   <title>EDGE — Am I On Track?</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
   <meta name="description" content="Five questions. Three numbers. About 10 seconds. A first look at whether your retirement savings will last." />
   <style>
     :root {
@@ -69,10 +71,17 @@
 
     /* ==== HEADLINE ==== */
     h1 {
-      font-size: 36px; line-height: 1.1; letter-spacing: -0.02em;
+      font-size: clamp(28px, 8vw, 36px); line-height: 1.1; letter-spacing: -0.02em;
       font-weight: 800; margin: 6px 0 10px;
     }
-    .sub { color: var(--text-muted); font-size: 16px; margin: 0 0 22px; }
+    .sub { color: var(--text-muted); font-size: clamp(15px, 4vw, 16px); margin: 0 0 22px; }
+
+    /* Smallest phones */
+    @media (max-width: 380px) {
+      .wrap { padding: 20px 14px 40px; }
+      .ring { width: 120px; height: 120px; }
+      .result-grid { gap: 10px; }
+    }
 
     /* ==== FORM ROWS ==== */
     form { display: block; }
@@ -132,8 +141,8 @@
       padding: 2px 0;
       min-width: 0;
     }
-    .row input#age { width: 38px; }
-    .row input#totalSavings, .row input#annualExpenses { width: 96px; }
+    .row input#age, .row input#retAge, .row input#planThroughAge { width: 44px; }
+    .row input#totalSavings, .row input#annualExpenses, .row input#salary { width: 96px; }
     .row select { -webkit-appearance: none; appearance: none; padding-right: 4px; cursor: pointer; width: 92px; }
 
     /* Hide any native spinner Safari/Edge may add */
@@ -145,6 +154,45 @@
     /* The chevron (decorative) */
     .chev { flex: none; color: var(--text-faint); }
     .chev svg { width: 16px; height: 16px; }
+
+    /* Optional SS field — visible affordance for an empty, optional input
+       (no placeholder, per form rules): $ / mo units + a dashed underline. */
+    .ss-control { gap: 4px; }
+    .ss-control .unit { color: var(--text-faint); font-size: 13px; font-weight: 600; }
+    .row input.ss-field { width: 62px; border-bottom: 1px dashed var(--text-faint); }
+    .row input.ss-field:focus { border-bottom-color: var(--text); }
+
+    /* Custom state dropdown — the native <select> stays as the hidden value
+       source (compute reads #state.value); this replaces the OS popup so the
+       scroll matches the dark theme with a thin styled scrollbar. */
+    .state-native { display: none; }
+    .state-wrap { position: relative; }
+    .state-btn {
+      background: transparent; border: 0; color: var(--text);
+      font: inherit; font-size: 15px; font-weight: 700; letter-spacing: -0.01em;
+      text-align: right; cursor: pointer; padding: 2px 0; width: 92px;
+    }
+    .state-menu {
+      position: absolute; top: calc(100% + 6px); right: 0; z-index: 60;
+      width: 224px; max-height: 264px; overflow-y: auto;
+      background: var(--card-bg-2); border: 1px solid rgba(255,255,255,.12);
+      border-radius: 10px; padding: 6px;
+      box-shadow: 0 12px 34px rgba(0,0,0,.55);
+      scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent;
+      -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
+    }
+    .state-menu[hidden] { display: none; }
+    .state-menu::-webkit-scrollbar { width: 8px; }
+    .state-menu::-webkit-scrollbar-track { background: transparent; }
+    .state-menu::-webkit-scrollbar-thumb { background: rgba(255,255,255,.18); border-radius: 8px; }
+    .state-menu::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.32); }
+    .state-opt {
+      display: block; width: 100%; text-align: left; background: transparent;
+      border: 0; color: var(--text); font: inherit; font-size: 14px;
+      padding: 11px 12px; border-radius: 7px; cursor: pointer;
+    }
+    .state-opt:hover { background: rgba(255,255,255,.08); }
+    .state-opt[aria-selected="true"] { background: rgba(255,255,255,.10); font-weight: 700; }
 
     /* Filing status segmented inline picker */
     .seg { display: inline-flex; background: var(--card-bg-2); border-radius: 8px; padding: 2px; }
@@ -212,7 +260,11 @@
     /* Ring */
     .ring-wrap { display: flex; flex-direction: column; align-items: center; gap: 10px; }
     .ring { position: relative; width: 138px; height: 138px; }
-    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring > svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring-check-icon { display: block; margin: 0 auto; color: var(--text-muted); }
+    .ring-check-icon.at-risk { color: var(--red); }
+    .ring-check-icon.on-track { color: var(--green); }
+    .ring-check-icon.middle { color: var(--amber); }
     .ring-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 11; }
     .ring-fill {
       fill: none; stroke-width: 11; stroke-linecap: round;
@@ -335,7 +387,7 @@
           <input type="text" id="age" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
             name="qa_age" data-lpignore="true" data-form-type="other"
-            readonly onfocus="this.removeAttribute('readonly')" />
+             />
         </div>
         <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
       </div>
@@ -365,10 +417,12 @@
         <div class="row-main">
           <div class="row-label">State</div>
         </div>
-        <div class="row-control">
-          <select id="state" required
+        <div class="row-control state-wrap">
+          <select id="state" required class="state-native"
             autocomplete="new-password" name="qa_state"
             data-lpignore="true" data-form-type="other"></select>
+          <button type="button" id="stateBtn" class="state-btn" aria-haspopup="listbox" aria-expanded="false"><span id="stateBtnLabel">Florida</span></button>
+          <div id="stateMenu" class="state-menu" role="listbox" hidden></div>
         </div>
         <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
       </div>
@@ -386,7 +440,7 @@
           <input type="text" id="totalSavings" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="500000"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
             name="qa_savings" data-lpignore="true" data-form-type="other"
-            readonly onfocus="this.removeAttribute('readonly')" />
+             />
         </div>
         <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
       </div>
@@ -404,7 +458,27 @@
           <input type="text" id="annualExpenses" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="60000"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
             name="qa_spending" data-lpignore="true" data-form-type="other"
-            readonly onfocus="this.removeAttribute('readonly')" />
+             />
+        </div>
+        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+      </div>
+
+      <!-- Optional: known SS benefit at full retirement age -->
+      <div class="row with-sub">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a3 3 0 0 1 5.6 1.1c0 2-3 2.4-3 4"/><circle cx="12" cy="17.3" r="0.6" fill="currentColor"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">SS benefit at full retirement age (optional)</div>
+          <div class="row-sub">Know your number from ssa.gov? Enter $/month &mdash; otherwise we estimate it.</div>
+        </div>
+        <div class="row-control ss-control">
+          <span class="unit">$</span>
+          <input type="text" id="ssMonthlyFRA" class="ss-field" inputmode="numeric" pattern="[0-9]*" maxlength="6" value=""
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_ssfra" data-lpignore="true" data-form-type="other"
+            aria-label="Monthly Social Security benefit at full retirement age" />
+          <span class="unit">/mo</span>
         </div>
         <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
       </div>
@@ -436,7 +510,7 @@
           <input type="text" id="salary" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="100000"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
             name="qa_salary" data-lpignore="true" data-form-type="other"
-            readonly onfocus="this.removeAttribute('readonly')" />
+             />
         </div>
       </div>
 
@@ -453,7 +527,40 @@
           <input type="text" id="retAge" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
             name="qa_retage" data-lpignore="true" data-form-type="other"
-            readonly onfocus="this.removeAttribute('readonly')" />
+             />
+        </div>
+      </div>
+
+      <!-- Plan through age (deterministic goal age) -->
+      <div class="row with-sub">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">Plan through age</div>
+          <div class="row-sub">How long should the money last?</div>
+        </div>
+        <div class="row-control">
+          <input type="text" id="planThroughAge" inputmode="numeric" pattern="[0-9]*" maxlength="3" value="100"
+            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+            name="qa_planage" data-lpignore="true" data-form-type="other"
+             />
+        </div>
+      </div>
+
+      <!-- How you invest — supplies "your mix" benchmark for the gap line. Default balanced. -->
+      <div class="row with-sub">
+        <div class="ico purple" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
+        </div>
+        <div class="row-main">
+          <div class="row-label">How you invest</div>
+          <div class="row-sub">Sets what your mix is expected to earn.</div>
+        </div>
+        <div class="seg seg-risk" role="group" aria-label="How you invest">
+          <button type="button" class="seg-btn" data-risk="conservative" aria-pressed="false">Safer</button>
+          <button type="button" class="seg-btn" data-risk="balanced" aria-pressed="true">Balanced</button>
+          <button type="button" class="seg-btn" data-risk="aggressive" aria-pressed="false">Growth</button>
         </div>
       </div>
 
@@ -477,8 +584,9 @@
                 stroke-dasharray="477.5" stroke-dashoffset="477.5" />
             </svg>
             <div class="ring-center">
-              <div class="ring-pct" id="ringPct">&mdash;</div>
-              <div class="ring-unit">per year</div>
+              <svg class="ring-check-icon" id="ringCheck" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <div class="ring-pct" id="ringPct" style="display:none">&mdash;</div>
+              <div class="ring-unit" style="display:none">per year</div>
             </div>
           </div>
         </div>
@@ -497,16 +605,24 @@
         </div>
       </div>
 
+      <div style="max-width:520px;margin:18px auto 0;padding:12px 16px;border-left:3px solid #A78BFA;background:rgba(167,139,250,0.06);border-radius:6px;font-size:14px;line-height:1.5;color:var(--text-muted);text-align:left;">
+        <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
+      </div>
+
       <div class="see-full">
-        <a href="/planner.html">See the full plan
+        <a href="/ballpark.html">See the full plan
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 19 12 13 19"/></svg>
         </a>
+      </div>
+
+      <div class="ebook-line" style="text-align:center;margin:14px auto 0;font-size:14px;color:var(--text-muted);max-width:520px;line-height:1.55;">
+        <strong style="color:var(--text);">New to this?</strong> Get the free <a href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener" style="color:#C4B5FD;font-weight:600;text-decoration:none;">GH2 EDGE&trade; Beginner&rsquo;s Guide (PDF)</a> &middot; questions to <a href="mailto:info@gh2benefits.com" style="color:#C4B5FD;text-decoration:none;">info@gh2benefits.com</a>
       </div>
     </div>
 
     <div class="how">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-      <p style="margin:0;"><strong>How to read this.</strong> The required portfolio return is the annual return your savings need to earn each year for your plan to last to age 95 at the spending level you entered. Lower is safer.</p>
+      <p style="margin:0;"><strong>How to read this.</strong> The required portfolio return is the annual return your savings need to earn each year for your plan to last to age <span id="howEndAge">100</span> at the spending level you entered. Lower is safer.</p>
     </div>
 
     <footer>
@@ -536,6 +652,48 @@
         sel.appendChild(opt);
       });
       sel.value = 'FL';
+
+      // Custom themed state dropdown. The native <select id="state"> above stays
+      // the value source (compute reads #state.value); this only replaces the OS
+      // popup so the scroll matches the dark theme.
+      (function initStateDropdown() {
+        var btn = document.getElementById('stateBtn');
+        var label = document.getElementById('stateBtnLabel');
+        var menu = document.getElementById('stateMenu');
+        if (!btn || !label || !menu) return;
+        function nameFor(code) {
+          for (var i = 0; i < STATES.length; i++) { if (STATES[i][0] === code) return STATES[i][1]; }
+          return code;
+        }
+        function close() { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+        function open() {
+          menu.hidden = false; btn.setAttribute('aria-expanded', 'true');
+          var s = menu.querySelector('.state-opt[aria-selected="true"]');
+          if (s) s.scrollIntoView({ block: 'nearest' });
+        }
+        STATES.forEach(function (s) {
+          var o = document.createElement('button');
+          o.type = 'button'; o.className = 'state-opt'; o.setAttribute('role', 'option');
+          o.textContent = s[1];
+          o.setAttribute('aria-selected', s[0] === sel.value ? 'true' : 'false');
+          o.addEventListener('click', function () {
+            sel.value = s[0];
+            try { sel.dispatchEvent(new Event('change', { bubbles: true })); } catch (e) {}
+            label.textContent = s[1];
+            menu.querySelectorAll('.state-opt').forEach(function (x) {
+              x.setAttribute('aria-selected', x === o ? 'true' : 'false');
+            });
+            close();
+          });
+          menu.appendChild(o);
+        });
+        label.textContent = nameFor(sel.value);
+        btn.addEventListener('click', function (e) { e.stopPropagation(); menu.hidden ? open() : close(); });
+        document.addEventListener('click', function (e) {
+          if (!menu.hidden && !menu.contains(e.target) && e.target !== btn) close();
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) close(); });
+      })();
 
       // Filing status segmented control
       var filing = 'single';
@@ -572,6 +730,25 @@
       });
       syncWorkRows();
 
+      // "How you invest?" segmented control — Path B: supplies the mix the required
+      // return is compared against (the gap line). Default balanced. Maps to the return
+      // assumption sent to the engine, which drives expectedPortfolioReturn.
+      var RISK_PROFILES = {
+        conservative: { label: 'conservative', postRet: 0.04,  preRet: 0.05 },
+        balanced:     { label: 'balanced',     postRet: 0.055, preRet: 0.065 },
+        aggressive:   { label: 'aggressive',   postRet: 0.07,  preRet: 0.08 }
+      };
+      var selectedRisk = 'balanced';
+      var riskBtns = document.querySelectorAll('[data-risk]');
+      riskBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          selectedRisk = btn.getAttribute('data-risk');
+          riskBtns.forEach(function (b) {
+            b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+          });
+        });
+      });
+
       function fmt$(n) {
         if (!Number.isFinite(n)) return '$0';
         return '$' + Math.round(n).toLocaleString('en-US');
@@ -589,10 +766,10 @@
         if (tier === 'moderate') return 'middle';
         return 'at-risk';
       }
-      function pillLabelFor(bucket) {
-        if (bucket === 'on-track') return 'ON TRACK';
-        if (bucket === 'middle') return 'FEASIBLE';
-        return 'AT RISK';
+      // Path B: pill describes how far the required return reaches past YOUR mix — not a
+      // safe/at-risk verdict. Color still comes from bucketFor(tier).
+      function pillLabelFor(tier) {
+        return ({ well_funded: 'WITHIN YOUR MIX', conservative: 'SLIGHT REACH', moderate: 'MODERATE REACH', aggressive: 'LARGE REACH', extremely_aggressive: 'BEYOND YOUR MIX' })[tier] || 'MODERATE REACH';
       }
 
       // Ring sized at r=76 → circumference = 2πr ≈ 477.52
@@ -606,26 +783,45 @@
         var reqIrrEl = document.getElementById('reqIrr');
         var outcomeTextEl = document.getElementById('outcomeText');
 
-        // Required IRR — same value in the ring center and the right column.
+        // Required Return — driven by the verdict so an unachievable solver-ceiling rate is
+        // never shown as "the return you need" (identical behavior to /ballpark).
         var irr = data.requiredIRR;
+        var v = data.verdict || {};
         var irrText, ringPctText;
-        if (typeof irr !== 'number') {
-          irrText = '—';
-          ringPctText = '—';
-        } else if (irr < 0) {
-          // Over-funded: any positive return works
-          irrText = 'Any positive return';
-          ringPctText = 'Any positive';
+        if (v.showReturn) {
+          irrText = (irr * 100).toFixed(1) + '%';
+          ringPctText = irrText;
+          reqIrrEl.classList.remove('small');
+          ringPctEl.classList.remove('small');
+        } else if (v.feasible === false) {
+          irrText = 'Not feasible';
+          ringPctText = irrText;
           reqIrrEl.classList.add('small');
           ringPctEl.classList.add('small');
         } else {
-          irrText = (irr * 100).toFixed(2) + '%';
+          // Over-funded: needs no market growth; engine returns its -10% solver floor
+          // (a sentinel). Report the meaningful actual number: 0%.
+          irrText = '0%';
           ringPctText = irrText;
           reqIrrEl.classList.remove('small');
           ringPctEl.classList.remove('small');
         }
         ringPctEl.textContent = ringPctText;
         reqIrrEl.textContent = irrText;
+
+        // §4 gap vs the plan's assumed return (quick uses a default mix, not a user allocation)
+        (function(){
+          var gapEl = document.getElementById('reqGap');
+          if (!gapEl && reqIrrEl && reqIrrEl.parentNode) { gapEl = document.createElement('div'); gapEl.id = 'reqGap'; gapEl.style.cssText = 'font-size:0.8rem;opacity:0.75;margin-top:6px;'; reqIrrEl.parentNode.appendChild(gapEl); }
+          var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
+          if (gapEl && v.showReturn && typeof g === 'number' && typeof mx === 'number') {
+            var mp = (mx*100).toFixed(1), gp = Math.abs(g*100).toFixed(1);
+            var mixName = (RISK_PROFILES[selectedRisk] || RISK_PROFILES.balanced).label;
+            gapEl.textContent = g > 0.001 ? ('your ' + mixName + ' mix is priced for ~' + mp + '% — short ~' + gp + '%')
+                              : g < -0.001 ? ('your ' + mixName + ' mix is priced for ~' + mp + '% — ahead ~' + gp + '%')
+                              : ('right on what your ' + mixName + ' mix is priced for (~' + mp + '%)');
+          } else if (gapEl) { gapEl.textContent = ''; }
+        })();
 
         // Disclose the Social Security assumption already baked into the estimate
         // (salary-derived bend-point PIA when working, spending-derived when
@@ -645,31 +841,30 @@
         ringFillEl.classList.remove('at-risk', 'on-track', 'middle');
         // Color by bucket
         ringFillEl.classList.add(bucket);
+        // Ring badge icon by tier: on-track = check, middle = !, at-risk = X (same as /ballpark)
+        var RING_ICONS = {
+          'on-track': '<polyline points="20 6 9 17 4 12"></polyline>',
+          'middle':   '<line x1="12" y1="7" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line>',
+          'at-risk':  '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
+        };
+        var ringCheckEl = document.getElementById('ringCheck');
+        if (ringCheckEl) {
+          ringCheckEl.setAttribute('class', 'ring-check-icon ' + bucket);
+          ringCheckEl.innerHTML = RING_ICONS[bucket] || RING_ICONS['middle'];
+        }
         // Set dashoffset (animates due to CSS transition)
         requestAnimationFrame(function () {
           ringFillEl.setAttribute('stroke-dashoffset', String(dashOffset));
         });
 
-        // Status pill (right column only)
-        var pillLabel = pillLabelFor(bucket);
+        // Status pill (right column only) — reach label from the tier; not-fundable is its own case.
+        var pillLabel = (v.feasible === false) ? 'NO REALISTIC RETURN' : pillLabelFor(data.feasibilityRating);
         rightPillEl.className = 'status-pill ' + bucket;
         rightPillEl.textContent = pillLabel;
 
-        // Plan outcome
+        // Plan outcome — the verdict's plain-English detail (same narrative as /ballpark).
         outcomeTextEl.className = 'outcome-text ' + bucket;
-        if (data.depletionAge && data.depletionAge < 95) {
-          var shortfallStr = '';
-          if (Number.isFinite(data.terminalBalance) && data.terminalBalance < 0) {
-            shortfallStr = '<span class="outcome-amount at-risk">(' + fmt$(-data.terminalBalance) + ' shortfall)</span>';
-          }
-          outcomeTextEl.innerHTML = 'You may run short of money at age ' + data.depletionAge + '.' + shortfallStr;
-        } else {
-          var remainStr = '';
-          if (Number.isFinite(data.terminalBalance) && data.terminalBalance > 0) {
-            remainStr = '<span class="outcome-amount on-track">(' + fmt$(data.terminalBalance) + ' remaining).</span>';
-          }
-          outcomeTextEl.innerHTML = 'Savings last past age 95 ' + remainStr;
-        }
+        outcomeTextEl.textContent = v.detail || '';
 
         // Show + scroll
         document.getElementById('arrowDown').style.display = 'flex';
@@ -686,9 +881,13 @@
         var state = document.getElementById('state').value;
         var totalSavings = parseFloat(document.getElementById('totalSavings').value);
         var annualExpenses = parseFloat(document.getElementById('annualExpenses').value);
+        var ssMonthlyFRA = Math.max(0, parseFloat(document.getElementById('ssMonthlyFRA').value) || 0);
+        var planThroughAge = parseInt(document.getElementById('planThroughAge').value, 10);
+        if (!(planThroughAge >= 80 && planThroughAge <= 110)) planThroughAge = 100;
+        var _howEnd = document.getElementById('howEndAge'); if (_howEnd) _howEnd.textContent = planThroughAge;
 
-        if (!Number.isFinite(age) || age < 50 || age > 80) {
-          showError('Enter an age between 50 and 80.'); return;
+        if (!Number.isFinite(age) || age < 35 || age > 80) {
+          showError('Enter an age between 35 and 80.'); return;
         }
         if (!state) { showError('Choose your state.'); return; }
         if (!Number.isFinite(totalSavings) || totalSavings < 0) {
@@ -726,8 +925,9 @@
         // household to absurd nine-figure remaining balances:
         //   - postRetReturn 4%  (matches EBRI conservative; engine default 6% inflates)
         //   - postRetInflation 3.5%
-        //   - yearsOfRetirement = max(5, 95 - retirementAge)  → plan to age 95
-        var yorTarget = Math.max(5, 95 - retAgeVal);
+        //   - yearsOfRetirement = max(5, 100 - retirementAge)  → plan to age 100 (matches engine RETIREMENT_END_AGE + ballpark)
+        var yorTarget = Math.max(5, planThroughAge - retAgeVal);
+        var risk = RISK_PROFILES[selectedRisk] || RISK_PROFILES.balanced;
         fetch('/api/optimize-quick', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -743,12 +943,14 @@
             spendingProfile: 'custom',
             customSpending: annualExpenses,
             monthlyPension: 0,
-            postRetReturn: 0.04,
+            postRetReturn: risk.postRet,
             postRetInflation: 0.035,
-            preRetReturn: 0.06,
+            preRetReturn: risk.preRet,
             preRetInflation: 0.035,
             salaryGrowth: 0.035,
-            yearsOfRetirement: yorTarget
+            yearsOfRetirement: yorTarget,
+            targetEndAge: planThroughAge,
+            ssMonthlyFRA: ssMonthlyFRA
           })
         }).then(function (r) {
           if (r.status === 401) {
