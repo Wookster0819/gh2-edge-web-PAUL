@@ -512,13 +512,13 @@
       font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
       color: var(--text-dim);
     }
-    .rz-mini-steps { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 22px; font-size: 12.5px; color: var(--text-muted); }
+    .rz-mini-steps { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 7px; font-size: 12px; color: var(--text-muted); }
     .rz-mini-steps .ms { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
     .rz-mini-steps .ms.done { color: var(--text); }
     .rz-mini-steps .ms.cur  { color: var(--text); font-weight: 700; }
     .rz-mini-steps .ms.cur .msdot { width: 13px; height: 13px; border-radius: 50%; background: #FFF; box-shadow: 0 0 0 3px rgba(255,255,255,0.18); display: inline-block; }
     .rz-mini-steps .ms.lock { color: var(--text-faint); }
-    .rz-mini-steps i { flex: 1 1 auto; height: 1.5px; background: linear-gradient(90deg, #4F46E5, #8B5CF6); min-width: 14px; }
+    .rz-mini-steps i { display: none; }
     .rz-mini-steps i.off { background: var(--border); }
 
     /* Card 2 — required return + range */
@@ -730,8 +730,8 @@
 
     /* Compact convenience CTA (precision card) */
     .rz-cta-sm {
-      font-size: 14px; font-weight: 700; padding: 11px 20px; border-radius: 11px;
-      align-self: flex-start; margin-top: 10px; gap: 7px;
+      font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 10px;
+      align-self: flex-start; margin-top: 4px; gap: 6px;
       box-shadow: 0 6px 22px rgba(139,92,246,0.35);
     }
 
@@ -762,15 +762,39 @@
     }
 
     /* Precision progress bar (endowed progress) */
-    .rz-prec-bar { height: 9px; border-radius: 99px; background: var(--border-soft); overflow: hidden; margin-top: 2px; }
-    .rz-prec-bar i { display: block; height: 100%; border-radius: 99px; background: var(--grad-rpr); transition: width 0.8s ease; }
+    /* Precision as a journey axis (same grammar as the return range bar) */
+    .rz-prec-row { display: flex; align-items: center; gap: 12px; margin: 14px 0 36px; }
+    .rz-prec-row .pend { font-size: 11.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+    .rz-prec-row .pend.lock { color: var(--text-faint); }
+    .rz-prec-track { flex: 1 1 auto; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-prec-track i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #8B5CF6, #A78BFA); transition: width 0.8s ease; }
+    .rz-prec-marker {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 17px; height: 17px; border-radius: 50%;
+      background: #100A24; border: 3.5px solid #A78BFA;
+      box-shadow: 0 0 10px rgba(167,139,250,0.65);
+    }
+    .rz-prec-you {
+      position: absolute; top: 19px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; line-height: 1.25; white-space: nowrap;
+    }
+    .rz-prec-you span { font-size: 13.5px; font-weight: 800; color: #C4B5FD; }
+    .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
 
-    /* Before/after range compare + total (information gap) */
-    .rz-compare { margin-top: 18px; display: flex; flex-direction: column; gap: 11px; }
-    .rz-cmp-row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 14px; font-size: 12.5px; color: var(--text-muted); font-weight: 600; }
-    .rz-cmp-row .bar { height: 9px; border-radius: 99px; }
-    .rz-cmp-row.now .bar { background: linear-gradient(90deg, #7C3AED, #FF3B30); }
-    .rz-cmp-row.full .bar { background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.5); width: 8%; min-width: 26px; }
+    /* Section thesis: today's span vs the Full Profile band, to scale */
+    .rz-compare { margin: 10px 0 6px; display: flex; flex-direction: column; gap: 9px; }
+    .rz-cmp-row { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .rz-cmp-row .cmpwrap { display: flex; align-items: center; gap: 10px; }
+    .rz-cmp-row .cv { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .rz-cmp-row .cv.green { color: #4ADE80; }
+    .rz-cmp-row .cv.ghost { visibility: hidden; }
+    .rz-cmp-row .bar { flex: 1 1 auto; height: 8px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); }
+    .rz-cmp-row .trk { flex: 1 1 auto; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-cmp-row .trk i {
+      position: absolute; top: 0; height: 100%; border-radius: 99px;
+      background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.6);
+    }
+
     .rz-total {
       display: flex; justify-content: space-between; align-items: center; gap: 12px;
       margin-top: 14px; padding: 13px 16px; border-radius: 10px;
@@ -1557,13 +1581,17 @@
           <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
           <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
           <div class="rz-note" id="rzPrecisionNote"></div>
-          <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
-          <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
-          <div class="rz-mini-steps">
-            <span class="ms done">&#10003; Quick Check</span><i></i>
-            <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
-            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
+          <div class="rz-prec-row">
+            <span class="pend">&#10003; Quick Check</span>
+            <div class="rz-prec-track">
+              <i id="rzPrecBarFill" style="width:0%"></i>
+              <div class="rz-prec-marker" id="rzPrecMarker">
+                <span class="rz-prec-you"><span id="rzPrecYou">&mdash;</span><em>You &mdash; Ballpark</em></span>
+              </div>
+            </div>
+            <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 96% Full Profile</span>
           </div>
+          <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
         </div>
 
       </div>
@@ -1594,11 +1622,17 @@
           <div class="rz-chips" id="rzChips"></div>
           <div class="rz-chips-note" id="rzChipsNote"></div>
           <div class="rz-card-title rz-sharpen-title">SHARPEN YOUR NUMBER &mdash; EACH FIELD TIGHTENS YOUR RANGE</div>
-          <div id="rzSharpenList"></div>
           <div class="rz-compare">
-            <div class="rz-cmp-row now"><span id="rzCmpNowLabel">Today</span><div class="bar"></div></div>
-            <div class="rz-cmp-row full"><span>Full Profile: &plusmn;0.2%</span><div class="bar"></div></div>
+            <div class="rz-cmp-row now">
+              <span>Your range today</span>
+              <div class="cmpwrap"><span class="cv" id="rzCmpLo">&mdash;</span><div class="bar"></div><span class="cv" id="rzCmpHi">&mdash;</span></div>
+            </div>
+            <div class="rz-cmp-row full">
+              <span>With Full Profile</span>
+              <div class="cmpwrap"><span class="cv ghost" id="rzCmpLoGhost"></span><div class="trk"><i id="rzCmpSliver"></i></div><span class="cv green">&plusmn;0.2%</span></div>
+            </div>
           </div>
+          <div id="rzSharpenList"></div>
           <div class="rz-total"><span>Unlocking everything tightens your range by</span><b id="rzTotalPts">&mdash;</b></div>
         </div>
         <div class="rz-card">
@@ -2055,7 +2089,10 @@
         document.getElementById('rzPrecisionNote').innerHTML =
           'You’re ' + precision + '% of the way to your exact number — <strong>' + lockedCount +
           ' inputs from 96%</strong> and a <strong>&plusmn;0.2%</strong> range.';
-        document.getElementById('rzPrecBarFill').style.width = precision + '%';
+        var precPos = Math.max(4, Math.min(96, precision / 96 * 100));
+        document.getElementById('rzPrecBarFill').style.width = precPos + '%';
+        document.getElementById('rzPrecMarker').style.left = precPos + '%';
+        document.getElementById('rzPrecYou').textContent = precision + '%';
 
         // Required-return card + range bar
         document.getElementById('rzCard2').setAttribute('data-tier', tier);
@@ -2239,10 +2276,16 @@
         RZ_SHARPEN.forEach(function (s) {
           if (!s.na && !(s.key === 'spouse' && filing !== 'mfj')) lockedSum += s.impact;
         });
-        document.getElementById('rzCmpNowLabel').textContent =
-          'Today: ' + rangeLo.toFixed(1) + '–' + rangeHi.toFixed(1) + '%';
         document.getElementById('rzTotalPts').textContent = '±' + lockedSum.toFixed(1) + ' points';
-
+        // Section-thesis bars: today's span vs the ±0.2% band, TO SCALE and
+        // positioned where the user's ballpark sits on that span.
+        document.getElementById('rzCmpLo').textContent = rangeLo.toFixed(1) + '%';
+        document.getElementById('rzCmpHi').textContent = rangeHi.toFixed(1) + '%';
+        document.getElementById('rzCmpLoGhost').textContent = rangeLo.toFixed(1) + '%';
+        var sliver = document.getElementById('rzCmpSliver');
+        var sliverW = rSpan > 0 ? Math.max(2.5, (0.4 / rSpan) * 100) : 4;
+        sliver.style.width = sliverW + '%';
+        sliver.style.left = Math.max(0, Math.min(100 - sliverW, rPos - sliverW / 2)) + '%';
         // Right column: top impacts, largest first (n/a rows excluded)
         var impEl = document.getElementById('rzImpactList');
         var pool = RZ_SHARPEN.filter(function (s) {
