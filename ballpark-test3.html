@@ -728,10 +728,18 @@
     }
 
 
+    /* Premium blur: computed magnitudes locked behind Full Profile */
+    .rz-blurwrap { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .rz-blur { filter: blur(8px); user-select: none; pointer-events: none; }
+    .rz-blur-sm { filter: blur(6px); }
+    .rz-blur-lock { color: #FBBF24; display: inline-flex; filter: drop-shadow(0 0 5px rgba(251,191,36,0.5)); }
+    .rz-blurwrap:hover .rz-blur-lock { transform: scale(1.12); transition: transform 0.15s ease; }
+
     /* Compact convenience CTA (precision card) */
-    .rz-cta-sm {
-      font-size: 13px; font-weight: 700; padding: 9px 16px; border-radius: 10px;
-      align-self: flex-start; margin-top: 4px; gap: 6px;
+    .rz-cta-btn.rz-cta-sm {
+      display: inline-flex; width: auto; font-size: 13px; font-weight: 700; padding: 9px 14px; border-radius: 10px;
+      align-self: flex-start; margin-top: 4px; gap: 6px; white-space: nowrap;
+      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
       box-shadow: 0 6px 22px rgba(139,92,246,0.35);
     }
 
@@ -763,10 +771,11 @@
 
     /* Precision progress bar (endowed progress) */
     /* Precision as a journey axis (same grammar as the return range bar) */
-    .rz-prec-row { display: flex; align-items: center; gap: 12px; margin: 14px 0 36px; }
-    .rz-prec-row .pend { font-size: 11.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
-    .rz-prec-row .pend.lock { color: var(--text-faint); }
-    .rz-prec-track { flex: 1 1 auto; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-prec-axis { margin: 12px 0 38px; }
+    .rz-prec-axis .ends { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 7px; }
+    .rz-prec-axis .pend { font-size: 11.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+    .rz-prec-axis .pend.lock { color: var(--text-faint); }
+    .rz-prec-track { width: 100%; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
     .rz-prec-track i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #8B5CF6, #A78BFA); transition: width 0.8s ease; }
     .rz-prec-marker {
       position: absolute; top: 50%; transform: translate(-50%, -50%);
@@ -1581,15 +1590,17 @@
           <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
           <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
           <div class="rz-note" id="rzPrecisionNote"></div>
-          <div class="rz-prec-row">
-            <span class="pend">&#10003; Quick Check</span>
+          <div class="rz-prec-axis">
+            <div class="ends">
+              <span class="pend">&#10003; Quick Check</span>
+              <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 96% Full Profile</span>
+            </div>
             <div class="rz-prec-track">
               <i id="rzPrecBarFill" style="width:0%"></i>
               <div class="rz-prec-marker" id="rzPrecMarker">
                 <span class="rz-prec-you"><span id="rzPrecYou">&mdash;</span><em>You &mdash; Ballpark</em></span>
               </div>
             </div>
-            <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 96% Full Profile</span>
           </div>
           <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
         </div>
@@ -2174,9 +2185,15 @@
             exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending or working longer.';
             note.textContent = 'A full profile finds which combination gets you there.';
           } else if (Number.isFinite(add.additionalAnnualDollars) && Number.isFinite(add.additionalRate)) {
-            amt.textContent = '+ ' + fmt$(add.additionalAnnualDollars) + ' / year';
-            exp.textContent = 'Increase savings by ' + fmtPct(add.additionalRate) + ' of salary on top of your current ' +
-              fmtPct(add.currentContributionRate) + '.';
+            // Computed magnitudes are premium: blurred with an amber lock,
+            // clicking through to pricing. The user's own input (current
+            // contribution rate) and the current/target returns stay visible.
+            var lockSm = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
+              '<span class="rz-blur">+ ' + fmt$(add.additionalAnnualDollars) + ' / year</span>' +
+              '<span class="rz-blur-lock">' + lockSm + '</span></a>';
+            exp.innerHTML = 'Increase savings by <span class="rz-blur rz-blur-sm">' + fmtPct(add.additionalRate) +
+              '</span> of salary on top of your current ' + fmtPct(add.currentContributionRate) + '.';
             note.textContent = 'This gets you to a safe 5% return with more margin for the future.';
           } else {
             bar.style.display = 'none';
