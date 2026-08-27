@@ -761,7 +761,7 @@
     @media (max-width: 880px) { .rz-resources { grid-template-columns: 1fr; } }
 
     /* V3: original sizes; hierarchy via surface elevation + verdict leads (LTR) */
-    .rz-top { grid-template-columns: 2.15fr 1.32fr 1fr; }
+    .rz-top { grid-template-columns: 1.9fr 1.3fr 1.15fr; }
     .rz-precision-pct { font-size: 64px; background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
     .rz-irr { font-size: 64px; }
     .rz-card { background: #0D1220; }
@@ -796,12 +796,9 @@
     .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
 
     /* Plain-language accuracy line (replaces the second range bar) */
-    .rz-acc { display: flex; align-items: baseline; gap: 16px; margin-top: 14px; font-size: 16px; color: var(--text-dim); flex-wrap: wrap; }
-    .rz-acc b { font-size: 21px; font-weight: 800; }
-    .rz-acc .now b { color: #FBBF24; }
-    .rz-acc .full b { color: #4ADE80; }
-    .rz-acc .arr { color: var(--text-muted); font-size: 18px; }
-    .rz-acc-def { font-size: 12.5px; color: var(--text-faint); margin-top: 5px; margin-bottom: 4px; }
+    .rz-acc { margin-top: 14px; margin-bottom: 4px; font-size: 16px; color: var(--text-dim); line-height: 1.6; max-width: 62ch; }
+    .rz-acc b.now { font-size: 19px; font-weight: 800; color: #FBBF24; }
+    .rz-acc b.full { font-size: 19px; font-weight: 800; color: #4ADE80; }
 
     /* Merged section head + one-bar comparison */
     .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
@@ -1630,7 +1627,7 @@
           <div class="rz-prec-axis">
             <div class="ends">
               <span class="pend">&#10003; Quick Check</span>
-              <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 96% Full Profile</span>
+              <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
             </div>
             <div class="rz-prec-track">
               <i id="rzPrecBarFill" style="width:0%"></i>
@@ -1673,14 +1670,9 @@
             <span class="rz-card-title">SHARPEN YOUR NUMBER &mdash; WHAT&rsquo;S STILL LOCKED</span>
             <a href="pricing.html">See all items &rarr;</a>
           </div>
-          <div class="rz-acc">
-            <span class="now">Today: <b>&plusmn;<span id="rzAccNow">&mdash;</span>%</b></span>
-            <span class="arr">&rarr;</span>
-            <span class="full">With Full Profile: <b>&plusmn;0.2%</b></span>
-          </div>
-          <div class="rz-acc-def">Accuracy: how far your Required Portfolio Return could shift once the locked inputs below are filled in.</div>
+          <div class="rz-acc">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
           <div id="rzSharpenList"></div>
-          <div class="rz-total"><span>Unlock all four to take your accuracy from <b id="rzTotalFrom">&mdash;</b> to</span><b id="rzTotalPts">&mdash;</b></div>
+          <div class="rz-total"><span>Unlock all four and your number is accurate to within</span><b id="rzTotalPts">0.2%</b></div>
         </div>
       </div>
 
@@ -2128,7 +2120,7 @@
         var lockedCount = (filing === 'mfj') ? 5 : 4; // sharpenable full-profile inputs
         document.getElementById('rzPrecisionNote').innerHTML =
           'You’re ' + precision + '% of the way to your exact number — <strong>' + lockedCount +
-          ' inputs from 96%</strong>.';
+          ' more inputs close the gap</strong>.';
         var precPos = Math.max(4, Math.min(96, precision / 96 * 100));
         document.getElementById('rzPrecBarFill').style.width = precPos + '%';
         document.getElementById('rzPrecMarker').style.left = precPos + '%';
@@ -2210,8 +2202,12 @@
               : 'You’re set — your plan is funded as it stands. No extra saving needed.';
             note.textContent = 'Already at or below the safe 5% return — with margin for the future.';
           } else if (add.capped) {
-            amt.textContent = 'Beyond saving';
-            exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending or working longer.';
+            var lockSm2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            var cappedAmt = Number.isFinite(add.additionalAnnualDollars) ? fmt$(add.additionalAnnualDollars) : '$—,———';
+            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
+              '<span class="rz-blur">+ ' + cappedAmt + ' / year</span>' +
+              '<span class="rz-blur-lock">' + lockSm2 + '</span></a>';
+            exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending, working longer, or both.';
             note.textContent = 'A full profile finds which combination gets you there.';
           } else if (Number.isFinite(add.additionalAnnualDollars) && Number.isFinite(add.additionalRate)) {
             // Computed magnitudes are premium: blurred with an amber lock,
@@ -2309,13 +2305,11 @@
             '<div class="rz-item-main"><div class="rz-item-name">' + it.name + '</div>' +
             '<div class="rz-item-sub">' + it.desc + '</div></div>' +
             '<div class="rz-imp-val"><span class="lab">Sharpens by</span>' +
-            '<span class="num ' + it.color + '">±' + it.scaled.toFixed(1) + '%</span></div>' +
+            '<span class="num ' + it.color + '">' + it.scaled.toFixed(1) + '%</span></div>' +
             '<span class="rz-imp-lk">' + lockSvg + '</span></a>';
         }).join('');
 
-        // Total: the same from -> to, so the section closes on the promise
-        document.getElementById('rzTotalFrom').textContent = '±' + accNow.toFixed(1) + '%';
-        document.getElementById('rzTotalPts').textContent = '±0.2%';
+
 
         // ===== Detail panel =====
         var ebriCard = document.getElementById('ebriCard');
