@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index,follow" />
-  <title>[TEST] GH2 EDGE™ — Discover Your Required Portfolio Return</title>
+  <title>[TEST 2 — Bento] GH2 EDGE™ — Discover Your Required Portfolio Return</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/favicon.svg" />
   <meta name="description" content="A friendly retirement ballpark check, with the GH2 EDGE™ Required Portfolio Return — the one number most calculators don't compute." />
@@ -706,6 +706,10 @@
       50% { transform: scale(1.07); }
     }
     .rz-verdict-badge .ring { animation: rzPulse 0.85s ease-in-out 0.3s 2; }
+    /* ...and pulse while the cursor is anywhere over the verdict card */
+    @media (hover: hover) and (pointer: fine) {
+      .rz-verdict:hover .rz-verdict-badge .ring { animation: rzPulse 0.85s ease-in-out infinite; }
+    }
 
     /* Hover glow — same treatment as the dashboard cards (cursor devices only) */
     @media (hover: hover) and (pointer: fine) {
@@ -723,6 +727,23 @@
       filter: drop-shadow(0 0 26px rgba(249,115,22,0.65));
     }
 
+
+    /* --- Bottom cleanup --- */
+    .detail-panel { margin-top: 26px; }
+    .rz-adjust-link { background: none; border: 0; cursor: pointer; font-family: inherit; font-size: 13.5px; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; padding: 2px; }
+    .rz-adjust-link:hover { color: var(--text); }
+    .rz-resources { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 42px; align-items: stretch; }
+    .rz-callout { padding: 20px 22px; border-left: 3px solid var(--accent-purple); background: rgba(139,92,246,0.06); border-radius: 12px; font-size: 14.5px; line-height: 1.55; color: var(--text-muted); }
+    .rz-resources .ebook-cta { margin: 0; }
+    .rz-vnav { position: fixed; left: 14px; bottom: 14px; z-index: 150; display: flex; gap: 12px; align-items: center; background: var(--card-bg-2); border: 1px solid var(--border); border-radius: 99px; padding: 8px 16px; font-size: 12.5px; color: var(--text-muted); box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+    .rz-vnav a { color: var(--accent-purple); text-decoration: none; font-weight: 700; }
+    .rz-vnav a.cur { color: var(--text); pointer-events: none; }
+    @media (max-width: 880px) { .rz-resources { grid-template-columns: 1fr; } }
+
+    /* V2: verdict leads the bento; numbered narrative; readable neutral numbers */
+    .rz-top { grid-template-columns: 2.15fr 1.32fr 1fr; }
+    #rzCard2 .rz-irr { color: var(--text); font-size: 56px; }
+    .rz-precision-pct { font-size: 48px; color: var(--text); }
     /* Demo-fallback banner (localhost preview only) */
     .rz-demo-note {
       margin-bottom: 16px; padding: 11px 16px; border-radius: 10px;
@@ -1494,22 +1515,18 @@
         Preview mode: the live engine couldn&rsquo;t be reached, so these are <strong>sample numbers</strong> to show the layout. Hit &ldquo;Adjust inputs&rdquo; and try again for your real result.
       </div>
       <div class="rz-top">
-        <!-- 1. Ballpark precision -->
-        <div class="rz-card">
-          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
-          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
-          <div class="rz-note" id="rzPrecisionNote"></div>
-          <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
-          <div class="rz-mini-steps">
-            <span class="ms done">&#10003; Quick Check</span><i></i>
-            <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
-            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
-          </div>
+        <!-- 3. Verdict (dominant) -->
+        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
+          <div class="rz-card-title" style="margin-bottom:0;">1 &middot; YOUR OUTCOME</div>
+          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
+          <div class="rz-verdict-head" id="rzVerdictHead"></div>
+          <div class="rz-verdict-body" id="rzVerdictBody"></div>
+          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
+          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
         </div>
-
         <!-- 2. Required return + possible range -->
         <div class="rz-card" id="rzCard2" data-tier="on_track">
-          <div class="rz-card-title">REQUIRED PORTFOLIO RETURN <span class="rz-info" title="The average annual return your whole portfolio needs.">&#9432;</span></div>
+          <div class="rz-card-title">2 &middot; REQUIRED PORTFOLIO RETURN <span class="rz-info" title="The average annual return your whole portfolio needs.">&#9432;</span></div>
           <div class="rz-irr" id="rzIrr">&mdash;</div>
           <div class="rz-note" id="rzIrrSub"></div>
           <div class="rz-range-label">Current possible range</div>
@@ -1526,14 +1543,19 @@
           <div class="rz-target-fixed">&#9650; Target: 5.0% <span>(safe zone)</span></div>
         </div>
 
-        <!-- 3. Verdict (dominant) -->
-        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
-          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
-          <div class="rz-verdict-head" id="rzVerdictHead"></div>
-          <div class="rz-verdict-body" id="rzVerdictBody"></div>
-          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
-          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
+        <!-- 1. Ballpark precision -->
+        <div class="rz-card">
+          <div class="rz-card-title">3 &middot; BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
+          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
+          <div class="rz-note" id="rzPrecisionNote"></div>
+          <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
+          <div class="rz-mini-steps">
+            <span class="ms done">&#10003; Quick Check</span><i></i>
+            <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
+            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
+          </div>
         </div>
+
       </div>
 
       <!-- Recommended action bar -->
@@ -1578,33 +1600,68 @@
         </div>
       </div>
 
+      <div class="detail-panel">
+        <details class="details">
+          <summary>
+            <span>See the math behind your number</span>
+            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+
+          <div id="ebriCard" class="ebri-card">
+            <div class="ebri-headline">Additional savings per year</div>
+            <div class="ebri-value" id="ebriValue"></div>
+            <div class="ebri-sub" id="ebriSub"></div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-cell">
+              <div class="dl">Projected balance at retirement</div>
+              <div class="dv" id="projBalance"></div>
+              <div class="ds" id="projBalanceSub"></div>
+            </div>
+            <div class="detail-cell">
+              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
+              <div class="dv" id="ssAnnual"></div>
+              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
+            </div>
+          </div>
+
+          <table class="spending-table" id="spendingTable">
+            <thead>
+              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
+            </thead>
+            <tbody id="spendingTbody"></tbody>
+            <tfoot>
+              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
+              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
+            </tfoot>
+          </table>
+        </details>
+      </div>
+
       <!-- Primary CTA (first-person + trust microcopy) -->
       <div class="rz-cta-block">
         <a class="rz-cta-btn" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
         <div class="rz-trust">Cancel anytime &middot; Clear pricing, no surprise charges &middot; Your data is never sold.</div>
+        <button type="button" class="rz-adjust-link" id="adjustInputsBtn">or adjust your inputs</button>
       </div>
 
-      <!-- Page footer: assumptions + adjust -->
-      <div class="rz-pagefoot">
-        <div class="rz-foot-tax">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Assumptions include the full federal + state + Medicare tax math.
-        </div>
-        <button type="button" class="rz-adjust" id="adjustInputsBtn">Adjust inputs <span aria-hidden="true">&rarr;</span></button>
-      </div>
 
-      <div style="max-width:560px;margin:20px auto 0;padding:13px 18px;border-left:3px solid var(--accent-purple,#8B5CF6);background:rgba(139,92,246,0.06);border-radius:8px;font-size:14.5px;line-height:1.5;color:var(--text-muted);">
+
+      <div class="rz-resources">
+      <div class="rz-callout">
         <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
       </div>
 
       <!-- Free beginner's e-book -->
-      <div class="ebook-cta">
+      <div class="ebook-cta rz-res-card">
         <div class="ec-text"><strong>New to all this?</strong> The free <em>GH2 EDGE&trade; Beginner&rsquo;s Guide</em> walks you through your number in plain English &mdash; no login, no jargon.</div>
         <div class="ec-actions">
           <a class="ec-dl" href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener">Download the guide (PDF)</a>
           <span class="ec-email">Questions? <a href="mailto:info@gh2benefits.com">info@gh2benefits.com</a></span>
         </div>
       </div>
+      </div><!-- /rz-resources -->
 
       <!-- Cadence pricing — hidden for now -->
       <div class="cadence-head" style="display:none">
@@ -1702,49 +1759,10 @@
       </div>
 
       <!-- Details collapsible (projected balance, SS, spending) -->
-      <div class="detail-panel">
-        <details class="details">
-          <summary>
-            <span>See the math behind your number</span>
-            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-
-          <div id="ebriCard" class="ebri-card">
-            <div class="ebri-headline">Additional savings per year</div>
-            <div class="ebri-value" id="ebriValue"></div>
-            <div class="ebri-sub" id="ebriSub"></div>
-          </div>
-
-          <div class="detail-grid">
-            <div class="detail-cell">
-              <div class="dl">Projected balance at retirement</div>
-              <div class="dv" id="projBalance"></div>
-              <div class="ds" id="projBalanceSub"></div>
-            </div>
-            <div class="detail-cell">
-              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
-              <div class="dv" id="ssAnnual"></div>
-              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
-            </div>
-          </div>
-
-          <table class="spending-table" id="spendingTable">
-            <thead>
-              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
-            </thead>
-            <tbody id="spendingTbody"></tbody>
-            <tfoot>
-              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
-              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
-            </tfoot>
-          </table>
-        </details>
-      </div>
-
       <div class="results-foot">
         <div class="left">
           <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Your data is secure and encrypted. We never sell your information.
+          Assumptions include the full federal + state + Medicare tax math &middot; Your data is secure, encrypted, and never sold.
         </div>
         <div class="right">
           Required Portfolio Return&trade; is a patent-pending retirement metric developed by GH2 EDGE.
@@ -2508,5 +2526,6 @@
     </div>
   </div>
 
+  <div class="rz-vnav">Layout test: <a href="ballpark.html">current</a><a href="ballpark-test1.html">1</a><a href="ballpark-test2.html" class="cur">2</a><a href="ballpark-test3.html">3</a></div>
 </body>
 </html>
