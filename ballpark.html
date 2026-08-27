@@ -700,6 +700,13 @@
     }
     .rz-adjust:hover { background: rgba(139,92,246,0.12); }
 
+    /* Demo-fallback banner (localhost preview only) */
+    .rz-demo-note {
+      margin-bottom: 16px; padding: 11px 16px; border-radius: 10px;
+      background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.45);
+      color: #FBBF24; font-size: 13.5px; font-weight: 600;
+    }
+
     /* Precision progress bar (endowed progress) */
     .rz-prec-bar { height: 9px; border-radius: 99px; background: var(--border-soft); overflow: hidden; margin-top: 2px; }
     .rz-prec-bar i { display: block; height: 100%; border-radius: 99px; background: var(--grad-rpr); transition: width 0.8s ease; }
@@ -1460,6 +1467,9 @@
     <!-- ============== RESULTS (hidden until submit) ============== -->
     <section id="resultsSection" aria-live="polite">
       <!-- ===== Results v2: precision / range / verdict bento ===== -->
+      <div class="rz-demo-note" id="rzDemoNote" style="display:none;">
+        Preview mode: the live engine couldn&rsquo;t be reached, so these are <strong>sample numbers</strong> to show the layout. Hit &ldquo;Adjust inputs&rdquo; and try again for your real result.
+      </div>
       <div class="rz-top">
         <!-- 1. Ballpark precision -->
         <div class="rz-card">
@@ -2264,10 +2274,37 @@
         }
 
         // Show results section
+        var demoNote = document.getElementById('rzDemoNote');
+        if (demoNote) demoNote.style.display = data.__demo ? '' : 'none';
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('resultsSection').classList.add('visible');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
+
+      // ===== Local-preview fallback =====
+      // On localhost only: if the live engine is unreachable (wifi blip,
+      // API down), render representative SAMPLE numbers through the normal
+      // pipeline with a visible banner, instead of a dead error. Production
+      // keeps the real error message.
+      var DEMO_RESULT = {
+        __demo: true,
+        requiredIRR: 0.066,
+        feasibilityRating: 'aggressive',
+        verdict: { showReturn: true, feasible: true, detail: 'Sample projection for layout preview.' },
+        projectedRetirementBalance: 890000,
+        requiredReturnGap: 0.017,
+        expectedPortfolioReturn: 0.049,
+        additionalSavings: { onTrack: false, capped: false, additionalAnnualDollars: 7813, additionalRate: 0.031, currentContributionRate: 0.10 },
+        assumptions: { targetEndAge: 100, preRetReturn: 0.06 },
+        yearsToRetirement: 13,
+        estimatedAnnualSS: 32000,
+        ssClaimAgeUsed: 67,
+        depletionAge: 88,
+        projectedRetirementSpending: 82000,
+        currentSpendingEstimate: 62000,
+        spendingBreakdown: { housing: 21000, food: 10500, healthCare: 12000, transportation: 7500, entertainment: 6000, gifts: 3500, clothing: 2500, other: 6500, taxes: 12500 }
+      };
+      var IS_LOCAL_PREVIEW = (location.hostname === '127.0.0.1' || location.hostname === 'localhost');
 
       // ===== "Computing" theater (labor illusion — honest steps, ~2.6s) =====
       // Ends on "some inputs unavailable — using wide estimates", pre-seeding
@@ -2416,6 +2453,11 @@
           runCalcTheater(out.body);
         }).catch(function () {
           btn.disabled = false; btn.innerHTML = orig;
+          if (IS_LOCAL_PREVIEW) {
+            showError('');
+            runCalcTheater(DEMO_RESULT);
+            return;
+          }
           showError('Network error. Please try again.');
         });
       });
