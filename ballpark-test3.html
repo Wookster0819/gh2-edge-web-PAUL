@@ -629,7 +629,7 @@
     .rz-action-note { font-size: 14.5px; color: var(--text-dim); max-width: 26ch; line-height: 1.5; }
 
     /* Bottom row */
-    .rz-bottom { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; margin-top: 46px; align-items: start; }
+    .rz-bottom { display: block; margin-top: 46px; }
     .rz-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
     .rz-chip {
       display: inline-flex; align-items: center; gap: 7px;
@@ -719,6 +719,11 @@
         box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3), 0 0 22px rgba(139,92,246,0.20);
       }
       .rz-row:hover { border-color: rgba(139,92,246,0.45); }
+      .rz-action:hover {
+        border-color: rgba(139,92,246,0.65);
+        box-shadow: 0 0 26px rgba(139,92,246,0.22);
+      }
+      .rz-item:hover { border-color: rgba(139,92,246,0.5); box-shadow: 0 0 18px rgba(139,92,246,0.15); }
     }
 
     /* Stretch tier: amber warning triangle instead of a circle */
@@ -790,6 +795,29 @@
     .rz-prec-you span { font-size: 13.5px; font-weight: 800; color: #C4B5FD; }
     .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
 
+    /* Merged section head + one-bar comparison */
+    .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
+    .rz-merge-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
+    .rz-merge-head a:hover { text-decoration: underline; }
+    .rz-onebar { margin: 14px 2px 6px; }
+    .ob-labels { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+    .ob-note { display: inline-flex; align-items: center; gap: 7px; color: #4ADE80; }
+    .ob-note i { width: 18px; height: 8px; border-radius: 99px; background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+    .ob-row { display: flex; align-items: center; gap: 12px; }
+    .ob-row .cv { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+    .ob-track { flex: 1 1 auto; height: 10px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); position: relative; }
+    .ob-band { position: absolute; top: -3px; bottom: -3px; border-radius: 99px; background: #22C55E; border: 2px solid #0B0F1E; box-shadow: 0 0 10px rgba(34,197,94,0.7); }
+    .rz-item {
+      display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 18px;
+      padding: 14px 16px; border-radius: 12px; margin-top: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
+      text-decoration: none; color: inherit;
+    }
+    .rz-item-main { min-width: 0; }
+    .rz-item-name { font-size: 15.5px; font-weight: 700; }
+    .rz-item-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Legacy two-bar styles (superseded) */
     /* Section thesis: today's span vs the Full Profile band, to scale */
     .rz-compare { margin: 10px 0 6px; display: flex; flex-direction: column; gap: 9px; }
     .rz-cmp-row { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
@@ -857,6 +885,7 @@
       .rz-verdict-head { max-width: none; }
       .rz-imp { grid-template-columns: auto 1fr auto; }
       .rz-imp-lk { display: none; }
+      .rz-item { grid-template-columns: auto 1fr auto; }
       .rz-pagefoot { flex-direction: column; align-items: flex-start; }
     }
     @media (max-width: 560px) {
@@ -1632,26 +1661,23 @@
           <div class="rz-card-title">FROM YOUR BALLPARK &mdash; CONFIRMED</div>
           <div class="rz-chips" id="rzChips"></div>
           <div class="rz-chips-note" id="rzChipsNote"></div>
-          <div class="rz-card-title rz-sharpen-title">SHARPEN YOUR NUMBER &mdash; EACH FIELD TIGHTENS YOUR RANGE</div>
-          <div class="rz-compare">
-            <div class="rz-cmp-row now">
+          <div class="rz-merge-head">
+            <span class="rz-card-title">SHARPEN YOUR NUMBER &mdash; WHAT&rsquo;S STILL LOCKED</span>
+            <a href="pricing.html">See all items &rarr;</a>
+          </div>
+          <div class="rz-onebar">
+            <div class="ob-labels">
               <span>Your range today</span>
-              <div class="cmpwrap"><span class="cv" id="rzCmpLo">&mdash;</span><div class="bar"></div><span class="cv" id="rzCmpHi">&mdash;</span></div>
+              <span class="ob-note"><i></i>&plusmn;0.2% with Full Profile</span>
             </div>
-            <div class="rz-cmp-row full">
-              <span>With Full Profile</span>
-              <div class="cmpwrap"><span class="cv ghost" id="rzCmpLoGhost"></span><div class="trk"><i id="rzCmpSliver"></i></div><span class="cv green">&plusmn;0.2%</span></div>
+            <div class="ob-row">
+              <span class="cv" id="rzCmpLo">&mdash;</span>
+              <div class="ob-track"><div class="ob-band" id="rzCmpSliver"></div></div>
+              <span class="cv" id="rzCmpHi">&mdash;</span>
             </div>
           </div>
           <div id="rzSharpenList"></div>
-          <div class="rz-total"><span>Unlocking everything tightens your range by</span><b id="rzTotalPts">&mdash;</b></div>
-        </div>
-        <div class="rz-card">
-          <div class="rz-impact-head">
-            <span class="rz-card-title">WHAT COULD SHARPEN YOUR RESULT? <span class="rz-info" title="Locked inputs, ranked by how much each one narrows your range.">&#9432;</span></span>
-            <a href="pricing.html">See all items &rarr;</a>
-          </div>
-          <div id="rzImpactList"></div>
+          <div class="rz-total"><span>Unlocking everything tightens your accuracy by</span><b id="rzTotalPts">&mdash;</b></div>
         </div>
       </div>
 
@@ -2258,66 +2284,32 @@
         ];
         var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
-        // Left column: sharpen rows. Sorted by impact (biggest prize first —
-        // NN/g: lists get scanned top-first), n/a rows last. Copy uses
-        // ownership framing: the analysis already exists, it's just locked.
+        // Merged list: one row per LOCKED input (n/a items omitted),
+        // impact-column presentation, sorted by impact. Rows link to pricing.
         var listEl = document.getElementById('rzSharpenList');
-        var rows = '';
-        var ordered = RZ_SHARPEN.slice().sort(function (a, b) {
-          var an = (a.na || (a.key === 'spouse' && filing !== 'mfj')) ? 1 : 0;
-          var bn = (b.na || (b.key === 'spouse' && filing !== 'mfj')) ? 1 : 0;
-          if (an !== bn) return an - bn;
-          return b.impact - a.impact;
-        });
-        ordered.forEach(function (s) {
-          var isNa = s.na || (s.key === 'spouse' && filing !== 'mfj');
-          if (isNa) {
-            var naText = s.key === 'spouse' ? 'Not applicable — you filed as single' : s.naText;
-            rows += '<div class="rz-row na"><div class="rz-row-main">' +
-              '<div class="rz-row-name">' + s.name + '</div>' +
-              '<div class="rz-row-sub">' + naText + '</div>' +
-              '</div></div>';
-            return;
-          }
-          rows += '<div class="rz-row"><div class="rz-row-main">' +
-            '<div class="rz-row-name">' + s.name + '</div>' +
-            '<div class="rz-row-sub">Computed &amp; locked — tightens your accuracy by <b class="' + s.color + '">±' + s.impact.toFixed(1) + '%</b></div>' +
-            '</div>' +
-            '<a class="rz-lock" href="pricing.html">' + lockSvg + ' Unlock with Full Profile</a>' +
-            '</div>';
-        });
-        listEl.innerHTML = rows;
+        var pool = RZ_SHARPEN.filter(function (it) {
+          return !it.na && !(it.key === 'spouse' && filing !== 'mfj');
+        }).slice().sort(function (a, b) { return b.impact - a.impact; });
+        listEl.innerHTML = pool.map(function (it) {
+          return '<a class="rz-item" href="pricing.html" title="Unlock with Full Profile">' +
+            '<div class="rz-imp-ico ' + it.color + ' ' + it.bg + '">' + it.ico + '</div>' +
+            '<div class="rz-item-main"><div class="rz-item-name">' + it.name + '</div>' +
+            '<div class="rz-item-sub">' + it.desc + '</div></div>' +
+            '<div class="rz-imp-val"><span class="lab">Potential impact</span>' +
+            '<span class="num ' + it.color + '">±' + it.impact.toFixed(1) + '%</span></div>' +
+            '<span class="rz-imp-lk">' + lockSvg + '</span></a>';
+        }).join('');
 
-        // Before/after compare + total (the aggregate prize, not just per-item)
+        // Sum + one-bar comparison (green band to scale, at the ballpark position)
         var lockedSum = 0;
-        RZ_SHARPEN.forEach(function (s) {
-          if (!s.na && !(s.key === 'spouse' && filing !== 'mfj')) lockedSum += s.impact;
-        });
+        pool.forEach(function (it) { lockedSum += it.impact; });
         document.getElementById('rzTotalPts').textContent = '±' + lockedSum.toFixed(1) + ' points';
-        // Section-thesis bars: today's span vs the ±0.2% band, TO SCALE and
-        // positioned where the user's ballpark sits on that span.
         document.getElementById('rzCmpLo').textContent = rangeLo.toFixed(1) + '%';
         document.getElementById('rzCmpHi').textContent = rangeHi.toFixed(1) + '%';
-        document.getElementById('rzCmpLoGhost').textContent = rangeLo.toFixed(1) + '%';
         var sliver = document.getElementById('rzCmpSliver');
         var sliverW = rSpan > 0 ? Math.max(2.5, (0.4 / rSpan) * 100) : 4;
         sliver.style.width = sliverW + '%';
         sliver.style.left = Math.max(0, Math.min(100 - sliverW, rPos - sliverW / 2)) + '%';
-        // Right column: top impacts, largest first (n/a rows excluded)
-        var impEl = document.getElementById('rzImpactList');
-        var pool = RZ_SHARPEN.filter(function (s) {
-          return !s.na && !(s.key === 'spouse' && filing !== 'mfj');
-        }).slice().sort(function (a, b) { return b.impact - a.impact; }).slice(0, 4);
-        impEl.innerHTML = pool.map(function (s) {
-          return '<div class="rz-imp">' +
-            '<div class="rz-imp-ico ' + s.color + ' ' + s.bg + '">' + s.ico + '</div>' +
-            '<div class="rz-imp-main"><div class="rz-imp-name">' + s.short + '</div>' +
-            '<div class="rz-imp-sub">' + s.desc + '</div></div>' +
-            '<div class="rz-imp-val"><span class="lab">Potential impact</span>' +
-            '<span class="num ' + s.color + '">±' + s.impact.toFixed(1) + '%</span></div>' +
-            '<span class="rz-imp-lk">' + lockSvg + '</span>' +
-            '</div>';
-        }).join('');
 
         // ===== Detail panel =====
         var ebriCard = document.getElementById('ebriCard');
