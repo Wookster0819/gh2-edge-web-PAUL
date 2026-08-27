@@ -799,6 +799,7 @@
     .rz-acc { margin-top: 26px; margin-bottom: 10px; font-size: 18px; color: var(--text-dim); line-height: 1.7; max-width: 72ch; }
     .rz-acc b.now { font-size: 28px; font-weight: 800; color: #FBBF24; line-height: 1; }
     .rz-acc b.full { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
+    .rz-acc b.money { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
 
     /* Merged section head + one-bar comparison */
     .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
@@ -2300,7 +2301,7 @@
           var proj = data.projectedRetirementBalance;
           if (el && typeof proj === 'number' && proj > 0) {
             var swing = Math.round(accNow / 100 * proj / 1000) * 1000;
-            el.innerHTML = ' — about <b class="now">' + fmt$(swing) + ' a year</b> on the savings you’re projected to have';
+            el.innerHTML = ' — about <b class="money">' + fmt$(swing) + ' a year</b> on the savings you’re projected to have';
           } else if (el) { el.textContent = ''; }
         })();
 
