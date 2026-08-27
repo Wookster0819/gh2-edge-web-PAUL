@@ -495,7 +495,7 @@
     }
     .rz-top { display: grid; grid-template-columns: 1fr 1.32fr 2.15fr; gap: 22px; }
     .rz-card {
-      background: var(--card-bg); border: 1px solid var(--border);
+      background: var(--card-bg); border: 1px solid var(--border-soft);
       border-radius: 16px; padding: 26px 30px; position: relative;
       display: flex; flex-direction: column; gap: 12px;
     }
@@ -509,20 +509,20 @@
 
     /* Card 1 — precision */
     .rz-precision-pct {
-      font-size: 64px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
-      background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+      color: var(--text-dim);
     }
-    .rz-mini-steps { display: flex; align-items: center; gap: 10px; margin-top: auto; padding-top: 22px; font-size: 12.5px; color: var(--text-muted); }
+    .rz-mini-steps { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 7px; font-size: 12px; color: var(--text-muted); }
     .rz-mini-steps .ms { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
     .rz-mini-steps .ms.done { color: var(--text); }
     .rz-mini-steps .ms.cur  { color: var(--text); font-weight: 700; }
     .rz-mini-steps .ms.cur .msdot { width: 13px; height: 13px; border-radius: 50%; background: #FFF; box-shadow: 0 0 0 3px rgba(255,255,255,0.18); display: inline-block; }
     .rz-mini-steps .ms.lock { color: var(--text-faint); }
-    .rz-mini-steps i { flex: 1 1 auto; height: 1.5px; background: linear-gradient(90deg, #4F46E5, #8B5CF6); min-width: 14px; }
+    .rz-mini-steps i { display: none; }
     .rz-mini-steps i.off { background: var(--border); }
 
     /* Card 2 — required return + range */
-    .rz-irr { font-size: 64px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+    .rz-irr { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
     #rzCard2[data-tier="at_risk"]  .rz-irr { color: #FF3B30; }
     #rzCard2[data-tier="stretch"]  .rz-irr { color: #F97316; }
     #rzCard2[data-tier="on_track"] .rz-irr { color: #22C55E; }
@@ -549,7 +549,7 @@
     #rzCard2[data-tier="stretch"]  .rz-range-your-wrap span { color: #F97316; }
     #rzCard2[data-tier="on_track"] .rz-range-your-wrap span { color: #22C55E; }
     .rz-range-your-wrap em { font-style: normal; font-size: 12px; color: var(--text-muted); }
-    .rz-target { font-size: 13px; color: var(--text-muted); min-height: 16px; }
+    .rz-target { display: none; }
     .rz-target-fixed { font-size: 13px; color: var(--text-dim); margin-top: auto; }
     .rz-target-fixed span { color: var(--text-faint); }
 
@@ -621,7 +621,7 @@
     .rz-action-amt { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; margin-top: 4px; }
     .rz-action-exp { font-size: 15.5px; color: var(--text-dim); line-height: 1.5; border-left: 1px solid rgba(255,255,255,0.09); padding-left: 34px; }
     .rz-action-nums { display: grid; grid-template-columns: auto auto auto; align-items: center; column-gap: 18px; border-left: 1px solid rgba(255,255,255,0.09); padding-left: 34px; }
-    .rz-action-nums .cur { font-size: 27px; font-weight: 800; color: #FF3B30; }
+    .rz-action-nums .cur { font-size: 27px; font-weight: 800; color: var(--text); }
     .rz-action-nums .arr { color: var(--text); font-size: 22px; }
     .rz-action-nums .tgt { font-size: 27px; font-weight: 800; color: #22C55E; }
     .rz-action-nums .lbls { grid-column: 1 / span 3; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-muted); margin-top: 3px; }
@@ -629,7 +629,7 @@
     .rz-action-note { font-size: 14.5px; color: var(--text-dim); max-width: 26ch; line-height: 1.5; }
 
     /* Bottom row */
-    .rz-bottom { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; margin-top: 22px; align-items: start; }
+    .rz-bottom { display: block; margin-top: 46px; }
     .rz-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
     .rz-chip {
       display: inline-flex; align-items: center; gap: 7px;
@@ -700,6 +700,70 @@
     }
     .rz-adjust:hover { background: rgba(139,92,246,0.12); }
 
+    /* R4: one-time badge pulse on reveal (two beats, then still) */
+    @keyframes rzPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
+    .rz-verdict-badge .ring { animation: rzPulse 0.85s ease-in-out 0.3s 2; }
+    /* ...and pulse while the cursor is anywhere over the verdict card */
+    @media (hover: hover) and (pointer: fine) {
+      .rz-verdict:hover .rz-verdict-badge .ring { animation: rzPulse 0.85s ease-in-out infinite; }
+    }
+
+    /* Hover glow — same treatment as the dashboard cards (cursor devices only) */
+    @media (hover: hover) and (pointer: fine) {
+      .rz-card, .rz-row, .rz-action { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+      .rz-card:not(.rz-verdict):hover {
+        border-color: rgba(139,92,246,0.55);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3), 0 0 22px rgba(139,92,246,0.20);
+      }
+      .rz-row:hover { border-color: rgba(139,92,246,0.45); }
+      .rz-action:hover {
+        border-color: rgba(139,92,246,0.65);
+        box-shadow: 0 0 26px rgba(139,92,246,0.22);
+      }
+      .rz-item:hover { border-color: rgba(139,92,246,0.5); box-shadow: 0 0 18px rgba(139,92,246,0.15); }
+    }
+
+    /* Stretch tier: amber warning triangle instead of a circle */
+    .rz-verdict[data-tier="stretch"] .rz-verdict-badge .ring {
+      background: transparent; box-shadow: none;
+      filter: drop-shadow(0 0 26px rgba(249,115,22,0.65));
+    }
+
+
+    /* Premium blur: computed magnitudes locked behind Full Profile */
+    .rz-blurwrap { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .rz-blur { filter: blur(8px); user-select: none; pointer-events: none; }
+    .rz-blur-sm { filter: blur(6px); }
+    .rz-blur-lock { color: #FBBF24; display: inline-flex; filter: drop-shadow(0 0 5px rgba(251,191,36,0.5)); }
+    .rz-blurwrap:hover .rz-blur-lock { transform: scale(1.12); transition: transform 0.15s ease; }
+
+    /* Compact convenience CTA (precision card) */
+    .rz-cta-btn.rz-cta-sm {
+      display: inline-flex; width: auto; font-size: 13px; font-weight: 700; padding: 9px 14px; border-radius: 10px;
+      align-self: flex-start; margin-top: 4px; gap: 6px; white-space: nowrap;
+      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
+      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
+    }
+
+    /* --- Bottom cleanup --- */
+    .detail-panel { margin-top: 26px; }
+    .rz-adjust-link { background: none; border: 0; cursor: pointer; font-family: inherit; font-size: 13.5px; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; padding: 2px; }
+    .rz-adjust-link:hover { color: var(--text); }
+    .rz-resources { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 42px; align-items: stretch; }
+    .rz-callout { padding: 20px 22px; border-left: 3px solid var(--accent-purple); background: rgba(139,92,246,0.06); border-radius: 12px; font-size: 14.5px; line-height: 1.55; color: var(--text-muted); }
+    .rz-resources .ebook-cta { margin: 0; }
+    @media (max-width: 880px) { .rz-resources { grid-template-columns: 1fr; } }
+
+    /* V3: original sizes; hierarchy via surface elevation + verdict leads (LTR) */
+    .rz-top { grid-template-columns: 1.9fr 1.3fr 1.15fr; }
+    .rz-precision-pct { font-size: 64px; background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+    .rz-irr { font-size: 64px; }
+    .rz-card { background: #0D1220; }
+    .rz-card .rz-card-title { color: var(--text-faint); }
+    .rz-verdict .rz-card-title { color: var(--text-dim); }
     /* Demo-fallback banner (localhost preview only) */
     .rz-demo-note {
       margin-bottom: 16px; padding: 11px 16px; border-radius: 10px;
@@ -708,15 +772,69 @@
     }
 
     /* Precision progress bar (endowed progress) */
-    .rz-prec-bar { height: 9px; border-radius: 99px; background: var(--border-soft); overflow: hidden; margin-top: 2px; }
-    .rz-prec-bar i { display: block; height: 100%; border-radius: 99px; background: var(--grad-rpr); transition: width 0.8s ease; }
+    /* Precision as a journey axis (same grammar as the return range bar) */
+    .rz-prec-axis { margin: 12px 0 38px; }
+    .rz-prec-axis .ends { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 7px; }
+    .rz-prec-axis .pend { font-size: 11.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+    .rz-prec-axis .pend.lock { color: var(--text-faint); }
+    .rz-prec-track { width: 100%; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-prec-track i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #8B5CF6, #A78BFA); transition: width 0.8s ease; }
+    .rz-prec-marker {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 17px; height: 17px; border-radius: 50%;
+      background: #100A24; border: 3.5px solid #A78BFA;
+      box-shadow: 0 0 10px rgba(167,139,250,0.65);
+    }
+    .rz-prec-you {
+      position: absolute; top: 19px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; line-height: 1.25; white-space: nowrap;
+    }
+    .rz-prec-you span { font-size: 13.5px; font-weight: 800; color: #C4B5FD; }
+    .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
 
-    /* Before/after range compare + total (information gap) */
-    .rz-compare { margin-top: 18px; display: flex; flex-direction: column; gap: 11px; }
-    .rz-cmp-row { display: grid; grid-template-columns: 150px 1fr; align-items: center; gap: 14px; font-size: 12.5px; color: var(--text-muted); font-weight: 600; }
-    .rz-cmp-row .bar { height: 9px; border-radius: 99px; }
-    .rz-cmp-row.now .bar { background: linear-gradient(90deg, #7C3AED, #FF3B30); }
-    .rz-cmp-row.full .bar { background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.5); width: 8%; min-width: 26px; }
+    /* Plain-language accuracy line (replaces the second range bar) */
+    .rz-acc { margin-top: 26px; margin-bottom: 10px; font-size: 18px; color: var(--text-dim); line-height: 1.7; max-width: 72ch; }
+    .rz-acc b.now { font-size: 28px; font-weight: 800; color: #FBBF24; line-height: 1; }
+    .rz-acc b.full { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
+    .rz-acc b.money { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
+
+    /* Merged section head + one-bar comparison */
+    .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
+    .rz-merge-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
+    .rz-merge-head a:hover { text-decoration: underline; }
+    .rz-onebar { margin: 14px 2px 6px; }
+    .ob-labels { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+    .ob-note { display: inline-flex; align-items: center; gap: 7px; color: #4ADE80; }
+    .ob-note i { width: 18px; height: 8px; border-radius: 99px; background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+    .ob-row { display: flex; align-items: center; gap: 12px; }
+    .ob-row .cv { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+    .ob-track { flex: 1 1 auto; height: 10px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); position: relative; }
+    .ob-band { position: absolute; top: -3px; bottom: -3px; border-radius: 99px; background: #22C55E; border: 2px solid #0B0F1E; box-shadow: 0 0 10px rgba(34,197,94,0.7); }
+    .rz-item {
+      display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 18px;
+      padding: 14px 16px; border-radius: 12px; margin-top: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
+      text-decoration: none; color: inherit;
+    }
+    .rz-item-main { min-width: 0; }
+    .rz-item-name { font-size: 15.5px; font-weight: 700; }
+    .rz-item-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Legacy two-bar styles (superseded) */
+    /* Section thesis: today's span vs the Full Profile band, to scale */
+    .rz-compare { margin: 10px 0 6px; display: flex; flex-direction: column; gap: 9px; }
+    .rz-cmp-row { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .rz-cmp-row .cmpwrap { display: flex; align-items: center; gap: 10px; }
+    .rz-cmp-row .cv { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .rz-cmp-row .cv.green { color: #4ADE80; }
+    .rz-cmp-row .cv.ghost { visibility: hidden; }
+    .rz-cmp-row .bar { flex: 1 1 auto; height: 8px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); }
+    .rz-cmp-row .trk { flex: 1 1 auto; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-cmp-row .trk i {
+      position: absolute; top: 0; height: 100%; border-radius: 99px;
+      background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.6);
+    }
+
     .rz-total {
       display: flex; justify-content: space-between; align-items: center; gap: 12px;
       margin-top: 14px; padding: 13px 16px; border-radius: 10px;
@@ -770,6 +888,7 @@
       .rz-verdict-head { max-width: none; }
       .rz-imp { grid-template-columns: auto 1fr auto; }
       .rz-imp-lk { display: none; }
+      .rz-item { grid-template-columns: auto 1fr auto; }
       .rz-pagefoot { flex-direction: column; align-items: flex-start; }
     }
     @media (max-width: 560px) {
@@ -1471,19 +1590,14 @@
         Preview mode: the live engine couldn&rsquo;t be reached, so these are <strong>sample numbers</strong> to show the layout. Hit &ldquo;Adjust inputs&rdquo; and try again for your real result.
       </div>
       <div class="rz-top">
-        <!-- 1. Ballpark precision -->
-        <div class="rz-card">
-          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
-          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
-          <div class="rz-note" id="rzPrecisionNote"></div>
-          <div class="rz-prec-bar"><i id="rzPrecBarFill" style="width:0%"></i></div>
-          <div class="rz-mini-steps">
-            <span class="ms done">&#10003; Quick Check</span><i></i>
-            <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
-            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
-          </div>
+        <!-- 3. Verdict (dominant) -->
+        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
+          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
+          <div class="rz-verdict-head" id="rzVerdictHead"></div>
+          <div class="rz-verdict-body" id="rzVerdictBody"></div>
+          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
+          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
         </div>
-
         <!-- 2. Required return + possible range -->
         <div class="rz-card" id="rzCard2" data-tier="on_track">
           <div class="rz-card-title">REQUIRED PORTFOLIO RETURN <span class="rz-info" title="The average annual return your whole portfolio needs.">&#9432;</span></div>
@@ -1503,14 +1617,26 @@
           <div class="rz-target-fixed">&#9650; Target: 5.0% <span>(safe zone)</span></div>
         </div>
 
-        <!-- 3. Verdict (dominant) -->
-        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
-          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
-          <div class="rz-verdict-head" id="rzVerdictHead"></div>
-          <div class="rz-verdict-body" id="rzVerdictBody"></div>
-          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
-          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
+        <!-- 1. Ballpark precision -->
+        <div class="rz-card">
+          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
+          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
+          <div class="rz-note" id="rzPrecisionNote"></div>
+          <div class="rz-prec-axis">
+            <div class="ends">
+              <span class="pend">&#10003; Quick Check</span>
+              <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
+            </div>
+            <div class="rz-prec-track">
+              <i id="rzPrecBarFill" style="width:0%"></i>
+              <div class="rz-prec-marker" id="rzPrecMarker">
+                <span class="rz-prec-you"><span id="rzPrecYou">&mdash;</span><em>You &mdash; Ballpark</em></span>
+              </div>
+            </div>
+          </div>
+          <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
         </div>
+
       </div>
 
       <!-- Recommended action bar -->
@@ -1538,50 +1664,74 @@
           <div class="rz-card-title">FROM YOUR BALLPARK &mdash; CONFIRMED</div>
           <div class="rz-chips" id="rzChips"></div>
           <div class="rz-chips-note" id="rzChipsNote"></div>
-          <div class="rz-card-title rz-sharpen-title">SHARPEN YOUR NUMBER &mdash; EACH FIELD TIGHTENS YOUR RANGE</div>
+          <div class="rz-acc">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b><span id="rzAccDollar"></span>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
           <div id="rzSharpenList"></div>
-          <div class="rz-compare">
-            <div class="rz-cmp-row now"><span id="rzCmpNowLabel">Today</span><div class="bar"></div></div>
-            <div class="rz-cmp-row full"><span>Full Profile: &plusmn;0.2%</span><div class="bar"></div></div>
-          </div>
-          <div class="rz-total"><span>Unlocking everything tightens your range by</span><b id="rzTotalPts">&mdash;</b></div>
+          <div class="rz-total"><span>Unlock all four and your number is accurate to within</span><b id="rzTotalPts">0.2%</b></div>
         </div>
-        <div class="rz-card">
-          <div class="rz-impact-head">
-            <span class="rz-card-title">WHAT COULD SHARPEN YOUR RESULT? <span class="rz-info" title="Locked inputs, ranked by how much each one narrows your range.">&#9432;</span></span>
-            <a href="pricing.html">See all items &rarr;</a>
+      </div>
+
+      <div class="detail-panel">
+        <details class="details">
+          <summary>
+            <span>See the math behind your number</span>
+            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+
+          <div id="ebriCard" class="ebri-card">
+            <div class="ebri-headline">Additional savings per year</div>
+            <div class="ebri-value" id="ebriValue"></div>
+            <div class="ebri-sub" id="ebriSub"></div>
           </div>
-          <div id="rzImpactList"></div>
-        </div>
+
+          <div class="detail-grid">
+            <div class="detail-cell">
+              <div class="dl">Projected balance at retirement</div>
+              <div class="dv" id="projBalance"></div>
+              <div class="ds" id="projBalanceSub"></div>
+            </div>
+            <div class="detail-cell">
+              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
+              <div class="dv" id="ssAnnual"></div>
+              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
+            </div>
+          </div>
+
+          <table class="spending-table" id="spendingTable">
+            <thead>
+              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
+            </thead>
+            <tbody id="spendingTbody"></tbody>
+            <tfoot>
+              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
+              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
+            </tfoot>
+          </table>
+        </details>
       </div>
 
       <!-- Primary CTA (first-person + trust microcopy) -->
       <div class="rz-cta-block">
         <a class="rz-cta-btn" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
         <div class="rz-trust">Cancel anytime &middot; Clear pricing, no surprise charges &middot; Your data is never sold.</div>
+        <button type="button" class="rz-adjust-link" id="adjustInputsBtn">or adjust your inputs</button>
       </div>
 
-      <!-- Page footer: assumptions + adjust -->
-      <div class="rz-pagefoot">
-        <div class="rz-foot-tax">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Assumptions include the full federal + state + Medicare tax math.
-        </div>
-        <button type="button" class="rz-adjust" id="adjustInputsBtn">Adjust inputs <span aria-hidden="true">&rarr;</span></button>
-      </div>
 
-      <div style="max-width:560px;margin:20px auto 0;padding:13px 18px;border-left:3px solid var(--accent-purple,#8B5CF6);background:rgba(139,92,246,0.06);border-radius:8px;font-size:14.5px;line-height:1.5;color:var(--text-muted);">
+
+      <div class="rz-resources">
+      <div class="rz-callout">
         <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
       </div>
 
       <!-- Free beginner's e-book -->
-      <div class="ebook-cta">
+      <div class="ebook-cta rz-res-card">
         <div class="ec-text"><strong>New to all this?</strong> The free <em>GH2 EDGE&trade; Beginner&rsquo;s Guide</em> walks you through your number in plain English &mdash; no login, no jargon.</div>
         <div class="ec-actions">
           <a class="ec-dl" href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener">Download the guide (PDF)</a>
           <span class="ec-email">Questions? <a href="mailto:info@gh2benefits.com">info@gh2benefits.com</a></span>
         </div>
       </div>
+      </div><!-- /rz-resources -->
 
       <!-- Cadence pricing — hidden for now -->
       <div class="cadence-head" style="display:none">
@@ -1679,49 +1829,10 @@
       </div>
 
       <!-- Details collapsible (projected balance, SS, spending) -->
-      <div class="detail-panel">
-        <details class="details">
-          <summary>
-            <span>See the math behind your number</span>
-            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </summary>
-
-          <div id="ebriCard" class="ebri-card">
-            <div class="ebri-headline">Additional savings per year</div>
-            <div class="ebri-value" id="ebriValue"></div>
-            <div class="ebri-sub" id="ebriSub"></div>
-          </div>
-
-          <div class="detail-grid">
-            <div class="detail-cell">
-              <div class="dl">Projected balance at retirement</div>
-              <div class="dv" id="projBalance"></div>
-              <div class="ds" id="projBalanceSub"></div>
-            </div>
-            <div class="detail-cell">
-              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
-              <div class="dv" id="ssAnnual"></div>
-              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
-            </div>
-          </div>
-
-          <table class="spending-table" id="spendingTable">
-            <thead>
-              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
-            </thead>
-            <tbody id="spendingTbody"></tbody>
-            <tfoot>
-              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
-              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
-            </tfoot>
-          </table>
-        </details>
-      </div>
-
       <div class="results-foot">
         <div class="left">
           <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Your data is secure and encrypted. We never sell your information.
+          Assumptions include the full federal + state + Medicare tax math &middot; Your data is secure, encrypted, and never sold.
         </div>
         <div class="right">
           Required Portfolio Return&trade; is a patent-pending retirement metric developed by GH2 EDGE.
@@ -2003,8 +2114,11 @@
         var lockedCount = (filing === 'mfj') ? 5 : 4; // sharpenable full-profile inputs
         document.getElementById('rzPrecisionNote').innerHTML =
           'You’re ' + precision + '% of the way to your exact number — <strong>' + lockedCount +
-          ' inputs from 96%</strong> and a <strong>&plusmn;0.2%</strong> range.';
-        document.getElementById('rzPrecBarFill').style.width = precision + '%';
+          ' more inputs close the gap</strong>.';
+        var precPos = Math.max(4, Math.min(96, precision / 96 * 100));
+        document.getElementById('rzPrecBarFill').style.width = precPos + '%';
+        document.getElementById('rzPrecMarker').style.left = precPos + '%';
+        document.getElementById('rzPrecYou').textContent = precision + '%';
 
         // Required-return card + range bar
         document.getElementById('rzCard2').setAttribute('data-tier', tier);
@@ -2028,13 +2142,21 @@
                               : g < -0.001 ? ('Your mix is priced for ~' + mp + '% — ahead ~' + gp + ' pp.')
                               : ('Right on what your mix is priced for (~' + mp + '%).');
         } else { mixNote.textContent = ''; }
+        // Mix note now lives in the card's tooltip instead of a visible line
+        var infoEl = document.querySelector('#rzCard2 .rz-info');
+        if (infoEl && mixNote.textContent) infoEl.title = infoEl.title.split(' — ')[0] + ' — ' + mixNote.textContent;
 
         // Verdict card — the emotional centerpiece.
         var vc = document.getElementById('rzVerdict');
         vc.setAttribute('data-tier', tier);
         document.getElementById('rzVerdictPill').textContent =
-          tier === 'at_risk' ? 'AT RISK' : tier === 'stretch' ? 'A REACH' : 'ON TRACK';
-        document.getElementById('rzVerdictGlyph').textContent = tier === 'on_track' ? '✓' : '!';
+          tier === 'at_risk' ? 'AT RISK' : tier === 'stretch' ? 'NEEDS ATTENTION' : 'ON TRACK';
+        var glyphEl = document.getElementById('rzVerdictGlyph');
+        if (tier === 'stretch') {
+          glyphEl.innerHTML = '<svg viewBox="0 0 24 24" style="width:88px;height:88px;display:block;"><path d="M12 2.6 L22.6 20.6 H1.4 Z" fill="#F59E0B" stroke="#F59E0B" stroke-width="2.6" stroke-linejoin="round"/><rect x="10.9" y="8.6" width="2.2" height="6.4" rx="1.1" fill="#3A2703"/><circle cx="12" cy="17.5" r="1.35" fill="#3A2703"/></svg>';
+        } else {
+          glyphEl.textContent = tier === 'on_track' ? '✓' : '!';
+        }
         var vh = document.getElementById('rzVerdictHead');
         var vb = document.getElementById('rzVerdictBody');
         var vcta = document.getElementById('rzVerdictCta');
@@ -2044,7 +2166,7 @@
           vcta.innerHTML = 'Let’s close the gap &nbsp;&rarr;';
         } else if (tier === 'stretch') {
           if (data.depletionAge && data.depletionAge < endAge) {
-            vh.textContent = 'Savings run out at age ' + data.depletionAge + '.';
+            vh.textContent = 'Savings may run out by age ' + data.depletionAge + '.';
           } else {
             vh.textContent = 'Savings last through age ' + endAge + ' — barely.';
           }
@@ -2074,13 +2196,23 @@
               : 'You’re set — your plan is funded as it stands. No extra saving needed.';
             note.textContent = 'Already at or below the safe 5% return — with margin for the future.';
           } else if (add.capped) {
-            amt.textContent = 'Beyond saving';
-            exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending or working longer.';
+            var lockSm2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            var cappedAmt = Number.isFinite(add.additionalAnnualDollars) ? fmt$(add.additionalAnnualDollars) : '$—,———';
+            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
+              '<span class="rz-blur">+ ' + cappedAmt + ' / year</span>' +
+              '<span class="rz-blur-lock">' + lockSm2 + '</span></a>';
+            exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending, working longer, or both.';
             note.textContent = 'A full profile finds which combination gets you there.';
           } else if (Number.isFinite(add.additionalAnnualDollars) && Number.isFinite(add.additionalRate)) {
-            amt.textContent = '+ ' + fmt$(add.additionalAnnualDollars) + ' / year';
-            exp.textContent = 'Increase savings by ' + fmtPct(add.additionalRate) + ' of salary on top of your current ' +
-              fmtPct(add.currentContributionRate) + '.';
+            // Computed magnitudes are premium: blurred with an amber lock,
+            // clicking through to pricing. The user's own input (current
+            // contribution rate) and the current/target returns stay visible.
+            var lockSm = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
+              '<span class="rz-blur">+ ' + fmt$(add.additionalAnnualDollars) + ' / year</span>' +
+              '<span class="rz-blur-lock">' + lockSm + '</span></a>';
+            exp.innerHTML = 'Increase savings by <span class="rz-blur rz-blur-sm">' + fmtPct(add.additionalRate) +
+              '</span> of salary on top of your current ' + fmtPct(add.currentContributionRate) + '.';
             note.textContent = 'This gets you to a safe 5% return with more margin for the future.';
           } else {
             bar.style.display = 'none';
@@ -2110,9 +2242,8 @@
           }).join('');
           // Ledger framing: inputs already given → value already delivered.
           // Placeholder pts (Jae: engine can size this per household).
-          var confirmedNarrow = 4.0 + Math.max(0, extra - 3) * 0.6;
           document.getElementById('rzChipsNote').textContent =
-            'These confirmed inputs already narrowed your range by ±' + confirmedNarrow.toFixed(1) + ' points.';
+            'These confirmed inputs built the first ' + precision + '% of your precision.';
         })();
 
         // ===================================================================
@@ -2145,60 +2276,44 @@
         ];
         var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
-        // Left column: sharpen rows. Sorted by impact (biggest prize first —
-        // NN/g: lists get scanned top-first), n/a rows last. Copy uses
-        // ownership framing: the analysis already exists, it's just locked.
+        // ONE unit system: accuracy in ±percentage-points of required return.
+        // Today's ± is half the current range; the four locked impacts are the
+        // RZ_SHARPEN weights rescaled so they sum EXACTLY to the improvement
+        // (today's ± minus the ±0.2 Full Profile floor). Every number on the
+        // card reconciles. (Jae: replace weights with engine sensitivities.)
+        var accNow = Math.max(0.4, (rangeHi - rangeLo) / 2);
+        var avail = Math.max(0.2, accNow - 0.2);
+        var pool = RZ_SHARPEN.filter(function (it) {
+          return !it.na && !(it.key === 'spouse' && filing !== 'mfj');
+        }).slice().sort(function (a, b) { return b.impact - a.impact; });
+        var wsum = 0;
+        pool.forEach(function (it) { wsum += it.impact; });
+        pool.forEach(function (it) { it.scaled = Math.max(0.1, Math.round(avail * it.impact / wsum * 10) / 10); });
+
+        document.getElementById('rzAccNow').textContent = accNow.toFixed(1);
+        // Translate the abstract percentage into dollars on THEIR balance —
+        // "off by 2.6%" reads like nothing; "$23,000 a year" doesn't.
+        (function () {
+          var el = document.getElementById('rzAccDollar');
+          var proj = data.projectedRetirementBalance;
+          if (el && typeof proj === 'number' && proj > 0) {
+            var swing = Math.round(accNow / 100 * proj / 1000) * 1000;
+            el.innerHTML = ' — about <b class="money">' + fmt$(swing) + ' a year</b> on the savings you’re projected to have';
+          } else if (el) { el.textContent = ''; }
+        })();
+
         var listEl = document.getElementById('rzSharpenList');
-        var rows = '';
-        var ordered = RZ_SHARPEN.slice().sort(function (a, b) {
-          var an = (a.na || (a.key === 'spouse' && filing !== 'mfj')) ? 1 : 0;
-          var bn = (b.na || (b.key === 'spouse' && filing !== 'mfj')) ? 1 : 0;
-          if (an !== bn) return an - bn;
-          return b.impact - a.impact;
-        });
-        ordered.forEach(function (s) {
-          var isNa = s.na || (s.key === 'spouse' && filing !== 'mfj');
-          if (isNa) {
-            var naText = s.key === 'spouse' ? 'Not applicable — you filed as single' : s.naText;
-            rows += '<div class="rz-row na"><div class="rz-row-main">' +
-              '<div class="rz-row-name">' + s.name + '</div>' +
-              '<div class="rz-row-sub">' + naText + '</div>' +
-              '</div></div>';
-            return;
-          }
-          rows += '<div class="rz-row"><div class="rz-row-main">' +
-            '<div class="rz-row-name">' + s.name + '</div>' +
-            '<div class="rz-row-sub">Computed &amp; locked — tightens your range by <b class="' + s.color + '">±' + s.impact.toFixed(1) + '%</b></div>' +
-            '</div>' +
-            '<a class="rz-lock" href="pricing.html">' + lockSvg + ' Unlock with Full Profile</a>' +
-            '</div>';
-        });
-        listEl.innerHTML = rows;
-
-        // Before/after compare + total (the aggregate prize, not just per-item)
-        var lockedSum = 0;
-        RZ_SHARPEN.forEach(function (s) {
-          if (!s.na && !(s.key === 'spouse' && filing !== 'mfj')) lockedSum += s.impact;
-        });
-        document.getElementById('rzCmpNowLabel').textContent =
-          'Today: ' + rangeLo.toFixed(1) + '–' + rangeHi.toFixed(1) + '%';
-        document.getElementById('rzTotalPts').textContent = '±' + lockedSum.toFixed(1) + ' points';
-
-        // Right column: top impacts, largest first (n/a rows excluded)
-        var impEl = document.getElementById('rzImpactList');
-        var pool = RZ_SHARPEN.filter(function (s) {
-          return !s.na && !(s.key === 'spouse' && filing !== 'mfj');
-        }).slice().sort(function (a, b) { return b.impact - a.impact; }).slice(0, 4);
-        impEl.innerHTML = pool.map(function (s) {
-          return '<div class="rz-imp">' +
-            '<div class="rz-imp-ico ' + s.color + ' ' + s.bg + '">' + s.ico + '</div>' +
-            '<div class="rz-imp-main"><div class="rz-imp-name">' + s.short + '</div>' +
-            '<div class="rz-imp-sub">' + s.desc + '</div></div>' +
-            '<div class="rz-imp-val"><span class="lab">Potential impact</span>' +
-            '<span class="num ' + s.color + '">±' + s.impact.toFixed(1) + '%</span></div>' +
-            '<span class="rz-imp-lk">' + lockSvg + '</span>' +
-            '</div>';
+        listEl.innerHTML = pool.map(function (it) {
+          return '<a class="rz-item" href="pricing.html" title="Unlock with Full Profile">' +
+            '<div class="rz-imp-ico ' + it.color + ' ' + it.bg + '">' + it.ico + '</div>' +
+            '<div class="rz-item-main"><div class="rz-item-name">' + it.name + '</div>' +
+            '<div class="rz-item-sub">' + it.desc + '</div></div>' +
+            '<div class="rz-imp-val"><span class="lab">Sharpens by</span>' +
+            '<span class="num ' + it.color + '">' + it.scaled.toFixed(1) + '%</span></div>' +
+            '<span class="rz-imp-lk">' + lockSvg + '</span></a>';
         }).join('');
+
+
 
         // ===== Detail panel =====
         var ebriCard = document.getElementById('ebriCard');
