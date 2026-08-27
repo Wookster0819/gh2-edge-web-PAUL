@@ -795,6 +795,14 @@
     .rz-prec-you span { font-size: 13.5px; font-weight: 800; color: #C4B5FD; }
     .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
 
+    /* Plain-language accuracy line (replaces the second range bar) */
+    .rz-acc { display: flex; align-items: baseline; gap: 16px; margin-top: 14px; font-size: 16px; color: var(--text-dim); flex-wrap: wrap; }
+    .rz-acc b { font-size: 21px; font-weight: 800; }
+    .rz-acc .now b { color: #FBBF24; }
+    .rz-acc .full b { color: #4ADE80; }
+    .rz-acc .arr { color: var(--text-muted); font-size: 18px; }
+    .rz-acc-def { font-size: 12.5px; color: var(--text-faint); margin-top: 5px; margin-bottom: 4px; }
+
     /* Merged section head + one-bar comparison */
     .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
     .rz-merge-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
@@ -1665,19 +1673,14 @@
             <span class="rz-card-title">SHARPEN YOUR NUMBER &mdash; WHAT&rsquo;S STILL LOCKED</span>
             <a href="pricing.html">See all items &rarr;</a>
           </div>
-          <div class="rz-onebar">
-            <div class="ob-labels">
-              <span>Your range today</span>
-              <span class="ob-note"><i></i>&plusmn;0.2% with Full Profile</span>
-            </div>
-            <div class="ob-row">
-              <span class="cv" id="rzCmpLo">&mdash;</span>
-              <div class="ob-track"><div class="ob-band" id="rzCmpSliver"></div></div>
-              <span class="cv" id="rzCmpHi">&mdash;</span>
-            </div>
+          <div class="rz-acc">
+            <span class="now">Today: <b>&plusmn;<span id="rzAccNow">&mdash;</span>%</b></span>
+            <span class="arr">&rarr;</span>
+            <span class="full">With Full Profile: <b>&plusmn;0.2%</b></span>
           </div>
+          <div class="rz-acc-def">Accuracy: how far your Required Portfolio Return could shift once the locked inputs below are filled in.</div>
           <div id="rzSharpenList"></div>
-          <div class="rz-total"><span>Unlocking everything tightens your accuracy by</span><b id="rzTotalPts">&mdash;</b></div>
+          <div class="rz-total"><span>Unlock all four to take your accuracy from <b id="rzTotalFrom">&mdash;</b> to</span><b id="rzTotalPts">&mdash;</b></div>
         </div>
       </div>
 
@@ -2125,7 +2128,7 @@
         var lockedCount = (filing === 'mfj') ? 5 : 4; // sharpenable full-profile inputs
         document.getElementById('rzPrecisionNote').innerHTML =
           'You’re ' + precision + '% of the way to your exact number — <strong>' + lockedCount +
-          ' inputs from 96%</strong> and a <strong>&plusmn;0.2%</strong> range.';
+          ' inputs from 96%</strong>.';
         var precPos = Math.max(4, Math.min(96, precision / 96 * 100));
         document.getElementById('rzPrecBarFill').style.width = precPos + '%';
         document.getElementById('rzPrecMarker').style.left = precPos + '%';
@@ -2249,9 +2252,8 @@
           }).join('');
           // Ledger framing: inputs already given → value already delivered.
           // Placeholder pts (Jae: engine can size this per household).
-          var confirmedNarrow = 4.0 + Math.max(0, extra - 3) * 0.6;
           document.getElementById('rzChipsNote').textContent =
-            'These confirmed inputs already narrowed your range by ±' + confirmedNarrow.toFixed(1) + ' points.';
+            'These confirmed inputs built the first ' + precision + '% of your precision.';
         })();
 
         // ===================================================================
@@ -2284,32 +2286,36 @@
         ];
         var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
 
-        // Merged list: one row per LOCKED input (n/a items omitted),
-        // impact-column presentation, sorted by impact. Rows link to pricing.
-        var listEl = document.getElementById('rzSharpenList');
+        // ONE unit system: accuracy in ±percentage-points of required return.
+        // Today's ± is half the current range; the four locked impacts are the
+        // RZ_SHARPEN weights rescaled so they sum EXACTLY to the improvement
+        // (today's ± minus the ±0.2 Full Profile floor). Every number on the
+        // card reconciles. (Jae: replace weights with engine sensitivities.)
+        var accNow = Math.max(0.4, (rangeHi - rangeLo) / 2);
+        var avail = Math.max(0.2, accNow - 0.2);
         var pool = RZ_SHARPEN.filter(function (it) {
           return !it.na && !(it.key === 'spouse' && filing !== 'mfj');
         }).slice().sort(function (a, b) { return b.impact - a.impact; });
+        var wsum = 0;
+        pool.forEach(function (it) { wsum += it.impact; });
+        pool.forEach(function (it) { it.scaled = Math.max(0.1, Math.round(avail * it.impact / wsum * 10) / 10); });
+
+        document.getElementById('rzAccNow').textContent = accNow.toFixed(1);
+
+        var listEl = document.getElementById('rzSharpenList');
         listEl.innerHTML = pool.map(function (it) {
           return '<a class="rz-item" href="pricing.html" title="Unlock with Full Profile">' +
             '<div class="rz-imp-ico ' + it.color + ' ' + it.bg + '">' + it.ico + '</div>' +
             '<div class="rz-item-main"><div class="rz-item-name">' + it.name + '</div>' +
             '<div class="rz-item-sub">' + it.desc + '</div></div>' +
-            '<div class="rz-imp-val"><span class="lab">Potential impact</span>' +
-            '<span class="num ' + it.color + '">±' + it.impact.toFixed(1) + '%</span></div>' +
+            '<div class="rz-imp-val"><span class="lab">Sharpens by</span>' +
+            '<span class="num ' + it.color + '">±' + it.scaled.toFixed(1) + '%</span></div>' +
             '<span class="rz-imp-lk">' + lockSvg + '</span></a>';
         }).join('');
 
-        // Sum + one-bar comparison (green band to scale, at the ballpark position)
-        var lockedSum = 0;
-        pool.forEach(function (it) { lockedSum += it.impact; });
-        document.getElementById('rzTotalPts').textContent = '±' + lockedSum.toFixed(1) + ' points';
-        document.getElementById('rzCmpLo').textContent = rangeLo.toFixed(1) + '%';
-        document.getElementById('rzCmpHi').textContent = rangeHi.toFixed(1) + '%';
-        var sliver = document.getElementById('rzCmpSliver');
-        var sliverW = rSpan > 0 ? Math.max(2.5, (0.4 / rSpan) * 100) : 4;
-        sliver.style.width = sliverW + '%';
-        sliver.style.left = Math.max(0, Math.min(100 - sliverW, rPos - sliverW / 2)) + '%';
+        // Total: the same from -> to, so the section closes on the promise
+        document.getElementById('rzTotalFrom').textContent = '±' + accNow.toFixed(1) + '%';
+        document.getElementById('rzTotalPts').textContent = '±0.2%';
 
         // ===== Detail panel =====
         var ebriCard = document.getElementById('ebriCard');
