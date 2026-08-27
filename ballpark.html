@@ -493,7 +493,7 @@
       left: 50%;
       transform: translateX(-50%);
     }
-    .rz-top { display: grid; grid-template-columns: 1.02fr 1.38fr 1.95fr; gap: 22px; }
+    .rz-top { display: grid; grid-template-columns: 1fr 1.32fr 2.15fr; gap: 22px; }
     .rz-card {
       background: var(--card-bg); border: 1px solid var(--border);
       border-radius: 16px; padding: 26px 30px; position: relative;
@@ -554,7 +554,7 @@
     .rz-target-fixed span { color: var(--text-faint); }
 
     /* Card 3 — verdict (the loudest thing on screen) */
-    .rz-verdict { padding: 30px 34px; padding-right: 250px; overflow: hidden; justify-content: center; gap: 14px; }
+    .rz-verdict { padding: 30px 34px; padding-right: 205px; overflow: hidden; justify-content: center; gap: 14px; }
     .rz-verdict[data-tier="at_risk"] {
       border: 1.5px solid rgba(255,59,48,0.55);
       background: radial-gradient(ellipse at 88% 45%, rgba(255,59,48,0.16) 0%, rgba(30,6,10,0.5) 45%, var(--card-bg) 75%);
@@ -579,11 +579,11 @@
     .rz-verdict[data-tier="at_risk"]  .rz-pill .dot { background: #FF3B30; box-shadow: 0 0 9px #FF3B30; }
     .rz-verdict[data-tier="stretch"]  .rz-pill .dot { background: #F97316; box-shadow: 0 0 9px #F97316; }
     .rz-verdict[data-tier="on_track"] .rz-pill .dot { background: #22C55E; box-shadow: 0 0 9px #22C55E; }
-    .rz-verdict-head { font-size: clamp(28px, 2.9vw, 42px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.12; max-width: 15ch; }
+    .rz-verdict-head { font-size: clamp(28px, 2.9vw, 42px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.12; }
     .rz-verdict[data-tier="at_risk"]  .rz-verdict-head { color: #FF453A; }
     .rz-verdict[data-tier="stretch"]  .rz-verdict-head { color: #F97316; }
     .rz-verdict[data-tier="on_track"] .rz-verdict-head { color: #22C55E; }
-    .rz-verdict-body { font-size: 15.5px; color: var(--text-dim); line-height: 1.55; max-width: 48ch; }
+    .rz-verdict-body { font-size: 15.5px; color: var(--text-dim); line-height: 1.55; max-width: 52ch; }
     .rz-verdict-cta { font-size: 15.5px; font-weight: 700; text-decoration: none; padding-top: 4px; }
     .rz-verdict[data-tier="at_risk"]  .rz-verdict-cta { color: #FF453A; }
     .rz-verdict[data-tier="stretch"]  .rz-verdict-cta { color: #F97316; }
@@ -591,16 +591,16 @@
     .rz-verdict-cta:hover { text-decoration: underline; }
     .rz-verdict-badge {
       position: absolute; right: 34px; top: 50%; transform: translateY(-50%);
-      width: 190px; height: 190px; border-radius: 50%;
+      width: 150px; height: 150px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
     }
     .rz-verdict[data-tier="at_risk"] .rz-verdict-badge { background: radial-gradient(circle, rgba(255,59,48,0.38) 0%, rgba(255,59,48,0.10) 55%, transparent 72%); }
     .rz-verdict[data-tier="stretch"] .rz-verdict-badge { background: radial-gradient(circle, rgba(249,115,22,0.34) 0%, rgba(249,115,22,0.09) 55%, transparent 72%); }
     .rz-verdict[data-tier="on_track"] .rz-verdict-badge { background: radial-gradient(circle, rgba(34,197,94,0.32) 0%, rgba(34,197,94,0.09) 55%, transparent 72%); }
     .rz-verdict-badge .ring {
-      width: 110px; height: 110px; border-radius: 50%;
+      width: 96px; height: 96px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      font-size: 56px; font-weight: 900; color: #FFF; line-height: 1;
+      font-size: 48px; font-weight: 900; color: #FFF; line-height: 1;
     }
     .rz-verdict[data-tier="at_risk"]  .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #FF5147, #D31408); box-shadow: 0 0 55px rgba(255,59,48,0.6); }
     .rz-verdict[data-tier="stretch"]  .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #FB8B3C, #CE5A05); box-shadow: 0 0 55px rgba(249,115,22,0.55); }
@@ -629,7 +629,7 @@
     .rz-action-note { font-size: 14.5px; color: var(--text-dim); max-width: 26ch; line-height: 1.5; }
 
     /* Bottom row */
-    .rz-bottom { display: grid; grid-template-columns: 1fr 1.18fr; gap: 22px; margin-top: 22px; align-items: start; }
+    .rz-bottom { display: grid; grid-template-columns: 1.15fr 1fr; gap: 22px; margin-top: 22px; align-items: start; }
     .rz-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
     .rz-chip {
       display: inline-flex; align-items: center; gap: 7px;
@@ -657,7 +657,7 @@
       transition: color 0.15s ease;
     }
     .rz-lock:hover { color: var(--text); }
-    .rz-lock svg { width: 13px; height: 13px; }
+    .rz-lock svg { width: 14px; height: 14px; color: #FBBF24; filter: drop-shadow(0 0 4px rgba(251,191,36,0.45)); }
     .imp-purple { color: #A78BFA; } .imp-blue { color: #60A5FA; }
     .imp-green { color: #4ADE80; } .imp-amber { color: #FBBF24; }
     .bg-purple { background: rgba(139,92,246,0.16); }
@@ -684,7 +684,7 @@
     .rz-imp-val { text-align: left; }
     .rz-imp-val .lab { font-size: 13px; color: var(--text-dim); display: block; }
     .rz-imp-val .num { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; }
-    .rz-imp-lk { color: var(--text-faint); padding-left: 4px; }
+    .rz-imp-lk { color: #FBBF24; opacity: 0.95; padding-left: 4px; filter: drop-shadow(0 0 4px rgba(251,191,36,0.4)); }
     .rz-imp-lk svg { width: 16px; height: 16px; }
 
     /* Page footer: assumptions left, adjust right */
@@ -1480,7 +1480,7 @@
           <div class="rz-mini-steps">
             <span class="ms done">&#10003; Quick Check</span><i></i>
             <span class="ms cur"><span class="msdot"></span> Ballpark</span><i class="off"></i>
-            <span class="ms lock">&#128274; Full Profile</span>
+            <span class="ms lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
           </div>
         </div>
 
@@ -2168,7 +2168,7 @@
           }
           rows += '<div class="rz-row"><div class="rz-row-main">' +
             '<div class="rz-row-name">' + s.name + '</div>' +
-            '<div class="rz-row-sub">Already computed — unlocking tightens your range by <b class="' + s.color + '">±' + s.impact.toFixed(1) + '%</b></div>' +
+            '<div class="rz-row-sub">Computed &amp; locked — tightens your range by <b class="' + s.color + '">±' + s.impact.toFixed(1) + '%</b></div>' +
             '</div>' +
             '<a class="rz-lock" href="pricing.html">' + lockSvg + ' Unlock with Full Profile</a>' +
             '</div>';
@@ -2304,7 +2304,9 @@
         currentSpendingEstimate: 62000,
         spendingBreakdown: { housing: 21000, food: 10500, healthCare: 12000, transportation: 7500, entertainment: 6000, gifts: 3500, clothing: 2500, other: 6500, taxes: 12500 }
       };
-      var IS_LOCAL_PREVIEW = (location.hostname === '127.0.0.1' || location.hostname === 'localhost');
+      // Anything that isn't the deployed site counts as local preview —
+      // covers 127.0.0.1, localhost, LAN IPs, and file:// (empty hostname).
+      var IS_LOCAL_PREVIEW = (location.hostname !== 'edge.gh2benefits.com');
 
       // ===== "Computing" theater (labor illusion — honest steps, ~2.6s) =====
       // Ends on "some inputs unavailable — using wide estimates", pre-seeding
