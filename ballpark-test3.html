@@ -796,9 +796,9 @@
     .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
 
     /* Plain-language accuracy line (replaces the second range bar) */
-    .rz-acc { margin-top: 14px; margin-bottom: 4px; font-size: 16px; color: var(--text-dim); line-height: 1.6; max-width: 62ch; }
-    .rz-acc b.now { font-size: 19px; font-weight: 800; color: #FBBF24; }
-    .rz-acc b.full { font-size: 19px; font-weight: 800; color: #4ADE80; }
+    .rz-acc { margin-top: 26px; margin-bottom: 10px; font-size: 18px; color: var(--text-dim); line-height: 1.7; max-width: 72ch; }
+    .rz-acc b.now { font-size: 28px; font-weight: 800; color: #FBBF24; line-height: 1; }
+    .rz-acc b.full { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
 
     /* Merged section head + one-bar comparison */
     .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
@@ -1666,10 +1666,6 @@
           <div class="rz-card-title">FROM YOUR BALLPARK &mdash; CONFIRMED</div>
           <div class="rz-chips" id="rzChips"></div>
           <div class="rz-chips-note" id="rzChipsNote"></div>
-          <div class="rz-merge-head">
-            <span class="rz-card-title">SHARPEN YOUR NUMBER &mdash; WHAT&rsquo;S STILL LOCKED</span>
-            <a href="pricing.html">See all items &rarr;</a>
-          </div>
           <div class="rz-acc">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b><span id="rzAccDollar"></span>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
           <div id="rzSharpenList"></div>
           <div class="rz-total"><span>Unlock all four and your number is accurate to within</span><b id="rzTotalPts">0.2%</b></div>
