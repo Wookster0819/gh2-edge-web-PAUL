@@ -1,7 +1,7 @@
 {
   "fixture": true,
   "note": "TEST DATA. Value-added = EDGE coupled-optimal vs a genuinely good conventional plan (SS 70/67, fill-bracket-24, taxable-first), both priced through the full engine at the household's full stated spending. Kept-dollars in today's dollars, qualified net of 35% heir tax. EDGE plan locked on the current snapshot, re-run frozen on earlier markets.",
-  "generated": "2026-09-01T17:33:26.310Z",
+  "generated": "2026-09-01T18:24:48.546Z",
   "source": "in-process runOptimization (api/optimize.ts)",
   "baseline": {
     "claimPrimary": 70,
@@ -350,6 +350,10 @@
               "years": 0,
               "firstYear": 0,
               "total": 0
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": 67
             }
           }
         },
@@ -613,6 +617,10 @@
               "years": 0,
               "firstYear": 0,
               "total": 0
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": 67
             }
           }
         },
@@ -876,6 +884,10 @@
               "years": 0,
               "firstYear": 0,
               "total": 0
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": 67
             }
           }
         }
@@ -1190,6 +1202,10 @@
               "years": 3,
               "firstYear": 22097,
               "total": 52943
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": null
             }
           }
         },
@@ -1459,6 +1475,10 @@
               "years": 3,
               "firstYear": 22097,
               "total": 54716
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": null
             }
           }
         },
@@ -1728,6 +1748,10 @@
               "years": 3,
               "firstYear": 22097,
               "total": 55330
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": null
             }
           }
         }
@@ -2017,6 +2041,10 @@
               "years": 2,
               "firstYear": 122898,
               "total": 222973
+            },
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
             }
           }
         },
@@ -2241,6 +2269,10 @@
               "years": 2,
               "firstYear": 122898,
               "total": 222973
+            },
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
             }
           }
         },
@@ -2465,6 +2497,10 @@
               "years": 2,
               "firstYear": 122898,
               "total": 222973
+            },
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
             }
           }
         }
