@@ -376,6 +376,7 @@
         <div class="trend-rows" id="trendRows"><!-- injected --></div>
         <div class="trend-spark" id="trendSpark"><!-- SVG injected --></div>
         <div style="font-size:10.5px;color:#5B6478;margin-top:6px;">Dollars kept, in today&rsquo;s dollars.</div>
+        <div id="tierWhy" style="font-size:12.5px;color:#8693AC;margin-top:10px;line-height:1.5;"></div>
       </section>
     </div>
 
@@ -559,6 +560,14 @@
       // ===== Hero =====
       document.getElementById('heroValue').textContent = fmt$(DATA.projectedLiquidNetWorth);
       document.getElementById('heroAge').textContent = DATA.throughAge;
+      // Depletion is information, not a blank: name the funded-through year.
+      // NOTE: this replaces the whole .hero-sub line, destroying the #heroAge
+      // span inside it — so it must run AFTER the heroAge write above, never before.
+      if (DATA.projectedLiquidNetWorth <= 0 && DATA.comparison && DATA.comparison.edgeFundedThrough) {
+        var heroSub = document.querySelector('.hero-sub');
+        if (heroSub) heroSub.textContent = 'Funded through ' + DATA.comparison.edgeFundedThrough +
+          ' at your stated spending. Reaches zero before 95.';
+      }
       // The arrow and color follow the SIGN of the delta. They were hardcoded
       // in the markup to match the demo data's signs, which rendered a
       // +$435,454 gain as a red decline. Direction belongs to the data.
@@ -721,6 +730,18 @@
         s2 += '</g>';
         s2 += '</svg>';
         document.getElementById('trendSpark').innerHTML = s2;
+        var tw = document.getElementById('tierWhy');
+        if (tw) {
+          var msg = '';
+          var lastYr = pts[pts.length - 1].year;
+          if (cmp.yearsGained > 0 && cmp.edgeFundedThrough < lastYr) {
+            msg = 'Coordination bought ' + cmp.yearsGained + ' more year' + (cmp.yearsGained === 1 ? '' : 's') +
+              ' of funded retirement, through ' + cmp.edgeFundedThrough + '. ';
+          }
+          // The tier hook, Founder-ruled: LTSS pricing is the next tier's work.
+          msg += 'Long-term care is not yet priced into this plan. Pricing it in — and planning through it — is what the next tier adds.';
+          tw.textContent = msg;
+        }
       })();
 
       // ===== Drivers =====
