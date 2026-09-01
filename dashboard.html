@@ -6,7 +6,7 @@
   <!-- Subscriber-only page: keep out of search indexes -->
   <meta name="robots" content="noindex,nofollow" />
   <meta name="theme-color" content="#0A0E1A" />
-  <title>EDGE — Dashboard</title>
+  <title>EDGE &mdash; Dashboard</title>
   <meta name="description" content="Your EDGE subscriber dashboard." />
   <style>
     :root {
@@ -263,7 +263,7 @@
     }
     .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* ===== Hover glow (cursor devices only — no effect on touch) ===== */
+    /* ===== Hover glow (cursor devices only &mdash; no effect on touch) ===== */
     @media (hover: hover) and (pointer: fine) {
       .card, .driver { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
       .card:hover {
@@ -309,7 +309,7 @@
     </nav>
     <div class="asof">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span id="whoAmI" style="margin-right:14px;"></span>As of <span id="asofDate">—</span>
+      <span id="whoAmI" style="margin-right:14px;"></span>As of <span id="asofDate">&mdash;</span>
     </div>
   </div>
 
@@ -319,11 +319,11 @@
     <section class="card hero" aria-label="Projected liquid net worth">
       <div>
         <div class="card-label">Projected Liquid Net Worth</div>
-        <div class="hero-value" id="heroValue">—</div>
+        <div class="hero-value" id="heroValue">&mdash;</div>
         <div class="hero-sub">Projected through age <span id="heroAge">87</span>, after taxes and spending.</div>
         <div class="hero-deltas">
-          <div class="delta" id="deltaMonthRow"><span class="arrow"></span> <span id="deltaMonth">—</span> <span class="delta-note">since last month</span></div>
-          <div class="delta" id="deltaSignupRow"><span class="arrow"></span> <span id="deltaSignup">—</span> <span class="delta-note">since signup</span></div>
+          <div class="delta" id="deltaMonthRow"><span class="arrow"></span> <span id="deltaMonth">&mdash;</span> <span class="delta-note">since last month</span></div>
+          <div class="delta" id="deltaSignupRow"><span class="arrow"></span> <span id="deltaSignup">&mdash;</span> <span class="delta-note">since signup</span></div>
         </div>
         <a class="why-link" href="#" id="whyLink">Why did this move? →</a>
       </div>
@@ -349,8 +349,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
             </div>
             <div>
-              <div class="next-title" id="actionTitle">—</div>
-              <div class="next-sub" id="actionSub">—</div>
+              <div class="next-title" id="actionTitle">&mdash;</div>
+              <div class="next-sub" id="actionSub">&mdash;</div>
               <a class="next-link" href="#" id="actionLink">View details →</a>
             </div>
           </div>
@@ -361,8 +361,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
             </div>
             <div>
-              <div class="next-title" id="checkinTitle">—</div>
-              <div class="next-sub" id="checkinSub">—</div>
+              <div class="next-title" id="checkinTitle">&mdash;</div>
+              <div class="next-sub" id="checkinSub">&mdash;</div>
               <a class="next-link" href="#" id="checkinLink">View calendar →</a>
             </div>
           </div>
@@ -372,7 +372,7 @@
       <!-- Net outcome trend -->
       <section class="card" aria-label="Net outcome trend">
         <div class="card-label">Net Outcome Trend</div>
-        <div class="hero-sub" style="margin-top:-6px;">Projected value added by EDGE strategies.</div>
+        <div class="hero-sub" style="margin-top:-6px;">Value added by solving everything together &mdash; vs a well-executed conventional plan (delay Social Security, fill the 24% bracket, spend taxable first). Dollars kept, in today&rsquo;s dollars.</div>
         <div class="trend-rows" id="trendRows"><!-- injected --></div>
         <div class="trend-spark" id="trendSpark"><!-- SVG injected --></div>
       </section>
@@ -381,7 +381,7 @@
     <!-- ===== WEALTH PRESERVATION DRIVERS ===== -->
     <section aria-label="Wealth preservation drivers">
       <div class="drivers-head">
-        <div class="card-label">Wealth Preservation Drivers</div>
+        <div class="card-label">Where the Money Goes</div>
         <a href="#">View all drivers →</a>
       </div>
       <div class="drivers" id="drivers"><!-- injected --></div>
@@ -448,7 +448,7 @@
       <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
       <div>
         <div class="chat-head-name">Ask Edge</div>
-        <div class="chat-head-sub" id="chatStatus">Preview — not connected yet</div>
+        <div class="chat-head-sub" id="chatStatus">Preview &mdash; not connected yet</div>
       </div>
       <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -466,11 +466,11 @@
       'use strict';
 
       // =====================================================================
-      // SUBSCRIBER GATE — connect-ready, currently DISABLED.
+      // SUBSCRIBER GATE &mdash; connect-ready, currently DISABLED.
       // Jae: when the auth endpoint exists, set AUTH_ENABLED = true.
       // Expected behavior mirrors ballpark.html: a 401 redirects to login.
       // =====================================================================
-      var AUTH_ENABLED = false;                 // <— flip when /api/me is live
+      var AUTH_ENABLED = false;                 // <&mdash; flip when /api/me is live
       var AUTH_ENDPOINT = '/api/me';
       function requireSubscriber() {
         fetch(AUTH_ENDPOINT).then(function (r) {
@@ -482,10 +482,10 @@
       if (AUTH_ENABLED) requireSubscriber();
 
       // =====================================================================
-      // LIVE DATA — connect-ready, currently on demo data.
+      // LIVE DATA &mdash; connect-ready, currently on demo data.
       //
       // All numbers on this page come from the EDGE engine (private repo);
-      // this page contains no calculation logic — it renders whatever the
+      // this page contains no calculation logic &mdash; it renders whatever the
       // engine returns.
       //
       // Jae: expose the subscriber dashboard payload at DASHBOARD_ENDPOINT
@@ -493,7 +493,7 @@
       // LIVE_DATA = true. On any fetch failure the page falls back to
       // DEMO_DATA so it never renders empty.
       // =====================================================================
-      var LIVE_DATA = false;             // <— flip when /api/dashboard is live
+      var LIVE_DATA = false;             // <&mdash; flip when /api/dashboard is live
       var DASHBOARD_ENDPOINT = '/api/dashboard';
 
       var DEMO_DATA = {
@@ -536,6 +536,7 @@
       // ===== Formatters =====
       function fmt$(n) { return (n < 0 ? '-$' : '$') + Math.round(Math.abs(n)).toLocaleString('en-US'); }
       function fmtK(n) {
+        if (n < 0) return '-' + fmtK(-n);
         var a = Math.abs(n);
         if (a >= 1000000) return '$' + (n / 1000000).toFixed(2).replace(/\.?0+$/, '') + 'M';
         if (a >= 1000) return '$' + Math.round(n / 1000) + 'K';
@@ -549,7 +550,7 @@
         months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
 
       // =====================================================================
-      // RENDER — everything below draws from the `DATA` argument only, so the
+      // RENDER &mdash; everything below draws from the `DATA` argument only, so the
       // live fetch and the demo fallback share one code path.
       // =====================================================================
       function renderDashboard(DATA) {
@@ -625,7 +626,7 @@
           }
         });
 
-        // most recent (latest) point — highlighted: glow dot + purple value pill
+        // most recent (latest) point &mdash; highlighted: glow dot + purple value pill
         var lp = pts[lastI], lx = X(lp.year), ly = Y(lp.value);
         s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="10" fill="rgba(139,92,246,0.25)"/>';
         s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="5" fill="#0A0E1A" stroke="#C4B5FD" stroke-width="2.6"/>';
@@ -670,27 +671,55 @@
       });
       document.getElementById('trendRows').innerHTML = trHtml;
 
-      // sparkline with markers + end label (sqrt scale so 1yr/3yr stay visible)
+      // Two lines, one household, both futures (Founder-locked): the EDGE plan
+      // and a well-executed conventional plan, in kept-dollars — the same
+      // curves the rows above read from, so the right-edge gap equals the
+      // Lifetime row by construction. Kept-basis is load-bearing: a nominal
+      // chart counts the IRS's share of a qualified balance as the household's.
       (function () {
-        var W = 260, H = 84, padL = 10, padR = 14, padT = 26, padB = 10;
-        var vals = DATA.outcomes.map(function (o) { return o.value; });
-        var max = Math.sqrt(Math.max.apply(null, vals));
-        function X(i) { return padL + i / (vals.length - 1) * (W - padL - padR); }
-        function Y(v) { return padT + (1 - Math.sqrt(v) / max) * (H - padT - padB); }
-        var line = vals.map(function (v, i) { return (i ? 'L' : 'M') + X(i) + ' ' + Y(v).toFixed(1); }).join(' ');
-        var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Net outcome trend">';
-        s += '<path d="' + line + '" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>';
-        vals.forEach(function (v, i) {
-          s += '<circle cx="' + X(i) + '" cy="' + Y(v).toFixed(1) + '" r="3" fill="#0A0E1A" stroke="#A78BFA" stroke-width="2"/>';
-          // final label sits ABOVE its point, right-aligned to the tile edge,
-          // so it neither overflows nor overlaps the marker
-          var lx = i === 0 ? X(i) - 4 : (i === vals.length - 1 ? W - 2 : X(i));
-          var ly = i === vals.length - 1 ? Y(v) - 10 : Y(v) - 8;
-          var la = i === 0 ? 'start' : (i === vals.length - 1 ? 'end' : 'middle');
-          s += '<text class="ch-ptlabel" x="' + lx + '" y="' + ly + '" text-anchor="' + la + '">' + fmtK(v) + '</text>';
+        var cmp = DATA.comparison;
+        if (!cmp || !cmp.series || cmp.series.length < 2) { document.getElementById('trendSpark').innerHTML = ''; return; }
+        var W = 260, H = 118, padL = 10, padR = 14, padT = 14, padB = 26;
+        var pts = cmp.series;
+        var lo = Infinity, hi = -Infinity;
+        pts.forEach(function (r) {
+          lo = Math.min(lo, r.edge, r.conventional);
+          hi = Math.max(hi, r.edge, r.conventional);
         });
-        s += '</svg>';
-        document.getElementById('trendSpark').innerHTML = s;
+        if (hi === lo) hi = lo + 1;
+        var y0 = pts[0].year, y1 = pts[pts.length - 1].year;
+        function X(yr) { return padL + (yr - y0) / (y1 - y0) * (W - padL - padR); }
+        function Y(v) { return padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB); }
+        function line(key) {
+          return pts.map(function (r, i) { return (i ? 'L' : 'M') + X(r.year).toFixed(1) + ' ' + Y(r[key]).toFixed(1); }).join(' ');
+        }
+        var s2 = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' +
+          cmp.edgeLabel + ' vs ' + cmp.baselineLabel + ', ' + cmp.basis + '">';
+        // conventional first (under), muted; EDGE on top, brand purple
+        s2 += '<path d="' + line('conventional') + '" fill="none" stroke="#5B6478" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round"/>';
+        s2 += '<path d="' + line('edge') + '" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>';
+        // crossover: the year EDGE pulls ahead after being behind
+        if (cmp.crossoverYear != null) {
+          var cx = X(cmp.crossoverYear);
+          var cr = pts.filter(function (r) { return r.year >= cmp.crossoverYear; })[0];
+          if (cr) {
+            s2 += '<circle cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2"/>';
+            s2 += '<text class="ch-ptlabel" x="' + cx.toFixed(1) + '" y="' + (Y(cr.edge) - 8).toFixed(1) + '" text-anchor="middle" fill="#22C55E">ahead from ' + cmp.crossoverYear + '</text>';
+          }
+        }
+        // end-gap annotation — this number IS the Lifetime row
+        var last = pts[pts.length - 1];
+        var gy = (Y(last.edge) + Y(last.conventional)) / 2;
+        s2 += '<text class="ch-ptlabel" x="' + (W - 2) + '" y="' + Math.max(10, gy - 6).toFixed(1) + '" text-anchor="end">' + (cmp.endGap >= 0 ? '+' : '-') + fmtK(Math.abs(cmp.endGap)) + '</text>';
+        // legend
+        s2 += '<g font-size="8.5" fill="#8693AC">';
+        s2 += '<line x1="' + padL + '" y1="' + (H - 8) + '" x2="' + (padL + 14) + '" y2="' + (H - 8) + '" stroke="#A78BFA" stroke-width="2.2"/>';
+        s2 += '<text x="' + (padL + 18) + '" y="' + (H - 5) + '">' + cmp.edgeLabel + '</text>';
+        s2 += '<line x1="' + (padL + 92) + '" y1="' + (H - 8) + '" x2="' + (padL + 106) + '" y2="' + (H - 8) + '" stroke="#5B6478" stroke-width="2" stroke-dasharray="4 3"/>';
+        s2 += '<text x="' + (padL + 110) + '" y="' + (H - 5) + '">' + cmp.baselineLabel + '</text>';
+        s2 += '</g>';
+        s2 += '</svg>';
+        document.getElementById('trendSpark').innerHTML = s2;
       })();
 
       // ===== Drivers =====
@@ -705,8 +734,8 @@
         drHtml += '<div class="driver">' +
           '<div class="driver-top"><span class="driver-ico">' + (DRIVER_ICONS[d.name] || '') + '</span>' +
           '<span class="driver-name">' + d.name + '</span></div>' +
-          '<div class="driver-amt">+' + fmt$(d.amount) + '</div>' +
-          '<div class="driver-share">' + Math.round(d.share * 100) + '% of total impact</div>' +
+          '<div class="driver-amt">' + fmt$(d.amount) + '</div>' +
+          '<div class="driver-share">lifetime, through age 95</div>' +
           '<div class="driver-bar"><i style="width:' + Math.round(d.share * 100) + '%"></i></div>' +
           '</div>';
       });
@@ -717,7 +746,7 @@
       // =================================================================
       // TEST-DATA MODE (the fixture-backed plan store).
       //
-      // getPlan(household) reads data/plan-fixtures.json — three TEST
+      // getPlan(household) reads data/plan-fixtures.json &mdash; three TEST
       // households x three dated engine snapshots. ?hh=H1|H2|H3 selects the
       // household; the selector below stands in for login. When the real
       // server-side plan store exists, this block is replaced by a fetch to
@@ -749,13 +778,13 @@
               location.search = '?hh=' + this.value;
             });
           }
-          document.title = hh.label + ' — EDGE Dashboard';
+          document.title = hh.label + ' \u2014 EDGE Dashboard';
 
           renderDashboard(snap.dashboard);
         })
         .catch(function () {
           // Fixture unreachable: say so rather than render invented numbers.
-          document.getElementById('heroValue').textContent = '—';
+          document.getElementById('heroValue').textContent = '\u2014';
           var who = document.getElementById('whoAmI');
           if (who) who.textContent = 'Plan data unavailable';
         });
@@ -769,18 +798,18 @@
       }
 
       // =====================================================================
-      // ASK EDGE — CHAT (connect-ready, NOT wired to a model yet).
+      // ASK EDGE &mdash; CHAT (connect-ready, NOT wired to a model yet).
       //
       // Jae / Paul: to connect, implement the endpoint below. The panel
       // POSTs:  { messages: [{role:'user'|'assistant', content:'…'}, …],
       //           context: { page:'dashboard', access:'subscriber' } }
       // and expects JSON back:  { reply: '…' }
-      // Then set CHAT_CONFIG.connected = true — nothing else changes.
+      // Then set CHAT_CONFIG.connected = true &mdash; nothing else changes.
       // While connected=false, the panel answers with a canned preview reply.
       // =====================================================================
       var CHAT_CONFIG = {
         endpoint: '/api/edge-chat',
-        connected: false,               // <— flip when the endpoint is live
+        connected: false,               // <&mdash; flip when the endpoint is live
         context: { page: 'dashboard', access: 'subscriber' }
       };
 
@@ -858,7 +887,7 @@
         }
 
         if (CHAT_CONFIG.connected) {
-          // Live path — used once the endpoint exists.
+          // Live path &mdash; used once the endpoint exists.
           fetch(CHAT_CONFIG.endpoint, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -867,9 +896,9 @@
             .then(function (j) { finish(j.reply || 'Sorry — I didn’t catch that. Try again?'); })
             .catch(function () { finish('I couldn’t reach my brain just now. Please try again in a moment.'); });
         } else {
-          // Preview path — canned reply until the endpoint is connected.
+          // Preview path &mdash; canned reply until the endpoint is connected.
           setTimeout(function () {
-            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I’ll answer questions about your plan, your Heat Map, and your next best move.');
+            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I&rsquo;ll answer questions about your plan, your Heat Map, and your next best move.');
           }, 700);
         }
       });
@@ -882,7 +911,7 @@
       // ===== Real mascot auto-swap =====
       // The inline SVG mascot is a stand-in. Drop the official character
       // render (transparent background) at assets/edge-wave.png and every
-      // mascot on this page upgrades to it automatically — no code change.
+      // mascot on this page upgrades to it automatically &mdash; no code change.
       (function () {
         var probe = new Image();
         probe.onload = function () {
