@@ -610,7 +610,7 @@
       </div>
 
       <div class="see-full">
-        <a href="/ballpark.html">See the full plan
+        <a href="/ballpark.html" id="seeFullLink">See the full plan
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 19 12 13 19"/></svg>
         </a>
       </div>
@@ -974,6 +974,38 @@
         });
       });
     })();
-  </script>
+  
+      // ===== Carry the answers to /ballpark =====
+      // Written on click, read once on the other side, then cleared. Same
+      // origin, so sessionStorage reaches it; it dies with the tab, which is
+      // right for something a household typed and did not ask us to keep.
+      (function () {
+        var link = document.getElementById('seeFullLink');
+        if (!link) return;
+        link.addEventListener('click', function () {
+          try {
+            var num = function (id) {
+              var e = document.getElementById(id);
+              if (!e) return null;
+              var v = parseFloat(String(e.value).replace(/[^0-9.\-]/g, ''));
+              return isFinite(v) ? v : null;
+            };
+            var pressed = document.querySelector('[data-filing][aria-pressed="true"]');
+            sessionStorage.setItem('gh2_quick_handoff', JSON.stringify({
+              v: 1,
+              age: num('age'),
+              retirementAge: num('retAge'),
+              filingStatus: pressed ? pressed.getAttribute('data-filing') : null,
+              state: (document.getElementById('state') || {}).value || null,
+              currentSalary: num('salary'),
+              currentSavings: num('totalSavings'),
+              customSpending: num('annualExpenses'),
+              ssMonthlyFRA: num('ssMonthlyFRA'),
+              targetEndAge: num('planThroughAge')
+            }));
+          } catch (e) { /* storage blocked: they retype, which is the old behaviour */ }
+        });
+      })();
+    </script>
 </body>
 </html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Subscriber-only page: keep out of search indexes -->
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="theme-color" content="#0A0E1A" />
+  <title>EDGE — Dashboard</title>
+  <meta name="description" content="Your EDGE subscriber dashboard." />
+  <style>
+    :root {
+      --bg: #0A0E1A;
+      --bg-soft: #0E1424;
+      --card-bg: #11172A;
+      --card-bg-2: #161D33;
+      --border: #1F2940;
+      --border-soft: #18213B;
+      --text: #F5F7FA;
+      --text-dim: #B6BFD0;
+      --text-muted: #8693AC;
+      --text-faint: #5A6680;
+      --accent-purple: #8B5CF6;
+      --accent-purple-soft: rgba(139,92,246,0.14);
+      --accent-blue: #3B82F6;
+      --accent-blue-soft: rgba(59,130,246,0.14);
+      --accent-green: #22C55E;
+      --accent-green-soft: rgba(34,197,94,0.12);
+      --accent-amber: #F97316;
+      --accent-amber-soft: rgba(249,115,22,0.12);
+      --accent-red: #FF3B30;
+      --accent-red-soft: rgba(255,59,48,0.12);
+      --accent-money: #10B981;
+      --accent-money-soft: rgba(16,185,129,0.14);
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Text", Roboto, Inter, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+
+    /* ===== Top bar ===== */
+    .topbar {
+      display: flex; align-items: center; gap: 20px;
+      max-width: 1180px; margin: 0 auto;
+      padding: 20px 28px 0;
+    }
+    .wordmark { font-size: 17px; font-weight: 800; letter-spacing: 0.3em; }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
+    .nav a {
+      font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; padding: 7px 12px; border-radius: 8px;
+    }
+    .nav a:hover { color: var(--text); background: var(--card-bg-2); }
+    .nav a.active { color: var(--text); background: var(--accent-purple-soft); }
+    .asof {
+      margin-left: auto;
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; color: var(--text-muted);
+      background: var(--card-bg); border: 1px solid var(--border);
+      padding: 7px 12px; border-radius: 9px; white-space: nowrap;
+    }
+    .asof svg { width: 13px; height: 13px; color: var(--text-faint); }
+
+    /* ===== Page ===== */
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 22px 28px 96px; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      padding: 22px 24px;
+    }
+    .card-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+
+    /* ===== Hero: Projected Liquid Net Worth ===== */
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); gap: 22px; align-items: center; margin-bottom: 22px; }
+    .hero-value {
+      font-size: clamp(40px, 5.4vw, 58px); font-weight: 800; letter-spacing: -0.02em;
+      line-height: 1.05; margin: 10px 0 6px;
+      font-variant-numeric: tabular-nums;
+    }
+    .hero-sub { font-size: 13.5px; color: var(--text-muted); }
+    .hero-deltas { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 4px; }
+    .delta { display: flex; align-items: baseline; gap: 8px; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .delta .arrow { font-size: 15px; }
+    .delta.up { color: var(--accent-green); }
+    .delta.down { color: var(--accent-red); }
+    .delta .delta-note { font-size: 12.5px; font-weight: 500; color: var(--text-muted); }
+    .why-link {
+      display: inline-block; margin-top: 10px;
+      font-size: 13px; font-weight: 600; color: var(--accent-purple);
+      text-decoration: none;
+    }
+    .why-link:hover { text-decoration: underline; }
+    .hero-chart { min-width: 0; }
+    .hero-chart svg { display: block; width: 100%; height: auto; }
+
+    /* Chart text (SVG) */
+    .ch-axis { font-size: 13px; fill: var(--text-muted); font-family: inherit; }
+    .ch-ptlabel { font-size: 13.5px; font-weight: 700; fill: #E8ECF4; font-family: inherit; }
+    .ch-grid { stroke: rgba(255,255,255,0.09); stroke-width: 1; }
+
+    /* ===== Middle row ===== */
+    .mid { display: grid; grid-template-columns: 1.15fr 1fr 1fr; gap: 22px; margin-bottom: 22px; }
+    .mid .card { display: flex; flex-direction: column; gap: 14px; }
+
+    /* What's hot */
+    .hot-list { display: flex; flex-direction: column; gap: 6px; }
+    .hot-item {
+      display: grid; grid-template-columns: 34px 1fr 14px; align-items: center; gap: 12px;
+      padding: 10px 10px; margin: 0 -10px; border-radius: 12px;
+      text-decoration: none;
+    }
+    .hot-item:hover { background: var(--card-bg-2); }
+    .hot-dot {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .hot-dot svg { width: 17px; height: 17px; }
+    .hot-dot.hot   { background: var(--accent-red-soft);   color: var(--accent-red); }
+    .hot-dot.warn  { background: var(--accent-amber-soft); color: var(--accent-amber); }
+    .hot-dot.ok    { background: var(--accent-green-soft); color: var(--accent-green); }
+    .hot-title { font-size: 14px; font-weight: 700; }
+    .hot-sub { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
+    .hot-chev { color: var(--text-faint); }
+    .card-cta {
+      margin-top: auto;
+      font-size: 13px; font-weight: 600; color: var(--accent-purple); text-decoration: none;
+    }
+    .card-cta:hover { text-decoration: underline; }
+
+    /* Next key action / next check-in */
+    .next-block { display: flex; flex-direction: column; gap: 12px; }
+    .next-row { display: flex; align-items: flex-start; gap: 14px; }
+    .next-ico {
+      flex: none; width: 40px; height: 40px; border-radius: 11px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent-purple-soft); color: #A78BFA;
+    }
+    .next-ico.amber { background: var(--accent-amber-soft); color: var(--accent-amber); }
+    .next-ico svg { width: 20px; height: 20px; }
+    .next-title { font-size: 15.5px; font-weight: 700; line-height: 1.3; }
+    .next-sub { font-size: 12.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.45; }
+    .next-link { display: inline-block; margin-top: 7px; font-size: 12.5px; font-weight: 600; color: var(--accent-purple); text-decoration: none; }
+    .next-link:hover { text-decoration: underline; }
+    .next-divider { border: 0; border-top: 1px solid var(--border-soft); margin: 2px 0; }
+
+    /* Net outcome trend */
+    .trend-rows { display: flex; flex-direction: column; }
+    .trend-row {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 8px 0; border-bottom: 1px solid var(--border-soft);
+      font-size: 13.5px;
+    }
+    .trend-row:last-of-type { border-bottom: 0; }
+    .trend-row .k { color: var(--text-muted); }
+    .trend-row .v { font-weight: 800; font-variant-numeric: tabular-nums; font-size: 15px; }
+    .trend-spark { margin-top: 2px; }
+    .trend-spark svg { display: block; width: 100%; height: auto; }
+
+    /* ===== Drivers ===== */
+    .drivers-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 12px; }
+    .drivers-head .card-label { flex: 1; }
+    .drivers-head a { font-size: 13px; font-weight: 600; color: var(--accent-purple); text-decoration: none; }
+    .drivers-head a:hover { text-decoration: underline; }
+    .drivers { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+    .driver {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+      padding: 16px 18px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .driver-top { display: flex; align-items: center; gap: 10px; }
+    .driver-ico {
+      flex: none; width: 32px; height: 32px; border-radius: 9px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--accent-blue-soft); color: var(--accent-blue);
+    }
+    .driver-ico svg { width: 16px; height: 16px; }
+    .driver-name { font-size: 13px; font-weight: 600; color: var(--text-dim); }
+    .driver-amt { font-size: 21px; font-weight: 800; color: var(--accent-money); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .driver-share { font-size: 11.5px; color: var(--text-muted); }
+    .driver-bar { height: 4px; border-radius: 4px; background: var(--border-soft); overflow: hidden; }
+    .driver-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent-purple); }
+
+    /* ===== Ask Edge (floating chat launcher) ===== */
+    .ask-edge {
+      position: fixed; right: 22px; bottom: 22px; z-index: 60;
+      display: inline-flex; align-items: center; gap: 9px;
+      background: var(--grad-cta);
+      color: #FFF; border: 0; cursor: pointer; font-family: inherit;
+      font-size: 14.5px; font-weight: 700; letter-spacing: 0.01em;
+      padding: 11px 18px 11px 12px; border-radius: 999px;
+      box-shadow: 0 8px 28px rgba(139,92,246,0.45);
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    .ask-edge:hover { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(139,92,246,0.55); }
+    .ask-edge .mascot { width: 30px; height: 30px; flex: none; }
+    img.mascot {
+      object-fit: contain;
+      /* soft white glow around the transparent cutout */
+      filter: drop-shadow(0 0 3px rgba(255,255,255,0.75)) drop-shadow(0 0 7px rgba(255,255,255,0.35));
+    }
+
+    /* Chat panel */
+    .chat-panel {
+      position: fixed; right: 22px; bottom: 84px; z-index: 61;
+      width: 360px; max-width: calc(100vw - 32px);
+      max-height: min(560px, calc(100vh - 120px));
+      display: none; flex-direction: column;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 18px; box-shadow: 0 24px 64px rgba(0,0,0,0.55);
+      overflow: hidden;
+    }
+    .chat-panel.open { display: flex; }
+    .chat-head {
+      display: flex; align-items: center; gap: 10px;
+      padding: 13px 16px; border-bottom: 1px solid var(--border-soft);
+      background: var(--card-bg-2);
+    }
+    .chat-head .mascot { width: 56px; height: 56px; }
+    .chat-head-name { font-size: 14.5px; font-weight: 800; }
+    .chat-head-sub { font-size: 11px; color: var(--text-muted); }
+    .chat-close {
+      margin-left: auto; background: transparent; border: 0; cursor: pointer;
+      color: var(--text-muted); padding: 6px; border-radius: 8px; line-height: 0;
+    }
+    .chat-close:hover { background: var(--card-bg); color: var(--text); }
+    .chat-msgs {
+      flex: 1 1 auto; overflow-y: auto;
+      padding: 16px; display: flex; flex-direction: column; gap: 10px;
+      min-height: 180px;
+    }
+    .msg { max-width: 85%; padding: 10px 13px; border-radius: 14px; font-size: 13.5px; line-height: 1.5; }
+    .msg.edge { background: var(--card-bg-2); border: 1px solid var(--border-soft); border-bottom-left-radius: 5px; align-self: flex-start; }
+    .msg.user { background: var(--accent-purple); color: #FFF; border-bottom-right-radius: 5px; align-self: flex-end; }
+    .msg.typing { color: var(--text-muted); font-style: italic; }
+    .chat-inputbar {
+      display: flex; gap: 8px; padding: 12px;
+      border-top: 1px solid var(--border-soft); background: var(--card-bg-2);
+    }
+    .chat-inputbar input {
+      flex: 1 1 auto; min-width: 0;
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 10px; color: var(--text);
+      font: inherit; font-size: 13.5px; padding: 10px 12px;
+    }
+    .chat-inputbar input:focus { outline: none; border-color: var(--accent-purple); }
+    .chat-send {
+      flex: none; background: var(--accent-purple); color: #FFF;
+      border: 0; border-radius: 10px; cursor: pointer;
+      padding: 0 14px; font-family: inherit; font-size: 13.5px; font-weight: 700;
+    }
+    .chat-send:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ===== Hover glow (cursor devices only — no effect on touch) ===== */
+    @media (hover: hover) and (pointer: fine) {
+      .card, .driver { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+      .card:hover {
+        border-color: rgba(139,92,246,0.55);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3), 0 0 22px rgba(139,92,246,0.20);
+      }
+      .driver:hover {
+        border-color: rgba(59,130,246,0.55);
+        box-shadow: 0 0 18px rgba(59,130,246,0.18);
+      }
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 980px) {
+      .mid { grid-template-columns: 1fr 1fr; }
+      .mid .card:first-child { grid-column: span 2; }
+      .drivers { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 720px) {
+      .topbar { flex-wrap: wrap; gap: 10px; padding: 16px 16px 0; }
+      .asof { margin-left: 0; }
+      .wrap { padding: 16px 16px 110px; }
+      .hero { grid-template-columns: 1fr; }
+      .mid { grid-template-columns: 1fr; }
+      .mid .card:first-child { grid-column: auto; }
+      .card { padding: 18px 16px; }
+    }
+    @media (max-width: 480px) {
+      .drivers { grid-template-columns: 1fr; }
+      .chat-panel { right: 8px; bottom: 78px; }
+      .ask-edge { right: 14px; bottom: 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== Top bar ===== -->
+  <div class="topbar">
+    <div class="wordmark">EDGE</div>
+    <nav class="nav" aria-label="Dashboard sections">
+      <a href="dashboard.html" class="active" aria-current="page">Dashboard</a>
+      <a href="heatmap.html">Heat Map</a>
+    </nav>
+    <div class="asof">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span id="whoAmI" style="margin-right:14px;"></span>As of <span id="asofDate">—</span>
+    </div>
+  </div>
+
+  <main class="wrap">
+
+    <!-- ===== HERO: Projected Liquid Net Worth ===== -->
+    <section class="card hero" aria-label="Projected liquid net worth">
+      <div>
+        <div class="card-label">Projected Liquid Net Worth</div>
+        <div class="hero-value" id="heroValue">—</div>
+        <div class="hero-sub">Projected through age <span id="heroAge">87</span>, after taxes and spending.</div>
+        <div class="hero-deltas">
+          <div class="delta" id="deltaMonthRow"><span class="arrow"></span> <span id="deltaMonth">—</span> <span class="delta-note">since last month</span></div>
+          <div class="delta" id="deltaSignupRow"><span class="arrow"></span> <span id="deltaSignup">—</span> <span class="delta-note">since signup</span></div>
+        </div>
+        <a class="why-link" href="#" id="whyLink">Why did this move? →</a>
+      </div>
+      <div class="hero-chart" id="heroChart"><!-- SVG injected --></div>
+    </section>
+
+    <!-- ===== MIDDLE ROW ===== -->
+    <div class="mid">
+
+      <!-- What's hot right now -->
+      <section class="card" aria-label="What's hot right now">
+        <div class="card-label">What&rsquo;s Hot Right Now</div>
+        <div class="hot-list" id="hotList"><!-- injected --></div>
+        <a class="card-cta" href="heatmap.html">View full Heat Map →</a>
+      </section>
+
+      <!-- Next key action + next check-in -->
+      <section class="card" aria-label="Next key action and next check-in">
+        <div class="card-label">Next Key Action</div>
+        <div class="next-block">
+          <div class="next-row">
+            <div class="next-ico amber">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="m9 16 2 2 4-4"/></svg>
+            </div>
+            <div>
+              <div class="next-title" id="actionTitle">—</div>
+              <div class="next-sub" id="actionSub">—</div>
+              <a class="next-link" href="#" id="actionLink">View details →</a>
+            </div>
+          </div>
+          <hr class="next-divider" />
+          <div class="card-label">Next Check-In</div>
+          <div class="next-row">
+            <div class="next-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div>
+              <div class="next-title" id="checkinTitle">—</div>
+              <div class="next-sub" id="checkinSub">—</div>
+              <a class="next-link" href="#" id="checkinLink">View calendar →</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Net outcome trend -->
+      <section class="card" aria-label="Net outcome trend">
+        <div class="card-label">Net Outcome Trend</div>
+        <div class="hero-sub" style="margin-top:-6px;">Projected value added by EDGE strategies.</div>
+        <div class="trend-rows" id="trendRows"><!-- injected --></div>
+        <div class="trend-spark" id="trendSpark"><!-- SVG injected --></div>
+      </section>
+    </div>
+
+    <!-- ===== WEALTH PRESERVATION DRIVERS ===== -->
+    <section aria-label="Wealth preservation drivers">
+      <div class="drivers-head">
+        <div class="card-label">Wealth Preservation Drivers</div>
+        <a href="#">View all drivers →</a>
+      </div>
+      <div class="drivers" id="drivers"><!-- injected --></div>
+    </section>
+  </main>
+
+  <!-- ===== EDGE MASCOT (shared symbol) =====
+       Placeholder drawn to match the brand reference (fuzzy purple square,
+       big eyes, navy "E" chest patch, white/purple sneakers, waving).
+       For a pixel-exact mascot, drop the real asset in e.g. assets/edge-wave.png
+       and replace the <svg class="mascot"><use .../></svg> instances with
+       <img class="mascot" src="assets/edge-wave.png" alt="">. -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="edgeMascot" viewBox="0 0 76 84">
+      <g stroke-linecap="round" stroke-linejoin="round">
+        <!-- waving arm (raised, viewer LEFT) with open hand -->
+        <path d="M16 36 C9 30 6 22 8 13" stroke="#8465E6" stroke-width="7" fill="none"/>
+        <path d="M8 13 l-4.6 -2.6 M8 13 l-1.8 -5.4 M8 13 l2.2 -5.2 M8 13 l5 -3.4" stroke="#8465E6" stroke-width="4.2" fill="none"/>
+        <!-- hip arm (viewer right, bent akimbo) -->
+        <path d="M62 44 C70 47 70 57 61 60" stroke="#8465E6" stroke-width="7" fill="none"/>
+        <!-- legs -->
+        <path d="M29 70 L29 75 M47 70 L47 75" stroke="#8465E6" stroke-width="7"/>
+        <!-- sneakers: white with purple toe cap + stripes -->
+        <path d="M20 79 q0 -5 6 -5 h4 q4 0 4 4 v2 q0 1.6 -1.6 1.6 h-10.8 q-1.6 0 -1.6 -1.6 z" fill="#FFFFFF"/>
+        <path d="M20.5 80.5 q0 -3.5 3 -4.5" stroke="#6D4FD4" stroke-width="2.4" fill="none"/>
+        <path d="M27 75 l2.6 3.8 M30.5 74.5 l2 3.6" stroke="#6D4FD4" stroke-width="1.6"/>
+        <path d="M42 79 q0 -5 6 -5 h4 q4 0 4 4 v2 q0 1.6 -1.6 1.6 h-10.8 q-1.6 0 -1.6 -1.6 z" fill="#FFFFFF"/>
+        <path d="M42.5 80.5 q0 -3.5 3 -4.5" stroke="#6D4FD4" stroke-width="2.4" fill="none"/>
+        <path d="M49 75 l2.6 3.8 M52.5 74.5 l2 3.6" stroke="#6D4FD4" stroke-width="1.6"/>
+        <!-- fuzzy body -->
+        <rect x="13" y="10" width="50" height="60" rx="17" fill="#A18BEB"/>
+        <rect x="13" y="10" width="50" height="60" rx="17" fill="none" stroke="#8F76E4" stroke-width="2.4"/>
+        <!-- eyebrows (thick, dark) -->
+        <path d="M22 22.5 Q28 18.5 34 21.5" stroke="#3D2E7C" stroke-width="4" fill="none"/>
+        <path d="M42 21.5 Q48 18.5 54 22.5" stroke="#3D2E7C" stroke-width="4" fill="none"/>
+        <!-- eyes: whites + purple iris + dark pupil + glint -->
+        <ellipse cx="30" cy="33" rx="8" ry="8.6" fill="#FFFFFF"/>
+        <ellipse cx="47" cy="33" rx="8" ry="8.6" fill="#FFFFFF"/>
+        <circle cx="31.5" cy="34" r="4.8" fill="#7C5CD6"/>
+        <circle cx="48.5" cy="34" r="4.8" fill="#7C5CD6"/>
+        <circle cx="31.5" cy="34" r="2.5" fill="#241A4E"/>
+        <circle cx="48.5" cy="34" r="2.5" fill="#241A4E"/>
+        <circle cx="33.2" cy="32.2" r="1.2" fill="#FFFFFF"/>
+        <circle cx="50.2" cy="32.2" r="1.2" fill="#FFFFFF"/>
+        <!-- huge open smile: dark mouth, top+bottom teeth, tongue -->
+        <path d="M24 44 Q38.5 48 53 44 Q51 60 38.5 60 Q26 60 24 44 Z" fill="#3A2361"/>
+        <path d="M25.5 44.6 Q38.5 48 51.5 44.6 L50.7 49.6 Q38.5 52.6 26.3 49.6 Z" fill="#FFFFFF"/>
+        <path d="M30 58.2 Q38.5 60.6 47 58.2 L46.2 55.6 Q38.5 57.6 30.8 55.6 Z" fill="#FFFFFF"/>
+        <path d="M32.5 55.5 Q38.5 58.5 44.5 55.5 Q42.5 52.5 38.5 52.5 Q34.5 52.5 32.5 55.5 Z" fill="#C0546F"/>
+        <!-- dark purple E chest patch (low, slightly left like the reference) -->
+        <text x="33" y="68.8" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="13.5" font-weight="900" fill="#3D2E7C">E</text>
+      </g>
+    </symbol>
+  </svg>
+
+  <!-- ===== ASK EDGE ===== -->
+  <button type="button" class="ask-edge" id="askEdgeBtn" aria-expanded="false" aria-controls="chatPanel">
+    <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
+    Ask Edge
+  </button>
+
+  <div class="chat-panel" id="chatPanel" role="dialog" aria-label="Ask Edge chat" aria-modal="false">
+    <div class="chat-head">
+      <svg class="mascot" aria-hidden="true"><use href="#edgeMascot"/></svg>
+      <div>
+        <div class="chat-head-name">Ask Edge</div>
+        <div class="chat-head-sub" id="chatStatus">Preview — not connected yet</div>
+      </div>
+      <button type="button" class="chat-close" id="chatClose" aria-label="Close chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <form class="chat-inputbar" id="chatForm">
+      <input type="text" id="chatInput" placeholder="Ask about your plan…" autocomplete="off" />
+      <button type="submit" class="chat-send" id="chatSend">Send</button>
+    </form>
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // =====================================================================
+      // SUBSCRIBER GATE — connect-ready, currently DISABLED.
+      // Jae: when the auth endpoint exists, set AUTH_ENABLED = true.
+      // Expected behavior mirrors ballpark.html: a 401 redirects to login.
+      // =====================================================================
+      var AUTH_ENABLED = false;                 // <— flip when /api/me is live
+      var AUTH_ENDPOINT = '/api/me';
+      function requireSubscriber() {
+        fetch(AUTH_ENDPOINT).then(function (r) {
+          if (r.status === 401 || r.status === 403) {
+            window.location.href = '/login.html?next=' + encodeURIComponent('/dashboard.html');
+          }
+        }).catch(function () { /* network error: fail open for now */ });
+      }
+      if (AUTH_ENABLED) requireSubscriber();
+
+      // =====================================================================
+      // LIVE DATA — connect-ready, currently on demo data.
+      //
+      // All numbers on this page come from the EDGE engine (private repo);
+      // this page contains no calculation logic — it renders whatever the
+      // engine returns.
+      //
+      // Jae: expose the subscriber dashboard payload at DASHBOARD_ENDPOINT
+      // returning exactly the shape of DEMO_DATA below, then set
+      // LIVE_DATA = true. On any fetch failure the page falls back to
+      // DEMO_DATA so it never renders empty.
+      // =====================================================================
+      var LIVE_DATA = false;             // <— flip when /api/dashboard is live
+      var DASHBOARD_ENDPOINT = '/api/dashboard';
+
+      var DEMO_DATA = {
+        projectedLiquidNetWorth: 1247000,
+        throughAge: 87,
+        deltaSinceLastMonth: 34000,       // positive = up
+        deltaSinceSignup: -12000,         // negative = down
+        // Trajectory: projected liquid net worth by year
+        trajectory: [
+          { year: 2026, value: 890000 }, { year: 2028, value: 924000 },
+          { year: 2030, value: 968000 }, { year: 2032, value: 1004000 },
+          { year: 2034, value: 1052000 }, { year: 2036, value: 1090000 },
+          { year: 2038, value: 1136000 }, { year: 2040, value: 1168000 },
+          { year: 2042, value: 1196000 }, { year: 2044, value: 1224000 },
+          { year: 2046, value: 1247000 }, { year: 2048, value: 1262000 },
+          { year: 2050, value: 1250000 }, { year: 2052, value: 1236000 },
+          { year: 2054, value: 1230000 }, { year: 2056, value: 1242000 },
+          { year: 2058, value: 1251000 }, { year: 2060, value: 1256000 }
+        ],
+        hot: [
+          { level: 'hot',  title: 'Roth conversion window', sub: '47 days until Dec 31 cutoff', href: '#' },
+          { level: 'warn', title: 'IRMAA bracket inflation', sub: '2027 numbers drop Nov; re-resolve then', href: '#' },
+          { level: 'ok',   title: 'All other regimes', sub: 'Stable', href: '#' }
+        ],
+        nextAction: { title: 'Roth conversion window', sub: '47 days until Dec 31 cutoff', href: '#' },
+        nextCheckin: { title: 'October 1, 2026', sub: 'Q4 tax-year window opens', href: '#' },
+        outcomes: [
+          { label: '1 Year',   value: 34000 },
+          { label: '3 Year',   value: 128000 },
+          { label: 'Lifetime', value: 1250000 }
+        ],
+        drivers: [
+          { name: 'Taxes',               amount: 440000, share: 0.56 },
+          { name: 'Social Security',     amount: 170000, share: 0.22 },
+          { name: 'Medicare',            amount: 80000,  share: 0.10 },
+          { name: 'Withdrawal Strategy', amount: 557000, share: 0.70 }
+        ]
+      };
+
+      // ===== Formatters =====
+      function fmt$(n) { return (n < 0 ? '-$' : '$') + Math.round(Math.abs(n)).toLocaleString('en-US'); }
+      function fmtK(n) {
+        var a = Math.abs(n);
+        if (a >= 1000000) return '$' + (n / 1000000).toFixed(2).replace(/\.?0+$/, '') + 'M';
+        if (a >= 1000) return '$' + Math.round(n / 1000) + 'K';
+        return fmt$(n);
+      }
+
+      // ===== As-of date =====
+      var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var now = new Date();
+      document.getElementById('asofDate').textContent =
+        months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+
+      // =====================================================================
+      // RENDER — everything below draws from the `DATA` argument only, so the
+      // live fetch and the demo fallback share one code path.
+      // =====================================================================
+      function renderDashboard(DATA) {
+
+      // ===== Hero =====
+      document.getElementById('heroValue').textContent = fmt$(DATA.projectedLiquidNetWorth);
+      document.getElementById('heroAge').textContent = DATA.throughAge;
+      // The arrow and color follow the SIGN of the delta. They were hardcoded
+      // in the markup to match the demo data's signs, which rendered a
+      // +$435,454 gain as a red decline. Direction belongs to the data.
+      function setDelta(rowId, valueId, v) {
+        var row = document.getElementById(rowId);
+        var up = v >= 0;
+        row.classList.remove('up', 'down');
+        row.classList.add(up ? 'up' : 'down');
+        row.querySelector('.arrow').textContent = up ? '↑' : '↓';
+        document.getElementById(valueId).textContent = fmt$(Math.abs(v));
+      }
+      setDelta('deltaMonthRow', 'deltaMonth', DATA.deltaSinceLastMonth);
+      setDelta('deltaSignupRow', 'deltaSignup', DATA.deltaSinceSignup);
+
+      // ===== Hero chart (SVG, with axis numbers + point markers) =====
+      function buildHeroChart() {
+        var W = 640, H = 300, padL = 64, padR = 20, padT = 30, padB = 36;
+        var pts = DATA.trajectory;
+        var minV = Infinity, maxV = -Infinity;
+        pts.forEach(function (p) { if (p.value < minV) minV = p.value; if (p.value > maxV) maxV = p.value; });
+        var span = maxV - minV; minV -= span * 0.18; maxV += span * 0.18;
+        var x0 = pts[0].year, x1 = pts[pts.length - 1].year;
+        function X(yr) { return padL + (yr - x0) / (x1 - x0) * (W - padL - padR); }
+        function Y(v)  { return padT + (1 - (v - minV) / (maxV - minV)) * (H - padT - padB); }
+
+        var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Projected liquid net worth by year">';
+
+        // y grid + labels (3 ticks, rounded to $50K)
+        var ticks = 3;
+        for (var t = 0; t <= ticks; t++) {
+          var v = minV + (maxV - minV) * t / ticks;
+          v = Math.round(v / 50000) * 50000;
+          var y = Y(v);
+          s += '<line class="ch-grid" x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '"/>';
+          s += '<text class="ch-axis" x="' + (padL - 8) + '" y="' + (y + 3.5) + '" text-anchor="end">' + fmtK(v) + '</text>';
+        }
+        // x labels every 4th point
+        pts.forEach(function (p, i) {
+          // label every 4th year, skipping any that would crowd the final label
+          if ((i % 4 === 0 && i < pts.length - 2) || i === pts.length - 1) {
+            s += '<text class="ch-axis" x="' + X(p.year) + '" y="' + (H - 8) + '" text-anchor="middle">' + p.year + '</text>';
+          }
+        });
+
+        // area fill + line
+        var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + X(p.year).toFixed(1) + ' ' + Y(p.value).toFixed(1); }).join(' ');
+        s += '<defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1">' +
+             '<stop offset="0" stop-color="rgba(139,92,246,0.32)"/><stop offset="1" stop-color="rgba(139,92,246,0)"/>' +
+             '</linearGradient></defs>';
+        s += '<path d="' + line + ' L' + X(x1).toFixed(1) + ' ' + (H - padB) + ' L' + padL + ' ' + (H - padB) + ' Z" fill="url(#hg)"/>';
+        s += '<path d="' + line + '" fill="none" stroke="#B79CFF" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>';
+
+        // point markers (every 3rd point) + value labels at start and peak
+        var peakI = 0, lastI = pts.length - 1;
+        pts.forEach(function (p, i) { if (p.value > pts[peakI].value) peakI = i; });
+        pts.forEach(function (p, i) {
+          if (i % 3 === 0 && i !== lastI) {
+            s += '<circle cx="' + X(p.year).toFixed(1) + '" cy="' + Y(p.value).toFixed(1) + '" r="3.2" fill="#0A0E1A" stroke="#B79CFF" stroke-width="2"/>';
+          }
+          if (i === 0 || (i === peakI && peakI !== lastI)) {
+            var anchor = i === 0 ? 'start' : 'middle';
+            // start label sits BELOW its point (the line rises away above it);
+            // peak label sits above.
+            var labelY = i === 0 ? Y(p.value) + 24 : Y(p.value) - 12;
+            s += '<text class="ch-ptlabel" x="' + X(p.year).toFixed(1) + '" y="' + labelY.toFixed(1) + '" text-anchor="' + anchor + '">' + fmtK(p.value) + '</text>';
+          }
+        });
+
+        // most recent (latest) point — highlighted: glow dot + purple value pill
+        var lp = pts[lastI], lx = X(lp.year), ly = Y(lp.value);
+        s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="10" fill="rgba(139,92,246,0.25)"/>';
+        s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="5" fill="#0A0E1A" stroke="#C4B5FD" stroke-width="2.6"/>';
+        var lbl = fmtK(lp.value);
+        var pw = lbl.length * 8.4 + 20, ph = 24;
+        var px = Math.min(lx - pw / 2, W - padR - pw), py = ly - ph - 14;
+        s += '<rect x="' + px.toFixed(1) + '" y="' + py.toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + ph + '" rx="12" fill="#8B5CF6"/>';
+        s += '<text x="' + (px + pw / 2).toFixed(1) + '" y="' + (py + 16.5).toFixed(1) + '" text-anchor="middle" font-size="13.5" font-weight="800" fill="#FFFFFF" font-family="inherit">' + lbl + '</text>';
+        s += '</svg>';
+        document.getElementById('heroChart').innerHTML = s;
+      }
+      buildHeroChart();
+
+      // ===== What's hot =====
+      var HOT_ICONS = {
+        hot:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+        warn: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+        ok:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>'
+      };
+      var hotHtml = '';
+      DATA.hot.forEach(function (h) {
+        hotHtml += '<a class="hot-item" href="' + h.href + '">' +
+          '<span class="hot-dot ' + h.level + '">' + HOT_ICONS[h.level] + '</span>' +
+          '<span><span class="hot-title">' + h.title + '</span><br/><span class="hot-sub">' + h.sub + '</span></span>' +
+          '<svg class="hot-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>' +
+          '</a>';
+      });
+      document.getElementById('hotList').innerHTML = hotHtml;
+
+      // ===== Next key action / check-in =====
+      document.getElementById('actionTitle').textContent = DATA.nextAction.title;
+      document.getElementById('actionSub').textContent = DATA.nextAction.sub;
+      document.getElementById('actionLink').href = DATA.nextAction.href;
+      document.getElementById('checkinTitle').textContent = DATA.nextCheckin.title;
+      document.getElementById('checkinSub').textContent = DATA.nextCheckin.sub;
+      document.getElementById('checkinLink').href = DATA.nextCheckin.href;
+
+      // ===== Net outcome trend =====
+      var trHtml = '';
+      DATA.outcomes.forEach(function (o) {
+        trHtml += '<div class="trend-row"><span class="k">' + o.label + '</span><span class="v">' + fmtK(o.value) + '</span></div>';
+      });
+      document.getElementById('trendRows').innerHTML = trHtml;
+
+      // sparkline with markers + end label (sqrt scale so 1yr/3yr stay visible)
+      (function () {
+        var W = 260, H = 84, padL = 10, padR = 14, padT = 26, padB = 10;
+        var vals = DATA.outcomes.map(function (o) { return o.value; });
+        var max = Math.sqrt(Math.max.apply(null, vals));
+        function X(i) { return padL + i / (vals.length - 1) * (W - padL - padR); }
+        function Y(v) { return padT + (1 - Math.sqrt(v) / max) * (H - padT - padB); }
+        var line = vals.map(function (v, i) { return (i ? 'L' : 'M') + X(i) + ' ' + Y(v).toFixed(1); }).join(' ');
+        var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Net outcome trend">';
+        s += '<path d="' + line + '" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>';
+        vals.forEach(function (v, i) {
+          s += '<circle cx="' + X(i) + '" cy="' + Y(v).toFixed(1) + '" r="3" fill="#0A0E1A" stroke="#A78BFA" stroke-width="2"/>';
+          // final label sits ABOVE its point, right-aligned to the tile edge,
+          // so it neither overflows nor overlaps the marker
+          var lx = i === 0 ? X(i) - 4 : (i === vals.length - 1 ? W - 2 : X(i));
+          var ly = i === vals.length - 1 ? Y(v) - 10 : Y(v) - 8;
+          var la = i === 0 ? 'start' : (i === vals.length - 1 ? 'end' : 'middle');
+          s += '<text class="ch-ptlabel" x="' + lx + '" y="' + ly + '" text-anchor="' + la + '">' + fmtK(v) + '</text>';
+        });
+        s += '</svg>';
+        document.getElementById('trendSpark').innerHTML = s;
+      })();
+
+      // ===== Drivers =====
+      var DRIVER_ICONS = {
+        'Taxes': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg>',
+        'Social Security': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+        'Medicare': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>',
+        'Withdrawal Strategy': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
+      };
+      var drHtml = '';
+      DATA.drivers.forEach(function (d) {
+        drHtml += '<div class="driver">' +
+          '<div class="driver-top"><span class="driver-ico">' + (DRIVER_ICONS[d.name] || '') + '</span>' +
+          '<span class="driver-name">' + d.name + '</span></div>' +
+          '<div class="driver-amt">+' + fmt$(d.amount) + '</div>' +
+          '<div class="driver-share">' + Math.round(d.share * 100) + '% of total impact</div>' +
+          '<div class="driver-bar"><i style="width:' + Math.round(d.share * 100) + '%"></i></div>' +
+          '</div>';
+      });
+      document.getElementById('drivers').innerHTML = drHtml;
+
+      } // end renderDashboard
+
+      // =================================================================
+      // TEST-DATA MODE (the fixture-backed plan store).
+      //
+      // getPlan(household) reads data/plan-fixtures.json — three TEST
+      // households x three dated engine snapshots. ?hh=H1|H2|H3 selects the
+      // household; the selector below stands in for login. When the real
+      // server-side plan store exists, this block is replaced by a fetch to
+      // it and the selector goes; nothing in renderDashboard changes.
+      //
+      // The label rule: every fixture label carries "(test household)" and is
+      // rendered into the header. Test data is unmistakable IN the data,
+      // never by where it is served.
+      // =================================================================
+      var FIXTURES = 'data/plan-fixtures.json';
+      function getParam(k) { try { return new URLSearchParams(location.search).get(k); } catch (e) { return null; } }
+      var hhId = { H1: 1, H2: 1, H3: 1 }[getParam('hh')] ? getParam('hh') : 'H1';
+
+      fetch(FIXTURES, { cache: 'no-store' })
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (fx) {
+          var hh = fx.households[hhId];
+          var snap = hh.snapshots.current;
+
+          // Household label + selector into the topbar.
+          var who = document.getElementById('whoAmI');
+          if (who) {
+            var opts = Object.keys(fx.households).map(function (k) {
+              return '<option value="' + k + '"' + (k === hhId ? ' selected' : '') + '>' +
+                fx.households[k].label + '</option>';
+            }).join('');
+            who.innerHTML = '<select id="hhSelect" style="background:transparent;color:inherit;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:4px 8px;font:inherit;">' + opts + '</select>';
+            document.getElementById('hhSelect').addEventListener('change', function () {
+              location.search = '?hh=' + this.value;
+            });
+          }
+          document.title = hh.label + ' — EDGE Dashboard';
+
+          renderDashboard(snap.dashboard);
+        })
+        .catch(function () {
+          // Fixture unreachable: say so rather than render invented numbers.
+          document.getElementById('heroValue').textContent = '—';
+          var who = document.getElementById('whoAmI');
+          if (who) who.textContent = 'Plan data unavailable';
+        });
+
+      if (false) {  // Paul's original live/demo paths, kept for the cut-over
+        fetch(DASHBOARD_ENDPOINT)
+          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+          .then(function (j) { renderDashboard(j && j.projectedLiquidNetWorth ? j : DEMO_DATA); })
+          .catch(function () { renderDashboard(DEMO_DATA); });
+        renderDashboard(DEMO_DATA);
+      }
+
+      // =====================================================================
+      // ASK EDGE — CHAT (connect-ready, NOT wired to a model yet).
+      //
+      // Jae / Paul: to connect, implement the endpoint below. The panel
+      // POSTs:  { messages: [{role:'user'|'assistant', content:'…'}, …],
+      //           context: { page:'dashboard', access:'subscriber' } }
+      // and expects JSON back:  { reply: '…' }
+      // Then set CHAT_CONFIG.connected = true — nothing else changes.
+      // While connected=false, the panel answers with a canned preview reply.
+      // =====================================================================
+      var CHAT_CONFIG = {
+        endpoint: '/api/edge-chat',
+        connected: false,               // <— flip when the endpoint is live
+        context: { page: 'dashboard', access: 'subscriber' }
+      };
+
+      // Mascot poses: waving = idle; abacus = "thinking" while a reply is
+      // being generated. The header swaps to the abacus pose during the wait
+      // and back to the wave when the reply lands (real images only).
+      var MASCOT_IDLE = 'assets/edge-wave.png';
+      var MASCOT_THINKING = 'assets/edge-abacus.png';
+      var thinkingPoseReady = false;
+      (function () {
+        var p = new Image();
+        p.onload = function () { thinkingPoseReady = true; };
+        p.src = MASCOT_THINKING;
+      })();
+      function setHeadMascot(src) {
+        var el = document.querySelector('.chat-head img.mascot');
+        if (el) el.src = src;
+      }
+
+      var chatHistory = [];             // {role, content}
+      var panel = document.getElementById('chatPanel');
+      var btn = document.getElementById('askEdgeBtn');
+      var msgs = document.getElementById('chatMsgs');
+      var input = document.getElementById('chatInput');
+      var sendBtn = document.getElementById('chatSend');
+
+      function addMsg(role, text) {
+        var el = document.createElement('div');
+        el.className = 'msg ' + (role === 'user' ? 'user' : 'edge');
+        el.textContent = text;
+        msgs.appendChild(el);
+        msgs.scrollTop = msgs.scrollHeight;
+        return el;
+      }
+
+      function openChat() {
+        panel.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        if (!chatHistory.length) {
+          addMsg('assistant', 'Hi, I’m Edge! 👋 Ask me anything about your plan — your trajectory, what’s hot right now, or what to do next.');
+          chatHistory.push({ role: 'assistant', content: '(greeting)' });
+        }
+        input.focus();
+      }
+      function closeChat() {
+        panel.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      btn.addEventListener('click', function () {
+        panel.classList.contains('open') ? closeChat() : openChat();
+      });
+      document.getElementById('chatClose').addEventListener('click', closeChat);
+
+      document.getElementById('chatForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        var text = input.value.trim();
+        if (!text) return;
+        input.value = '';
+        addMsg('user', text);
+        chatHistory.push({ role: 'user', content: text });
+        sendBtn.disabled = true;
+
+        var typing = addMsg('assistant', 'Edge is thinking…');
+        typing.classList.add('typing');
+        if (thinkingPoseReady) setHeadMascot(MASCOT_THINKING);
+
+        function finish(reply) {
+          typing.classList.remove('typing');
+          typing.textContent = reply;
+          chatHistory.push({ role: 'assistant', content: reply });
+          setHeadMascot(MASCOT_IDLE);
+          sendBtn.disabled = false;
+          input.focus();
+          msgs.scrollTop = msgs.scrollHeight;
+        }
+
+        if (CHAT_CONFIG.connected) {
+          // Live path — used once the endpoint exists.
+          fetch(CHAT_CONFIG.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ messages: chatHistory.filter(function (m) { return m.content !== '(greeting)'; }), context: CHAT_CONFIG.context })
+          }).then(function (r) { return r.json(); })
+            .then(function (j) { finish(j.reply || 'Sorry — I didn’t catch that. Try again?'); })
+            .catch(function () { finish('I couldn’t reach my brain just now. Please try again in a moment.'); });
+        } else {
+          // Preview path — canned reply until the endpoint is connected.
+          setTimeout(function () {
+            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I’ll answer questions about your plan, your Heat Map, and your next best move.');
+          }, 700);
+        }
+      });
+
+      // Esc closes the chat
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && panel.classList.contains('open')) closeChat();
+      });
+
+      // ===== Real mascot auto-swap =====
+      // The inline SVG mascot is a stand-in. Drop the official character
+      // render (transparent background) at assets/edge-wave.png and every
+      // mascot on this page upgrades to it automatically — no code change.
+      (function () {
+        var probe = new Image();
+        probe.onload = function () {
+          Array.prototype.forEach.call(document.querySelectorAll('svg.mascot'), function (svg) {
+            var img = document.createElement('img');
+            img.className = 'mascot';
+            img.src = probe.src;
+            img.alt = '';
+            svg.parentNode.replaceChild(img, svg);
+          });
+        };
+        probe.src = 'assets/edge-wave.png';
+      })();
+    })();
+  </script>
+  <script>
+    // Carry the test-household selection across the two pages.
+    (function carryHH() {
+      try {
+        var hh = new URLSearchParams(location.search).get('hh');
+        if (!hh) return;
+        document.querySelectorAll('a[href="dashboard.html"], a[href="heatmap.html"]').forEach(function (a) {
+          a.href = a.getAttribute('href') + '?hh=' + hh;
+        });
+      } catch (e) {}
+    })();
+  </script>
+</body>
+</html>

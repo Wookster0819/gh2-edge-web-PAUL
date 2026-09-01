@@ -1,0 +1,1661 @@
+{
+  "fixture": true,
+  "note": "TEST DATA. Three test households, engine-generated at three dated snapshots. The label rule: every household label carries \"(test household)\" and renders wherever the name renders. Deltas between snapshots are real engine deltas.",
+  "generated": "2026-09-01T05:04:51.361Z",
+  "source": "https://edge.gh2benefits.com/api/optimize",
+  "snapshotDesign": [
+    {
+      "id": "signup",
+      "asOf": "2026-03-01",
+      "marketFactor": 0.9615384615384615
+    },
+    {
+      "id": "lastMonth",
+      "asOf": "2026-08-01",
+      "marketFactor": 0.9900990099009901
+    },
+    {
+      "id": "current",
+      "asOf": "2026-09-01",
+      "marketFactor": 1
+    }
+  ],
+  "households": {
+    "H1": {
+      "label": "Mahoney (test household)",
+      "profile": {
+        "primary": {
+          "name": "Paul",
+          "age": 62,
+          "gender": "male",
+          "healthScore": 6
+        },
+        "spouse": {
+          "name": "Anne",
+          "age": 60,
+          "gender": "female",
+          "healthScore": 7
+        },
+        "filingStatus": "mfj",
+        "stateOfResidence": "NY",
+        "zipCode": "10001"
+      },
+      "accounts": [
+        {
+          "id": "q1",
+          "name": "Paul Trad 401(k)",
+          "type": "qualified",
+          "owner": "primary",
+          "balance": 720000
+        },
+        {
+          "id": "q2",
+          "name": "Anne Trad IRA",
+          "type": "qualified",
+          "owner": "spouse",
+          "balance": 380000
+        },
+        {
+          "id": "r1",
+          "name": "Paul Roth IRA",
+          "type": "roth",
+          "owner": "primary",
+          "balance": 145000
+        },
+        {
+          "id": "n1",
+          "name": "Joint Taxable",
+          "type": "taxable",
+          "owner": "joint",
+          "balance": 220000
+        },
+        {
+          "id": "c1",
+          "name": "Cash",
+          "type": "cash",
+          "owner": "joint",
+          "balance": 35000
+        }
+      ],
+      "expenses": {
+        "essential": 67200,
+        "discretionary": 28800,
+        "healthcare": 0,
+        "debts": []
+      },
+      "snapshots": {
+        "signup": {
+          "asOf": "2026-03-01",
+          "marketFactor": 0.9615384615384615,
+          "dashboard": {
+            "projectedLiquidNetWorth": 7036701,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 1467300
+              },
+              {
+                "year": 2028,
+                "value": 1513841
+              },
+              {
+                "year": 2030,
+                "value": 1549658
+              },
+              {
+                "year": 2032,
+                "value": 1570324
+              },
+              {
+                "year": 2034,
+                "value": 1614608
+              },
+              {
+                "year": 2036,
+                "value": 1822591
+              },
+              {
+                "year": 2038,
+                "value": 2075745
+              },
+              {
+                "year": 2040,
+                "value": 2353335
+              },
+              {
+                "year": 2042,
+                "value": 2652453
+              },
+              {
+                "year": 2044,
+                "value": 2986848
+              },
+              {
+                "year": 2046,
+                "value": 3359464
+              },
+              {
+                "year": 2048,
+                "value": 3772597
+              },
+              {
+                "year": 2050,
+                "value": 4231001
+              },
+              {
+                "year": 2052,
+                "value": 4740496
+              },
+              {
+                "year": 2054,
+                "value": 5307829
+              },
+              {
+                "year": 2056,
+                "value": 5941217
+              },
+              {
+                "year": 2058,
+                "value": 6650172
+              },
+              {
+                "year": 2059,
+                "value": 7036701
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $29,687 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$29,687 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "April 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 23416
+              },
+              {
+                "label": "3 Year",
+                "value": 65989
+              },
+              {
+                "label": "Lifetime",
+                "value": 7036701
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 576320,
+                "share": 0.18
+              },
+              {
+                "name": "Social Security",
+                "amount": 3163705,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 275736,
+                "share": 0.09
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 1213177,
+                "share": 0.38
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Roth First",
+            "requiredIRR": -0.0125,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.0734,
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 69
+            },
+            "spending": {
+              "essential": 67200,
+              "discretionary": 28800,
+              "stated": 96000,
+              "planSpendsYearOne": 67200
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 29687,
+              "total": 89061
+            }
+          }
+        },
+        "lastMonth": {
+          "asOf": "2026-08-01",
+          "marketFactor": 0.9900990099009901,
+          "dashboard": {
+            "projectedLiquidNetWorth": 7343345,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 1511902
+              },
+              {
+                "year": 2028,
+                "value": 1564526
+              },
+              {
+                "year": 2030,
+                "value": 1607782
+              },
+              {
+                "year": 2032,
+                "value": 1636326
+              },
+              {
+                "year": 2034,
+                "value": 1690995
+              },
+              {
+                "year": 2036,
+                "value": 1909394
+              },
+              {
+                "year": 2038,
+                "value": 2174385
+              },
+              {
+                "year": 2040,
+                "value": 2464412
+              },
+              {
+                "year": 2042,
+                "value": 2776881
+              },
+              {
+                "year": 2044,
+                "value": 3126224
+              },
+              {
+                "year": 2046,
+                "value": 3514288
+              },
+              {
+                "year": 2048,
+                "value": 3944559
+              },
+              {
+                "year": 2050,
+                "value": 4421986
+              },
+              {
+                "year": 2052,
+                "value": 4952635
+              },
+              {
+                "year": 2054,
+                "value": 5543530
+              },
+              {
+                "year": 2056,
+                "value": 6203121
+              },
+              {
+                "year": 2058,
+                "value": 6941019
+              },
+              {
+                "year": 2059,
+                "value": 7343345
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $29,687 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$29,687 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 26360
+              },
+              {
+                "label": "3 Year",
+                "value": 75416
+              },
+              {
+                "label": "Lifetime",
+                "value": 7343345
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 613960,
+                "share": 0.19
+              },
+              {
+                "name": "Social Security",
+                "amount": 3163705,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 275736,
+                "share": 0.09
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 1250378,
+                "share": 0.4
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Roth First",
+            "requiredIRR": -0.0133,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.0687,
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 69
+            },
+            "spending": {
+              "essential": 67200,
+              "discretionary": 28800,
+              "stated": 96000,
+              "planSpendsYearOne": 67200
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 29687,
+              "total": 89061
+            }
+          }
+        },
+        "current": {
+          "asOf": "2026-09-01",
+          "marketFactor": 1,
+          "dashboard": {
+            "projectedLiquidNetWorth": 7472155,
+            "throughAge": 95,
+            "deltaSinceLastMonth": 128810,
+            "deltaSinceSignup": 435454,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 1527365
+              },
+              {
+                "year": 2028,
+                "value": 1582096
+              },
+              {
+                "year": 2030,
+                "value": 1627932
+              },
+              {
+                "year": 2032,
+                "value": 1659211
+              },
+              {
+                "year": 2034,
+                "value": 1717475
+              },
+              {
+                "year": 2036,
+                "value": 1901015
+              },
+              {
+                "year": 2038,
+                "value": 2170635
+              },
+              {
+                "year": 2040,
+                "value": 2465963
+              },
+              {
+                "year": 2042,
+                "value": 2784786
+              },
+              {
+                "year": 2044,
+                "value": 3141575
+              },
+              {
+                "year": 2046,
+                "value": 3538297
+              },
+              {
+                "year": 2048,
+                "value": 3978740
+              },
+              {
+                "year": 2050,
+                "value": 4468080
+              },
+              {
+                "year": 2052,
+                "value": 5012633
+              },
+              {
+                "year": 2054,
+                "value": 5619719
+              },
+              {
+                "year": 2056,
+                "value": 6298091
+              },
+              {
+                "year": 2058,
+                "value": 7057720
+              },
+              {
+                "year": 2059,
+                "value": 7472155
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $29,687 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$29,687 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 27380
+              },
+              {
+                "label": "3 Year",
+                "value": 78684
+              },
+              {
+                "label": "Lifetime",
+                "value": 7472155
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 617052,
+                "share": 0.19
+              },
+              {
+                "name": "Social Security",
+                "amount": 3207307,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 275736,
+                "share": 0.09
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 1217593,
+                "share": 0.38
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Roth First",
+            "requiredIRR": -0.0227,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.0672,
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            },
+            "spending": {
+              "essential": 67200,
+              "discretionary": 28800,
+              "stated": 96000,
+              "planSpendsYearOne": 67200
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 29687,
+              "total": 89061
+            }
+          }
+        }
+      }
+    },
+    "H2": {
+      "label": "Reyes (test household)",
+      "profile": {
+        "primary": {
+          "name": "Linda",
+          "age": 62,
+          "gender": "female",
+          "healthScore": 7
+        },
+        "filingStatus": "single",
+        "stateOfResidence": "AZ",
+        "zipCode": "85001"
+      },
+      "accounts": [
+        {
+          "id": "q1",
+          "name": "Trad IRA",
+          "type": "qualified",
+          "owner": "primary",
+          "balance": 340200
+        },
+        {
+          "id": "r1",
+          "name": "Roth IRA",
+          "type": "roth",
+          "owner": "primary",
+          "balance": 47800
+        },
+        {
+          "id": "c1",
+          "name": "Cash",
+          "type": "cash",
+          "owner": "primary",
+          "balance": 22150
+        }
+      ],
+      "expenses": {
+        "essential": 29400,
+        "discretionary": 12600,
+        "healthcare": 0,
+        "debts": []
+      },
+      "snapshots": {
+        "signup": {
+          "asOf": "2026-03-01",
+          "marketFactor": 0.9615384615384615,
+          "dashboard": {
+            "projectedLiquidNetWorth": 1359008,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 389972
+              },
+              {
+                "year": 2028,
+                "value": 389799
+              },
+              {
+                "year": 2030,
+                "value": 420782
+              },
+              {
+                "year": 2032,
+                "value": 454768
+              },
+              {
+                "year": 2034,
+                "value": 492100
+              },
+              {
+                "year": 2036,
+                "value": 533164
+              },
+              {
+                "year": 2038,
+                "value": 578394
+              },
+              {
+                "year": 2040,
+                "value": 626632
+              },
+              {
+                "year": 2042,
+                "value": 679046
+              },
+              {
+                "year": 2044,
+                "value": 735974
+              },
+              {
+                "year": 2046,
+                "value": 797759
+              },
+              {
+                "year": 2048,
+                "value": 864825
+              },
+              {
+                "year": 2050,
+                "value": 937712
+              },
+              {
+                "year": 2052,
+                "value": 1017096
+              },
+              {
+                "year": 2054,
+                "value": 1103735
+              },
+              {
+                "year": 2056,
+                "value": 1198616
+              },
+              {
+                "year": 2058,
+                "value": 1302877
+              },
+              {
+                "year": 2059,
+                "value": 1359008
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $22,097 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$22,097 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "April 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -6386
+              },
+              {
+                "label": "3 Year",
+                "value": 14963
+              },
+              {
+                "label": "Lifetime",
+                "value": 1359008
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 66812,
+                "share": 0.06
+              },
+              {
+                "name": "Social Security",
+                "amount": 1138178,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 141022,
+                "share": 0.12
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 599015,
+                "share": 0.53
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Roth First",
+            "requiredIRR": 0.0195,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.1047,
+            "ssClaim": {
+              "primary": 64,
+              "spouse": null
+            },
+            "spending": {
+              "essential": 29400,
+              "discretionary": 12600,
+              "stated": 42000,
+              "planSpendsYearOne": 29400
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 22097,
+              "total": 66291
+            }
+          }
+        },
+        "lastMonth": {
+          "asOf": "2026-08-01",
+          "marketFactor": 0.9900990099009901,
+          "dashboard": {
+            "projectedLiquidNetWorth": 1417476,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 413278
+              },
+              {
+                "year": 2028,
+                "value": 443895
+              },
+              {
+                "year": 2030,
+                "value": 475335
+              },
+              {
+                "year": 2032,
+                "value": 509505
+              },
+              {
+                "year": 2034,
+                "value": 546694
+              },
+              {
+                "year": 2036,
+                "value": 587226
+              },
+              {
+                "year": 2038,
+                "value": 631343
+              },
+              {
+                "year": 2040,
+                "value": 679681
+              },
+              {
+                "year": 2042,
+                "value": 732505
+              },
+              {
+                "year": 2044,
+                "value": 789835
+              },
+              {
+                "year": 2046,
+                "value": 852071
+              },
+              {
+                "year": 2048,
+                "value": 919695
+              },
+              {
+                "year": 2050,
+                "value": 993269
+              },
+              {
+                "year": 2052,
+                "value": 1073429
+              },
+              {
+                "year": 2054,
+                "value": 1160833
+              },
+              {
+                "year": 2056,
+                "value": 1256402
+              },
+              {
+                "year": 2058,
+                "value": 1361188
+              },
+              {
+                "year": 2059,
+                "value": 1417476
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $22,097 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$22,097 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 14993
+              },
+              {
+                "label": "3 Year",
+                "value": 46013
+              },
+              {
+                "label": "Lifetime",
+                "value": 1417476
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 27662,
+                "share": 0.03
+              },
+              {
+                "name": "Social Security",
+                "amount": 1037290,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 141022,
+                "share": 0.14
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 685118,
+                "share": 0.66
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Qualified First",
+            "requiredIRR": 0.0266,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.1031,
+            "ssClaim": {
+              "primary": 62,
+              "spouse": null
+            },
+            "spending": {
+              "essential": 29400,
+              "discretionary": 12600,
+              "stated": 42000,
+              "planSpendsYearOne": 29400
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 22097,
+              "total": 43871
+            }
+          }
+        },
+        "current": {
+          "asOf": "2026-09-01",
+          "marketFactor": 1,
+          "dashboard": {
+            "projectedLiquidNetWorth": 1448332,
+            "throughAge": 95,
+            "deltaSinceLastMonth": 30856,
+            "deltaSinceSignup": 89324,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 417373
+              },
+              {
+                "year": 2028,
+                "value": 448548
+              },
+              {
+                "year": 2030,
+                "value": 480623
+              },
+              {
+                "year": 2032,
+                "value": 515514
+              },
+              {
+                "year": 2034,
+                "value": 553522
+              },
+              {
+                "year": 2036,
+                "value": 594984
+              },
+              {
+                "year": 2038,
+                "value": 640160
+              },
+              {
+                "year": 2040,
+                "value": 689700
+              },
+              {
+                "year": 2042,
+                "value": 743833
+              },
+              {
+                "year": 2044,
+                "value": 802582
+              },
+              {
+                "year": 2046,
+                "value": 866416
+              },
+              {
+                "year": 2048,
+                "value": 935838
+              },
+              {
+                "year": 2050,
+                "value": 1011438
+              },
+              {
+                "year": 2052,
+                "value": 1093852
+              },
+              {
+                "year": 2054,
+                "value": 1183797
+              },
+              {
+                "year": 2056,
+                "value": 1282234
+              },
+              {
+                "year": 2058,
+                "value": 1390264
+              },
+              {
+                "year": 2059,
+                "value": 1448332
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $22,097 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$22,097 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 15262
+              },
+              {
+                "label": "3 Year",
+                "value": 46878
+              },
+              {
+                "label": "Lifetime",
+                "value": 1448332
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 29307,
+                "share": 0.03
+              },
+              {
+                "name": "Social Security",
+                "amount": 1037290,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 141022,
+                "share": 0.14
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 686653,
+                "share": 0.66
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Qualified First",
+            "requiredIRR": 0.0258,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.1008,
+            "ssClaim": {
+              "primary": 62,
+              "spouse": null
+            },
+            "spending": {
+              "essential": 29400,
+              "discretionary": 12600,
+              "stated": 42000,
+              "planSpendsYearOne": 29400
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 22097,
+              "total": 43871
+            }
+          }
+        }
+      }
+    },
+    "H3": {
+      "label": "Henderson (test household)",
+      "profile": {
+        "primary": {
+          "name": "Robert",
+          "age": 71,
+          "gender": "male",
+          "healthScore": 4
+        },
+        "spouse": {
+          "name": "Sandra",
+          "age": 68,
+          "gender": "female",
+          "healthScore": 5
+        },
+        "filingStatus": "mfj",
+        "stateOfResidence": "OH",
+        "zipCode": "44001"
+      },
+      "accounts": [
+        {
+          "id": "q1",
+          "name": "Trad IRA P",
+          "type": "qualified",
+          "owner": "primary",
+          "balance": 250000
+        },
+        {
+          "id": "q2",
+          "name": "Trad IRA S",
+          "type": "qualified",
+          "owner": "spouse",
+          "balance": 150000
+        },
+        {
+          "id": "r1",
+          "name": "Roth",
+          "type": "roth",
+          "owner": "primary",
+          "balance": 45000
+        },
+        {
+          "id": "n1",
+          "name": "Taxable",
+          "type": "taxable",
+          "owner": "joint",
+          "balance": 40000
+        },
+        {
+          "id": "c1",
+          "name": "Cash",
+          "type": "cash",
+          "owner": "joint",
+          "balance": 15000
+        }
+      ],
+      "expenses": {
+        "essential": 63000,
+        "discretionary": 27000,
+        "healthcare": 0,
+        "debts": []
+      },
+      "snapshots": {
+        "signup": {
+          "asOf": "2026-03-01",
+          "marketFactor": 0.9615384615384615,
+          "dashboard": {
+            "projectedLiquidNetWorth": 2609462,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 491806
+              },
+              {
+                "year": 2028,
+                "value": 531395
+              },
+              {
+                "year": 2030,
+                "value": 622822
+              },
+              {
+                "year": 2032,
+                "value": 727327
+              },
+              {
+                "year": 2034,
+                "value": 846707
+              },
+              {
+                "year": 2036,
+                "value": 983005
+              },
+              {
+                "year": 2038,
+                "value": 1137890
+              },
+              {
+                "year": 2040,
+                "value": 1313405
+              },
+              {
+                "year": 2042,
+                "value": 1512315
+              },
+              {
+                "year": 2044,
+                "value": 1737688
+              },
+              {
+                "year": 2046,
+                "value": 1992923
+              },
+              {
+                "year": 2048,
+                "value": 2281916
+              },
+              {
+                "year": 2050,
+                "value": 2609462
+              }
+            ],
+            "hot": [
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "No action required",
+              "sub": "The plan holds as computed",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "April 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 10570
+              },
+              {
+                "label": "3 Year",
+                "value": 83771
+              },
+              {
+                "label": "Lifetime",
+                "value": 2609462
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 29885,
+                "share": 0.01
+              },
+              {
+                "name": "Social Security",
+                "amount": 2525405,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 195750,
+                "share": 0.08
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 33390,
+                "share": 0.01
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Qualified First",
+            "requiredIRR": -0.1,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.0734,
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            },
+            "spending": {
+              "essential": 63000,
+              "discretionary": 27000,
+              "stated": 90000,
+              "planSpendsYearOne": 63000
+            },
+            "roth": {
+              "years": 0,
+              "firstYear": 0,
+              "total": 0
+            }
+          }
+        },
+        "lastMonth": {
+          "asOf": "2026-08-01",
+          "marketFactor": 0.9900990099009901,
+          "dashboard": {
+            "projectedLiquidNetWorth": 2674603,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 506571
+              },
+              {
+                "year": 2028,
+                "value": 548173
+              },
+              {
+                "year": 2030,
+                "value": 641888
+              },
+              {
+                "year": 2032,
+                "value": 748993
+              },
+              {
+                "year": 2034,
+                "value": 871328
+              },
+              {
+                "year": 2036,
+                "value": 1010978
+              },
+              {
+                "year": 2038,
+                "value": 1169486
+              },
+              {
+                "year": 2040,
+                "value": 1349097
+              },
+              {
+                "year": 2042,
+                "value": 1552638
+              },
+              {
+                "year": 2044,
+                "value": 1783158
+              },
+              {
+                "year": 2046,
+                "value": 2044177
+              },
+              {
+                "year": 2048,
+                "value": 2339684
+              },
+              {
+                "year": 2050,
+                "value": 2674603
+              }
+            ],
+            "hot": [
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "No action required",
+              "sub": "The plan holds as computed",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 11544
+              },
+              {
+                "label": "3 Year",
+                "value": 86892
+              },
+              {
+                "label": "Lifetime",
+                "value": 2674603
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 32057,
+                "share": 0.01
+              },
+              {
+                "name": "Social Security",
+                "amount": 2525405,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 195750,
+                "share": 0.08
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 33390,
+                "share": 0.01
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Qualified First",
+            "requiredIRR": -0.1,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.0711,
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            },
+            "spending": {
+              "essential": 63000,
+              "discretionary": 27000,
+              "stated": 90000,
+              "planSpendsYearOne": 63000
+            },
+            "roth": {
+              "years": 0,
+              "firstYear": 0,
+              "total": 0
+            }
+          }
+        },
+        "current": {
+          "asOf": "2026-09-01",
+          "marketFactor": 1,
+          "dashboard": {
+            "projectedLiquidNetWorth": 2697092,
+            "throughAge": 95,
+            "deltaSinceLastMonth": 22489,
+            "deltaSinceSignup": 87630,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 511690
+              },
+              {
+                "year": 2028,
+                "value": 553990
+              },
+              {
+                "year": 2030,
+                "value": 648498
+              },
+              {
+                "year": 2032,
+                "value": 756504
+              },
+              {
+                "year": 2034,
+                "value": 879863
+              },
+              {
+                "year": 2036,
+                "value": 1020648
+              },
+              {
+                "year": 2038,
+                "value": 1180411
+              },
+              {
+                "year": 2040,
+                "value": 1361437
+              },
+              {
+                "year": 2042,
+                "value": 1566568
+              },
+              {
+                "year": 2044,
+                "value": 1798866
+              },
+              {
+                "year": 2046,
+                "value": 2061874
+              },
+              {
+                "year": 2048,
+                "value": 2359628
+              },
+              {
+                "year": 2050,
+                "value": 2697092
+              }
+            ],
+            "hot": [
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "No action required",
+              "sub": "The plan holds as computed",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 11882
+              },
+              {
+                "label": "3 Year",
+                "value": 87974
+              },
+              {
+                "label": "Lifetime",
+                "value": 2697092
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes",
+                "amount": 32854,
+                "share": 0.01
+              },
+              {
+                "name": "Social Security",
+                "amount": 2525405,
+                "share": 1
+              },
+              {
+                "name": "Medicare",
+                "amount": 195750,
+                "share": 0.08
+              },
+              {
+                "name": "Withdrawal Strategy",
+                "amount": 33390,
+                "share": 0.01
+              }
+            ]
+          },
+          "chatGrounding": {
+            "strategy": "Bengen 4% Rule + Qualified First",
+            "requiredIRR": -0.1,
+            "feasibilityTier": "well_funded",
+            "requiredIRRAtStatedSpending": 0.0711,
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            },
+            "spending": {
+              "essential": 63000,
+              "discretionary": 27000,
+              "stated": 90000,
+              "planSpendsYearOne": 63000
+            },
+            "roth": {
+              "years": 0,
+              "firstYear": 0,
+              "total": 0
+            }
+          }
+        }
+      }
+    }
+  }
+}

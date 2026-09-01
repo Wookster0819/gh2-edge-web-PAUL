@@ -55,7 +55,12 @@
       --hero-grad-start: #3F5191; --hero-grad-end: #5B6EAE; --hero-accent: #F2C28B; --section-accent: #D4A5A5;
     }
 
-    /* Theme selector */
+    /* Theme selector — INTERNAL. Hidden from customers by default.
+       Reveal it with ?design=1 on the URL; that also remembers the choice
+       for this browser, so you keep the tool and visitors never see it. */
+    .theme-bar { display: none !important; }
+    body.design-mode .theme-bar { display: flex !important; }
+
     .theme-bar {
       position: sticky; top: 0; z-index: 50;
       background: rgba(255,255,255,0.92);
@@ -192,6 +197,18 @@
       font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
       padding: 5px 12px; border-radius: 999px;
     }
+
+    /* ===== Commerce OFF until the store opens (same switch as ballpark) =====
+       What a tier DOES stays visible. What it COSTS does not: the price, and
+       the value-for-what-you-pay ratio, which reconstructs the price from the
+       savings figure in one division. The mailto buttons are selling, so they
+       go too. ?upsell=1 restores all of it; ?upsell=0 hides it again. */
+    body:not(.upsell-on) .tier-price,
+    body:not(.upsell-on) .tier-ratio,
+    body:not(.upsell-on) .tier-cta { display: none !important; }
+    body:not(.upsell-on) .pt-sell { display: none; }
+    body.upsell-on .pt-tell { display: none; }
+
     .tier-name { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
     .tier-tagline { font-size: 13px; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4; min-height: 36px; }
     .tier-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
@@ -395,14 +412,14 @@
     </div>
 
     <div class="pricing-intro">
-      <h2>Pick your tier</h2>
+      <h2><span class="pt-tell">The three tiers</span><span class="pt-sell">Pick your tier</span></h2>
       <p>All consumer tiers include the full federal + state + Medicare tax math, year-by-year projections, and a downloadable PDF plan.</p>
     </div>
 
     <div class="tier-grid">
-      <!-- Jae's Corner -->
-      <div class="tier-card">
-        <h3 class="tier-name">Jae&rsquo;s Corner</h3>
+      <!-- Tier 1 -->
+      <div class="tier-card" data-tier="Tier 1">
+        <h3 class="tier-name">Tier 1 &mdash; Quick Check</h3>
         <div class="tier-price">
           <span class="tier-price-amount">$50</span>
           <span class="tier-price-unit">/ year</span>
@@ -426,13 +443,13 @@
           <li><strong>Best for:</strong> anyone retired, planning to retire, or curious</li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=Jae%27s%20Corner%20inquiry" class="tier-cta secondary">Get Jae&rsquo;s Corner</a>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%201%20Quick%20Check%20inquiry" class="tier-cta secondary">Get Quick Check</a>
       </div>
 
       <!-- GH2 EDGE -->
-      <div class="tier-card popular">
+      <div class="tier-card popular" data-tier="Tier 2">
         <span class="tier-badge">Most popular</span>
-        <h3 class="tier-name">GH2 EDGE&trade;</h3>
+        <h3 class="tier-name">Tier 2 &mdash; Full Plan</h3>
         <div class="tier-price">
           <span class="tier-price-amount">$250</span>
           <span class="tier-price-unit">/ year</span>
@@ -453,15 +470,16 @@
         <ul class="tier-features">
           <li>All 80 retirement strategies ranked for your household</li>
           <li>Email when the answer changes (market, tax law, life event)</li>
+          <li><strong>Coming for subscribers &mdash; the dashboard:</strong> your projected liquid net worth, the drivers preserving it, your next key action and check-in date, the heat map, and Ask EDGE chat</li>
           <li><strong>Best for:</strong> $500K&ndash;$2M households with life events ahead</li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry" class="tier-cta primary">Get GH2 EDGE&trade;</a>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%202%20Full%20Plan%20inquiry" class="tier-cta primary">Get Full Plan</a>
       </div>
 
-      <!-- GH2 EDGE Ultra -->
-      <div class="tier-card">
-        <h3 class="tier-name">GH2 EDGE&trade; Ultra</h3>
+      <!-- Tier 3 -->
+      <div class="tier-card" data-tier="Tier 3">
+        <h3 class="tier-name">Tier 3 &mdash; Concierge Plan</h3>
         <div class="tier-price">
           <span class="tier-price-amount">$2,500</span>
           <span class="tier-price-unit">/ year</span>
@@ -485,7 +503,7 @@
           <li><strong>Best for:</strong> $2M+ households with IRMAA and SECURE-Act-heir-tax exposure</li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20Ultra%20inquiry" class="tier-cta secondary">Get GH2 EDGE&trade; Ultra</a>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%203%20Concierge%20inquiry" class="tier-cta secondary">Get Concierge Plan</a>
       </div>
     </div>
 
@@ -555,13 +573,25 @@
     </div>
 
     <footer>
-      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Jae&rsquo;s Corner, 80+ for GH2 EDGE&trade;, 80+ proprietary for Ultra), how often the plan is rerun (annual / quarterly / continuous), and whether the firm gets the Strategy Builder and full grid access.</p>
+      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Tier&nbsp;1, 80+ for Tier&nbsp;2, 80+ proprietary for Tier&nbsp;3), how often the plan is rerun (annual / quarterly / continuous), and whether the firm gets the Strategy Builder and full grid access.</p>
       <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
     </footer>
   </div>
 
   <script>
     (function () {
+      // ===== Design-preview bar: internal only =====
+      // Off for everyone. ?design=1 turns it on and remembers it for this
+      // browser; ?design=0 turns it back off. Customers never see the menu.
+      try {
+        var dq = new URLSearchParams(location.search).get('design');
+        if (dq === '1') localStorage.setItem('gh2_design_mode', '1');
+        if (dq === '0') localStorage.removeItem('gh2_design_mode');
+        if (localStorage.getItem('gh2_design_mode') === '1') {
+          document.body.classList.add('design-mode');
+        }
+      } catch (e) { /* private mode: bar stays hidden, which is the safe default */ }
+
       // ===== Theme selector (shared with ballpark.html via localStorage) =====
       var THEME_KEY = 'gh2_ballpark_theme';
       var savedTheme = '';
@@ -638,6 +668,149 @@
         prompt.classList.add('visible');
       }
     })();
+  </script>
+  <!-- ===================================================================
+       Shopify catalogue binding.
+
+       The three consumer cards carry data-tier="Tier 1|2|3". Shopify holds
+       the same three products, titled "GH2 EDGE(tm) - Tier N: ...". This
+       matches on the tier number rather than the product handle, because
+       the handles are auto-generated from titles containing a trademark
+       symbol and an em dash, and that encoding is not worth depending on.
+
+       Until the store is public, /products.json returns 401 and nothing
+       here runs. The prices printed in the markup are what the page has
+       always said, so the page reads correctly either way.
+
+       WHAT DOES NOT HAPPEN ON FAILURE: no price is invented, and no
+       purchase is offered against a price we could not confirm. If the
+       catalogue is unreachable the buy button falls back to a contact
+       link -- because a stale price someone can click is worse than no
+       button at all.
+       =================================================================== -->
+  <script>
+  (function () {
+    var SHOP = '43itxk-wa.myshopify.com';
+
+      /* Shopify is the source of truth for what the tiers say and cost
+         (Founder, 2026-08-31: "just stay w shopify, I will modify later on
+         that end"). CONTENT -- titles, descriptions, prices -- syncs from the
+         store on every load and fails silently while the store is locked
+         (products.json returns 401 until launch), so the hardcoded copy below
+         is only the fallback. Edits made in the Shopify admin reach the page
+         with no deploy. This supersedes the earlier don't-call-the-store note:
+         that guarded the BUY binding, which still stays behind ?shopify=1. */
+    // Commerce switch, same key as ballpark: ?upsell=1 persists, ?upsell=0 clears.
+    try {
+      var uq = new URLSearchParams(location.search).get('upsell');
+      if (uq === '1') localStorage.setItem('gh2_upsell', '1');
+      if (uq === '0') localStorage.removeItem('gh2_upsell');
+      if (localStorage.getItem('gh2_upsell') === '1') document.body.classList.add('upsell-on');
+    } catch (e) { /* storage blocked — commerce simply stays off */ }
+
+    // ---- content sync: Shopify owns the words and the numbers ----------
+      function shopifyLines(html) {
+        try {
+          var doc = new DOMParser().parseFromString(html || '', 'text/html');
+          var nodes = doc.querySelectorAll('li, p');
+          var out = [];
+          (nodes.length ? [].slice.call(nodes) : [doc.body]).forEach(function (n) {
+            n.textContent.split(/\n+/).forEach(function (t) {
+              t = t.trim(); if (t) out.push(t);
+            });
+          });
+          return out;
+        } catch (e) { return []; }
+      }
+      fetch('https://' + SHOP + '/products.json?limit=50', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data || !data.products) return;   // locked store: keep the fallback copy
+          document.querySelectorAll('.tier-card[data-tier]').forEach(function (card) {
+            var tier = card.getAttribute('data-tier');           // "Tier 1"
+            var m = data.products.filter(function (p) {
+              return (p.title || '').indexOf(tier) !== -1;
+            })[0];
+            if (!m) return;
+
+            var nameEl = card.querySelector('.tier-name');
+            if (nameEl && m.title) nameEl.textContent = m.title;
+
+            var lines = shopifyLines(m.body_html);
+            var ul = card.querySelector('.tier-features');
+            if (ul && lines.length) {
+              ul.textContent = '';
+              lines.forEach(function (t) {
+                var li = document.createElement('li');
+                li.textContent = t;
+                ul.appendChild(li);
+              });
+            }
+
+            var v = (m.variants || [])[0];
+            var amt = card.querySelector('.tier-price-amount');
+            var unit = card.querySelector('.tier-price-unit');
+            if (v && amt) {
+              amt.textContent = '$' + Number(v.price).toLocaleString('en-US', { maximumFractionDigits: 0 });
+              if (unit) {
+                // Only claim a cadence the store states. A wrong unit beside a
+                // right amount is the 12x bug again.
+                var vt = (v.title || '').toLowerCase();
+                unit.textContent = vt.indexOf('month') > -1 ? '/ month'
+                  : vt.indexOf('year') > -1 ? '/ year' : '';
+              }
+            }
+          });
+        })
+        .catch(function () { /* offline or locked: fallback copy stands */ });
+
+      var shopifyOn = false;
+    try {
+      var sq = new URLSearchParams(location.search).get('shopify');
+      if (sq === '1') localStorage.setItem('gh2_shopify', '1');
+      if (sq === '0') localStorage.removeItem('gh2_shopify');
+      shopifyOn = localStorage.getItem('gh2_shopify') === '1';
+    } catch (e) { /* storage blocked: stays off, which is the safe default */ }
+    if (!shopifyOn) return;
+
+    fetch('https://' + SHOP + '/products.json?limit=50')
+      .then(function (r) { if (!r.ok) throw new Error('catalogue ' + r.status); return r.json(); })
+      .then(function (data) {
+        var products = (data && data.products) || [];
+
+        document.querySelectorAll('.tier-card[data-tier]').forEach(function (card) {
+          var tier = card.getAttribute('data-tier');            // "Tier 1"
+          var match = products.filter(function (p) {
+            return (p.title || '').indexOf(tier) !== -1;
+          })[0];
+          if (!match) return;
+
+          var variant = (match.variants || [])[0];
+          if (!variant) return;
+
+          // Shopify owns the number. The page owns everything around it.
+          var amount = card.querySelector('.tier-price-amount');
+          if (amount) {
+            amount.textContent = '$' + Number(variant.price)
+              .toLocaleString('en-US', { maximumFractionDigits: 0 });
+          }
+
+          var cta = card.querySelector('.tier-cta');
+          if (cta && variant.id) {
+            cta.href = 'https://' + SHOP + '/cart/' + variant.id + ':1';
+            cta.removeAttribute('target');
+          }
+        });
+      })
+      .catch(function () {
+        // Catalogue unreachable. Keep the stated prices, remove the ability
+        // to transact against them.
+        document.querySelectorAll('.tier-card[data-tier] .tier-cta').forEach(function (cta) {
+          if (cta.href && cta.href.indexOf('mailto:') === 0) return;   // already a contact link
+          cta.href = 'mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry';
+        });
+      });
+  })();
   </script>
 </body>
 </html>
