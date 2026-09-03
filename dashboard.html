@@ -384,7 +384,7 @@
     </nav>
     <div class="asof">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span id="whoAmI" style="margin-right:14px;"></span>As of <span id="asofDate">&mdash;</span>
+      <span id="whoAmI"></span>As of <span id="asofDate">&mdash;</span>
     </div>
   </div>
 
@@ -940,14 +940,16 @@
           var snap = hh.snapshots.current;
 
           // Household label + selector into the topbar.
-          // The household switcher is a TEST tool (fixture households). Real
-          // members have one household, so by default show the name only;
-          // add ?dev=1 to the URL to get the dropdown (same convention as
-          // ?design=1 on pricing).
+          // Jae: WHICH household/model a member sees must be decided by the
+          // engine/API from their session — never by the front-end. The ?hh=
+          // parameter and this switcher exist only to exercise the fixture
+          // households while testing (add ?dev=1 to the URL to see them).
+          // Members see just the as-of date here.
           var who = document.getElementById('whoAmI');
           if (who && getParam('dev') !== '1') {
-            who.textContent = hh.label;
+            who.textContent = '';
           } else if (who) {
+            who.style.marginRight = '14px';
             var opts = Object.keys(fx.households).map(function (k) {
               return '<option value="' + k + '"' + (k === hhId ? ' selected' : '') + '>' +
                 fx.households[k].label + '</option>';
@@ -957,7 +959,7 @@
               location.search = '?hh=' + this.value;
             });
           }
-          document.title = hh.label + ' \u2014 EDGE Dashboard';
+          document.title = (getParam('dev') === '1' ? hh.label + ' \u2014 ' : '') + 'EDGE Dashboard';
 
           renderDashboard(snap.dashboard);
         })
