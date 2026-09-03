@@ -71,6 +71,18 @@
       50%      { box-shadow: 0 0 10px rgba(139,92,246,0.95), 0 0 0 5px rgba(139,92,246,0.10); opacity: 1; }
     }
     @media (prefers-reduced-motion: reduce) { .tier-label .tier-dot { animation: none; } }
+
+    /* Chart focal points breathe on the same 2.6s cadence as the tier dot,
+       so the eye lands on the latest value and the crossover first. */
+    .ch-halo {
+      transform-box: fill-box; transform-origin: center;
+      animation: haloPulse 2.6s ease-in-out infinite;
+    }
+    @keyframes haloPulse {
+      0%, 100% { transform: scale(1);   opacity: 0.55; }
+      50%      { transform: scale(1.7); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { .ch-halo { animation: none; } }
     .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
     .nav a {
       font-size: 13.5px; font-weight: 600; color: var(--text-muted);
@@ -678,7 +690,7 @@
 
         // most recent (latest) point &mdash; highlighted: glow dot + purple value pill
         var lp = pts[lastI], lx = X(lp.year), ly = Y(lp.value);
-        s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="10" fill="rgba(139,92,246,0.25)"/>';
+        s += '<circle class="ch-halo" cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="10" fill="rgba(139,92,246,0.35)"/>';
         s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="5" fill="#0A0E1A" stroke="#C4B5FD" stroke-width="2.6"/>';
         var lbl = fmtK(lp.value);
         var pw = lbl.length * 8.4 + 20, ph = 24;
@@ -756,6 +768,7 @@
           if (cr) {
             // marker only — the "ahead from" label lives in the HTML legend
             // below, where it can't scale up with the chart or sit on a line
+            s2 += '<circle class="ch-halo green" cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="7" fill="rgba(34,197,94,0.35)"/>';
             s2 += '<circle cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2" vector-effect="non-scaling-stroke"/>';
           }
         }
