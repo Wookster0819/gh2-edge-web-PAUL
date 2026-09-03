@@ -53,13 +53,15 @@
       padding: 20px 28px 0;
     }
     .wordmark { font-size: 17px; font-weight: 800; letter-spacing: 0.3em; }
-    .tier-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      margin-left: 14px; padding: 5px 13px; border-radius: 99px;
-      background: rgba(139,92,246,0.14); border: 1px solid rgba(139,92,246,0.45);
-      color: #C4B5FD; font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em;
-      text-transform: uppercase; white-space: nowrap;
+    /* Tier indicator — a label, deliberately NOT button-shaped */
+    .tier-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-left: 18px; padding-left: 18px; border-left: 1px solid var(--border);
+      font-size: 12.5px; white-space: nowrap; color: var(--text);
+      font-weight: 700; letter-spacing: 0.02em;
     }
+    .tier-label .tier-k { color: var(--text-faint); font-weight: 500; letter-spacing: 0; }
+    .tier-label .tier-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-purple); box-shadow: 0 0 6px rgba(139,92,246,0.7); }
     .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
     .nav a {
       font-size: 13.5px; font-weight: 600; color: var(--text-muted);
@@ -103,6 +105,9 @@
     .tl-item { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
     .tl-swatch { width: 17px; height: 0; border-top: 2.5px solid #A78BFA; display: inline-block; }
     .tl-swatch.dash { border-top: 2.5px dashed #5B6478; }
+    .tl-item.green { color: #4ADE80; font-weight: 600; }
+    .tl-dot { width: 9px; height: 9px; border-radius: 50%; border: 2.2px solid #22C55E; background: #0A0E1A; display: inline-block; }
+    #trendSpark svg { display: block; width: 100%; height: auto; max-height: 150px; }
     .hero-deltas { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 4px; }
     .delta { display: flex; align-items: baseline; gap: 8px; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .delta .arrow { font-size: 15px; }
@@ -314,7 +319,7 @@
   <!-- ===== Top bar ===== -->
   <div class="topbar">
     <div class="wordmark">EDGE</div>
-    <span class="tier-chip" id="userTier">GH2 EDGE&trade;</span>
+    <span class="tier-label"><span class="tier-k">Your plan</span><span class="tier-dot"></span><span id="userTier">GH2 EDGE&trade;</span></span>
     <nav class="nav" aria-label="Dashboard sections">
       <a href="dashboard.html" class="active" aria-current="page">Dashboard</a>
       <a href="heatmap.html">Heat Map</a>
@@ -729,32 +734,25 @@
         var s2 = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' +
           cmp.edgeLabel + ' vs ' + cmp.baselineLabel + ', ' + cmp.basis + '">';
         // conventional first (under), muted; EDGE on top, brand purple
-        s2 += '<path d="' + line('conventional') + '" fill="none" stroke="#5B6478" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round"/>';
-        s2 += '<path d="' + line('edge') + '" fill="none" stroke="#A78BFA" stroke-width="2.2" stroke-linecap="round"/>';
+        s2 += '<path d="' + line('conventional') + '" fill="none" stroke="#5B6478" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+        s2 += '<path d="' + line('edge') + '" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
         // crossover: the year EDGE pulls ahead after being behind
         if (cmp.crossoverYear != null) {
           var cx = X(cmp.crossoverYear);
           var cr = pts.filter(function (r) { return r.year >= cmp.crossoverYear; })[0];
           if (cr) {
-            s2 += '<circle cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2"/>';
-            // label sits under the dashed line, which falls away after the
-            // crossover — clean space, and start-anchored so it can't clip
-            var wy = Math.min(Y(cr.conventional) + 14, H - padB - 2);
-            var wx = Math.min(cx + 2, W - 96);
-            s2 += '<text class="ch-ptlabel" x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" text-anchor="start" fill="#22C55E">ahead from ' + cmp.crossoverYear + '</text>';
+            // marker only — the "ahead from" label lives in the HTML legend
+            // below, where it can't scale up with the chart or sit on a line
+            s2 += '<circle cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2" vector-effect="non-scaling-stroke"/>';
           }
         }
         // end-gap annotation — this number IS the Lifetime row
-        var last = pts[pts.length - 1];
-        // the gap between the lines is widest at the right edge — the label
-        // sits in the middle of that opening
-        var egy = Math.max(12, Math.min((Y(last.edge) + Y(last.conventional)) / 2 + 3.5, H - padB - 2));
-        s2 += '<text class="ch-ptlabel" x="' + (W - 2) + '" y="' + egy.toFixed(1) + '" text-anchor="end">' + (cmp.endGap >= 0 ? '+' : '-') + fmtK(Math.abs(cmp.endGap)) + '</text>';
         s2 += '</svg>';
         // legend lives in HTML so long labels wrap instead of truncating
         s2 += '<div class="trend-legend">' +
           '<span class="tl-item"><i class="tl-swatch"></i>' + cmp.edgeLabel + '</span>' +
           '<span class="tl-item"><i class="tl-swatch dash"></i>' + cmp.baselineLabel + '</span>' +
+          (cmp.crossoverYear != null ? '<span class="tl-item green"><i class="tl-dot"></i>Ahead from ' + cmp.crossoverYear + '</span>' : '') +
           '</div>';
         document.getElementById('trendSpark').innerHTML = s2;
         var tw = document.getElementById('tierWhy');
