@@ -74,6 +74,7 @@
 
     /* Chart focal points breathe on the same 2.6s cadence as the tier dot,
        so the eye lands on the latest value and the crossover first. */
+    #heroChart svg { overflow: visible; }
     .ch-halo {
       transform-box: fill-box; transform-origin: center;
       animation: haloPulse 2.6s ease-in-out infinite;
@@ -155,7 +156,7 @@
       font-size: 10.5px; font-weight: 700; white-space: nowrap; line-height: 1;
       padding: 3px 7px; border-radius: 99px; background: rgba(124,132,150,0.22); color: #AEB6C8;
     }
-    .tp-svgwrap svg { display: block; width: 100%; height: auto; max-height: 150px; }
+    .tp-svgwrap svg { display: block; width: 100%; height: auto; max-height: 150px; overflow: visible; }
     .tp-ax { position: absolute; top: 100%; margin-top: 5px; font-size: 10.5px; color: var(--text-faint); white-space: nowrap; }
     .tp-ax.start { left: 0; max-width: 62%; overflow: hidden; text-overflow: ellipsis; }
     .tp-ax.end { right: 0; }
@@ -824,7 +825,7 @@
         // where behind), each line carries a fixed-size HTML label at its end
         // so nobody has to decode which one is "them", and the end gap (= the
         // Lifetime row) sits in the wedge. HTML labels don't scale with the SVG.
-        var W = 260, H = 104, padL = 8, padR = 6, padT = 10, padB = 10;
+        var W = 260, H = 104, padL = 14, padR = 6, padT = 12, padB = 12;
         var pts = cmp.series;
         var lo = Infinity, hi = -Infinity;
         pts.forEach(function (r) { lo = Math.min(lo, r.edge, r.conventional); hi = Math.max(hi, r.edge, r.conventional); });
