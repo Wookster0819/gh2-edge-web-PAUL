@@ -123,6 +123,17 @@
     }
     .hero-sub { font-size: 13.5px; color: var(--text-muted); }
     .trend-cap { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 2px 0 6px; }
+    .hero-sub .you { color: var(--text); font-weight: 800; letter-spacing: 0.02em; }
+    .tier-hook { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+    .tw-star { color: #FBBF24; font-weight: 800; margin-right: 4px; }
+    .tw-upgrade {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--grad-cta); color: #FFF; text-decoration: none;
+      font-size: 13px; font-weight: 800; padding: 9px 16px; border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(139,92,246,0.35);
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    .tw-upgrade:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(139,92,246,0.5); }
     .trend-row .v.pos { color: #4ADE80; }
     .trend-legend { display: flex; flex-wrap: wrap; gap: 5px 18px; margin-top: 8px; font-size: 12px; color: var(--text-muted); align-items: center; }
     .tl-item { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
@@ -447,11 +458,14 @@
       <!-- Net outcome trend -->
       <section class="card" aria-label="Net outcome trend">
         <div class="card-label">Net Outcome Trend</div>
-        <div class="hero-sub" style="margin-top:-6px;">Because EDGE solves everything, simultaneously, to fit your specific situation.</div>
+        <div class="hero-sub" style="margin-top:-6px;">EDGE calculates everything simultaneously to fit <strong class="you">YOUR</strong> situation.</div>
         <div class="trend-rows" id="trendRows"><!-- injected --></div>
         <div class="trend-spark" id="trendSpark"><!-- SVG injected --></div>
         <div style="font-size:10.5px;color:#5B6478;margin-top:6px;">Dollars kept, in today&rsquo;s dollars.</div>
-        <div id="tierWhy" style="font-size:12.5px;color:#8693AC;margin-top:10px;line-height:1.5;"></div>
+        <div class="tier-hook">
+          <div id="tierWhy" style="font-size:12.5px;color:#8693AC;line-height:1.5;"></div>
+          <a class="tw-upgrade" href="pricing.html">Upgrade <span aria-hidden="true">&rarr;</span></a>
+        </div>
       </section>
     </div>
 
@@ -783,7 +797,7 @@
       var signupYear = cs.length ? cs[0].year : null;
       var ROW_LABELS = { '1 Year': 'Next 12 months (from today)', '3 Year': 'Next 3 years (from today)',
                          'Lifetime': signupYear ? 'Lifetime (since you signed up in ' + signupYear + ')' : 'Lifetime (since you signed up)' };
-      var trHtml = '<div class="trend-cap">Extra dollars you keep with EDGE, compared with a well-executed conventional plan:</div>';
+      var trHtml = '<div class="trend-cap">Below is your projection with EDGE vs a well-executed conventional plan.</div>';
       DATA.outcomes.forEach(function (o) {
         var sign = o.value > 0 ? '+' : (o.value < 0 ? '−' : '');
         trHtml += '<div class="trend-row"><span class="k">' + (ROW_LABELS[o.label] || o.label) + '</span>' +
@@ -891,8 +905,9 @@
               ' of funded retirement, through ' + cmp.edgeFundedThrough + '. ';
           }
           // The tier hook, Founder-ruled: LTSS pricing is the next tier's work.
-          msg += 'Long-term care is not yet priced into this plan. Pricing it in — and planning through it — is what the next tier adds.';
-          tw.textContent = msg;
+          // Accent asterisk marks it as the upgrade item.
+          var hook = 'Long-term care is not yet priced into this plan. Pricing it in — and planning through it — is what the next tier adds.';
+          tw.innerHTML = (msg ? msg.replace(/</g, '&lt;') : '') + '<span class="tw-star">*</span>' + hook;
         }
       })();
 
