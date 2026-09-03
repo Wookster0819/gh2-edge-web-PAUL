@@ -123,7 +123,7 @@
     }
     .hero-sub { font-size: 13.5px; color: var(--text-muted); }
     .trend-cap { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 2px 0 6px; }
-    .hero-sub .you { color: var(--text); font-weight: 800; letter-spacing: 0.02em; }
+    .hero-sub .you { color: var(--text); font-weight: 700; }
     .tier-hook { margin-top: 12px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
     .tw-star { color: #FBBF24; font-weight: 800; margin-right: 4px; }
     .tw-upgrade {
@@ -458,7 +458,7 @@
       <!-- Net outcome trend -->
       <section class="card" aria-label="Net outcome trend">
         <div class="card-label">Net Outcome Trend</div>
-        <div class="hero-sub" style="margin-top:-6px;">EDGE calculates everything simultaneously to fit <strong class="you">YOUR</strong> situation.</div>
+        <div class="hero-sub" style="margin-top:-6px;">EDGE calculates everything simultaneously to fit <strong class="you">your</strong> situation &mdash; here&rsquo;s your projection vs. a well-executed conventional plan.</div>
         <div class="trend-rows" id="trendRows"><!-- injected --></div>
         <div class="trend-spark" id="trendSpark"><!-- SVG injected --></div>
         <div style="font-size:10.5px;color:#5B6478;margin-top:6px;">Dollars kept, in today&rsquo;s dollars.</div>
@@ -797,7 +797,7 @@
       var signupYear = cs.length ? cs[0].year : null;
       var ROW_LABELS = { '1 Year': 'Next 12 months (from today)', '3 Year': 'Next 3 years (from today)',
                          'Lifetime': signupYear ? 'Lifetime (since you signed up in ' + signupYear + ')' : 'Lifetime (since you signed up)' };
-      var trHtml = '<div class="trend-cap">Below is your projection with EDGE vs a well-executed conventional plan.</div>';
+      var trHtml = '';
       DATA.outcomes.forEach(function (o) {
         var sign = o.value > 0 ? '+' : (o.value < 0 ? '−' : '');
         trHtml += '<div class="trend-row"><span class="k">' + (ROW_LABELS[o.label] || o.label) + '</span>' +
