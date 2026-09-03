@@ -304,6 +304,8 @@
     /* ===== Responsive ===== */
     @media (max-width: 980px) {
       .mid { grid-template-columns: 1fr 1fr; }
+      .topbar { flex-wrap: wrap; row-gap: 10px; }
+      .asof { margin-left: auto; }
       .mid .card:first-child { grid-column: span 2; }
       .drivers { grid-template-columns: repeat(2, 1fr); }
     }
@@ -318,6 +320,8 @@
     }
     @media (max-width: 480px) {
       .drivers { grid-template-columns: 1fr; }
+      .tier-label { margin-left: 0; padding-left: 0; border-left: 0; }
+      .tier-label .tier-k { display: none; }
       .chat-panel { right: 8px; bottom: 78px; }
       .ask-edge { right: 14px; bottom: 14px; }
     }
