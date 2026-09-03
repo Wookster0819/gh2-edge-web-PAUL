@@ -714,9 +714,21 @@
           }
           if (i === 0 || (i === peakI && peakI !== lastI)) {
             var anchor = i === 0 ? 'start' : 'middle';
-            // start label sits ABOVE its point (the line dips away below it);
-            // peak label also above.
-            var labelY = i === 0 ? Y(p.value) - 12 : Y(p.value) - 12;
+            // Label goes on whichever side the line ISN'T: look at the
+            // neighbouring points — if the line leaves this point heading up,
+            // the label sits below it; heading down, above. Then clamp so it
+            // stays inside the plot.
+            var yHere = Y(p.value), above = 0, below = 0;
+            [pts[i - 1], pts[i + 1]].forEach(function (n) {
+              if (!n) return;
+              var yn = Y(n.value);
+              if (yn < yHere - 1) above++; else if (yn > yHere + 1) below++;
+            });
+            var side = (above && !below) ? 'below' : (below && !above) ? 'above'
+                     : (yHere < (padT + H - padB) / 2 ? 'below' : 'above');
+            var labelY = side === 'above' ? yHere - 12 : yHere + 22;
+            if (labelY < padT + 10) labelY = yHere + 22;
+            if (labelY > H - padB - 4) labelY = yHere - 12;
             s += '<text class="ch-ptlabel" x="' + X(p.year).toFixed(1) + '" y="' + labelY.toFixed(1) + '" text-anchor="' + anchor + '">' + fmtK(p.value) + '</text>';
           }
         });
