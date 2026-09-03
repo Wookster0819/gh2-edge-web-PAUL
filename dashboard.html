@@ -53,6 +53,13 @@
       padding: 20px 28px 0;
     }
     .wordmark { font-size: 17px; font-weight: 800; letter-spacing: 0.3em; }
+    .tier-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-left: 14px; padding: 5px 13px; border-radius: 99px;
+      background: rgba(139,92,246,0.14); border: 1px solid rgba(139,92,246,0.45);
+      color: #C4B5FD; font-size: 11.5px; font-weight: 800; letter-spacing: 0.08em;
+      text-transform: uppercase; white-space: nowrap;
+    }
     .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
     .nav a {
       font-size: 13.5px; font-weight: 600; color: var(--text-muted);
@@ -92,6 +99,10 @@
       font-variant-numeric: tabular-nums;
     }
     .hero-sub { font-size: 13.5px; color: var(--text-muted); }
+    .trend-legend { display: flex; flex-wrap: wrap; gap: 5px 18px; margin-top: 8px; font-size: 12px; color: var(--text-muted); align-items: center; }
+    .tl-item { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
+    .tl-swatch { width: 17px; height: 0; border-top: 2.5px solid #A78BFA; display: inline-block; }
+    .tl-swatch.dash { border-top: 2.5px dashed #5B6478; }
     .hero-deltas { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 4px; }
     .delta { display: flex; align-items: baseline; gap: 8px; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .delta .arrow { font-size: 15px; }
@@ -303,6 +314,7 @@
   <!-- ===== Top bar ===== -->
   <div class="topbar">
     <div class="wordmark">EDGE</div>
+    <span class="tier-chip" id="userTier">GH2 EDGE&trade;</span>
     <nav class="nav" aria-label="Dashboard sections">
       <a href="dashboard.html" class="active" aria-current="page">Dashboard</a>
       <a href="heatmap.html">Heat Map</a>
@@ -558,6 +570,11 @@
       function renderDashboard(DATA) {
 
       // ===== Hero =====
+      // Jae: the subscriber's tier — read from the payload when the API
+      // carries it (e.g. DATA.tier = "Founding Member" / "EDGE" / "Ultra").
+      var tierEl = document.getElementById('userTier');
+      if (tierEl && DATA.tier) tierEl.textContent = DATA.tier;
+
       document.getElementById('heroValue').textContent = fmt$(DATA.projectedLiquidNetWorth);
       document.getElementById('heroAge').textContent = DATA.throughAge;
       // Depletion is information, not a blank: name the funded-through year.
@@ -595,14 +612,19 @@
 
         var s = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Projected liquid net worth by year">';
 
-        // y grid + labels (3 ticks, rounded to $50K)
-        var ticks = 3;
-        for (var t = 0; t <= ticks; t++) {
-          var v = minV + (maxV - minV) * t / ticks;
-          v = Math.round(v / 50000) * 50000;
-          var y = Y(v);
+        // y grid + labels: "nice" round steps, one consistent format
+        var rawStep = (maxV - minV) / 4.2;
+        var mag = Math.pow(10, Math.floor(Math.log(rawStep) / Math.LN10));
+        var norm = rawStep / mag;
+        var step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+        function fmtTick(v) {
+          if (v >= 1e6) { var m = v / 1e6; return '$' + (m % 1 === 0 ? m.toFixed(0) : m.toFixed(1)) + 'M'; }
+          return '$' + Math.round(v / 1e3) + 'K';
+        }
+        for (var tv = Math.ceil(minV / step) * step; tv <= maxV + 1; tv += step) {
+          var y = Y(tv);
           s += '<line class="ch-grid" x1="' + padL + '" y1="' + y + '" x2="' + (W - padR) + '" y2="' + y + '"/>';
-          s += '<text class="ch-axis" x="' + (padL - 8) + '" y="' + (y + 3.5) + '" text-anchor="end">' + fmtK(v) + '</text>';
+          s += '<text class="ch-axis" x="' + (padL - 8) + '" y="' + (y + 3.5) + '" text-anchor="end">' + fmtTick(tv) + '</text>';
         }
         // x labels every 4th point
         pts.forEach(function (p, i) {
@@ -629,9 +651,9 @@
           }
           if (i === 0 || (i === peakI && peakI !== lastI)) {
             var anchor = i === 0 ? 'start' : 'middle';
-            // start label sits BELOW its point (the line rises away above it);
-            // peak label sits above.
-            var labelY = i === 0 ? Y(p.value) + 24 : Y(p.value) - 12;
+            // start label sits ABOVE its point (the line dips away below it);
+            // peak label also above.
+            var labelY = i === 0 ? Y(p.value) - 12 : Y(p.value) - 12;
             s += '<text class="ch-ptlabel" x="' + X(p.year).toFixed(1) + '" y="' + labelY.toFixed(1) + '" text-anchor="' + anchor + '">' + fmtK(p.value) + '</text>';
           }
         });
@@ -643,6 +665,7 @@
         var lbl = fmtK(lp.value);
         var pw = lbl.length * 8.4 + 20, ph = 24;
         var px = Math.min(lx - pw / 2, W - padR - pw), py = ly - ph - 14;
+        if (py < 4) py = ly + 16; // no headroom — pill goes under the dot
         s += '<rect x="' + px.toFixed(1) + '" y="' + py.toFixed(1) + '" width="' + pw.toFixed(1) + '" height="' + ph + '" rx="12" fill="#8B5CF6"/>';
         s += '<text x="' + (px + pw / 2).toFixed(1) + '" y="' + (py + 16.5).toFixed(1) + '" text-anchor="middle" font-size="13.5" font-weight="800" fill="#FFFFFF" font-family="inherit">' + lbl + '</text>';
         s += '</svg>';
@@ -689,7 +712,7 @@
       (function () {
         var cmp = DATA.comparison;
         if (!cmp || !cmp.series || cmp.series.length < 2) { document.getElementById('trendSpark').innerHTML = ''; return; }
-        var W = 260, H = 118, padL = 10, padR = 14, padT = 14, padB = 26;
+        var W = 260, H = 104, padL = 10, padR = 14, padT = 14, padB = 10;
         var pts = cmp.series;
         var lo = Infinity, hi = -Infinity;
         pts.forEach(function (r) {
@@ -714,21 +737,25 @@
           var cr = pts.filter(function (r) { return r.year >= cmp.crossoverYear; })[0];
           if (cr) {
             s2 += '<circle cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2"/>';
-            s2 += '<text class="ch-ptlabel" x="' + cx.toFixed(1) + '" y="' + (Y(cr.edge) - 8).toFixed(1) + '" text-anchor="middle" fill="#22C55E">ahead from ' + cmp.crossoverYear + '</text>';
+            // label sits under the dashed line, which falls away after the
+            // crossover — clean space, and start-anchored so it can't clip
+            var wy = Math.min(Y(cr.conventional) + 14, H - padB - 2);
+            var wx = Math.min(cx + 2, W - 96);
+            s2 += '<text class="ch-ptlabel" x="' + wx.toFixed(1) + '" y="' + wy.toFixed(1) + '" text-anchor="start" fill="#22C55E">ahead from ' + cmp.crossoverYear + '</text>';
           }
         }
         // end-gap annotation — this number IS the Lifetime row
         var last = pts[pts.length - 1];
-        var gy = (Y(last.edge) + Y(last.conventional)) / 2;
-        s2 += '<text class="ch-ptlabel" x="' + (W - 2) + '" y="' + Math.max(10, gy - 6).toFixed(1) + '" text-anchor="end">' + (cmp.endGap >= 0 ? '+' : '-') + fmtK(Math.abs(cmp.endGap)) + '</text>';
-        // legend
-        s2 += '<g font-size="8.5" fill="#8693AC">';
-        s2 += '<line x1="' + padL + '" y1="' + (H - 8) + '" x2="' + (padL + 14) + '" y2="' + (H - 8) + '" stroke="#A78BFA" stroke-width="2.2"/>';
-        s2 += '<text x="' + (padL + 18) + '" y="' + (H - 5) + '">' + cmp.edgeLabel + '</text>';
-        s2 += '<line x1="' + (padL + 92) + '" y1="' + (H - 8) + '" x2="' + (padL + 106) + '" y2="' + (H - 8) + '" stroke="#5B6478" stroke-width="2" stroke-dasharray="4 3"/>';
-        s2 += '<text x="' + (padL + 110) + '" y="' + (H - 5) + '">' + cmp.baselineLabel + '</text>';
-        s2 += '</g>';
+        // the gap between the lines is widest at the right edge — the label
+        // sits in the middle of that opening
+        var egy = Math.max(12, Math.min((Y(last.edge) + Y(last.conventional)) / 2 + 3.5, H - padB - 2));
+        s2 += '<text class="ch-ptlabel" x="' + (W - 2) + '" y="' + egy.toFixed(1) + '" text-anchor="end">' + (cmp.endGap >= 0 ? '+' : '-') + fmtK(Math.abs(cmp.endGap)) + '</text>';
         s2 += '</svg>';
+        // legend lives in HTML so long labels wrap instead of truncating
+        s2 += '<div class="trend-legend">' +
+          '<span class="tl-item"><i class="tl-swatch"></i>' + cmp.edgeLabel + '</span>' +
+          '<span class="tl-item"><i class="tl-swatch dash"></i>' + cmp.baselineLabel + '</span>' +
+          '</div>';
         document.getElementById('trendSpark').innerHTML = s2;
         var tw = document.getElementById('tierWhy');
         if (tw) {
@@ -751,10 +778,21 @@
         'Medicare': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="9" x2="12" y2="15"/><line x1="9" y1="12" x2="15" y2="12"/></svg>',
         'Withdrawal Strategy': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>'
       };
+      // Fixture names drifted from the icon keys ("Taxes" -> "Taxes paid");
+      // match by substring so renames can't blank the icons again.
+      function driverIcon(name) {
+        if (DRIVER_ICONS[name]) return DRIVER_ICONS[name];
+        var n = String(name).toLowerCase();
+        if (n.indexOf('tax') > -1) return DRIVER_ICONS['Taxes'];
+        if (n.indexOf('social') > -1) return DRIVER_ICONS['Social Security'];
+        if (n.indexOf('medicare') > -1 || n.indexOf('health') > -1) return DRIVER_ICONS['Medicare'];
+        if (n.indexOf('withdraw') > -1 || n.indexOf('portfolio') > -1) return DRIVER_ICONS['Withdrawal Strategy'];
+        return DRIVER_ICONS['Withdrawal Strategy'];
+      }
       var drHtml = '';
       DATA.drivers.forEach(function (d) {
         drHtml += '<div class="driver">' +
-          '<div class="driver-top"><span class="driver-ico">' + (DRIVER_ICONS[d.name] || '') + '</span>' +
+          '<div class="driver-top"><span class="driver-ico">' + driverIcon(d.name) + '</span>' +
           '<span class="driver-name">' + d.name + '</span></div>' +
           '<div class="driver-amt">' + fmt$(d.amount) + '</div>' +
           '<div class="driver-share">lifetime, through age 95</div>' +
@@ -920,7 +958,7 @@
         } else {
           // Preview path &mdash; canned reply until the endpoint is connected.
           setTimeout(function () {
-            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I&rsquo;ll answer questions about your plan, your Heat Map, and your next best move.');
+            finish('Great question! I’m not connected to my full brain yet — once my live connection is switched on, I’ll answer questions about your plan, your Heat Map, and your next best move.');
           }, 700);
         }
       });
