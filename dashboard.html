@@ -122,13 +122,33 @@
       font-variant-numeric: tabular-nums;
     }
     .hero-sub { font-size: 13.5px; color: var(--text-muted); }
+    .trend-cap { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 2px 0 6px; }
+    .trend-row .v.pos { color: #4ADE80; }
     .trend-legend { display: flex; flex-wrap: wrap; gap: 5px 18px; margin-top: 8px; font-size: 12px; color: var(--text-muted); align-items: center; }
     .tl-item { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
     .tl-swatch { width: 17px; height: 0; border-top: 2.5px solid #A78BFA; display: inline-block; }
     .tl-swatch.dash { border-top: 2.5px dashed #5B6478; }
+    .tl-swatch.wedge { width: 14px; height: 10px; border: 0; border-radius: 3px; background: linear-gradient(180deg, rgba(34,197,94,0.55), rgba(34,197,94,0.15)); }
+    /* plot box: the SVG takes ~72% width; the right 28% is reserved for end labels */
+    .trend-plot { display: flex; align-items: stretch; gap: 8px; width: 100%; padding-bottom: 18px; }
+    .tp-svgwrap { position: relative; flex: 1 1 auto; min-width: 0; }
+    .tp-svgwrap svg { display: block; width: 100%; height: auto; max-height: 150px; }
+    .tp-ax { position: absolute; top: 100%; margin-top: 5px; font-size: 10.5px; color: var(--text-faint); white-space: nowrap; }
+    .tp-ax.start { left: 0; }
+    .tp-ax.end { right: 0; }
+    .tp-ax.now { transform: translateX(-50%); color: #4ADE80; font-weight: 700; }
+    .tp-ax.start.here { color: #4ADE80; font-weight: 700; }
+    .tp-col { position: relative; flex: 0 0 98px; }
+    .tp-tag {
+      position: absolute; left: 0; transform: translateY(-50%);
+      font-size: 10.5px; font-weight: 700; white-space: nowrap; line-height: 1;
+      padding: 4px 7px; border-radius: 99px;
+    }
+    .tp-tag.edge { background: rgba(139,92,246,0.18); color: #C4B5FD; }
+    .tp-tag.conv { background: rgba(124,132,150,0.22); color: #AEB6C8; }
+    .tp-tag.gap  { background: rgba(34,197,94,0.20); color: #4ADE80; font-weight: 800; }
     .tl-item.green { color: #4ADE80; font-weight: 600; }
     .tl-dot { width: 9px; height: 9px; border-radius: 50%; border: 2.2px solid #22C55E; background: #0A0E1A; display: inline-block; }
-    #trendSpark svg { display: block; width: 100%; height: auto; max-height: 150px; }
     .hero-deltas { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 4px; }
     .delta { display: flex; align-items: baseline; gap: 8px; font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; }
     .delta .arrow { font-size: 15px; }
@@ -728,9 +748,14 @@
       document.getElementById('checkinLink').href = DATA.nextCheckin.href;
 
       // ===== Net outcome trend =====
-      var trHtml = '';
+      // The rows are EDGE's extra kept-dollars vs a conventional plan at each
+      // horizon — say so, in plain words, before the numbers.
+      var ROW_LABELS = { '1 Year': 'After 1 year', '3 Year': 'After 3 years', 'Lifetime': 'Over your lifetime' };
+      var trHtml = '<div class="trend-cap">Extra dollars you keep with EDGE, compared with a well-executed conventional plan:</div>';
       DATA.outcomes.forEach(function (o) {
-        trHtml += '<div class="trend-row"><span class="k">' + o.label + '</span><span class="v">' + fmtK(o.value) + '</span></div>';
+        var sign = o.value > 0 ? '+' : (o.value < 0 ? '−' : '');
+        trHtml += '<div class="trend-row"><span class="k">' + (ROW_LABELS[o.label] || o.label) + '</span>' +
+                  '<span class="v' + (o.value > 0 ? ' pos' : '') + '">' + sign + fmtK(Math.abs(o.value)) + '</span></div>';
       });
       document.getElementById('trendRows').innerHTML = trHtml;
 
@@ -742,43 +767,83 @@
       (function () {
         var cmp = DATA.comparison;
         if (!cmp || !cmp.series || cmp.series.length < 2) { document.getElementById('trendSpark').innerHTML = ''; return; }
-        var W = 260, H = 104, padL = 10, padR = 14, padT = 14, padB = 10;
+        // ---- Two futures, made legible ----
+        // Both curves stay (EDGE vs a well-executed conventional plan), but:
+        // the gap between them is shaded (green where EDGE is ahead, faint red
+        // where behind), each line carries a fixed-size HTML label at its end
+        // so nobody has to decode which one is "them", and the end gap (= the
+        // Lifetime row) sits in the wedge. HTML labels don't scale with the SVG.
+        var W = 260, H = 104, padL = 8, padR = 6, padT = 10, padB = 10;
         var pts = cmp.series;
         var lo = Infinity, hi = -Infinity;
-        pts.forEach(function (r) {
-          lo = Math.min(lo, r.edge, r.conventional);
-          hi = Math.max(hi, r.edge, r.conventional);
-        });
+        pts.forEach(function (r) { lo = Math.min(lo, r.edge, r.conventional); hi = Math.max(hi, r.edge, r.conventional); });
         if (hi === lo) hi = lo + 1;
+        var spanV = hi - lo; lo -= spanV * 0.06; hi += spanV * 0.06;
         var y0 = pts[0].year, y1 = pts[pts.length - 1].year;
         function X(yr) { return padL + (yr - y0) / (y1 - y0) * (W - padL - padR); }
         function Y(v) { return padT + (1 - (v - lo) / (hi - lo)) * (H - padT - padB); }
-        function line(key) {
-          return pts.map(function (r, i) { return (i ? 'L' : 'M') + X(r.year).toFixed(1) + ' ' + Y(r[key]).toFixed(1); }).join(' ');
-        }
-        var s2 = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' +
-          cmp.edgeLabel + ' vs ' + cmp.baselineLabel + ', ' + cmp.basis + '">';
-        // conventional first (under), muted; EDGE on top, brand purple
-        s2 += '<path d="' + line('conventional') + '" fill="none" stroke="#5B6478" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
-        s2 += '<path d="' + line('edge') + '" fill="none" stroke="#A78BFA" stroke-width="2.5" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
-        // crossover: the year EDGE pulls ahead after being behind
-        if (cmp.crossoverYear != null) {
-          var cx = X(cmp.crossoverYear);
-          var cr = pts.filter(function (r) { return r.year >= cmp.crossoverYear; })[0];
-          if (cr) {
-            // marker only — the "ahead from" label lives in the HTML legend
-            // below, where it can't scale up with the chart or sit on a line
-            s2 += '<circle class="ch-halo green" cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="7" fill="rgba(34,197,94,0.35)"/>';
-            s2 += '<circle cx="' + cx.toFixed(1) + '" cy="' + Y(cr.edge).toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2" vector-effect="non-scaling-stroke"/>';
+        function fwd(vals) { return vals.map(function (v, i) { return (i ? 'L' : 'M') + X(pts[i].year).toFixed(1) + ' ' + Y(v).toFixed(1); }).join(' '); }
+        function back(vals) { var out = ''; for (var i = vals.length - 1; i >= 0; i--) out += ' L' + X(pts[i].year).toFixed(1) + ' ' + Y(vals[i]).toFixed(1); return out; }
+        var edgeV = pts.map(function (r) { return r.edge; });
+        var convV = pts.map(function (r) { return r.conventional; });
+        var upper = pts.map(function (r) { return Math.max(r.edge, r.conventional); });
+        var lower = pts.map(function (r) { return Math.min(r.edge, r.conventional); });
+
+        var s2 = '<div class="trend-plot"><div class="tp-svgwrap">';
+        s2 += '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + cmp.edgeLabel + ' vs ' + cmp.baselineLabel + ', ' + cmp.basis + '">';
+        s2 += '<defs><linearGradient id="gapPos" x1="0" y1="0" x2="0" y2="1">' +
+              '<stop offset="0" stop-color="rgba(34,197,94,0.40)"/><stop offset="1" stop-color="rgba(34,197,94,0.10)"/></linearGradient></defs>';
+        // gain wedge: between the higher curve and the conventional line (only where EDGE is ahead)
+        s2 += '<path d="' + fwd(upper) + back(convV) + ' Z" fill="url(#gapPos)"/>';
+        // shortfall wedge: between the conventional line and the lower curve (only where EDGE is behind)
+        s2 += '<path d="' + fwd(convV) + back(lower) + ' Z" fill="rgba(255,59,48,0.16)"/>';
+        // the two lines
+        s2 += '<path d="' + fwd(convV) + '" fill="none" stroke="#7C8496" stroke-width="2" stroke-dasharray="4 3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>';
+        s2 += '<path d="' + fwd(edgeV) + '" fill="none" stroke="#A78BFA" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
+        // "You are here": the current calendar year on the EDGE line. The
+        // series starts at signup, so the dot walks right as time passes —
+        // left of it is realized, right of it is projected.
+        // Jae: the series must be per-household from the engine; the marker
+        // just reads the clock.
+        var nowYear = Math.max(y0, Math.min(y1, new Date().getFullYear()));
+        var nowEdge = (function () {
+          for (var i = 0; i < pts.length - 1; i++) {
+            if (nowYear >= pts[i].year && nowYear <= pts[i + 1].year) {
+              var t = (nowYear - pts[i].year) / ((pts[i + 1].year - pts[i].year) || 1);
+              return pts[i].edge + t * (pts[i + 1].edge - pts[i].edge);
+            }
           }
-        }
-        // end-gap annotation — this number IS the Lifetime row
+          return pts[pts.length - 1].edge;
+        })();
+        var nx = X(nowYear), ny = Y(nowEdge);
+        s2 += '<line x1="' + nx.toFixed(1) + '" y1="' + padT + '" x2="' + nx.toFixed(1) + '" y2="' + (H - padB) + '" stroke="rgba(34,197,94,0.35)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/>';
+        s2 += '<circle class="ch-halo green" cx="' + nx.toFixed(1) + '" cy="' + ny.toFixed(1) + '" r="7" fill="rgba(34,197,94,0.35)"/>';
+        s2 += '<circle cx="' + nx.toFixed(1) + '" cy="' + ny.toFixed(1) + '" r="3.5" fill="#0A0E1A" stroke="#22C55E" stroke-width="2" vector-effect="non-scaling-stroke"/>';
         s2 += '</svg>';
-        // legend lives in HTML so long labels wrap instead of truncating
+        // x-axis in HTML: signup year, "you are here", end year
+        var nowPct = (nx / W * 100);
+        var nowSeparate = nowPct > 22 && nowPct < 80;
+        s2 += '<span class="tp-ax start' + (nowSeparate ? '' : ' here') + '">' + y0 + ' &middot; signed up' + (nowSeparate ? '' : ' &middot; you are here') + '</span>';
+        if (nowSeparate) s2 += '<span class="tp-ax now" style="left:' + nowPct.toFixed(1) + '%">You are here &middot; ' + nowYear + '</span>';
+        s2 += '<span class="tp-ax end">' + y1 + '</span>';
+        s2 += '</div>';
+        // fixed-size HTML labels pinned to each line's end (percent of the plot box)
+        var last = pts[pts.length - 1];
+        var eY = Y(last.edge) / H * 100, cY = Y(last.conventional) / H * 100;
+        var gapY = (eY + cY) / 2;
+        // keep the three tags from stacking on top of each other
+        if (Math.abs(eY - cY) < 30) { eY = Math.min(eY, cY) - 10; cY = Math.max(eY + 30, cY + 10); gapY = (eY + cY) / 2; }
+        s2 += '<div class="tp-col">';
+        s2 += '<span class="tp-tag edge" style="top:' + eY.toFixed(1) + '%">' + cmp.edgeLabel + '</span>';
+        s2 += '<span class="tp-tag gap"  style="top:' + gapY.toFixed(1) + '%">' + (cmp.endGap >= 0 ? '+' : '-') + fmtK(Math.abs(cmp.endGap)) + '</span>';
+        s2 += '<span class="tp-tag conv" style="top:' + cY.toFixed(1) + '%">Conventional</span>';
+        s2 += '</div></div>';
+        // legend (HTML, wraps freely)
         s2 += '<div class="trend-legend">' +
           '<span class="tl-item"><i class="tl-swatch"></i>' + cmp.edgeLabel + '</span>' +
           '<span class="tl-item"><i class="tl-swatch dash"></i>' + cmp.baselineLabel + '</span>' +
-          (cmp.crossoverYear != null ? '<span class="tl-item green"><i class="tl-dot"></i>Ahead from ' + cmp.crossoverYear + '</span>' : '') +
+          '<span class="tl-item"><i class="tl-swatch wedge"></i>Your gain</span>' +
+          '<span class="tl-item green"><i class="tl-dot"></i>You are here</span>' +
           '</div>';
         document.getElementById('trendSpark').innerHTML = s2;
         var tw = document.getElementById('tierWhy');
