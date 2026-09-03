@@ -159,6 +159,7 @@
     .tp-tag.edge { background: rgba(139,92,246,0.18); color: #C4B5FD; }
     .tp-tag.conv { background: rgba(124,132,150,0.22); color: #AEB6C8; }
     .tp-tag.gap  { background: rgba(34,197,94,0.20); color: #4ADE80; font-weight: 800; }
+    .tp-tag.gap.flat { background: rgba(124,132,150,0.22); color: #AEB6C8; }
     .tl-item.green { color: #4ADE80; font-weight: 600; }
     .tl-dot { width: 9px; height: 9px; border-radius: 50%; border: 2.2px solid #22C55E; background: #0A0E1A; display: inline-block; }
     .hero-deltas { display: flex; flex-direction: column; gap: 10px; margin: 16px 0 4px; }
@@ -856,7 +857,9 @@
         if (Math.abs(eY - cY) < 30) { eY = Math.min(eY, cY) - 10; cY = Math.max(eY + 30, cY + 10); gapY = (eY + cY) / 2; }
         s2 += '<div class="tp-col">';
         s2 += '<span class="tp-tag edge" style="top:' + eY.toFixed(1) + '%">' + cmp.edgeLabel + '</span>';
-        s2 += '<span class="tp-tag gap"  style="top:' + gapY.toFixed(1) + '%">' + (cmp.endGap >= 0 ? '+' : '-') + fmtK(Math.abs(cmp.endGap)) + '</span>';
+        // sign only when there is one: "+$578K", "−$40K", or plain "$0"
+        var gapSign = cmp.endGap > 0 ? '+' : (cmp.endGap < 0 ? '\u2212' : '');
+        s2 += '<span class="tp-tag gap' + (cmp.endGap > 0 ? '' : ' flat') + '"  style="top:' + gapY.toFixed(1) + '%">' + gapSign + fmtK(Math.abs(cmp.endGap)) + '</span>';
         s2 += '<span class="tp-tag conv" style="top:' + cY.toFixed(1) + '%">Conventional</span>';
         s2 += '</div></div>';
         // legend (HTML, wraps freely)
@@ -937,8 +940,14 @@
           var snap = hh.snapshots.current;
 
           // Household label + selector into the topbar.
+          // The household switcher is a TEST tool (fixture households). Real
+          // members have one household, so by default show the name only;
+          // add ?dev=1 to the URL to get the dropdown (same convention as
+          // ?design=1 on pricing).
           var who = document.getElementById('whoAmI');
-          if (who) {
+          if (who && getParam('dev') !== '1') {
+            who.textContent = hh.label;
+          } else if (who) {
             var opts = Object.keys(fx.households).map(function (k) {
               return '<option value="' + k + '"' + (k === hhId ? ' selected' : '') + '>' +
                 fx.households[k].label + '</option>';

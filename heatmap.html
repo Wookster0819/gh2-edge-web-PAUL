@@ -615,8 +615,14 @@
           document.title = hh.label + ' — EDGE Heat Map';
           // Household selector in the topbar — same control as the dashboard,
           // so switching households carries across pages via ?hh=.
+          // The household switcher is a TEST tool (fixture households). Real
+          // members have one household, so by default show the name only;
+          // add ?dev=1 to the URL to get the dropdown (same convention as
+          // ?design=1 on pricing).
           var who = document.getElementById('whoAmI');
-          if (who) {
+          if (who && getParam('dev') !== '1') {
+            who.textContent = hh.label;
+          } else if (who) {
             var opts = Object.keys(fx.households).map(function (k) {
               return '<option value="' + k + '"' + (k === hhId ? ' selected' : '') + '>' +
                 fx.households[k].label + '</option>';
