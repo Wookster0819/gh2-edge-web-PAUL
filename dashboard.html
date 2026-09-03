@@ -269,7 +269,12 @@
     }
     .driver-ico svg { width: 16px; height: 16px; }
     .driver-name { font-size: 13px; font-weight: 600; color: var(--text-dim); }
-    .driver-amt { font-size: 21px; font-weight: 800; color: var(--accent-money); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .driver-amt { font-size: 21px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 6px; }
+    .driver-amt.in { color: var(--accent-money); }
+    .driver-amt .dir { font-size: 15px; font-weight: 700; opacity: 0.8; }
+    .driver-amt.out .dir { color: var(--text-muted); }
+    .driver-amt .dir-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-left: 2px; }
+    .driver-amt.in .dir-lbl { color: var(--accent-money); opacity: 0.8; }
     .driver-share { font-size: 11.5px; color: var(--text-muted); }
     .driver-bar { height: 4px; border-radius: 4px; background: var(--border-soft); overflow: hidden; }
     .driver-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent-purple); }
@@ -929,12 +934,22 @@
         if (n.indexOf('withdraw') > -1 || n.indexOf('portfolio') > -1) return DRIVER_ICONS['Withdrawal Strategy'];
         return DRIVER_ICONS['Withdrawal Strategy'];
       }
+      // "Where the Money Goes" = lifetime cash flows. Color by direction so
+      // money OUT (taxes, premiums, withdrawals) doesn't read as a gain.
+      // Jae: send an explicit d.direction ('in' | 'out'); until then it's
+      // inferred from the name ("received" -> in, everything else -> out).
+      function driverDir(d) {
+        if (d.direction === 'in' || d.direction === 'out') return d.direction;
+        return /received|income|benefit/i.test(d.name) ? 'in' : 'out';
+      }
       var drHtml = '';
       DATA.drivers.forEach(function (d) {
+        var dir = driverDir(d);
         drHtml += '<div class="driver">' +
           '<div class="driver-top"><span class="driver-ico">' + driverIcon(d.name) + '</span>' +
           '<span class="driver-name">' + d.name + '</span></div>' +
-          '<div class="driver-amt">' + fmt$(d.amount) + '</div>' +
+          '<div class="driver-amt ' + dir + '"><span class="dir" aria-hidden="true">' + (dir === 'in' ? '&uarr;' : '&darr;') + '</span>' + fmt$(d.amount) +
+          '<span class="dir-lbl">' + (dir === 'in' ? 'in' : 'out') + '</span></div>' +
           '<div class="driver-share">lifetime, through age 95</div>' +
           '<div class="driver-bar"><i style="width:' + Math.round(d.share * 100) + '%"></i></div>' +
           '</div>';
