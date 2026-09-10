@@ -1164,6 +1164,7 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 22px rgba(0,0,0,0.38);
     }
     .tier-icon svg { width: 27px; height: 27px; }
+    .tier-icon.jae svg { width: 30px; height: 30px; }
     .tier-icon.jae   svg { filter: drop-shadow(0 0 6px rgba(201,168,118,0.55)); }
     .tier-icon.edge  svg { filter: drop-shadow(0 0 7px rgba(167,139,250,0.65)); }
     .tier-icon.ultra svg { filter: drop-shadow(0 0 7px rgba(252,211,77,0.6)); }
@@ -1272,7 +1273,7 @@
     .tp-opt:hover { border-color: var(--text-muted); }
     .tp-opt .tp-amt { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.1; }
     .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
-    .tp-opt .tp-tag { position: absolute; top: -9px; right: 8px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; background: rgba(34,197,94,0.2); color: #86EFAC; }
+    .tp-opt .tp-tag { display: inline-block; margin-top: 5px; align-self: flex-start; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
     .tp-opt.on { color: var(--text); border-color: var(--accent-purple); background: rgba(139,92,246,0.12); box-shadow: inset 0 0 0 1px var(--accent-purple); }
     .tier-card.jae .tp-opt.on   { border-color: rgba(201,168,118,0.75); background: rgba(201,168,118,0.08); box-shadow: inset 0 0 0 1px rgba(201,168,118,0.75); }
     .tier-card.ultra .tp-opt.on { border-color: rgba(252,211,77,0.75); background: rgba(252,211,77,0.08); box-shadow: inset 0 0 0 1px rgba(252,211,77,0.75); }
@@ -1894,7 +1895,7 @@
         <div class="tier-card jae" data-shopify-tier="Tier 1">
           <div class="tier-head">
             <div class="tier-icon jae">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path class="ico-fill" d="M9 5.5h3.5V8H15l2 2h3.5v6.5H17l-2 2H9l-2-2H4.5V10.5H7V8h2z"/><path d="M4.5 12H2.5"/><path d="M10 18.5v1.8M14 18.5v1.8"/><path d="M12.5 5.5V3.8"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" aria-label="Check engine"><path d="M9.5 9V5.5h4V9h2.2l2 2H21v6.5h-3.3l-2 2H9.2l-2-2H5V14H3v-3.5h2V9z"/><path d="M10 19.5V22M14.5 19.5V22" fill="none" stroke-width="1.8"/><path d="M11.5 5.5V3.5" fill="none" stroke-width="1.8"/></svg>
             </div>
             <div>
               <h3 class="tier-name">Quick Check</h3>
