@@ -753,6 +753,11 @@
        commerce. ?upsell=1 brings them back, same switch as everything else. */
     body:not(.upsell-on) .tier-prices,
     body:not(.upsell-on) .tier-billing,
+    body:not(.upsell-on) .bp-bill-row,
+    body:not(.upsell-on) .tier-price,
+    body:not(.upsell-on) .tier-price-sub,
+    body:not(.upsell-on) .tier-lock,
+    body:not(.upsell-on) .tier-addon,
     body:not(.upsell-on) .tier-cta-btn { display: none !important; }
     body:not(.upsell-on) .cadence-sell { display: none; }
     body.upsell-on .cadence-tell { display: none; }
@@ -1235,6 +1240,35 @@
     .billing-toggle button[aria-pressed="true"] { background: rgba(255,255,255,0.06); color: var(--text); }
     .tier-card.popular .billing-toggle button[aria-pressed="true"] { background: rgba(139,92,246,0.18); }
     .tier-card.ultra .billing-toggle button[aria-pressed="true"] { background: rgba(252,211,77,0.15); }
+
+    /* Shared billing toggle + founding price lock (mirrors pricing.html) */
+    .bp-bill-row { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 22px; }
+    .billing-toggle.bp-shared { display: inline-grid; grid-template-columns: auto auto; border-radius: 999px; }
+    .billing-toggle.bp-shared button { padding: 8px 16px; font-size: 13px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px; }
+    .billing-toggle.bp-shared button[aria-pressed="true"] { background: var(--accent-purple); color: #FFF; }
+    .bp-save { font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
+    .billing-toggle.bp-shared button[aria-pressed="true"] .bp-save { background: rgba(255,255,255,0.22); color: #FFF; }
+    .bp-bill-hint { font-size: 13px; color: var(--text-muted); }
+    .bp-bill-hint strong { color: var(--text); }
+    .tier-price { display: flex; align-items: baseline; gap: 6px; }
+    .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin-top: -10px; min-height: 16px; }
+    .tier-lock { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.28); font-size: 12.5px; line-height: 1.35; color: var(--text); }
+    .tier-lock .lk { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.18); color: #22C55E; }
+    .tier-lock .lk svg { width: 11px; height: 11px; }
+    .tier-lock strong { color: #4ADE80; font-weight: 800; }
+    .tier-lock.off { background: transparent; border-style: dashed; border-color: var(--border); color: var(--text-muted); }
+    .tier-lock.off .lk { background: var(--border); color: var(--text-muted); }
+    .tier-lock.off strong { color: var(--text); }
+    .tier-features { flex: 1; }
+    .tier-addon { padding: 14px 16px; border-radius: 12px; border: 1px dashed rgba(252,211,77,0.35); background: var(--bg-soft); }
+    .addon-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+    .addon-eyebrow { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #FCD34D; }
+    .addon-price { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; color: var(--text); }
+    .addon-price small { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+    .addon-title { font-size: 14.5px; font-weight: 700; margin: 0 0 4px; color: var(--text); }
+    .addon-sub { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px; }
+    .addon-cta { font-size: 13px; font-weight: 700; color: #FCD34D; text-decoration: none; }
+    .addon-cta:hover { text-decoration: underline; }
 
     .tier-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
     .tier-price-cell {
@@ -1784,36 +1818,37 @@
         <p>All consumer tiers include the full federal + state + Medicare tax math,<br/>year-by-year projections, and a downloadable PDF plan.</p>
       </div>
 
+      <div class="bp-bill-row">
+        <div class="billing-toggle bp-shared" role="group" aria-label="Billing period">
+          <button type="button" data-billing="monthly" aria-pressed="false">Monthly</button>
+          <button type="button" data-billing="yearly" aria-pressed="true">Yearly <span class="bp-save">2 months free</span></button>
+        </div>
+        <div class="bp-bill-hint"><strong>Founding price lock:</strong> go yearly and today&rsquo;s price is yours for as long as you stay.</div>
+      </div>
+
       <div class="tier-grid">
-        <!-- Jae's Corner -->
+        <!-- Tier 1 — Quick Check -->
         <div class="tier-card jae" data-shopify-tier="Tier 1">
           <div class="tier-head">
             <div class="tier-icon jae">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
             </div>
             <div>
-              <h3 class="tier-name">Jae&rsquo;s Corner</h3>
-              <p class="tier-tag">Stay informed</p>
+              <h3 class="tier-name">Quick Check</h3>
+              <p class="tier-tag">Stay informed.</p>
             </div>
           </div>
+          <div class="tier-price" data-month="9" data-year="89"><span class="tier-price-amount">$89</span><span class="tier-price-unit">/ year</span></div>
+          <div class="tier-price-sub"></div>
+          <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 13.03 12.7 2 7"/></svg><span class="feat-text">Weekly insights</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg><span class="feat-text">Annual rerun of key episodes</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 13.03 12.7 2 7"/></svg><span class="feat-text">Jae&rsquo;s working notes on the tax law and rule changes that matter</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg><span class="feat-text">One EDGE recommendation per year, run on your numbers</span></li>
           </ul>
-          <div class="tier-billing">
-            <div class="billing-toggle" data-tier="jae" role="group" aria-label="Billing cadence">
-              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly &middot; 2 months free &middot; price locked</button>
-            </div>
-          </div>
-          <div class="tier-prices">
-            <div class="tier-price-cell"><span class="tier-price-amount">$9</span><span class="tier-price-unit">/ month</span></div>
-            <div class="tier-price-cell"><span class="tier-price-amount">$89</span><span class="tier-price-unit">/ year</span></div>
-          </div>
-          <a href="mailto:jae@gh2benefits.com?subject=Jae%27s%20Corner%20inquiry" class="tier-cta-btn">Get Jae&rsquo;s Corner</a>
+          <a href="mailto:jae@gh2benefits.com?subject=Quick%20Check%20inquiry" class="tier-cta-btn">Get Quick Check</a>
         </div>
 
-        <!-- GH2 EDGE (Most Popular) -->
+        <!-- Tier 2 — Full Plan (Most Popular) -->
         <div class="tier-card popular" data-shopify-tier="Tier 2">
           <span class="tier-badge">Most Popular</span>
           <div class="tier-head">
@@ -1821,55 +1856,51 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M22 12c-2.667 4-6 6-10 6s-7.333-2-10-6c2.667-4 6-6 10-6s7.333 2 10 6z"/></svg>
             </div>
             <div>
-              <h3 class="tier-name">GH2 EDGE&trade;</h3>
+              <h3 class="tier-name">Full Plan</h3>
               <p class="tier-tag">Improve Your Number.</p>
             </div>
           </div>
+          <div class="tier-price" data-month="29" data-year="290"><span class="tier-price-amount">$290</span><span class="tier-price-unit">/ year</span></div>
+          <div class="tier-price-sub"></div>
+          <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.739-8z"/></svg><div class="feat-text"><strong>Continuous monitoring</strong><span>We monitor the markets and your plan 24/7.</span></div></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="feat-text">Updates with every market move</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="feat-text">Life-event driven recalcs</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="feat-text">All 80 retirement strategies ranked for your household</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><div class="feat-text"><strong>Your dashboard</strong><span>Projected liquid net worth, the drivers preserving it, your next key action and check-in date.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg><div class="feat-text"><strong>Heat map + Ask EDGE</strong><span>Seven wealth regimes at a glance, and chat grounded in your numbers.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.739-8z"/></svg><div class="feat-text"><strong>Continuous monitoring</strong><span>Re-run on every market move, rule change, and life event &mdash; email when the answer changes.</span></div></li>
           </ul>
-          <div class="tier-billing">
-            <div class="billing-toggle" data-tier="edge" role="group" aria-label="Billing cadence">
-              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly &middot; 2 months free &middot; price locked</button>
-            </div>
-          </div>
-          <div class="tier-prices">
-            <div class="tier-price-cell"><span class="tier-price-amount">$29</span><span class="tier-price-unit">/ month</span></div>
-            <div class="tier-price-cell"><span class="tier-price-amount">$290</span><span class="tier-price-unit">/ year</span></div>
-          </div>
-          <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry" class="tier-cta-btn">View details</a>
+          <a href="mailto:jae@gh2benefits.com?subject=Full%20Plan%20inquiry" class="tier-cta-btn">Get Full Plan</a>
         </div>
 
-        <!-- GH2 EDGE Ultra -->
+        <!-- Tier 3 — Concierge -->
+        <!-- Jae: "ask Jae any time" is served by Ask EDGE first; true anomalies route to you. Members see one promise. (Paul, Sept 10) -->
         <div class="tier-card ultra" data-shopify-tier="Tier 3">
           <div class="tier-head">
             <div class="tier-icon ultra">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6 22V8"/><path d="M18 22V8"/><path d="M10 22V12h4v10"/><circle cx="12" cy="4" r="3" fill="currentColor" stroke="none"/></svg>
             </div>
             <div>
-              <h3 class="tier-name">GH2 EDGE&trade; Ultra</h3>
-              <p class="tier-tag">Protect Your Number.</p>
+              <h3 class="tier-name">Concierge</h3>
+              <p class="tier-tag">A person behind your plan.</p>
             </div>
           </div>
+          <div class="tier-price" data-month="99" data-year="990"><span class="tier-price-amount">$990</span><span class="tier-price-unit">/ year</span></div>
+          <div class="tier-price-sub"></div>
+          <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Priority continuous monitoring</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="feat-text">Direct alerts for critical changes</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="feat-text">Concierge-level guidance</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-5"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Everything in Full Plan</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg><div class="feat-text"><strong>Ask Jae a question any time</strong><span>Concierge service, not a ticket queue.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg><div class="feat-text"><strong>A quarterly review brief</strong><span>Written for your household.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg><span class="feat-text">4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</span></li>
           </ul>
-          <div class="tier-billing">
-            <div class="billing-toggle" data-tier="ultra" role="group" aria-label="Billing cadence">
-              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly &middot; 2 months free &middot; price locked</button>
-            </div>
+          <a href="mailto:jae@gh2benefits.com?subject=Concierge%20inquiry" class="tier-cta-btn">Get Concierge</a>
+          <!-- Jae: $4,000 is a placeholder (Paul, Sept 10). Annual only by design. -->
+          <div class="tier-addon" data-placeholder-price="true">
+            <div class="addon-head"><span class="addon-eyebrow">Within Concierge</span><span class="addon-price">$4,000 <small>/ year</small></span></div>
+            <div class="addon-title">Jae as your personal advisor</div>
+            <p class="addon-sub">Jae works your plan personally, all year. Annual only, and your founding price is locked the same way.</p>
+            <a class="addon-cta" href="mailto:jae@gh2benefits.com?subject=Personal%20advisor%20inquiry">Talk to Jae about this &rarr;</a>
           </div>
-          <div class="tier-prices">
-            <div class="tier-price-cell"><span class="tier-price-amount">$99</span><span class="tier-price-unit">/ month</span></div>
-            <div class="tier-price-cell"><span class="tier-price-amount">$990</span><span class="tier-price-unit">/ year</span></div>
-          </div>
-          <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20Ultra%20inquiry" class="tier-cta-btn">Get Ultra</a>
         </div>
 
         <!-- Enterprise: institutional door. No Shopify sync (see CSS note). -->
@@ -2062,16 +2093,37 @@
         });
       });
 
-      // ===== Billing toggle (per-tier) =====
-      var billingGroups = document.querySelectorAll('.billing-toggle');
-      billingGroups.forEach(function (g) {
-        var btns = g.querySelectorAll('button');
-        btns.forEach(function (b) {
-          b.addEventListener('click', function () {
-            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-          });
+      // ===== Billing toggle (shared) + founding price lock — mirrors pricing.html =====
+      var BP_BILL = 'yearly';
+      function bpMoney(n) { return '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+      function bpApplyBilling() {
+        document.querySelectorAll('.billing-toggle.bp-shared button').forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-billing') === BP_BILL ? 'true' : 'false');
         });
+        document.querySelectorAll('.tier-card[data-shopify-tier]').forEach(function (card) {
+          var p = card.querySelector('.tier-price'); if (!p) return;
+          var m = p.getAttribute('data-month'), y = p.getAttribute('data-year');
+          if (m == null && y == null) return;
+          var useYear = BP_BILL === 'yearly' ? y != null : m == null;
+          var price = useYear ? +y : +m;
+          p.querySelector('.tier-price-amount').textContent = bpMoney(price);
+          p.querySelector('.tier-price-unit').textContent = useYear ? '/ year' : '/ month';
+          var sub = card.querySelector('.tier-price-sub');
+          if (sub) sub.textContent = useYear ? (m != null ? '$' + (y / 12).toFixed(2) + ' a month, billed yearly' : 'Billed yearly') : (y != null ? 'or ' + bpMoney(y) + ' a year' : '');
+          var lock = card.querySelector('.tier-lock'), lt = card.querySelector('.tier-lock-text');
+          if (lock && lt && y != null) {
+            lock.classList.toggle('off', !useYear);
+            lt.innerHTML = useYear
+              ? '<strong>Founding price lock</strong> \u2014 ' + bpMoney(y) + ' a year is yours for as long as you stay.'
+              : '<strong>Go yearly</strong> to lock ' + bpMoney(y) + ' a year for as long as you stay.';
+          }
+        });
+      }
+      document.querySelectorAll('.billing-toggle.bp-shared button').forEach(function (b) {
+        b.addEventListener('click', function () { BP_BILL = b.getAttribute('data-billing'); bpApplyBilling(); });
       });
+      bpApplyBilling();
+      window.GH2_BP_APPLY = bpApplyBilling;
 
       // ===== Formatters =====
       function fmt$(n) { if (!Number.isFinite(n)) return '—'; return '$' + Math.round(n).toLocaleString('en-US'); }
@@ -2531,25 +2583,23 @@
               ul.textContent = '';
               ls.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
             }
-            // Price cells: fill only what a variant title states. This page
-            // shows a monthly and a yearly cell; a cell no variant claims is
-            // emptied rather than left carrying the page's old number.
-            var cells = card.querySelectorAll('.tier-price-cell');
-            if (cells.length) {
-              var vs = m.variants || [];
-              var pick = function (kw) {
-                return vs.filter(function (v) { return (v.title || '').toLowerCase().indexOf(kw) > -1; })[0];
-              };
-              var mo = pick('month'), yr = pick('year');
-              var put = function (cell, v, unit) {
-                if (!cell) return;
-                if (v) cell.innerHTML = '<span class="tier-price-amount">$' +
-                  Number(v.price).toLocaleString('en-US', { maximumFractionDigits: 0 }) +
-                  '</span><span class="tier-price-unit">' + unit + '</span>';
-                else cell.textContent = '';
-              };
-              if (mo || yr) { put(cells[0], mo, '/ month'); put(cells[1], yr, '/ year'); }
-              else if (vs[0]) { put(cells[0], vs[0], ''); if (cells[1]) cells[1].textContent = ''; }
+            // Prices: variants titled with "month" / "year" feed the shared
+            // billing toggle. Jae: name the Shopify variants Monthly / Yearly.
+            var p = card.querySelector('.tier-price');
+            if (p) {
+              var vs = m.variants || [], titled = false;
+              vs.forEach(function (v) {
+                var t = (v.title || '').toLowerCase();
+                if (t.indexOf('month') > -1) { p.setAttribute('data-month', v.price); titled = true; }
+                else if (t.indexOf('year') > -1 || t.indexOf('annual') > -1) { p.setAttribute('data-year', v.price); titled = true; }
+              });
+              if (!titled && vs[0]) {
+                // A single untitled variant: show it plainly, no toggle claim.
+                p.removeAttribute('data-month'); p.removeAttribute('data-year');
+                p.querySelector('.tier-price-amount').textContent = '$' + Number(vs[0].price).toLocaleString('en-US', { maximumFractionDigits: 0 });
+                p.querySelector('.tier-price-unit').textContent = '';
+              }
+              if (window.GH2_BP_APPLY) window.GH2_BP_APPLY();
             }
           });
         })
