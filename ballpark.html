@@ -1161,7 +1161,13 @@
       border-radius: 16px;
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 22px rgba(0,0,0,0.38);
     }
+    .tier-icon svg { width: 27px; height: 27px; }
+    .tier-icon.jae   svg { filter: drop-shadow(0 0 6px rgba(201,168,118,0.55)); }
+    .tier-icon.edge  svg { filter: drop-shadow(0 0 7px rgba(167,139,250,0.65)); }
+    .tier-icon.ultra svg { filter: drop-shadow(0 0 7px rgba(252,211,77,0.6)); }
+    .tier-icon .ico-fill { fill: currentColor; fill-opacity: 0.18; }
     .tier-icon.jae   { background: radial-gradient(circle at 30% 30%, #2A2520, #0a0a0a); border: 1px solid #3A3530; color: #C9A876; }
     .tier-icon.edge  { background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border: 1px solid #312E5B; color: #A78BFA; }
     .tier-icon.ultra { background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border: 1px solid #3A2F1F; color: #FCD34D; }
@@ -1200,17 +1206,21 @@
     }
     .tier-features li {
       display: grid;
-      grid-template-columns: 22px 1fr;
-      gap: 10px;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
       align-items: start;
     }
     .tier-features li .feat-icon {
-      width: 18px; height: 18px;
+      width: 30px; height: 30px; box-sizing: border-box; padding: 7px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-soft);
       color: var(--text-dim);
-      margin-top: 2px;
+      stroke-linecap: round; stroke-linejoin: round;
+      margin-top: -1px;
     }
-    .tier-card.popular .feat-icon { color: var(--accent-purple); }
-    .tier-card.ultra .feat-icon { color: #FCD34D; }
+    .tier-card.jae .feat-icon     { background: rgba(201,168,118,0.10); border-color: rgba(201,168,118,0.28); color: #E2C89A; }
+    .tier-card.popular .feat-icon { background: rgba(139,92,246,0.14); border-color: rgba(139,92,246,0.32); color: #C4B5FD; }
+    .tier-card.ultra .feat-icon   { background: rgba(252,211,77,0.10); border-color: rgba(252,211,77,0.30); color: #FCD34D; }
     .tier-features li .feat-text { color: var(--text); font-size: 13.5px; line-height: 1.45; }
     .tier-features li .feat-text strong { display: block; font-weight: 600; }
     .tier-features li .feat-text span { display: block; color: var(--text-muted); font-size: 12.5px; margin-top: 2px; }
@@ -1249,8 +1259,24 @@
     .billing-toggle.bp-shared button[aria-pressed="true"] .bp-save { background: rgba(255,255,255,0.22); color: #FFF; }
     .bp-bill-hint { font-size: 13px; color: var(--text-muted); }
     .bp-bill-hint strong { color: var(--text); }
-    .tier-price { display: flex; align-items: baseline; gap: 6px; }
-    .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin-top: -10px; min-height: 16px; }
+    /* Per-card price options: monthly and yearly both visible, one selected.
+       Clicking either switches the whole grid (shared billing state). */
+    .tier-price { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+    .tp-opt {
+      position: relative; text-align: left; cursor: pointer; font-family: inherit;
+      padding: 10px 12px 9px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--bg-soft); color: var(--text-muted);
+      display: flex; flex-direction: column; gap: 2px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .tp-opt:hover { border-color: var(--text-muted); }
+    .tp-opt .tp-amt { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.1; }
+    .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
+    .tp-opt .tp-tag { position: absolute; top: -9px; right: 8px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 6px; border-radius: 999px; background: rgba(34,197,94,0.2); color: #86EFAC; }
+    .tp-opt.on { color: var(--text); border-color: var(--accent-purple); background: rgba(139,92,246,0.12); box-shadow: inset 0 0 0 1px var(--accent-purple); }
+    .tier-card.jae .tp-opt.on   { border-color: rgba(201,168,118,0.75); background: rgba(201,168,118,0.08); box-shadow: inset 0 0 0 1px rgba(201,168,118,0.75); }
+    .tier-card.ultra .tp-opt.on { border-color: rgba(252,211,77,0.75); background: rgba(252,211,77,0.08); box-shadow: inset 0 0 0 1px rgba(252,211,77,0.75); }
+    .tp-opt[hidden] { display: none; }
     .tier-lock { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.28); font-size: 12.5px; line-height: 1.35; color: var(--text); }
     .tier-lock .lk { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.18); color: #22C55E; }
     .tier-lock .lk svg { width: 11px; height: 11px; }
@@ -1259,15 +1285,48 @@
     .tier-lock.off .lk { background: var(--border); color: var(--text-muted); }
     .tier-lock.off strong { color: var(--text); }
     .tier-features { flex: 1; }
-    .tier-addon { padding: 14px 16px; border-radius: 12px; border: 1px dashed rgba(252,211,77,0.35); background: var(--bg-soft); }
-    .addon-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-    .addon-eyebrow { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #FCD34D; }
-    .addon-price { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; color: var(--text); }
-    .addon-price small { font-size: 12px; font-weight: 600; color: var(--text-muted); }
-    .addon-title { font-size: 14.5px; font-weight: 700; margin: 0 0 4px; color: var(--text); }
-    .addon-sub { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px; }
-    .addon-cta { font-size: 13px; font-weight: 700; color: #FCD34D; text-decoration: none; }
-    .addon-cta:hover { text-decoration: underline; }
+    /* Advisor add-on: a teaser line; click opens a bubble with the detail
+       and a link out to Jae's site. Price stays inside the bubble. */
+    .tier-addon { position: relative; }
+    .addon-toggle {
+      width: 100%; text-align: left; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px;
+      border: 1px dashed rgba(252,211,77,0.35); background: var(--bg-soft); color: var(--text);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .addon-toggle:hover, .addon-toggle[aria-expanded="true"] { border-style: solid; border-color: rgba(252,211,77,0.6); background: rgba(252,211,77,0.06); }
+    .addon-toggle .at-ico { width: 30px; height: 30px; flex: none; border-radius: 9px; display: grid; place-items: center; background: rgba(252,211,77,0.12); border: 1px solid rgba(252,211,77,0.3); color: #FCD34D; }
+    .addon-toggle .at-ico svg { width: 15px; height: 15px; }
+    .addon-toggle .at-text { flex: 1; }
+    .addon-toggle .at-eyebrow { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #FCD34D; margin-bottom: 2px; }
+    .addon-toggle .at-title { display: block; font-size: 14px; font-weight: 700; }
+    .addon-toggle .at-chev { width: 16px; height: 16px; color: var(--text-muted); transition: transform 0.18s ease; flex: none; }
+    .addon-toggle[aria-expanded="true"] .at-chev { transform: rotate(90deg); }
+    .addon-pop {
+      position: absolute; left: 0; right: 0; bottom: calc(100% + 12px); z-index: 5;
+      background: #161D33; border: 1px solid rgba(252,211,77,0.45); border-radius: 14px;
+      padding: 16px 18px; box-shadow: 0 18px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.3);
+    }
+    .addon-pop::after {
+      content: ''; position: absolute; left: 28px; bottom: -8px; width: 14px; height: 14px;
+      background: #161D33; border-right: 1px solid rgba(252,211,77,0.45); border-bottom: 1px solid rgba(252,211,77,0.45);
+      transform: rotate(45deg);
+    }
+    .addon-pop[hidden] { display: none; }
+    .addon-pop-h { font-size: 15px; font-weight: 800; color: var(--text); margin: 0 0 6px; }
+    .addon-pop p { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0 0 12px; }
+    .addon-pop-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 12px; }
+    .addon-pop-price b { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+    .addon-pop-price small { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .addon-pop-price .pp-lock { margin-left: auto; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #4ADE80; background: rgba(34,197,94,0.12); padding: 3px 8px; border-radius: 999px; }
+    .addon-pop-cta {
+      display: block; text-align: center; text-decoration: none;
+      background: linear-gradient(90deg, #B45309, #F59E0B); color: #1A1200;
+      font-weight: 800; font-size: 13.5px; padding: 11px 14px; border-radius: 10px;
+    }
+    .addon-pop-cta:hover { filter: brightness(1.06); }
+    .addon-pop-x { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: var(--text-muted); font-size: 18px; cursor: pointer; line-height: 1; font-family: inherit; }
 
     .tier-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
     .tier-price-cell {
@@ -1821,11 +1880,7 @@
       </div>
 
       <div class="bp-bill-row">
-        <div class="billing-toggle bp-shared" role="group" aria-label="Billing period">
-          <button type="button" data-billing="monthly" aria-pressed="false">Monthly</button>
-          <button type="button" data-billing="yearly" aria-pressed="true">Yearly <span class="bp-save">2 months free</span></button>
-        </div>
-        <div class="bp-bill-hint"><strong>Founding price lock:</strong> go yearly and today&rsquo;s price is yours for as long as you stay.</div>
+        <div class="bp-bill-hint"><strong>Founding price lock:</strong> pay monthly or yearly &mdash; go yearly and today&rsquo;s price is yours for as long as you stay.</div>
       </div>
 
       <div class="tier-grid">
@@ -1833,15 +1888,17 @@
         <div class="tier-card jae" data-shopify-tier="Tier 1">
           <div class="tier-head">
             <div class="tier-icon jae">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path class="ico-fill" d="M9 5.5h3.5V8H15l2 2h3.5v6.5H17l-2 2H9l-2-2H4.5V10.5H7V8h2z"/><path d="M4.5 12H2.5"/><path d="M10 18.5v1.8M14 18.5v1.8"/><path d="M12.5 5.5V3.8"/></svg>
             </div>
             <div>
               <h3 class="tier-name">Quick Check</h3>
               <p class="tier-tag">Stay informed.</p>
             </div>
           </div>
-          <div class="tier-price" data-month="9" data-year="89"><span class="tier-price-amount">$89</span><span class="tier-price-unit">/ year</span></div>
-          <div class="tier-price-sub"></div>
+          <div class="tier-price" data-month="9" data-year="89">
+            <button type="button" class="tp-opt" data-billing="monthly"><span class="tp-amt">$9</span><span class="tp-unit">/ month</span></button>
+            <button type="button" class="tp-opt on" data-billing="yearly"><span class="tp-amt">$89</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          </div>
           <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 13.03 12.7 2 7"/></svg><span class="feat-text">Jae&rsquo;s working notes on the tax law and rule changes that matter</span></li>
@@ -1855,15 +1912,17 @@
           <span class="tier-badge">Most Popular</span>
           <div class="tier-head">
             <div class="tier-icon edge">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M22 12c-2.667 4-6 6-10 6s-7.333-2-10-6c2.667-4 6-6 10-6s7.333 2 10 6z"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle class="ico-fill" cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 1.5V4M12 20v2.5M1.5 12H4M20 12h2.5"/></svg>
             </div>
             <div>
               <h3 class="tier-name">Full Plan</h3>
               <p class="tier-tag">Improve Your Number.</p>
             </div>
           </div>
-          <div class="tier-price" data-month="29" data-year="290"><span class="tier-price-amount">$290</span><span class="tier-price-unit">/ year</span></div>
-          <div class="tier-price-sub"></div>
+          <div class="tier-price" data-month="29" data-year="290">
+            <button type="button" class="tp-opt" data-billing="monthly"><span class="tp-amt">$29</span><span class="tp-unit">/ month</span></button>
+            <button type="button" class="tp-opt on" data-billing="yearly"><span class="tp-amt">$290</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          </div>
           <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="feat-text">All 80 retirement strategies ranked for your household</span></li>
@@ -1879,15 +1938,17 @@
         <div class="tier-card ultra" data-shopify-tier="Tier 3">
           <div class="tier-head">
             <div class="tier-icon ultra">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6 22V8"/><path d="M18 22V8"/><path d="M10 22V12h4v10"/><circle cx="12" cy="4" r="3" fill="currentColor" stroke="none"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path class="ico-fill" d="M4.5 16.5a7.5 7.5 0 0 1 15 0z"/><path d="M12 9V6.5"/><path d="M10 6.5h4"/><path d="M3 19.5h18"/><path d="M8 13.2a4.6 4.6 0 0 1 3-2.6"/></svg>
             </div>
             <div>
               <h3 class="tier-name">Concierge</h3>
               <p class="tier-tag">A person behind your plan.</p>
             </div>
           </div>
-          <div class="tier-price" data-month="99" data-year="990"><span class="tier-price-amount">$990</span><span class="tier-price-unit">/ year</span></div>
-          <div class="tier-price-sub"></div>
+          <div class="tier-price" data-month="99" data-year="990">
+            <button type="button" class="tp-opt" data-billing="monthly"><span class="tp-amt">$99</span><span class="tp-unit">/ month</span></button>
+            <button type="button" class="tp-opt on" data-billing="yearly"><span class="tp-amt">$990</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          </div>
           <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-5"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Everything in Full Plan</span></li>
@@ -1896,12 +1957,22 @@
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg><span class="feat-text">4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</span></li>
           </ul>
           <a href="mailto:jae@gh2benefits.com?subject=Concierge%20inquiry" class="tier-cta-btn">Get Concierge</a>
-          <!-- Jae: $4,000 is a placeholder (Paul, Sept 10). Annual only by design. -->
+          <!-- Jae: the $4,000 is a placeholder (Paul, Sept 10) and annual-only by
+               design. The bubble's button should go to your advisory offer —
+               set ADVISOR_URL below to the exact page. -->
           <div class="tier-addon" data-placeholder-price="true">
-            <div class="addon-head"><span class="addon-eyebrow">Within Concierge</span><span class="addon-price">$4,000 <small>/ year</small></span></div>
-            <div class="addon-title">Jae as your personal advisor</div>
-            <p class="addon-sub">Jae works your plan personally, all year. Annual only, and your founding price is locked the same way.</p>
-            <a class="addon-cta" href="mailto:jae@gh2benefits.com?subject=Personal%20advisor%20inquiry">Talk to Jae about this &rarr;</a>
+            <button type="button" class="addon-toggle" aria-expanded="false" aria-controls="advisorPop">
+              <span class="at-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <span class="at-text"><span class="at-eyebrow">Within Concierge</span><span class="at-title">Want Jae as your personal advisor?</span></span>
+              <svg class="at-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div class="addon-pop" id="advisorPop" hidden role="dialog" aria-label="Jae as your personal advisor">
+              <button type="button" class="addon-pop-x" aria-label="Close">&times;</button>
+              <div class="addon-pop-h">Jae, personally, all year</div>
+              <p>Not just the engine &mdash; Jae works your plan himself and stays on it as your life changes. Annual only.</p>
+              <div class="addon-pop-price"><b>$4,000</b><small>/ year</small><span class="pp-lock">price locked</span></div>
+              <a class="addon-pop-cta" data-advisor-link href="https://jaeoh.com/" target="_blank" rel="noopener">See Jae&rsquo;s advisory offer &nearr;</a>
+            </div>
           </div>
         </div>
 
@@ -2090,11 +2161,9 @@
           var m = p.getAttribute('data-month'), y = p.getAttribute('data-year');
           if (m == null && y == null) return;
           var useYear = BP_BILL === 'yearly' ? y != null : m == null;
-          var price = useYear ? +y : +m;
-          p.querySelector('.tier-price-amount').textContent = bpMoney(price);
-          p.querySelector('.tier-price-unit').textContent = useYear ? '/ year' : '/ month';
-          var sub = card.querySelector('.tier-price-sub');
-          if (sub) sub.textContent = useYear ? (m != null ? '$' + (y / 12).toFixed(2) + ' a month, billed yearly' : 'Billed yearly') : (y != null ? 'or ' + bpMoney(y) + ' a year' : '');
+          var om = p.querySelector('.tp-opt[data-billing="monthly"]'), oy = p.querySelector('.tp-opt[data-billing="yearly"]');
+          if (om) { om.hidden = m == null; if (m != null) om.querySelector('.tp-amt').textContent = bpMoney(m); om.classList.toggle('on', !useYear); }
+          if (oy) { oy.hidden = y == null; if (y != null) oy.querySelector('.tp-amt').textContent = bpMoney(y); oy.classList.toggle('on', useYear); }
           var lock = card.querySelector('.tier-lock'), lt = card.querySelector('.tier-lock-text');
           if (lock && lt && y != null) {
             lock.classList.toggle('off', !useYear);
@@ -2104,11 +2173,25 @@
           }
         });
       }
-      document.querySelectorAll('.billing-toggle.bp-shared button').forEach(function (b) {
+      document.querySelectorAll('.billing-toggle.bp-shared button, .tp-opt').forEach(function (b) {
         b.addEventListener('click', function () { BP_BILL = b.getAttribute('data-billing'); bpApplyBilling(); });
       });
       bpApplyBilling();
       window.GH2_BP_APPLY = bpApplyBilling;
+
+      // ===== Advisor add-on bubble =====
+      // Jae: point this at your advisory offer page.
+      var ADVISOR_URL = 'https://jaeoh.com/';
+      (function () {
+        var wrap = document.querySelector('.tier-addon'); if (!wrap) return;
+        var btn = wrap.querySelector('.addon-toggle'), pop = wrap.querySelector('.addon-pop'), x = wrap.querySelector('.addon-pop-x');
+        var link = wrap.querySelector('[data-advisor-link]'); if (link) link.href = ADVISOR_URL;
+        function setOpen(o) { pop.hidden = !o; btn.setAttribute('aria-expanded', o ? 'true' : 'false'); }
+        btn.addEventListener('click', function () { setOpen(pop.hidden); });
+        x.addEventListener('click', function () { setOpen(false); });
+        document.addEventListener('click', function (e) { if (!pop.hidden && !wrap.contains(e.target)) setOpen(false); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+      })();
 
       // ===== Formatters =====
       function fmt$(n) { if (!Number.isFinite(n)) return '—'; return '$' + Math.round(n).toLocaleString('en-US'); }
@@ -2580,9 +2663,8 @@
               });
               if (!titled && vs[0]) {
                 // A single untitled variant: show it plainly, no toggle claim.
-                p.removeAttribute('data-month'); p.removeAttribute('data-year');
-                p.querySelector('.tier-price-amount').textContent = '$' + Number(vs[0].price).toLocaleString('en-US', { maximumFractionDigits: 0 });
-                p.querySelector('.tier-price-unit').textContent = '';
+                p.setAttribute('data-month', vs[0].price); p.removeAttribute('data-year');
+                var lone = p.querySelector('.tp-opt[data-billing="monthly"] .tp-unit'); if (lone) lone.textContent = '';
               }
               if (window.GH2_BP_APPLY) window.GH2_BP_APPLY();
             }
