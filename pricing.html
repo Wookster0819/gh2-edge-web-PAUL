@@ -47,6 +47,35 @@
       --card-radius: 22px; --button-radius: 16px; --field-radius: 14px;
       --hero-grad-start: #048963; --hero-grad-end: #06A77D; --hero-accent: #FFE07A; --section-accent: #48ACF0;
     }
+    /* ===== THEME: EDGE — the member-facing UI (dashboard / heat map / home).
+       Default for the preview (Paul, Sept 10). Trust/Warm/Fresh/Calm stay
+       selectable from the ?design=1 bar. ===== */
+    body[data-theme="edge"] {
+      --brand-blue: #8B5CF6; --brand-blue-dark: #7C3AED; --bg: #0A0E1A; --card-bg: #11172A;
+      --text: #F5F7FA; --text-muted: #8693AC; --text-faint: #5A6680; --border: #1F2940;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+      --card-radius: 16px; --button-radius: 10px; --field-radius: 12px;
+      --hero-grad-start: #1E1B4B; --hero-grad-end: #312E81; --hero-accent: #FBBF24; --section-accent: #8B5CF6;
+      --green: #22C55E; --green-bg: rgba(34,197,94,0.12); --amber: #F97316; --amber-bg: rgba(249,115,22,0.12); --red: #FF3B30;
+      --card-bg-2: #161D33; --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+    }
+    body[data-theme="edge"] .theme-bar { background: rgba(10,14,26,0.92); }
+    body[data-theme="edge"] .theme-btn { background: var(--card-bg); }
+    body[data-theme="edge"] .tier-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 16px 40px rgba(139,92,246,0.10); }
+    body[data-theme="edge"] .tier-card.popular { border-color: var(--brand-blue); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); }
+    body[data-theme="edge"] .tier-cta.primary { background: var(--grad-cta); border-color: transparent; }
+    body[data-theme="edge"] .tier-cta.primary:hover { filter: brightness(1.08); }
+    body[data-theme="edge"] .tier-cta.secondary { background: var(--card-bg-2); color: var(--text); border-color: var(--border); }
+    body[data-theme="edge"] .tier-cta.secondary:hover { border-color: var(--brand-blue); background: rgba(139,92,246,0.14); color: var(--text); }
+    body[data-theme="edge"] .back-link:hover { background: rgba(139,92,246,0.14); color: var(--text); border-color: var(--brand-blue); }
+    body[data-theme="edge"] .tier-value-block { border: 1px solid rgba(139,92,246,0.35); }
+    body[data-theme="edge"] .tier-ratio-value { color: #A78BFA; }
+    body[data-theme="edge"] .bill-toggle { background: var(--card-bg-2); }
+    body[data-theme="edge"] .vs-table td.cross { opacity: 0.7; }
+    body[data-theme="edge"] .b2b-tier { background: var(--card-bg-2); }
+    body[data-theme="edge"] .theme-btn[data-theme="edge"] .swatch { background: #8B5CF6; }
+    .theme-btn[data-theme="edge"] .swatch { background: #8B5CF6; }
+
     body[data-theme="calm"] {
       --brand-blue: #5B6EAE; --brand-blue-dark: #3F5191; --bg: #F6F4EE; --card-bg: #FFFFFF;
       --text: #2C2E3A; --text-muted: #6E707F; --text-faint: #A0A2B0; --border: #E1DFD7;
@@ -207,6 +236,8 @@
     body:not(.upsell-on) .tier-ratio,
     body:not(.upsell-on) .tier-cta,
     body:not(.upsell-on) .tier-price-sub,
+    body:not(.upsell-on) .tier-lock,
+    body:not(.upsell-on) .tier-addon,
     body:not(.upsell-on) .bill-row { display: none !important; }
     body:not(.upsell-on) .pt-sell { display: none; }
     body.upsell-on .pt-tell { display: none; }
@@ -217,7 +248,27 @@
     .tier-price-amount { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
     .tier-price-unit { font-size: 14px; color: var(--text-muted); font-weight: 600; }
     .tier-price-amount.tbd { font-size: 22px; color: var(--text-muted); }
-    .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin: -10px 0 14px; line-height: 1.4; min-height: 18px; }
+    .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin: -10px 0 10px; line-height: 1.4; min-height: 18px; }
+    .tier-lock { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: var(--green-bg); border: 1px solid rgba(34,197,94,0.28); margin: 0 0 14px; font-size: 12.5px; line-height: 1.35; color: var(--text); }
+    .tier-lock .lk { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.18); color: var(--green); }
+    .tier-lock .lk svg { width: 11px; height: 11px; }
+    .tier-lock strong { color: var(--green); font-weight: 800; letter-spacing: 0.02em; }
+    .tier-lock.off { background: transparent; border-style: dashed; border-color: var(--border); color: var(--text-muted); }
+    .tier-lock.off .lk { background: var(--border); color: var(--text-muted); }
+    .tier-lock.off strong { color: var(--text); }
+    .bill-hint { font-size: 13.5px; color: var(--text-muted); }
+    .bill-hint strong { color: var(--text); }
+
+    /* Concierge add-on: Jae as a personal advisor (annual only) */
+    .tier-addon { margin-top: 16px; padding: 14px 16px; border-radius: var(--field-radius); border: 1px dashed var(--border); background: var(--bg); }
+    .addon-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+    .addon-eyebrow { font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand-blue); }
+    .addon-price { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+    .addon-price small { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+    .addon-title { font-size: 15px; font-weight: 700; margin: 0 0 4px; }
+    .addon-sub { font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px; }
+    .addon-cta { font-size: 13px; font-weight: 700; color: var(--brand-blue); text-decoration: none; }
+    .addon-cta:hover { text-decoration: underline; }
     .lock-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #86EFAC; background: rgba(34,197,94,0.12); padding: 2px 7px; border-radius: 999px; vertical-align: 1px; }
 
     /* ===== Billing toggle + founding price lock ===== */
@@ -394,6 +445,7 @@
   <div class="theme-bar" role="region" aria-label="Design preview">
     <span class="theme-bar-label">Design preview</span>
     <div class="theme-bar-buttons" role="group" aria-label="Pick a theme">
+      <button type="button" class="theme-btn" data-theme="edge"  aria-pressed="false"><span class="swatch"></span>EDGE</button>
       <button type="button" class="theme-btn" data-theme=""      aria-pressed="false"><span class="swatch"></span>Trust</button>
       <button type="button" class="theme-btn" data-theme="warm"  aria-pressed="false"><span class="swatch"></span>Warm</button>
       <button type="button" class="theme-btn" data-theme="fresh" aria-pressed="false"><span class="swatch"></span>Fresh</button>
@@ -440,10 +492,7 @@
         <button type="button" class="bill-btn" data-bill="month">Monthly</button>
         <button type="button" class="bill-btn on" data-bill="year">Yearly <span class="bill-save">2 months free</span></button>
       </div>
-      <div class="lock-note">
-        <span class="lock-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
-        <span><strong>Founding price lock.</strong> Sign up for a yearly plan and today&rsquo;s price is yours for as long as you stay. When prices go up later, yours doesn&rsquo;t.</span>
-      </div>
+      <div class="bill-hint"><strong>Founding price lock:</strong> go yearly and today&rsquo;s price is yours for as long as you stay.</div>
     </div>
 
     <div class="tier-grid">
@@ -455,6 +504,7 @@
           <span class="tier-price-unit">/ year</span>
         </div>
         <div class="tier-price-sub"></div>
+        <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Weekly newsletter + annual rerun</div>
 
         <div class="tier-value-block">
@@ -486,6 +536,7 @@
           <span class="tier-price-unit">/ year</span>
         </div>
         <div class="tier-price-sub"></div>
+        <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
 
         <div class="tier-value-block">
@@ -511,14 +562,18 @@
       </div>
 
       <!-- Tier 3 -->
-      <div class="tier-card" data-tier="Tier 3">
+      <!-- Jae: Concierge "ask Jae any time" is served by Ask EDGE first; the
+           chat handles the bulk and only routes true anomalies to you for a
+           personal reply. Members just see one promise. (Paul, Sept 10) -->
+      <div class="tier-card" data-tier="Tier 3" data-savings="30000">
         <h3 class="tier-name">Tier 3 &mdash; Concierge Plan</h3>
-        <div class="tier-price">
-          <span class="tier-price-amount tbd">Pricing coming soon</span>
-          <span class="tier-price-unit"></span>
+        <div class="tier-price" data-month="99" data-year="990">
+          <span class="tier-price-amount">$990</span>
+          <span class="tier-price-unit">/ year</span>
         </div>
-        <div class="tier-price-sub">Yearly members lock their price here too.</div>
-        <div class="tier-cadence">Everything in Full Plan, plus</div>
+        <div class="tier-price-sub"></div>
+        <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
+        <div class="tier-cadence">Everything in Full Plan, plus a person behind it</div>
 
         <div class="tier-value-block">
           <div class="tier-value-label">What you save this year</div>
@@ -526,14 +581,28 @@
           <div class="tier-value-note">150 bp on a $2M household, monitored continuously. Itemized as it happens.</div>
         </div>
 
+        <div class="tier-ratio">
+          <span class="tier-ratio-label">Value for what you pay</span>
+          <span class="tier-ratio-value">30&times;</span>
+        </div>
+
         <ul class="tier-features">
           <li>Everything in Full Plan</li>
+          <li><strong>Ask Jae a question any time</strong> &mdash; concierge service, not a ticket queue</li>
+          <li><strong>A quarterly review brief</strong> written for your household</li>
           <li>4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</li>
-          <li>Direct access to Jae once a year</li>
           <li><strong>Best for:</strong> $2M+ households with IRMAA and SECURE-Act-heir-tax exposure</li>
         </ul>
 
         <a href="mailto:jae@gh2benefits.com?subject=Tier%203%20Concierge%20inquiry" class="tier-cta secondary">Get Concierge Plan</a>
+
+        <!-- Jae: $4,000 is a placeholder (Paul, Sept 10). Annual only by design. -->
+        <div class="tier-addon" data-placeholder-price="true">
+          <div class="addon-head"><span class="addon-eyebrow">Within Concierge</span><span class="addon-price">$4,000 <small>/ year</small></span></div>
+          <div class="addon-title">Jae as your personal advisor</div>
+          <p class="addon-sub">Jae works your plan personally, all year. Annual only, and your founding price is locked the same way.</p>
+          <a class="addon-cta" href="mailto:jae@gh2benefits.com?subject=Personal%20advisor%20inquiry">Talk to Jae about this &rarr;</a>
+        </div>
       </div>
     </div>
 
@@ -603,7 +672,7 @@
     </div>
 
     <footer>
-      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Tier&nbsp;1, 80+ for Tier&nbsp;2, 80+ proprietary for Tier&nbsp;3), how often the plan is rerun (annual for Tier&nbsp;1, continuous for Tiers&nbsp;2 and&nbsp;3), and whether the firm gets the Strategy Builder and full grid access.</p>
+      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Tier&nbsp;1, 80+ for Tier&nbsp;2, 80+ proprietary for Tier&nbsp;3), how often the plan is rerun (annual for Tier&nbsp;1, continuous for Tiers&nbsp;2 and&nbsp;3), whether a person is behind the plan (Concierge), and whether the firm gets the Strategy Builder and full grid access.</p>
       <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
     </footer>
   </div>
@@ -624,9 +693,10 @@
 
       // ===== Theme selector (shared with ballpark.html via localStorage) =====
       var THEME_KEY = 'gh2_ballpark_theme';
-      var savedTheme = '';
-      try { savedTheme = localStorage.getItem(THEME_KEY) || ''; } catch (e) {}
-      if (savedTheme && ['warm', 'fresh', 'calm'].indexOf(savedTheme) !== -1) {
+      // EDGE (our member UI) is the default; a stored choice from the design bar wins.
+      var savedTheme = 'edge';
+      try { var storedTheme = localStorage.getItem(THEME_KEY); if (storedTheme !== null) savedTheme = storedTheme; } catch (e) {}
+      if (savedTheme && ['edge', 'warm', 'fresh', 'calm'].indexOf(savedTheme) !== -1) {
         document.body.setAttribute('data-theme', savedTheme);
       }
       var themeBtns = document.querySelectorAll('.theme-btn');
@@ -721,9 +791,16 @@
         amt.textContent = money(price); amt.classList.remove('tbd');
         unit.textContent = useYear ? '/ year' : '/ month';
         if (sub) {
-          sub.innerHTML = useYear
-            ? (m != null ? '$' + (y / 12).toFixed(2) + ' a month, billed yearly &middot; ' : '') + '<span class="lock-tag">price locked</span>'
-            : (y != null ? 'or ' + money(y) + ' a year with your price locked' : '');
+          sub.textContent = useYear
+            ? (m != null ? '$' + (y / 12).toFixed(2) + ' a month, billed yearly' : 'Billed yearly')
+            : (y != null ? 'or ' + money(y) + ' a year' : '');
+        }
+        var lock = card.querySelector('.tier-lock'), lockText = card.querySelector('.tier-lock-text');
+        if (lock && lockText && y != null) {
+          lock.classList.toggle('off', !useYear);
+          lockText.innerHTML = useYear
+            ? '<strong>Founding price lock</strong> &mdash; ' + money(y) + ' a year is yours for as long as you stay.'
+            : '<strong>Go yearly</strong> to lock ' + money(y) + ' a year for as long as you stay.';
         }
         var ratio = card.querySelector('.tier-ratio-value'), sv = +card.getAttribute('data-savings');
         if (ratio && sv) { var annual = useYear ? +y : +m * 12; ratio.textContent = Math.round(sv / annual) + '\u00d7'; }
