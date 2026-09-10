@@ -905,7 +905,6 @@
     .rz-calc-step.warn { color: #FBBF24; font-weight: 600; }
 
     @media (max-width: 1180px) {
-      .tier-grid { grid-template-columns: 1fr 1fr; }
       .rz-top { grid-template-columns: 1fr 1.35fr; }
       .rz-verdict { grid-column: 1 / -1; }
     }
@@ -1364,9 +1363,12 @@
       .advanced-grid { grid-template-columns: 1fr; }
       .result-hero-grid { grid-template-columns: 1fr; text-align: center; }
       .result-readout .result-value { font-size: 64px; }
-      .tier-grid { grid-template-columns: 1fr 1fr; }
       .detail-grid { grid-template-columns: 1fr; }
     }
+    /* Three consumer tiers: stay 3-up until tablet width, then stack.
+       Two-up would orphan the third card. */
+    @media (max-width: 1180px) { .tier-grid { gap: 14px; } .tier-card { padding: 22px 18px 20px; } }
+    @media (max-width: 980px)  { .tier-grid { grid-template-columns: 1fr; max-width: 560px; margin-left: auto; margin-right: auto; } }
 
     /* ===== Phones ===== */
     @media (max-width: 560px) {
