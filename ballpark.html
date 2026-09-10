@@ -1351,7 +1351,13 @@
       text-decoration: none;
       display: block;
     }
-    .tier-card:not(.popular) .tier-cta-btn { display: none; }
+    /* Every tier is buyable (Paul, Sept 10). Full Plan keeps the gradient;
+       the other two get outlined buttons so the popular card still leads. */
+    .tier-card.jae .tier-cta-btn { background: transparent; border: 1.5px solid rgba(201,168,118,0.6); color: #E2C89A; }
+    .tier-card.jae .tier-cta-btn:hover { background: rgba(201,168,118,0.10); border-color: #E2C89A; }
+    .tier-card.ultra .tier-cta-btn { background: transparent; border: 1.5px solid rgba(252,211,77,0.6); color: #FCD34D; }
+    .tier-card.ultra .tier-cta-btn:hover { background: rgba(252,211,77,0.08); border-color: #FCD34D; }
+    .tier-card .tier-cta-btn + .tier-addon { margin-top: 12px; }
 
     /* Detail section */
     .detail-panel { margin-top: 36px; }
