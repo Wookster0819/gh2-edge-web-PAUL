@@ -1164,7 +1164,10 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 22px rgba(0,0,0,0.38);
     }
     .tier-icon svg { width: 27px; height: 27px; }
-    .tier-icon.jae svg { width: 30px; height: 30px; }
+    .tier-icon.jae svg { width: 36px; height: 36px; }
+    /* Quick Check reads as a dashboard warning light: amber, lit. */
+    .tier-icon.jae { color: #FBBF24; border-color: #4A3A1A; background: radial-gradient(circle at 30% 30%, #2E2412, #0a0905); }
+    .tier-icon.jae svg { filter: drop-shadow(0 0 8px rgba(251,191,36,0.7)); }
     .tier-icon.jae   svg { filter: drop-shadow(0 0 6px rgba(201,168,118,0.55)); }
     .tier-icon.edge  svg { filter: drop-shadow(0 0 7px rgba(167,139,250,0.65)); }
     .tier-icon.ultra svg { filter: drop-shadow(0 0 7px rgba(252,211,77,0.6)); }
@@ -1895,7 +1898,7 @@
         <div class="tier-card jae" data-shopify-tier="Tier 1">
           <div class="tier-head">
             <div class="tier-icon jae">
-              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" stroke-linecap="round" aria-label="Check engine"><path d="M9.5 9V5.5h4V9h2.2l2 2H21v6.5h-3.3l-2 2H9.2l-2-2H5V14H3v-3.5h2V9z"/><path d="M10 19.5V22M14.5 19.5V22" fill="none" stroke-width="1.8"/><path d="M11.5 5.5V3.5" fill="none" stroke-width="1.8"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round" aria-label="Check engine"><path d="M8 8V4.5h5V8h2.5l2 2H22v7.5h-4l-2 2H8.5l-2-2H4v-3.5H2v-4h2V8z"/><path d="M9.5 19.5V22M14.5 19.5V22" fill="none" stroke-width="2"/></svg>
             </div>
             <div>
               <h3 class="tier-name">Quick Check</h3>
