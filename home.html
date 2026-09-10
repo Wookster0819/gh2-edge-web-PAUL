@@ -9,7 +9,9 @@
   <!--
     MOCKUP — subscriber home / shell.  Paul + Claude, Sept 2026.
     Purpose: show the page a member lands on after sign-in, and how it
-    changes by pricing tier.  ?tier=1|2|3 switches the view (a visible
+    changes by pricing tier.  Paul's call (Sept 10): Tier 2 = the full
+    product, always on.  Tier 3 = the same plus time with Jae and the
+    proprietary strategies.  Tier 1 = annual result + newsletter.  ?tier=1|2|3 switches the view (a visible
     toggle sits under the top bar for review).  ?hh=H1|H2|H3 picks the
     fixture household like the dashboard does.
 
@@ -279,7 +281,7 @@
               '<div class="hero-row">' +
                 '<div class="kv"><div class="k">Next key action</div><div class="v">' + esc(na.title || '—') + '</div><div class="s">' + esc(na.sub || '') + '</div></div>' +
                 '<div class="kv"><div class="k">Next check-in</div><div class="v">' + esc(nc.title || '—') + '</div><div class="s">' + esc(nc.sub || '') + '</div></div>' +
-                '<div class="kv"><div class="k">Cadence</div><div class="v">' + (TIER === 3 ? 'Continuous' : 'Quarterly + life events') + '</div><div class="s">' + (TIER === 3 ? 'Every market move and rule change' : 'Upgrade for continuous monitoring') + '</div></div>' +
+                '<div class="kv"><div class="k">Cadence</div><div class="v">Continuous</div><div class="s">Every market move, rule change, and life event</div></div>' +
               '</div></section>';
       html += '<section class="card"><div class="card-label">Needs your attention</div><div class="att">';
       if (hot.length) hot.forEach(function (h) { html += '<a href="heatmap.html"><span class="dot hot"></span><div><div class="t">' + esc(h.title) + '</div><div class="s">' + esc(h.sub || '') + '</div></div><span class="chev">' + ICO.chev + '</span></a>'; });
@@ -287,15 +289,14 @@
       html += '</div><a class="foot-link" href="heatmap.html">' + (okCount ? okCount + ' regime' + (okCount > 1 ? 's' : '') + ' on track · ' : '') + 'Open the heat map →</a></section>';
       html += '</div>';
 
-      // Row 2: change feed (T3 full, T2 locked preview)
+      // Row 2: change feed (Full Plan and Concierge both get it — Paul: Tier 2 is the full product)
       var feed = '<div class="card-label">What changed since your last visit</div>';
       var total = CHANGES.reduce(function (a, c) { return a + (c.amt || 0); }, 0);
       feed += '<div class="ledger"><span class="big">' + fmtFull(total) + '</span><span class="lbl">kept for you this year, itemized as it happened</span></div><div class="feed">';
       CHANGES.forEach(function (c) { feed += '<div class="item"><div class="d">' + fmtDate(c.date) + '</div><div><span class="kind ' + c.kind + '">' + (c.kind === 'life' ? 'Life event' : c.kind === 'rule' ? 'Rule change' : 'Market') + '</span><div class="t">' + esc(c.title) + '</div><div class="s">' + esc(c.sub) + '</div></div><div class="amt' + (c.amt ? '' : ' none') + '">' + (c.amt ? '+' + fmtFull(c.amt) : 'No change') + '</div></div>'; });
       feed += '</div>';
       html += '<div class="stack">';
-      html += TIER === 3 ? '<section class="card">' + feed + '</section>'
-                         : locked('Concierge tracks every change', 'Full Plan re-checks quarterly and on life events. Concierge watches continuously and itemizes what each change kept for you.', feed);
+      html += '<section class="card">' + feed + '</section>';
 
       // Row 3: strategy rankings
       var rk = '<div class="card-label" id="strategies">Your strategies, ranked</div>' +
@@ -319,7 +320,7 @@
         tile('#plan', ICO.pdf, 'My plan (PDF)', 'Year-by-year projections and every scheduled action.') +
         tile('#update', ICO.edit, 'Update my info', 'Retired, moved, sold a home, new grandchild. Tell EDGE and it re-runs.') +
         tile('#settings', ICO.gear, 'Alerts &amp; settings', 'Email when the answer changes. Account, billing, sign out.') +
-        (TIER === 3 ? tile('#jae', ICO.cal, 'Time with Jae', 'Your annual session. Book when you’re ready.', { cls: 'prop', txt: 'Concierge' }) : tile('pricing.html', ICO.star, 'Upgrade to Concierge', 'Continuous monitoring, 4 proprietary strategies, time with Jae.', { cls: 'prop', txt: 'Upgrade' })) +
+        (TIER === 3 ? tile('#jae', ICO.cal, 'Time with Jae', 'Your annual session. Book when you’re ready.', { cls: 'prop', txt: 'Concierge' }) : tile('pricing.html', ICO.star, 'Upgrade to Concierge', 'Everything you have now, plus time with Jae and 4 proprietary GH2 strategies.', { cls: 'prop', txt: 'Upgrade' })) +
         '</div>';
       html += '</div>';
       return html;
