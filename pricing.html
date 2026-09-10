@@ -205,7 +205,9 @@
        go too. ?upsell=1 restores all of it; ?upsell=0 hides it again. */
     body:not(.upsell-on) .tier-price,
     body:not(.upsell-on) .tier-ratio,
-    body:not(.upsell-on) .tier-cta { display: none !important; }
+    body:not(.upsell-on) .tier-cta,
+    body:not(.upsell-on) .tier-price-sub,
+    body:not(.upsell-on) .bill-row { display: none !important; }
     body:not(.upsell-on) .pt-sell { display: none; }
     body.upsell-on .pt-tell { display: none; }
 
@@ -214,6 +216,23 @@
     .tier-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
     .tier-price-amount { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
     .tier-price-unit { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+    .tier-price-amount.tbd { font-size: 22px; color: var(--text-muted); }
+    .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin: -10px 0 14px; line-height: 1.4; min-height: 18px; }
+    .lock-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #86EFAC; background: rgba(34,197,94,0.12); padding: 2px 7px; border-radius: 999px; vertical-align: 1px; }
+
+    /* ===== Billing toggle + founding price lock ===== */
+    .bill-row { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; margin: 0 auto 26px; max-width: 900px; }
+    .bill-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 4px; background: var(--card-bg); }
+    .bill-btn { border: 0; background: transparent; color: var(--text-muted); font: inherit; font-size: 14px; font-weight: 700; padding: 8px 16px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .bill-btn.on { background: var(--brand-blue); color: #FFF; }
+    .bill-save { font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
+    .bill-btn.on .bill-save { background: rgba(255,255,255,0.22); color: #FFF; }
+    .lock-note { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--text-muted); line-height: 1.45; max-width: 520px; padding: 10px 14px; border: 1px dashed var(--border); border-radius: 12px; }
+    .lock-note strong { color: var(--text); }
+    .lock-note .lock-ico { width: 26px; height: 26px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.12); color: #86EFAC; }
+    .lock-note .lock-ico svg { width: 13px; height: 13px; }
+    @media (max-width: 560px) { .bill-row { gap: 12px; } .lock-note { font-size: 13px; } }
+
     .tier-cadence { font-size: 12px; color: var(--text-faint); margin-top: -10px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
     .tier-features { list-style: none; padding: 0; margin: 0 0 22px; flex: 1; }
     .tier-features li {
@@ -416,14 +435,26 @@
       <p>All consumer tiers include the full federal + state + Medicare tax math, year-by-year projections, and a downloadable PDF plan.</p>
     </div>
 
+    <div class="bill-row">
+      <div class="bill-toggle" role="group" aria-label="Billing period">
+        <button type="button" class="bill-btn" data-bill="month">Monthly</button>
+        <button type="button" class="bill-btn on" data-bill="year">Yearly <span class="bill-save">2 months free</span></button>
+      </div>
+      <div class="lock-note">
+        <span class="lock-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>
+        <span><strong>Founding price lock.</strong> Sign up for a yearly plan and today&rsquo;s price is yours for as long as you stay. When prices go up later, yours doesn&rsquo;t.</span>
+      </div>
+    </div>
+
     <div class="tier-grid">
       <!-- Tier 1 -->
       <div class="tier-card" data-tier="Tier 1">
         <h3 class="tier-name">Tier 1 &mdash; Quick Check</h3>
-        <div class="tier-price">
-          <span class="tier-price-amount">$50</span>
+        <div class="tier-price" data-month="9" data-year="89">
+          <span class="tier-price-amount">$89</span>
           <span class="tier-price-unit">/ year</span>
         </div>
+        <div class="tier-price-sub"></div>
         <div class="tier-cadence">Weekly newsletter + annual rerun</div>
 
         <div class="tier-value-block">
@@ -447,14 +478,15 @@
       </div>
 
       <!-- GH2 EDGE -->
-      <div class="tier-card popular" data-tier="Tier 2">
+      <div class="tier-card popular" data-tier="Tier 2" data-savings="10000">
         <span class="tier-badge">Most popular</span>
         <h3 class="tier-name">Tier 2 &mdash; Full Plan</h3>
-        <div class="tier-price">
-          <span class="tier-price-amount">$250</span>
+        <div class="tier-price" data-month="29" data-year="290">
+          <span class="tier-price-amount">$290</span>
           <span class="tier-price-unit">/ year</span>
         </div>
-        <div class="tier-cadence">Quarterly + every life event</div>
+        <div class="tier-price-sub"></div>
+        <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
 
         <div class="tier-value-block">
           <div class="tier-value-label">What you save this year</div>
@@ -464,13 +496,14 @@
 
         <div class="tier-ratio">
           <span class="tier-ratio-label">Value for what you pay</span>
-          <span class="tier-ratio-value">40&times;</span>
+          <span class="tier-ratio-value">34&times;</span>
         </div>
 
         <ul class="tier-features">
           <li>All 80 retirement strategies ranked for your household</li>
-          <li>Email when the answer changes (market, tax law, life event)</li>
-          <li><strong>Coming for subscribers &mdash; the dashboard:</strong> your projected liquid net worth, the drivers preserving it, your next key action and check-in date, the heat map, and Ask EDGE chat</li>
+          <li><strong>Your dashboard:</strong> projected liquid net worth, the drivers preserving it, your next key action and check-in date</li>
+          <li><strong>The heat map</strong> across your seven wealth regimes, and <strong>Ask EDGE</strong> chat grounded in your numbers</li>
+          <li>Re-run on every market move, rule change, and life event &mdash; email when the answer changes</li>
           <li><strong>Best for:</strong> $500K&ndash;$2M households with life events ahead</li>
         </ul>
 
@@ -481,10 +514,11 @@
       <div class="tier-card" data-tier="Tier 3">
         <h3 class="tier-name">Tier 3 &mdash; Concierge Plan</h3>
         <div class="tier-price">
-          <span class="tier-price-amount">$2,500</span>
-          <span class="tier-price-unit">/ year</span>
+          <span class="tier-price-amount tbd">Pricing coming soon</span>
+          <span class="tier-price-unit"></span>
         </div>
-        <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
+        <div class="tier-price-sub">Yearly members lock their price here too.</div>
+        <div class="tier-cadence">Everything in Full Plan, plus</div>
 
         <div class="tier-value-block">
           <div class="tier-value-label">What you save this year</div>
@@ -492,13 +526,9 @@
           <div class="tier-value-note">150 bp on a $2M household, monitored continuously. Itemized as it happens.</div>
         </div>
 
-        <div class="tier-ratio">
-          <span class="tier-ratio-label">Value for what you pay</span>
-          <span class="tier-ratio-value">12&times;</span>
-        </div>
-
         <ul class="tier-features">
-          <li>All 80 strategies + 4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</li>
+          <li>Everything in Full Plan</li>
+          <li>4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</li>
           <li>Direct access to Jae once a year</li>
           <li><strong>Best for:</strong> $2M+ households with IRMAA and SECURE-Act-heir-tax exposure</li>
         </ul>
@@ -573,7 +603,7 @@
     </div>
 
     <footer>
-      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Tier&nbsp;1, 80+ for Tier&nbsp;2, 80+ proprietary for Tier&nbsp;3), how often the plan is rerun (annual / quarterly / continuous), and whether the firm gets the Strategy Builder and full grid access.</p>
+      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Tier&nbsp;1, 80+ for Tier&nbsp;2, 80+ proprietary for Tier&nbsp;3), how often the plan is rerun (annual for Tier&nbsp;1, continuous for Tiers&nbsp;2 and&nbsp;3), and whether the firm gets the Strategy Builder and full grid access.</p>
       <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
     </footer>
   </div>
@@ -669,6 +699,42 @@
       }
     })();
   </script>
+  <script>
+  /* Billing period + founding price lock.
+     Cards carry data-month / data-year (fallback prices; Shopify overwrites
+     them below when its variants are titled with "month" / "year").
+     ?bill=month|year presets the toggle. Tier 3 has no data-* yet, so it
+     shows "Pricing coming soon" until Jae sets it. */
+  (function () {
+    var BILL = 'year';
+    try { var b = new URLSearchParams(location.search).get('bill'); if (b === 'month' || b === 'year') BILL = b; } catch (e) {}
+    function money(n) { return '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+    function apply() {
+      document.querySelectorAll('.bill-btn').forEach(function (btn) { btn.classList.toggle('on', btn.getAttribute('data-bill') === BILL); });
+      document.querySelectorAll('.tier-card[data-tier]').forEach(function (card) {
+        var p = card.querySelector('.tier-price'); if (!p) return;
+        var m = p.getAttribute('data-month'), y = p.getAttribute('data-year');
+        if (m == null && y == null) return;                       // price not set yet
+        var amt = p.querySelector('.tier-price-amount'), unit = p.querySelector('.tier-price-unit'), sub = card.querySelector('.tier-price-sub');
+        var useYear = BILL === 'year' ? y != null : m == null;    // fall back to whichever exists
+        var price = useYear ? +y : +m;
+        amt.textContent = money(price); amt.classList.remove('tbd');
+        unit.textContent = useYear ? '/ year' : '/ month';
+        if (sub) {
+          sub.innerHTML = useYear
+            ? (m != null ? '$' + (y / 12).toFixed(2) + ' a month, billed yearly &middot; ' : '') + '<span class="lock-tag">price locked</span>'
+            : (y != null ? 'or ' + money(y) + ' a year with your price locked' : '');
+        }
+        var ratio = card.querySelector('.tier-ratio-value'), sv = +card.getAttribute('data-savings');
+        if (ratio && sv) { var annual = useYear ? +y : +m * 12; ratio.textContent = Math.round(sv / annual) + '\u00d7'; }
+      });
+    }
+    document.querySelectorAll('.bill-btn').forEach(function (btn) { btn.addEventListener('click', function () { BILL = btn.getAttribute('data-bill'); apply(); }); });
+    apply();
+    window.GH2_BILL = function () { return BILL; };
+    window.GH2_APPLY = apply;
+  })();
+  </script>
   <!-- ===================================================================
        Shopify catalogue binding.
 
@@ -747,7 +813,17 @@
               });
             }
 
-            var v = (m.variants || [])[0];
+            // Jae: title the variants "Monthly" / "Yearly" (any text containing
+            // month / year) and the billing toggle picks between them.
+            var p = card.querySelector('.tier-price'), vs = m.variants || [], titled = false;
+            vs.forEach(function (x) {
+              var t = (x.title || '').toLowerCase();
+              if (t.indexOf('month') > -1) { p.setAttribute('data-month', x.price); titled = true; }
+              else if (t.indexOf('year') > -1 || t.indexOf('annual') > -1) { p.setAttribute('data-year', x.price); titled = true; }
+            });
+            if (titled) { if (window.GH2_APPLY) window.GH2_APPLY(); return; }
+
+            var v = vs[0];
             var amt = card.querySelector('.tier-price-amount');
             var unit = card.querySelector('.tier-price-unit');
             if (v && amt) {
@@ -785,7 +861,11 @@
           })[0];
           if (!match) return;
 
-          var variant = (match.variants || [])[0];
+          var want = window.GH2_BILL ? window.GH2_BILL() : 'year';
+          var variant = (match.variants || []).filter(function (x) {
+            var t = (x.title || '').toLowerCase();
+            return want === 'month' ? t.indexOf('month') > -1 : (t.indexOf('year') > -1 || t.indexOf('annual') > -1);
+          })[0] || (match.variants || [])[0];
           if (!variant) return;
 
           // Shopify owns the number. The page owns everything around it.
