@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDGE — Concept</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <!--
+    CONCEPT PAGE — not wired to anything. Paul + Claude, Sept 11 2026.
+    Six ideas on one scroll, sample numbers only:
+      1. one-message tier cards      4. an airier trend chart
+      2. cards written as sentences  5. serif headlines (public pages)
+      3. precision + next action fused   6. a quieter sign-in
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0E1A; --bg-soft: #0E1424; --card-bg: #11172A; --card-bg-2: #161D33;
+      --border: #1F2940; --border-soft: #18213B;
+      --text: #F5F7FA; --text-dim: #B6BFD0; --text-muted: #8693AC; --text-faint: #5A6680;
+      --purple: #8B5CF6; --purple-2: #A78BFA; --purple-soft: rgba(139,92,246,0.14);
+      --green: #22C55E; --money: #10B981; --amber: #F97316; --red: #FF3B30;
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+      --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; border-bottom: 1px solid var(--border-soft); position: sticky; top: 0; background: rgba(10,14,26,0.85); backdrop-filter: blur(10px); z-index: 5; }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; }
+    .topbar .tag { margin-left: auto; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--purple-2); border: 1px dashed rgba(139,92,246,0.4); padding: 5px 10px; border-radius: 999px; }
+
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+    section { padding: 88px 0; border-bottom: 1px solid var(--border-soft); }
+    .k { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--purple-2); margin-bottom: 18px; }
+    h1, h2 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; margin: 0; line-height: 1.05; }
+    h1 { font-size: clamp(44px, 6.4vw, 78px); }
+    h2 { font-size: clamp(34px, 4.4vw, 54px); }
+    h1 em, h2 em { font-style: italic; color: var(--purple-2); }
+    .lede { color: var(--text-muted); font-size: 18px; line-height: 1.55; margin: 18px 0 0; max-width: 54ch; }
+    .center { text-align: center; }
+    .center .lede { margin-left: auto; margin-right: auto; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 20px; border-radius: 11px; font-size: 15px; font-weight: 800; color: #fff; background: var(--grad-cta); border: 0; cursor: pointer; background-origin: border-box; }
+    .btn.ghost { background: var(--card-bg-2); border: 1px solid var(--border); color: var(--text); font-weight: 700; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); }
+
+    /* 5. hero */
+    .hero { padding: 120px 0 96px; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: -40% -20% auto; height: 120%; background: radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.22), transparent 60%); pointer-events: none; }
+    .hero .lede { margin: 22px auto 30px; }
+    .hero .trust { margin-top: 26px; font-size: 12.5px; color: var(--text-faint); display: flex; gap: 22px; justify-content: center; }
+
+    /* 3. fused card */
+    .fused { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; padding: 30px 34px; }
+    .ring { position: relative; width: 190px; height: 190px; margin: 0 auto; }
+    .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring .trk { fill: none; stroke: var(--border); stroke-width: 9; }
+    .ring .arc { fill: none; stroke: url(#ringGrad); stroke-width: 9; stroke-linecap: round; stroke-dasharray: 534; stroke-dashoffset: 144; filter: drop-shadow(0 0 8px rgba(139,92,246,0.6)); }
+    .ring .num { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+    .ring .num b { font-size: 44px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+    .ring .num span { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); margin-top: 6px; }
+    .fused .sum .k { margin-bottom: 8px; }
+    .fused .sum p { font-size: 22px; line-height: 1.4; margin: 0 0 18px; font-family: var(--serif); }
+    .fused .sum p b { color: var(--money); font-weight: 400; }
+    .fused .meta { display: flex; gap: 26px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); }
+    .fused .meta b { color: var(--text); font-weight: 700; display: block; font-size: 14px; }
+
+    /* 2. sentence cards */
+    .band { position: relative; border-radius: 22px; overflow: hidden; padding: 34px; background: radial-gradient(ellipse at 20% 20%, rgba(139,92,246,0.35), transparent 50%), radial-gradient(ellipse at 85% 80%, rgba(236,72,153,0.25), transparent 50%), linear-gradient(160deg, #1A1440, #0B0F1E 70%); border: 1px solid var(--border); }
+    .glass { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .g { padding: 22px 22px 20px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+    .g .lbl { display: flex; align-items: center; gap: 8px; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; }
+    .g .lbl .d { width: 7px; height: 7px; border-radius: 50%; }
+    .g .lbl .d.hot { background: var(--amber); box-shadow: 0 0 8px rgba(249,115,22,0.7); animation: pulse 2.6s ease-in-out infinite; }
+    .g .lbl .d.ok { background: var(--green); }
+    .g p { font-family: var(--serif); font-size: 21px; line-height: 1.35; margin: 0 0 14px; }
+    .g p b { font-weight: 400; color: var(--money); }
+    .g a { font-size: 13px; font-weight: 700; color: var(--purple-2); }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(249,115,22,0), 0 0 6px rgba(249,115,22,0.5); opacity: .85; } 50% { box-shadow: 0 0 0 4px rgba(249,115,22,0.14), 0 0 14px rgba(249,115,22,0.9); opacity: 1; } }
+
+    /* 4. chart */
+    .chart { padding: 30px 34px 26px; }
+    .chart .ends { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px; }
+    .chart .ends .lbl { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-faint); }
+    .chart .ends b { display: block; font-size: 34px; font-weight: 800; letter-spacing: -0.02em; margin-top: 4px; }
+    .chart .ends .gain { color: var(--money); font-size: 14px; font-weight: 700; }
+    .chart .ends .right { text-align: right; }
+    .chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .chart .axis { display: flex; justify-content: space-between; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--text-faint); margin-top: 10px; padding: 0 2px; }
+    .chart .legend { display: flex; gap: 22px; margin-top: 18px; font-size: 12.5px; color: var(--text-muted); }
+    .chart .legend i { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--purple-2); margin-right: 8px; vertical-align: middle; }
+    .chart .legend i.dash { border-top-style: dashed; border-color: #7C8496; }
+
+    /* 1. tier cards */
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 40px; }
+    .tier { padding: 26px 26px 24px; display: flex; flex-direction: column; gap: 14px; }
+    .tier.pop { border-color: rgba(139,92,246,0.6); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); position: relative; }
+    .tier .badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--purple); color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; }
+    .tier .head { display: flex; align-items: center; gap: 12px; }
+    .tier .ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; border: 1px solid; }
+    .tier .ico svg { width: 22px; height: 22px; }
+    .tier .ico.t { color: #2DD4BF; background: #0F2E2E; border-color: #1E4B48; }
+    .tier .ico.p { color: var(--purple-2); background: #1E1B4B; border-color: #312E5B; }
+    .tier .ico.g { color: #FCD34D; background: #292015; border-color: #3A2F1F; }
+    .tier h3 { margin: 0; font-size: 19px; font-weight: 800; }
+    .tier .price { margin-top: 6px; }
+    .tier .price b { font-size: 36px; font-weight: 800; letter-spacing: -0.02em; }
+    .tier .price span { color: var(--text-muted); font-size: 14px; font-weight: 600; margin-left: 6px; }
+    .tier .price small { display: block; font-size: 12.5px; color: var(--text-muted); margin-top: 4px; }
+    .tier .price small em { font-style: normal; color: var(--green); font-weight: 700; }
+    .tier ul { list-style: none; margin: 4px 0 0; padding: 14px 0 0; border-top: 1px solid var(--border-soft); display: grid; gap: 10px; flex: 1; }
+    .tier li { font-size: 14px; color: var(--text-dim); padding-left: 22px; position: relative; line-height: 1.4; }
+    .tier li::before { content: ''; position: absolute; left: 0; top: 7px; width: 10px; height: 10px; border-radius: 50%; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.5); }
+    .tier .btn { width: 100%; justify-content: center; margin-top: 8px; }
+
+    /* 6. sign in */
+    .signin { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-radius: 22px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .signin .side { background: radial-gradient(ellipse at 30% 30%, rgba(139,92,246,0.5), transparent 55%), radial-gradient(ellipse at 80% 90%, rgba(236,72,153,0.35), transparent 55%), #0E0B24; padding: 48px 44px; display: flex; flex-direction: column; justify-content: center; }
+    .signin .side h2 { font-size: 40px; }
+    .signin .side .marks { display: flex; gap: 14px; margin-top: 28px; }
+    .signin .side .mark { font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); border: 1px solid rgba(255,255,255,0.18); padding: 8px 12px; border-radius: 999px; }
+    .signin .form { background: var(--card-bg); padding: 48px 44px; }
+    .signin .form h3 { font-family: var(--serif); font-weight: 400; font-size: 32px; margin: 0 0 22px; }
+    .signin label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text-dim); margin: 0 0 6px; }
+    .signin input { width: 100%; font: inherit; font-size: 15px; color: var(--text); background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; outline: none; }
+    .signin input:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(139,92,246,0.18); }
+    .signin .btn { width: 100%; justify-content: center; margin-top: 4px; }
+    .signin .links { display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px; color: var(--text-muted); }
+    .signin .links a { color: var(--purple-2); font-weight: 600; }
+
+    footer { padding: 40px 0 80px; color: var(--text-faint); font-size: 12.5px; text-align: center; }
+
+    @media (max-width: 880px) {
+      .fused { grid-template-columns: 1fr; text-align: center; }
+      .fused .meta { justify-content: center; }
+      .glass, .tiers { grid-template-columns: 1fr; }
+      .signin { grid-template-columns: 1fr; }
+      section { padding: 64px 0; }
+      .wrap { padding: 0 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) { .g .lbl .d.hot { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar"><span class="wordmark">EDGE</span><span class="tag">Concept · six ideas on one page</span></div>
+
+  <!-- 5. serif headline -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="k">Concept 5 · Editorial headlines</span>
+      <h1>Your number, and <em>what to do</em> about it.</h1>
+      <p class="lede">EDGE calculates the return your portfolio actually needs, then ranks every move that lowers it — for your household, not the average one.</p>
+      <a class="btn" href="#">Run the free ballpark &rarr;</a>
+      <div class="trust"><span>Patent pending</span><span>Your data is never sold</span><span>Cancel anytime</span></div>
+    </div>
+  </section>
+
+  <!-- 3. precision + next action, fused -->
+  <section>
+    <div class="wrap">
+      <span class="k">Concept 3 · One card: how sure, and what next</span>
+      <div class="card fused">
+        <div class="ring">
+          <svg viewBox="0 0 190 190"><defs><linearGradient id="ringGrad" x1="0" x2="1"><stop offset="0" stop-color="#4F46E5"/><stop offset="1" stop-color="#A78BFA"/></linearGradient></defs><circle class="trk" cx="95" cy="95" r="85"/><circle class="arc" cx="95" cy="95" r="85"/></svg>
+          <div class="num"><div><b>73%</b><span>of your exact number</span></div></div>
+        </div>
+        <div class="sum">
+          <span class="k">This year&rsquo;s highest-impact move</span>
+          <p>Convert <b>$122,898</b> to Roth this year. It keeps about <b>$4,300</b> out of the 24% bracket while your income is low.</p>
+          <div class="meta"><div><b>October 1</b>Next check-in</div><div><b>5 inputs</b>close the remaining gap</div><div><b>2 regimes</b>on track</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. sentences with a dollar figure -->
+  <section>
+    <div class="wrap">
+      <span class="k">Concept 2 · Cards that talk</span>
+      <h2>What EDGE is <em>watching</em> for you.</h2>
+      <p class="lede">Each regime says what&rsquo;s happening and what it&rsquo;s worth, in one sentence.</p>
+      <div class="band" style="margin-top:32px">
+        <div class="glass">
+          <div class="g"><div class="lbl"><span class="d hot"></span>Roth conversion window</div><p>Converting <b>$122,898</b> now, instead of later, is worth about <b>$4,300</b> this year.</p><a href="#">See the move &rarr;</a></div>
+          <div class="g"><div class="lbl"><span class="d ok"></span>IRMAA</div><p>Your income stays <b>$18,400</b> under the first Medicare surcharge tier through age 95.</p><a href="#">Why this matters &rarr;</a></div>
+          <div class="g"><div class="lbl"><span class="d ok"></span>RMD runway</div><p>Thirteen years until required withdrawals begin at 75. Every conversion before then shrinks them.</p><a href="#">See the runway &rarr;</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. airier trend chart -->
+  <section>
+    <div class="wrap">
+      <span class="k">Concept 4 · The chart, with room to breathe</span>
+      <div class="card chart">
+        <div class="ends">
+          <div><div class="lbl">Today</div><b>$403K</b></div>
+          <div class="right"><div class="lbl">At age 90 with EDGE</div><b>$1.24M</b><div class="gain">+$837K &middot; $249K more than a conventional plan</div></div>
+        </div>
+        <svg viewBox="0 0 1000 260" aria-hidden="true">
+          <defs>
+            <linearGradient id="area" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8B5CF6" stop-opacity="0.35"/><stop offset="1" stop-color="#8B5CF6" stop-opacity="0"/></linearGradient>
+          </defs>
+          <path d="M0 200 C120 190 200 170 300 150 C400 130 480 100 600 80 C720 60 820 40 1000 22 L1000 260 L0 260 Z" fill="url(#area)"/>
+          <path d="M0 200 C120 190 200 170 300 150 C400 130 480 100 600 80 C720 60 820 40 1000 22" fill="none" stroke="#A78BFA" stroke-width="3" stroke-linecap="round"/>
+          <path d="M0 200 C120 195 200 185 300 172 C400 160 480 145 600 130 C720 118 820 105 1000 88" fill="none" stroke="#7C8496" stroke-width="2" stroke-dasharray="6 7"/>
+          <line x1="300" y1="150" x2="300" y2="248" stroke="#3B4560" stroke-width="1.5" stroke-dasharray="3 5"/>
+          <circle cx="300" cy="150" r="14" fill="#161D33" stroke="#A78BFA" stroke-width="2"/>
+          <text x="300" y="155" text-anchor="middle" font-size="12" fill="#C4B5FD" font-family="-apple-system, Inter, sans-serif" font-weight="700">65</text>
+          <line x1="600" y1="80" x2="600" y2="248" stroke="#3B4560" stroke-width="1.5" stroke-dasharray="3 5"/>
+          <circle cx="600" cy="80" r="14" fill="#161D33" stroke="#A78BFA" stroke-width="2"/>
+          <text x="600" y="85" text-anchor="middle" font-size="12" fill="#C4B5FD" font-family="-apple-system, Inter, sans-serif" font-weight="700">75</text>
+          <circle cx="0" cy="200" r="7" fill="#22C55E" stroke="#0A0E1A" stroke-width="3"/>
+          <circle cx="0" cy="200" r="16" fill="rgba(34,197,94,0.25)"><animate attributeName="r" values="10;20;10" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.6;0;0.6" dur="2.6s" repeatCount="indefinite"/></circle>
+        </svg>
+        <div class="axis"><span>Age 55 &middot; today</span><span>Retire 65</span><span>RMDs 75</span><span>Age 90</span></div>
+        <div class="legend"><span><i></i>Your EDGE plan</span><span><i class="dash"></i>A well-executed conventional plan</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1. one-message tier cards -->
+  <section>
+    <div class="wrap center">
+      <span class="k">Concept 1 · One message per card</span>
+      <h2>Pick your <em>cadence</em>.</h2>
+      <p class="lede">Go yearly and today&rsquo;s price is yours for as long as you stay.</p>
+      <div class="tiers">
+        <div class="card tier">
+          <div class="head"><div class="ico t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg></div><h3>Quick Check</h3></div>
+          <div class="price"><b>$89</b><span>/ year</span><small>or $9 / month &middot; <em>price locked</em></small></div>
+          <ul><li>Jae&rsquo;s Corner, weekly</li><li>One EDGE recommendation a year, on your numbers</li><li>Ask EDGE, 24/7</li></ul>
+          <a class="btn ghost" href="#">Get Quick Check</a>
+        </div>
+        <div class="card tier pop">
+          <span class="badge">Most popular</span>
+          <div class="head"><div class="ico p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 1.5V4M12 20v2.5M1.5 12H4M20 12h2.5"/></svg></div><h3>Full Plan</h3></div>
+          <div class="price"><b>$290</b><span>/ year</span><small>or $29 / month &middot; <em>price locked</em></small></div>
+          <ul><li>All 80 strategies, ranked for your household</li><li>Dashboard, heat map, and Ask EDGE on your numbers</li><li>Re-run on every market move, rule change, and life event</li></ul>
+          <a class="btn" href="#">Get Full Plan</a>
+        </div>
+        <div class="card tier">
+          <div class="head"><div class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5a7.5 7.5 0 0 1 15 0z"/><path d="M12 9V6.5"/><path d="M10 6.5h4"/><path d="M3 19.5h18"/></svg></div><h3>Concierge</h3></div>
+          <div class="price"><b>$990</b><span>/ year</span><small>or $99 / month &middot; <em>price locked</em></small></div>
+          <ul><li>Everything in Full Plan</li><li>Ask a question any time &mdash; a person answers</li><li>A quarterly review brief for your household</li></ul>
+          <a class="btn ghost" href="#">Get Concierge</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. quieter sign-in -->
+  <section>
+    <div class="wrap">
+      <span class="k">Concept 6 · Sign-in, quieter</span>
+      <div class="signin">
+        <div class="side">
+          <h2>Your plan, <em>up to date.</em></h2>
+          <div class="marks"><span class="mark">Patent pending</span><span class="mark">Data never sold</span></div>
+        </div>
+        <form class="form" onsubmit="return false">
+          <h3>Welcome back.</h3>
+          <label>Email</label><input type="email" placeholder="you@example.com" />
+          <label>Password</label><input type="password" placeholder="Your password" />
+          <button class="btn" type="submit">Sign in</button>
+          <div class="links"><a href="#">Forgot password?</a><span>New here? <a href="#">See plans</a></span></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>Concept only. Sample numbers from the Henderson test household. Nothing here is wired.</footer>
+</body>
+</html>
