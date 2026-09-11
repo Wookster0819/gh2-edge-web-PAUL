@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — GH2 EDGE™</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <!--
+    Member sign-in. Connect-ready, currently in PREVIEW mode.
+
+    Jae: set AUTH_ENABLED = true and the form POSTs to LOGIN_ENDPOINT as
+      { email, password, remember }  ->  200 { ok: true }   (session cookie set)
+                                          401               (bad credentials)
+    On success the page sends the member to ?next= (same-origin path only),
+    defaulting to home.html. Sign-out links on the member pages land here
+    with ?signedout=1; wire LOGOUT_ENDPOINT to clear the session cookie.
+
+    In preview mode any email + any password signs in and the member pages
+    open on fixture data, so the flow can be walked end to end.
+  -->
+  <style>
+    :root {
+      --bg: #0A0E1A; --bg-soft: #0E1424; --card-bg: #11172A; --card-bg-2: #161D33;
+      --border: #1F2940; --border-soft: #18213B;
+      --text: #F5F7FA; --text-dim: #B6BFD0; --text-muted: #8693AC; --text-faint: #5A6680;
+      --accent-purple: #8B5CF6; --accent-purple-soft: rgba(139,92,246,0.14);
+      --accent-green: #22C55E; --accent-red: #FF3B30; --accent-red-soft: rgba(255,59,48,0.12);
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); min-height: 100%; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; border-bottom: 1px solid var(--border-soft); }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; }
+    .topbar .right { margin-left: auto; font-size: 13px; color: var(--text-muted); }
+    .topbar .right a { color: var(--text); font-weight: 600; }
+    .topbar .right a:hover { color: #C4B5FD; }
+
+    .stage { min-height: calc(100vh - 62px); display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; max-width: 1180px; margin: 0 auto; padding: 48px 32px 80px; gap: 48px; }
+
+    /* Left: why you're here */
+    .pitch h1 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 14px; font-weight: 800; }
+    .pitch h1 .grad { background: linear-gradient(90deg, #A78BFA, #EC4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .pitch p { color: var(--text-muted); font-size: 16px; line-height: 1.55; margin: 0 0 26px; max-width: 46ch; }
+    .pitch ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+    .pitch li { display: flex; align-items: center; gap: 12px; color: var(--text-dim); font-size: 14.5px; }
+    .pitch li .ico { width: 30px; height: 30px; border-radius: 9px; background: var(--accent-purple-soft); border: 1px solid rgba(139,92,246,0.3); color: #C4B5FD; display: grid; place-items: center; flex: none; }
+    .pitch li .ico svg { width: 15px; height: 15px; }
+    .pitch .live { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; font-size: 12.5px; color: var(--text-muted); }
+    .pitch .live .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-purple); animation: tierPulse 2.6s ease-in-out infinite; }
+    @keyframes tierPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(139,92,246,0), 0 0 6px rgba(139,92,246,0.45); opacity: .85; } 50% { box-shadow: 0 0 0 4px rgba(139,92,246,0.12), 0 0 14px rgba(139,92,246,0.85); opacity: 1; } }
+
+    /* Right: the card */
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 30px 30px 26px; box-shadow: var(--shadow-card); max-width: 440px; width: 100%; justify-self: end; }
+    .card h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
+    .card .sub { margin: 0 0 22px; color: var(--text-muted); font-size: 14px; }
+    .notice { display: none; padding: 10px 12px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; line-height: 1.4; }
+    .notice.show { display: block; }
+    .notice.ok { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: #86EFAC; }
+    .notice.err { background: var(--accent-red-soft); border: 1px solid rgba(255,59,48,0.35); color: #FF8A84; }
+    label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text-dim); margin: 0 0 6px; }
+    .field { position: relative; margin-bottom: 14px; }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%; font: inherit; font-size: 15px; color: var(--text);
+      background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px;
+      padding: 12px 14px; outline: none; transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    input:focus { border-color: var(--accent-purple); box-shadow: 0 0 0 3px rgba(139,92,246,0.18); }
+    input::placeholder { color: var(--text-faint); }
+    .eye { position: absolute; right: 10px; top: 32px; background: none; border: 0; color: var(--text-faint); cursor: pointer; padding: 4px; font: inherit; font-size: 12px; font-weight: 700; }
+    .eye:hover { color: var(--text); }
+    .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 2px 0 18px; font-size: 13px; }
+    .row label { display: inline-flex; align-items: center; gap: 8px; margin: 0; font-weight: 500; color: var(--text-muted); cursor: pointer; }
+    .row input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent-purple); margin: 0; }
+    .row a { color: #C4B5FD; font-weight: 600; }
+    .row a:hover { text-decoration: underline; }
+    .btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 16px; border-radius: 11px; font: inherit; font-size: 15px; font-weight: 800; color: #fff; background: var(--grad-cta); border: 0; cursor: pointer; background-origin: border-box; }
+    .btn:hover { filter: brightness(1.06); }
+    .btn[disabled] { opacity: .7; cursor: default; filter: none; }
+    .btn svg { width: 15px; height: 15px; }
+    .foot { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-soft); font-size: 13.5px; color: var(--text-muted); display: grid; gap: 8px; }
+    .foot a { color: var(--text); font-weight: 700; }
+    .foot a:hover { color: #C4B5FD; }
+    .secure { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-faint); margin-top: 14px; }
+    .secure svg { width: 12px; height: 12px; }
+
+    .preview-tag { display: none; margin-top: 12px; font-size: 11.5px; color: var(--text-faint); border: 1px dashed rgba(139,92,246,0.35); border-radius: 8px; padding: 6px 10px; }
+    body.preview .preview-tag { display: block; }
+
+    @media (max-width: 880px) {
+      .stage { grid-template-columns: 1fr; gap: 28px; padding: 32px 20px 60px; }
+      .card { justify-self: stretch; max-width: none; }
+      .pitch p { max-width: none; }
+    }
+    @media (max-width: 480px) { .topbar { padding: 14px 18px; } .card { padding: 24px 20px 22px; } }
+    @media (prefers-reduced-motion: reduce) { .pitch .live .dot { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="wordmark" href="quick.html">EDGE</a>
+    <div class="right">Not a member? <a href="pricing.html">See plans &rarr;</a></div>
+  </div>
+
+  <main class="stage">
+    <section class="pitch">
+      <h1>Your plan, <span class="grad">up to date</span>.</h1>
+      <p>Sign in to see your projected net worth, what needs your attention, and the strategies EDGE is running for your household.</p>
+      <ul>
+        <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span>Your dashboard: net worth, trend, and the drivers preserving it</li>
+        <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></span>The heat map across your seven wealth regimes</li>
+        <li><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg></span>Ask EDGE, grounded in your numbers</li>
+      </ul>
+      <div class="live"><span class="dot"></span>Re-run on every market move, rule change, and life event</div>
+    </section>
+
+    <form class="card" id="loginForm" novalidate>
+      <h2>Sign in</h2>
+      <p class="sub">Welcome back. Use the email on your plan.</p>
+      <div class="notice" id="notice" role="status"></div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" autocomplete="username" placeholder="you@example.com" required />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Your password" required />
+        <button type="button" class="eye" id="togglePw" aria-label="Show password">Show</button>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="remember" checked /> Keep me signed in</label>
+        <a href="#forgot" id="forgotLink">Forgot password?</a>
+      </div>
+      <button type="submit" class="btn" id="submitBtn">Sign in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+
+      <div class="foot">
+        <div>New to EDGE? <a href="pricing.html">Pick a plan</a></div>
+        <div>Just want the free check? <a href="ballpark.html">Run the ballpark</a></div>
+      </div>
+      <div class="secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure. Private. Your data is never sold.</div>
+      <div class="preview-tag">Preview mode: any email and password opens the member pages on sample data.</div>
+    </form>
+  </main>
+
+  <script>
+    (function () {
+      // ---------------------------------------------------------------
+      // Jae: flip AUTH_ENABLED when the endpoints exist.
+      // ---------------------------------------------------------------
+      var AUTH_ENABLED = false;
+      var LOGIN_ENDPOINT = '/api/login';
+      var LOGOUT_ENDPOINT = '/api/logout';   // member pages' "Sign out" should POST here, then land on login.html?signedout=1
+      var DEFAULT_NEXT = 'home.html';
+
+      if (!AUTH_ENABLED) document.body.classList.add('preview');
+
+      function q(k) { try { return new URLSearchParams(location.search).get(k); } catch (e) { return null; } }
+      // Only same-origin relative paths are honored as a destination.
+      function safeNext() {
+        var n = q('next') || '';
+        if (!n) return DEFAULT_NEXT;
+        if (/^https?:|^\/\//i.test(n)) return DEFAULT_NEXT;
+        return n.replace(/^\/+/, '') || DEFAULT_NEXT;
+      }
+
+      var form = document.getElementById('loginForm'), notice = document.getElementById('notice');
+      var email = document.getElementById('email'), pw = document.getElementById('password'), btn = document.getElementById('submitBtn');
+      function say(kind, msg) { notice.className = 'notice show ' + kind; notice.textContent = msg; }
+      function clear() { notice.className = 'notice'; notice.textContent = ''; }
+
+      if (q('signedout') === '1') {
+        try { sessionStorage.removeItem('gh2_demo_session'); } catch (e) {}
+        say('ok', 'You’re signed out.');
+      }
+      if (q('expired') === '1') say('err', 'Your session ended. Sign in again to continue.');
+
+      document.getElementById('togglePw').addEventListener('click', function () {
+        var show = pw.type === 'password'; pw.type = show ? 'text' : 'password';
+        this.textContent = show ? 'Hide' : 'Show'; this.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+      });
+      document.getElementById('forgotLink').addEventListener('click', function (e) {
+        e.preventDefault();
+        // Jae: point at the reset flow when it exists.
+        say('ok', 'Password reset is coming. For now, email info@gh2benefits.com and we’ll get you back in.');
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault(); clear();
+        var em = email.value.trim(), p = pw.value;
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { say('err', 'Enter the email on your plan.'); email.focus(); return; }
+        if (!p) { say('err', 'Enter your password.'); pw.focus(); return; }
+        btn.disabled = true; var orig = btn.innerHTML; btn.textContent = 'Signing in…';
+
+        var go = function () { window.location.href = safeNext(); };
+
+        if (!AUTH_ENABLED) {
+          try { sessionStorage.setItem('gh2_demo_session', JSON.stringify({ email: em, at: Date.now() })); } catch (err) {}
+          setTimeout(go, 450);
+          return;
+        }
+        fetch(LOGIN_ENDPOINT, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'same-origin',
+          body: JSON.stringify({ email: em, password: p, remember: document.getElementById('remember').checked })
+        }).then(function (r) {
+          if (r.status === 401) { throw new Error('bad'); }
+          if (!r.ok) { throw new Error('server'); }
+          return r.json().catch(function () { return { ok: true }; });
+        }).then(function () { go(); })
+          .catch(function (err) {
+            btn.disabled = false; btn.innerHTML = orig;
+            say('err', err && err.message === 'bad' ? 'That email and password didn’t match. Try again.' : 'Something went wrong on our end. Try again in a moment.');
+          });
+      });
+    })();
+  </script>
+</body>
+</html>

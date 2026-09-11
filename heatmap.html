@@ -78,6 +78,8 @@
       padding: 7px 12px; border-radius: 9px; white-space: nowrap;
     }
     .asof svg { width: 13px; height: 13px; color: var(--text-faint); }
+    .signout { font-size: 12.5px; font-weight: 600; color: var(--text-muted); padding: 7px 10px; border-radius: 8px; white-space: nowrap; }
+    .signout:hover { color: var(--text); background: var(--card-bg-2); }
     .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
     .nav a {
       font-size: 13.5px; font-weight: 600; color: var(--text-muted);
@@ -345,6 +347,7 @@
     <div class="wordmark">EDGE</div>
     <span class="tier-label"><span class="tier-k">Your plan</span><span class="tier-dot"></span><span id="userTier">GH2 EDGE&trade;</span></span>
     <nav class="nav" aria-label="Dashboard sections">
+      <a href="home.html">Home</a>
       <a href="dashboard.html">Dashboard</a>
       <a href="heatmap.html" class="active" aria-current="page">Heat Map</a>
     </nav>
@@ -352,6 +355,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span id="whoAmI"></span>As of <span id="asofDate">&mdash;</span>
     </div>
+    <a class="signout" href="login.html?signedout=1" data-signout>Sign out</a>
   </div>
 
   <main class="wrap">
