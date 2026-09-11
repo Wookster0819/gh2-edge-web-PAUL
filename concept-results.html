@@ -118,6 +118,54 @@
     .g.locked { position: relative; }
     .g.locked .veil { position: absolute; inset: 0; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--text-dim); }
 
+    /* ===== Locked bits: show the shape, hide the answer ===== */
+    .blur { filter: blur(6px); user-select: none; pointer-events: none; }
+    .lockchip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #FBBF24; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); padding: 3px 8px; border-radius: 999px; vertical-align: middle; white-space: nowrap; }
+    .lockchip svg { width: 10px; height: 10px; }
+    .h1lock { display: inline-flex; align-items: center; gap: 10px; }
+    .r.locked .t, .r.locked .s, .r.locked .w { filter: blur(5px); user-select: none; }
+    .r.locked { position: relative; }
+    .r.locked .lockchip { position: absolute; right: 0; top: 16px; }
+    .rej.locked .txt { filter: blur(5px); user-select: none; }
+    .rej.locked { position: relative; }
+    .rej.locked .lockchip { position: absolute; right: 0; top: 14px; }
+    .unlock { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.35); display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .unlock p { margin: 0; font-size: 13.5px; color: var(--text-dim); }
+    .unlock p b { color: var(--text); }
+    .unlock a { font-size: 13px; font-weight: 800; color: var(--purple-2); white-space: nowrap; }
+
+    /* ===== Tiers ===== */
+    .tiers-head { text-align: center; padding: 30px 0 6px; }
+    .tiers-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 40px); margin: 0 0 8px; }
+    .tiers-head h2 em { font-style: italic; color: var(--purple-2); }
+    .tiers-head p { color: var(--text-muted); font-size: 15px; margin: 0; }
+    .tiers-head p b { color: var(--green); font-weight: 700; }
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .tier { padding: 24px 24px 22px; display: flex; flex-direction: column; gap: 12px; text-align: left; }
+    .tier.pop { border-color: rgba(139,92,246,0.6); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); position: relative; }
+    .tier .badge2 { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--purple); color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; }
+    .tier .head { display: flex; align-items: center; gap: 12px; }
+    .tier .ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; border: 1px solid; }
+    .tier .ico svg { width: 22px; height: 22px; }
+    .tier .ico.t { color: #2DD4BF; background: #0F2E2E; border-color: #1E4B48; }
+    .tier .ico.p { color: var(--purple-2); background: #1E1B4B; border-color: #312E5B; }
+    .tier .ico.g { color: #FCD34D; background: #292015; border-color: #3A2F1F; }
+    .tier h3 { margin: 0; font-size: 19px; font-weight: 800; }
+    .tier .tag2 { font-size: 12.5px; font-weight: 600; margin-top: 2px; }
+    .tier .ico.t + div .tag2 { color: #2DD4BF; } .tier .ico.p + div .tag2 { color: var(--purple-2); } .tier .ico.g + div .tag2 { color: #FCD34D; }
+    .tier .price { margin-top: 4px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .tier .price b { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+    .tier .price span { color: var(--text-muted); font-size: 13.5px; font-weight: 600; }
+    .tier .price small { flex-basis: 100%; font-size: 12.5px; color: var(--text-muted); margin-top: -2px; }
+    .tier .price small em { font-style: normal; color: var(--green); font-weight: 700; }
+    .tier ul { list-style: none; margin: 4px 0 0; padding: 12px 0 0; border-top: 1px solid var(--border-soft); display: grid; gap: 9px; flex: 1; }
+    .tier li { font-size: 13.5px; color: var(--text-dim); padding-left: 20px; position: relative; line-height: 1.4; }
+    .tier li::before { content: ''; position: absolute; left: 0; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.5); }
+    .tier li.you { color: var(--text); font-weight: 600; }
+    .tier li.you::before { background: var(--green); border-color: var(--green); }
+    .tier .btn { width: 100%; justify-content: center; margin-top: 8px; }
+    @media (max-width: 880px) { .tiers { grid-template-columns: 1fr; } }
+
     .foot { text-align: center; color: var(--text-faint); font-size: 12.5px; padding-top: 10px; }
 
     @media (max-width: 880px) {
@@ -140,8 +188,8 @@
     <section class="card verdict">
       <div>
         <div class="pillrow"><span class="badge" aria-hidden="true">!</span><span class="pill"><span class="d"></span>AT RISK</span></div>
-        <h1>Savings may run out at 72. <em>The biggest fix:</em> convert <b>$122,898</b> to Roth this year.</h1>
-        <p class="sub">Your plan needs a 19.1% return to last to 100. That one move, plus lower spending in the first five years, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.</p>
+        <h1>Savings may run out at 72. <em>The biggest fix:</em> a Roth conversion this year of <span class="h1lock"><b class="blur">$122,898</b><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Full Plan</span></span></h1>
+        <p class="sub">Your plan needs a 19.1% return to last to 100. That one move, sized to the dollar, plus one more change, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.</p>
         <div class="acts">
           <a class="btn" href="#">Get my exact number &rarr;</a>
           <span class="alt">or <a href="#">adjust your inputs</a></span>
@@ -172,11 +220,12 @@
         <div class="reasons">
           <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span><div><div class="t">Your income drops this year</div><div class="s">Retiring at 65 opens a low-income window. Dollars converted now are taxed at 12%, not the 24% they&rsquo;d face at 75.</div></div><span class="w">+$4,300</span></div>
           <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></span><div><div class="t">$38,400 of room in the 12% bracket</div><div class="s">EDGE fills the bracket to the dollar and stops. Converting more would spill into 22%.</div></div><span class="w">sized to fit</span></div>
-          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="4" y="14" width="4.5" height="7"/><rect x="9.75" y="9" width="4.5" height="12"/><rect x="15.5" y="4" width="4.5" height="17"/></svg></span><div><div class="t">Medicare surcharge stays clear</div><div class="s">The conversion keeps you $18,400 under the first IRMAA tier. Bigger conversions would cost $1,140 a year in premiums.</div></div><span class="w">$0 surcharge</span></div>
-          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><div><div class="t">Thirteen years before RMDs</div><div class="s">Every dollar moved to Roth now is a dollar the IRS can&rsquo;t force out at 75.</div></div><span class="w">+$2,100/yr later</span></div>
-          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span><div><div class="t">New York taxes the withdrawal, not the growth</div><div class="s">State tax is paid once on the conversion. Thirty years of Roth growth after that is untaxed.</div></div><span class="w">+$9,800 lifetime</span></div>
+          <div class="r locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Full Plan</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="4" y="14" width="4.5" height="7"/><rect x="9.75" y="9" width="4.5" height="12"/><rect x="15.5" y="4" width="4.5" height="17"/></svg></span><div><div class="t">Medicare surcharge stays clear</div><div class="s">The conversion keeps you $18,400 under the first IRMAA tier. Bigger conversions would cost $1,140 a year in premiums.</div></div><span class="w">$0 surcharge</span></div>
+          <div class="r locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Full Plan</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><div><div class="t">Thirteen years before RMDs</div><div class="s">Every dollar moved to Roth now is a dollar the IRS can&rsquo;t force out at 75.</div></div><span class="w">+$2,100/yr later</span></div>
+          <div class="r locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Full Plan</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span><div><div class="t">New York taxes the withdrawal, not the growth</div><div class="s">State tax is paid once on the conversion. Thirty years of Roth growth after that is untaxed.</div></div><span class="w">+$9,800 lifetime</span></div>
         </div>
-        <div class="rej"><b>Also considered, ranked lower for you:</b> delaying Social Security to 70 (+$3,100/yr, but it needs cash you don&rsquo;t have in years 65&ndash;70) &middot; taxable-first drawdown (+$2,900/yr, ranked #3) &middot; a qualified charitable distribution (not until 70&frac12;). <a class="lk" href="#">See all 80 &rarr;</a></div>
+        <div class="rej locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Full Plan</span><b>Also considered, ranked lower for you:</b> <span class="txt">delaying Social Security to 70 (+$3,100/yr, but it needs cash you don&rsquo;t have in years 65&ndash;70) &middot; taxable-first drawdown (+$2,900/yr, ranked #3) &middot; a qualified charitable distribution (not until 70&frac12;).</span></div>
+        <div class="unlock"><p><b>2 of 5 reasons shown.</b> Full Plan opens all five, the exact conversion amount, and the other 79 strategies ranked for you.</p><a href="#tiers">See plans &darr;</a></div>
       </section>
 
       <section class="card gaps">
@@ -199,10 +248,37 @@
       <div class="rg">
         <div class="g"><div class="lbl"><span class="d ok"></span>IRMAA</div><p>Your income stays <b>$18,400</b> under the first Medicare tier through 95.</p></div>
         <div class="g"><div class="lbl"><span class="d ok"></span>RMD runway</div><p>Thirteen years until required withdrawals begin at 75.</p></div>
-        <div class="g"><div class="lbl"><span class="d hot"></span>Social Security</div><p>Claiming at 67 beats 70 for you by <b>$14,200</b>, because of the cash gap.</p></div>
+        <div class="g locked"><div class="lbl"><span class="d hot"></span>Social Security</div><p>Claiming at 67 beats 70 for you by <b>$14,200</b>, because of the cash gap.</p><div class="veil">&#128274; Full Plan</div></div>
         <div class="g locked"><div class="lbl"><span class="d lk"></span>State tax</div><p>Moving to Florida at 70 would keep about $61,000 more.</p><div class="veil">&#128274; Full Plan</div></div>
       </div>
     </section>
+
+    <!-- ===== TIERS ===== -->
+    <div class="tiers-head" id="tiers">
+      <h2>Unlock the <em>whole</em> answer.</h2>
+      <p>Pick monthly or yearly. <b>Go yearly and today&rsquo;s price is locked for as long as you stay.</b></p>
+    </div>
+    <div class="tiers">
+      <div class="card tier">
+        <div class="head"><div class="ico t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg></div><div><h3>Quick Check</h3><div class="tag2">Stay informed.</div></div></div>
+        <div class="price"><b>$89</b><span>/ year</span><small>or $9 / month &middot; <em>price locked</em></small></div>
+        <ul><li>Jae&rsquo;s Corner, weekly</li><li>One EDGE recommendation a year, on your numbers</li><li>Ask EDGE, 24/7</li></ul>
+        <a class="btn ghost" href="#">Get Quick Check</a>
+      </div>
+      <div class="card tier pop">
+        <span class="badge2">Most popular</span>
+        <div class="head"><div class="ico p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><path d="M12 1.5V4M12 20v2.5M1.5 12H4M20 12h2.5"/></svg></div><div><h3>Full Plan</h3><div class="tag2">Improve Your Number.</div></div></div>
+        <div class="price"><b>$290</b><span>/ year</span><small>or $29 / month &middot; <em>price locked</em></small></div>
+        <ul><li class="you">Your exact conversion amount and all 5 reasons</li><li>All 80 strategies, ranked for your household</li><li>Dashboard, heat map, Ask EDGE on your numbers</li><li>Re-run on every market move, rule change, life event</li></ul>
+        <a class="btn" href="#">Unlock my plan</a>
+      </div>
+      <div class="card tier">
+        <div class="head"><div class="ico g"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5a7.5 7.5 0 0 1 15 0z"/><path d="M12 9V6.5"/><path d="M10 6.5h4"/><path d="M3 19.5h18"/></svg></div><div><h3>Concierge</h3><div class="tag2">A person behind your plan.</div></div></div>
+        <div class="price"><b>$990</b><span>/ year</span><small>or $99 / month &middot; <em>price locked</em></small></div>
+        <ul><li>Everything in Full Plan</li><li>Ask a question any time &mdash; a person answers</li><li>A quarterly review brief for your household</li></ul>
+        <a class="btn ghost" href="#">Get Concierge</a>
+      </div>
+    </div>
 
     <div class="foot">Concept only. Sample numbers. Nothing here is wired.</div>
   </main>
