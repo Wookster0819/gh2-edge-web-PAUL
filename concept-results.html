@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDGE — Results Concept</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- CONCEPT: ballpark results in three layers — verdict, the receipt, the reasoning. Sample numbers. Not wired. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0E1A; --bg-soft: #0E1424; --card-bg: #11172A; --card-bg-2: #161D33;
+      --border: #1F2940; --border-soft: #18213B;
+      --text: #F5F7FA; --text-dim: #B6BFD0; --text-muted: #8693AC; --text-faint: #5A6680;
+      --purple: #8B5CF6; --purple-2: #A78BFA; --purple-soft: rgba(139,92,246,0.14);
+      --green: #22C55E; --money: #10B981; --amber: #F97316; --red: #FF3B30;
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+      --serif: "Instrument Serif", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; border-bottom: 1px solid var(--border-soft); }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; }
+    .topbar .tag { margin-left: auto; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--purple-2); border: 1px dashed rgba(139,92,246,0.4); padding: 5px 10px; border-radius: 999px; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 32px 90px; display: grid; gap: 18px; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); }
+    .k { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-faint); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 11px; font-size: 14.5px; font-weight: 800; color: #fff; background: var(--grad-cta); border: 0; cursor: pointer; background-origin: border-box; }
+    .btn.ghost { background: var(--card-bg-2); border: 1px solid var(--border); color: var(--text); font-weight: 700; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,59,48,0), 0 0 8px rgba(255,59,48,0.55); opacity: .88; } 50% { box-shadow: 0 0 0 4px rgba(255,59,48,0.14), 0 0 16px rgba(255,59,48,0.95); opacity: 1; } }
+    @keyframes pulseP { 0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0), 0 0 8px rgba(167,139,250,0.55); } 50% { box-shadow: 0 0 0 4px rgba(167,139,250,0.14), 0 0 16px rgba(167,139,250,0.95); } }
+
+    /* ===== Layer 1: the verdict ===== */
+    .verdict { padding: 32px 36px 28px; border-color: rgba(255,59,48,0.45); background: radial-gradient(ellipse at 90% 30%, rgba(255,59,48,0.14), transparent 45%), var(--card-bg); display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: center; }
+    .pill { display: inline-flex; align-items: center; gap: 9px; background: rgba(0,0,0,0.45); border-radius: 99px; padding: 7px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; }
+    .pill .d { width: 9px; height: 9px; border-radius: 50%; background: var(--red); animation: pulse 2.6s ease-in-out infinite; }
+    .verdict h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; margin: 16px 0 12px; letter-spacing: -0.01em; }
+    .verdict h1 em { font-style: italic; color: #FF6B61; }
+    .verdict h1 b { font-weight: 400; color: var(--money); }
+    .verdict .sub { color: var(--text-dim); font-size: 15.5px; line-height: 1.55; max-width: 56ch; margin: 0 0 18px; }
+    .verdict .acts { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .verdict .acts .alt { font-size: 13.5px; color: var(--text-muted); }
+    .verdict .acts .alt a { color: var(--purple-2); font-weight: 700; }
+    .numbers { display: grid; gap: 10px; }
+    .num { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
+    .num .k { margin-bottom: 4px; }
+    .num b { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; display: block; }
+    .num b.red { color: #FF6B61; }
+    .num small { display: block; font-size: 12px; color: var(--text-muted); margin-top: 5px; }
+    .num .bar { position: relative; height: 6px; border-radius: 99px; background: var(--border); margin-top: 10px; overflow: visible; }
+    .num .bar i { display: block; height: 100%; width: 73%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #A78BFA); }
+    .num .bar em { position: absolute; top: 50%; left: 73%; width: 13px; height: 13px; border-radius: 50%; background: #100A24; border: 3px solid #A78BFA; transform: translate(-50%, -50%); animation: pulseP 2.6s ease-in-out infinite; }
+
+    /* ===== Layer 2: the receipt ===== */
+    .receipt { display: flex; align-items: center; gap: 0; padding: 14px 24px; flex-wrap: wrap; }
+    .receipt .lead { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--purple-2); margin-right: 22px; display: inline-flex; align-items: center; gap: 8px; }
+    .receipt .lead .d { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); animation: pulseP 2.6s ease-in-out infinite; }
+    .receipt .it { display: flex; align-items: baseline; gap: 6px; padding: 6px 22px 6px 0; margin-right: 22px; border-right: 1px solid var(--border-soft); }
+    .receipt .it:last-child { border-right: 0; margin-right: 0; }
+    .receipt .it b { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .receipt .it span { font-size: 12.5px; color: var(--text-muted); }
+
+    /* ===== Layer 3: the reasoning ===== */
+    .two { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; }
+    .why { padding: 24px 28px 22px; }
+    .why h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 6px 0 16px; }
+    .why h2 em { font-style: italic; color: var(--purple-2); }
+    .reasons { display: grid; gap: 0; }
+    .r { display: grid; grid-template-columns: 34px 1fr auto; gap: 14px; align-items: start; padding: 13px 0; border-top: 1px solid var(--border-soft); }
+    .r:first-child { border-top: 0; padding-top: 2px; }
+    .r .ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.3); color: var(--purple-2); }
+    .r .ico svg { width: 16px; height: 16px; }
+    .r .t { font-size: 15px; font-weight: 700; }
+    .r .s { font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.45; }
+    .r .w { font-size: 13px; font-weight: 800; color: var(--money); white-space: nowrap; padding-top: 2px; }
+    .r .w.neg { color: var(--text-muted); font-weight: 600; }
+    .rej { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .rej b { color: var(--text-dim); font-weight: 700; }
+    .rej .lk { color: var(--purple-2); font-weight: 700; }
+
+    .gaps { padding: 24px 28px 22px; }
+    .gaps h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 6px 0 6px; }
+    .gaps h2 em { font-style: italic; color: var(--purple-2); }
+    .gaps p { color: var(--text-muted); font-size: 13.5px; margin: 0 0 14px; line-height: 1.5; }
+    .gap { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--card-bg-2); border: 1px solid var(--border-soft); margin-bottom: 8px; }
+    .gap .n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: var(--purple-soft); color: var(--purple-2); flex: none; }
+    .gap .t { font-size: 14px; font-weight: 700; flex: 1; }
+    .gap .pct { font-size: 12.5px; font-weight: 800; color: var(--purple-2); }
+    .gaps .btn { width: 100%; justify-content: center; margin-top: 10px; }
+    .gaps .fine { font-size: 12px; color: var(--text-faint); text-align: center; margin-top: 10px; }
+
+    /* regimes strip */
+    .regimes { padding: 22px 28px; }
+    .regimes .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .regimes h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0; }
+    .regimes h2 em { font-style: italic; color: var(--purple-2); }
+    .regimes .head a { font-size: 13px; font-weight: 700; color: var(--purple-2); }
+    .rg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .g { padding: 16px 16px 14px; border-radius: 14px; background: var(--card-bg-2); border: 1px solid var(--border-soft); }
+    .g .lbl { display: flex; align-items: center; gap: 7px; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .g .lbl .d { width: 7px; height: 7px; border-radius: 50%; }
+    .g .lbl .d.hot { background: var(--amber); box-shadow: 0 0 8px rgba(249,115,22,0.7); }
+    .g .lbl .d.ok { background: var(--green); }
+    .g .lbl .d.lk { background: var(--text-faint); }
+    .g p { font-family: var(--serif); font-size: 17px; line-height: 1.35; margin: 0; }
+    .g p b { font-weight: 400; color: var(--money); }
+    .g.locked p { filter: blur(4px); user-select: none; }
+    .g.locked { position: relative; }
+    .g.locked .veil { position: absolute; inset: 0; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--text-dim); }
+
+    .foot { text-align: center; color: var(--text-faint); font-size: 12.5px; padding-top: 10px; }
+
+    @media (max-width: 880px) {
+      .verdict { grid-template-columns: 1fr; }
+      .two { grid-template-columns: 1fr; }
+      .rg { grid-template-columns: 1fr 1fr; }
+      .wrap { padding: 20px 18px 70px; }
+      .receipt .it { border-right: 0; margin-right: 0; padding-right: 0; width: 50%; }
+    }
+    @media (max-width: 520px) { .rg { grid-template-columns: 1fr; } .receipt .it { width: 100%; } }
+    @media (prefers-reduced-motion: reduce) { .pill .d, .receipt .lead .d, .num .bar em { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar"><span class="wordmark">EDGE</span><span class="tag">Concept · results in three layers</span></div>
+
+  <main class="wrap">
+
+    <!-- ===== 1. VERDICT ===== -->
+    <section class="card verdict">
+      <div>
+        <span class="pill"><span class="d"></span>AT RISK</span>
+        <h1>Savings may run out at 72. <em>The biggest fix:</em> convert <b>$122,898</b> to Roth this year.</h1>
+        <p class="sub">Your plan needs a 19.1% return to last to 100. That one move, plus lower spending in the first five years, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.</p>
+        <div class="acts">
+          <a class="btn" href="#">Get my exact number &rarr;</a>
+          <span class="alt">or <a href="#">adjust your inputs</a></span>
+        </div>
+      </div>
+      <div class="numbers">
+        <div class="num"><span class="k">Required portfolio return</span><b class="red">19.1%</b><small>Safe zone is under 5.0%</small></div>
+        <div class="num"><span class="k">How much EDGE has to work with</span><b>73%</b><small>5 more inputs close the gap</small><div class="bar"><i></i><em></em></div></div>
+      </div>
+    </section>
+
+    <!-- ===== 2. THE RECEIPT ===== -->
+    <section class="card receipt">
+      <span class="lead"><span class="d"></span>To get here, EDGE ran</span>
+      <span class="it"><b>80</b><span>strategies, ranked</span></span>
+      <span class="it"><b>7</b><span>wealth regimes</span></span>
+      <span class="it"><b>45</b><span>years, year by year</span></span>
+      <span class="it"><b>437</b><span>inputs weighed</span></span>
+      <span class="it"><b>3</b><span>tax codes: federal, NY, Medicare</span></span>
+      <span class="it"><b>1</b><span>household: yours</span></span>
+    </section>
+
+    <!-- ===== 3. THE REASONING ===== -->
+    <div class="two">
+      <section class="card why">
+        <span class="k">Why this move ranked first</span>
+        <h2>Five things <em>tipped it</em>.</h2>
+        <div class="reasons">
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span><div><div class="t">Your income drops this year</div><div class="s">Retiring at 65 opens a low-income window. Dollars converted now are taxed at 12%, not the 24% they&rsquo;d face at 75.</div></div><span class="w">+$4,300</span></div>
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></span><div><div class="t">$38,400 of room in the 12% bracket</div><div class="s">EDGE fills the bracket to the dollar and stops. Converting more would spill into 22%.</div></div><span class="w">sized to fit</span></div>
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="4" y="14" width="4.5" height="7"/><rect x="9.75" y="9" width="4.5" height="12"/><rect x="15.5" y="4" width="4.5" height="17"/></svg></span><div><div class="t">Medicare surcharge stays clear</div><div class="s">The conversion keeps you $18,400 under the first IRMAA tier. Bigger conversions would cost $1,140 a year in premiums.</div></div><span class="w">$0 surcharge</span></div>
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><div><div class="t">Thirteen years before RMDs</div><div class="s">Every dollar moved to Roth now is a dollar the IRS can&rsquo;t force out at 75.</div></div><span class="w">+$2,100/yr later</span></div>
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span><div><div class="t">New York taxes the withdrawal, not the growth</div><div class="s">State tax is paid once on the conversion. Thirty years of Roth growth after that is untaxed.</div></div><span class="w">+$9,800 lifetime</span></div>
+        </div>
+        <div class="rej"><b>Also considered, ranked lower for you:</b> delaying Social Security to 70 (+$3,100/yr, but it needs cash you don&rsquo;t have in years 65&ndash;70) &middot; taxable-first drawdown (+$2,900/yr, ranked #3) &middot; a qualified charitable distribution (not until 70&frac12;). <a class="lk" href="#">See all 80 &rarr;</a></div>
+      </section>
+
+      <section class="card gaps">
+        <span class="k">The 27% EDGE doesn&rsquo;t have yet</span>
+        <h2>Five inputs <em>sharpen</em> this.</h2>
+        <p>Each one narrows your range. Right now your number could be off by as much as 4.3%, about $39,000 a year.</p>
+        <div class="gap"><span class="n">1</span><span class="t">Other retirement income</span><span class="pct">+9%</span></div>
+        <div class="gap"><span class="n">2</span><span class="t">Account mix: pre-tax, Roth, taxable</span><span class="pct">+7%</span></div>
+        <div class="gap"><span class="n">3</span><span class="t">Spouse&rsquo;s Social Security estimate</span><span class="pct">+5%</span></div>
+        <div class="gap"><span class="n">4</span><span class="t">Health and longevity</span><span class="pct">+4%</span></div>
+        <div class="gap"><span class="n">5</span><span class="t">Home equity and plans for it</span><span class="pct">+2%</span></div>
+        <a class="btn" href="#">Add these with Full Plan &rarr;</a>
+        <div class="fine">Full Plan re-runs all 80 strategies on the complete picture.</div>
+      </section>
+    </div>
+
+    <!-- ===== regimes: what else EDGE is already watching ===== -->
+    <section class="card regimes">
+      <div class="head"><h2>Four other things EDGE is <em>already</em> watching.</h2><a href="#">All seven regimes &rarr;</a></div>
+      <div class="rg">
+        <div class="g"><div class="lbl"><span class="d ok"></span>IRMAA</div><p>Your income stays <b>$18,400</b> under the first Medicare tier through 95.</p></div>
+        <div class="g"><div class="lbl"><span class="d ok"></span>RMD runway</div><p>Thirteen years until required withdrawals begin at 75.</p></div>
+        <div class="g"><div class="lbl"><span class="d hot"></span>Social Security</div><p>Claiming at 67 beats 70 for you by <b>$14,200</b>, because of the cash gap.</p></div>
+        <div class="g locked"><div class="lbl"><span class="d lk"></span>State tax</div><p>Moving to Florida at 70 would keep about $61,000 more.</p><div class="veil">&#128274; Full Plan</div></div>
+      </div>
+    </section>
+
+    <div class="foot">Concept only. Sample numbers. Nothing here is wired.</div>
+  </main>
+</body>
+</html>
