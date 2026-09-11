@@ -38,6 +38,11 @@
     .verdict { padding: 32px 36px 28px; border-color: rgba(255,59,48,0.45); background: radial-gradient(ellipse at 90% 30%, rgba(255,59,48,0.14), transparent 45%), var(--card-bg); display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: center; }
     .pill { display: inline-flex; align-items: center; gap: 9px; background: rgba(0,0,0,0.45); border-radius: 99px; padding: 7px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; }
     .pill .d { width: 9px; height: 9px; border-radius: 50%; background: var(--red); animation: pulse 2.6s ease-in-out infinite; }
+    /* Small badge: a 34px red circle with an "!" beside the pill. Breathes
+       softly. Enough to catch the eye, not a siren. */
+    .pillrow { display: flex; align-items: center; gap: 12px; }
+    .badge { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; font-weight: 800; color: #fff; background: radial-gradient(circle at 35% 30%, #FF5147, #D31408); box-shadow: 0 0 14px rgba(255,59,48,0.45); animation: badge 2.6s ease-in-out infinite; }
+    @keyframes badge { 0%,100% { box-shadow: 0 0 10px rgba(255,59,48,0.35); transform: scale(1); } 50% { box-shadow: 0 0 22px rgba(255,59,48,0.7); transform: scale(1.05); } }
     .verdict h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; margin: 16px 0 12px; letter-spacing: -0.01em; }
     .verdict h1 em { font-style: italic; color: #FF6B61; }
     .verdict h1 b { font-weight: 400; color: var(--money); }
@@ -122,7 +127,7 @@
       .receipt .it { border-right: 0; margin-right: 0; padding-right: 0; width: 50%; }
     }
     @media (max-width: 520px) { .rg { grid-template-columns: 1fr; } .receipt .it { width: 100%; } }
-    @media (prefers-reduced-motion: reduce) { .pill .d, .receipt .lead .d, .num .bar em { animation: none; } }
+    @media (prefers-reduced-motion: reduce) { .pill .d, .receipt .lead .d, .num .bar em, .badge { animation: none; } }
   </style>
 </head>
 <body>
@@ -133,7 +138,7 @@
     <!-- ===== 1. VERDICT ===== -->
     <section class="card verdict">
       <div>
-        <span class="pill"><span class="d"></span>AT RISK</span>
+        <div class="pillrow"><span class="badge" aria-hidden="true">!</span><span class="pill"><span class="d"></span>AT RISK</span></div>
         <h1>Savings may run out at 72. <em>The biggest fix:</em> convert <b>$122,898</b> to Roth this year.</h1>
         <p class="sub">Your plan needs a 19.1% return to last to 100. That one move, plus lower spending in the first five years, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.</p>
         <div class="acts">
