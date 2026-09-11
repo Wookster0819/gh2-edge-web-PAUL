@@ -715,6 +715,9 @@
     .stepper .step.active.results-stretch .dot { animation: bpGlowAmber 2.6s ease-in-out infinite; }
     .stepper .step.active.results-on-track .dot { animation: bpGlowGreen 2.6s ease-in-out infinite; }
     .rz-prec-marker { animation: bpGlowPurple 2.6s ease-in-out infinite; }
+    #rzCard2[data-tier="at_risk"]  .rz-range-marker { animation: bpGlowRed 2.6s ease-in-out infinite; }
+    #rzCard2[data-tier="stretch"]  .rz-range-marker { animation: bpGlowAmber 2.6s ease-in-out infinite; }
+    #rzCard2[data-tier="on_track"] .rz-range-marker { animation: bpGlowGreen 2.6s ease-in-out infinite; }
 
     /* Verdict badge: a slow breathing halo instead of the old two-beat bounce */
     @keyframes bpBadgeRed   { 0%,100% { box-shadow: 0 0 40px rgba(255,59,48,0.45);  transform: scale(1); } 50% { box-shadow: 0 0 75px rgba(255,59,48,0.85);  transform: scale(1.04); } }
@@ -724,7 +727,7 @@
     .rz-verdict[data-tier="stretch"]  .rz-verdict-badge .ring { animation: bpBadgeAmber 2.6s ease-in-out infinite; }
     .rz-verdict[data-tier="on_track"] .rz-verdict-badge .ring { animation: bpBadgeGreen 2.6s ease-in-out infinite; }
     @media (prefers-reduced-motion: reduce) {
-      .rz-pill .dot, .stepper .step .dot, .rz-prec-marker, .rz-verdict-badge .ring { animation: none !important; }
+      .rz-pill .dot, .stepper .step .dot, .rz-prec-marker, .rz-range-marker, .rz-verdict-badge .ring { animation: none !important; }
     }
 
     /* Hover glow — same treatment as the dashboard cards (cursor devices only) */
