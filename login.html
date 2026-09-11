@@ -142,7 +142,7 @@
         <div>Just want the free check? <a href="ballpark.html">Run the ballpark</a></div>
       </div>
       <div class="secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure. Private. Your data is never sold.</div>
-      <div class="preview-tag">Preview mode: any email and password opens the member pages on sample data.</div>
+      <div class="preview-tag">Preview mode: just click Sign in. The member pages open on sample data.</div>
     </form>
   </main>
 
@@ -191,8 +191,12 @@
       form.addEventListener('submit', function (e) {
         e.preventDefault(); clear();
         var em = email.value.trim(), p = pw.value;
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { say('err', 'Enter the email on your plan.'); email.focus(); return; }
-        if (!p) { say('err', 'Enter your password.'); pw.focus(); return; }
+        if (AUTH_ENABLED) {
+          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { say('err', 'Enter the email on your plan.'); email.focus(); return; }
+          if (!p) { say('err', 'Enter your password.'); pw.focus(); return; }
+        } else if (!em) {
+          em = 'preview@gh2edge.com';   // preview: a bare click signs in
+        }
         btn.disabled = true; var orig = btn.innerHTML; btn.textContent = 'Signing in…';
 
         var go = function () { window.location.href = safeNext(); };
