@@ -244,28 +244,20 @@
 
     .tier-name { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
     .tier-tagline { font-size: 13px; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4; min-height: 36px; }
-    /* Per-card price options: monthly and yearly both visible, one selected.
-       Clicking either switches the page's billing period. */
-    .tier-price { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
-    .tp-opt { position: relative; text-align: left; cursor: pointer; font-family: inherit; padding: 10px 12px 9px; border-radius: var(--field-radius); border: 1px solid var(--border); background: var(--bg); color: var(--text-muted); display: flex; flex-direction: column; gap: 2px; transition: border-color 0.15s ease, background 0.15s ease; }
-    .tp-opt:hover { border-color: var(--text-faint); }
-    .tp-opt .tp-amt { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.1; font-variant-numeric: tabular-nums; }
-    .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
-    .tp-opt .tp-tag { display: inline-block; margin-top: 5px; align-self: flex-start; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: var(--green-bg); color: var(--green); }
-    .tp-opt.on { color: var(--text); border-color: var(--brand-blue); background: var(--card-bg); box-shadow: inset 0 0 0 1px var(--brand-blue); }
-    body[data-theme="edge"] .tp-opt.on { background: rgba(139,92,246,0.12); }
-    .tp-opt[hidden] { display: none; }
+    /* One price, one quiet switch link, one quiet lock line (Paul: the
+       two-box version was noisy). The top toggle still drives the period. */
+    .tier-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 2px; }
+    .tier-alt { background: none; border: 0; padding: 0; font: inherit; font-size: 13px; font-weight: 600; color: var(--brand-blue); cursor: pointer; text-align: left; }
+    .tier-alt:hover { text-decoration: underline; }
     .tier-price-amount { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
     .tier-price-unit { font-size: 14px; color: var(--text-muted); font-weight: 600; }
     .tier-price-amount.tbd { font-size: 22px; color: var(--text-muted); }
     .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin: -10px 0 10px; line-height: 1.4; min-height: 18px; }
-    .tier-lock { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: var(--green-bg); border: 1px solid rgba(34,197,94,0.28); margin: 0 0 14px; font-size: 12.5px; line-height: 1.35; color: var(--text); }
-    .tier-lock .lk { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.18); color: var(--green); }
-    .tier-lock .lk svg { width: 11px; height: 11px; }
-    .tier-lock strong { color: var(--green); font-weight: 800; letter-spacing: 0.02em; }
-    .tier-lock.off { background: transparent; border-style: dashed; border-color: var(--border); color: var(--text-muted); }
-    .tier-lock.off .lk { background: var(--border); color: var(--text-muted); }
-    .tier-lock.off strong { color: var(--text); }
+    .tier-lock { display: flex; align-items: center; gap: 7px; margin: 12px 0 6px; font-size: 12.5px; line-height: 1.35; color: var(--green); font-weight: 600; }
+    .tier-lock .lk { display: inline-grid; place-items: center; width: 16px; height: 16px; flex: none; }
+    .tier-lock .lk svg { width: 12px; height: 12px; }
+    .tier-lock strong { font-weight: 700; }
+    .tier-lock.off { color: var(--text-muted); font-weight: 500; }
     .bill-hint { font-size: 13.5px; color: var(--text-muted); }
     .bill-hint strong { color: var(--text); }
 
@@ -309,7 +301,7 @@
     .lock-note .lock-ico svg { width: 13px; height: 13px; }
     @media (max-width: 560px) { .bill-row { gap: 12px; } .lock-note { font-size: 13px; } }
 
-    .tier-cadence { font-size: 12px; color: var(--text-faint); margin-top: -10px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+    .tier-cadence { font-size: 13px; color: var(--text-muted); margin: 0 0 16px; font-weight: 500; line-height: 1.4; }
     .tier-features { list-style: none; padding: 0; margin: 0 0 22px; flex: 1; }
     .tier-features li {
       padding: 8px 0 8px 26px; position: relative;
@@ -343,23 +335,24 @@
 
     /* Tier value-block + value/cost ratio */
     .tier-value-block {
-      background: linear-gradient(135deg, var(--hero-grad-start), var(--hero-grad-end));
-      color: #FFF;
-      padding: 16px 18px;
+      background: var(--bg);
+      border: 1px solid var(--border); border-left: 3px solid var(--brand-blue);
+      color: var(--text);
+      padding: 12px 14px;
       border-radius: var(--field-radius);
-      margin: 4px 0 14px;
+      margin: 4px 0 12px;
     }
     .tier-value-label {
-      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-      font-weight: 700; opacity: 0.85;
+      font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+      font-weight: 700; color: var(--text-faint);
     }
     .tier-value-amount {
-      font-size: 28px; font-weight: 800; line-height: 1.1;
-      letter-spacing: -0.02em; margin: 4px 0 2px;
+      font-size: 22px; font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.02em; margin: 3px 0 2px;
       font-variant-numeric: tabular-nums;
     }
     .tier-value-note {
-      font-size: 12px; opacity: 0.9; line-height: 1.4;
+      font-size: 12px; color: var(--text-muted); line-height: 1.4;
     }
     .tier-ratio {
       display: flex; justify-content: space-between; align-items: baseline;
@@ -371,7 +364,7 @@
       font-weight: 600; color: var(--text-muted);
     }
     .tier-ratio-value {
-      font-size: 22px; font-weight: 800; color: var(--brand-blue);
+      font-size: 18px; font-weight: 800; color: var(--brand-blue);
       letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
     }
 
@@ -517,7 +510,7 @@
         <button type="button" class="bill-btn" data-bill="month">Monthly</button>
         <button type="button" class="bill-btn on" data-bill="year">Yearly <span class="bill-save">2 months free</span></button>
       </div>
-      <div class="bill-hint"><strong>Founding price lock:</strong> go yearly and today&rsquo;s price is yours for as long as you stay.</div>
+      <div class="bill-hint">Go yearly and today&rsquo;s price is locked for as long as you stay.</div>
     </div>
 
     <div class="tier-grid">
@@ -525,9 +518,10 @@
       <div class="tier-card" data-tier="Tier 1">
         <h3 class="tier-name">Tier 1 &mdash; Quick Check</h3>
         <div class="tier-price" data-month="9" data-year="89">
-          <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$9</span><span class="tp-unit">/ month</span></button>
-          <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$89</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          <span class="tier-price-amount">$89</span>
+          <span class="tier-price-unit">/ year</span>
         </div>
+        <button type="button" class="tier-alt" data-billing="month">or $9 / month</button>
         <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Weekly newsletter + annual rerun</div>
 
@@ -555,9 +549,10 @@
         <span class="tier-badge">Most popular</span>
         <h3 class="tier-name">Tier 2 &mdash; Full Plan</h3>
         <div class="tier-price" data-month="29" data-year="290">
-          <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$29</span><span class="tp-unit">/ month</span></button>
-          <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$290</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          <span class="tier-price-amount">$290</span>
+          <span class="tier-price-unit">/ year</span>
         </div>
+        <button type="button" class="tier-alt" data-billing="month">or $29 / month</button>
         <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
 
@@ -589,9 +584,10 @@
       <div class="tier-card" data-tier="Tier 3" data-savings="30000">
         <h3 class="tier-name">Tier 3 &mdash; Concierge Plan</h3>
         <div class="tier-price" data-month="99" data-year="990">
-          <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$99</span><span class="tp-unit">/ month</span></button>
-          <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$990</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          <span class="tier-price-amount">$990</span>
+          <span class="tier-price-unit">/ year</span>
         </div>
+        <button type="button" class="tier-alt" data-billing="month">or $99 / month</button>
         <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Everything in Full Plan, plus a person behind it</div>
 
@@ -815,22 +811,29 @@
         var m = p.getAttribute('data-month'), y = p.getAttribute('data-year');
         if (m == null && y == null) return;                       // price not set yet
         var useYear = BILL === 'year' ? y != null : m == null;    // fall back to whichever exists
-        var om = p.querySelector('.tp-opt[data-billing="month"]'), oy = p.querySelector('.tp-opt[data-billing="year"]');
-        if (om) { om.hidden = m == null; if (m != null) om.querySelector('.tp-amt').textContent = money(m); om.classList.toggle('on', !useYear); }
-        if (oy) { oy.hidden = y == null; if (y != null) oy.querySelector('.tp-amt').textContent = money(y); oy.classList.toggle('on', useYear); }
+        var amt = p.querySelector('.tier-price-amount'), unit = p.querySelector('.tier-price-unit');
+        amt.textContent = money(useYear ? y : m);
+        unit.textContent = useYear ? '/ year' : '/ month';
+        var alt = card.querySelector('.tier-alt');
+        if (alt) {
+          var other = useYear ? m : y;
+          alt.hidden = other == null;
+          alt.setAttribute('data-billing', useYear ? 'month' : 'year');
+          alt.textContent = useYear ? 'or ' + money(m) + ' / month' : 'or ' + money(y) + ' / year \u2014 2 months free';
+        }
         var lock = card.querySelector('.tier-lock'), lockText = card.querySelector('.tier-lock-text');
         if (lock && lockText && y != null) {
           lock.classList.toggle('off', !useYear);
           lockText.innerHTML = useYear
-            ? '<strong>Founding price lock</strong> &mdash; ' + money(y) + ' a year is yours for as long as you stay.'
-            : '<strong>Go yearly</strong> to lock ' + money(y) + ' a year for as long as you stay.';
+            ? '<strong>Price locked</strong> for as long as you stay'
+            : 'Go yearly to lock today\u2019s price';
         }
         var ratio = card.querySelector('.tier-ratio-value'), sv = +card.getAttribute('data-savings');
         if (ratio && sv) { var annual = useYear ? +y : +m * 12; ratio.textContent = Math.round(sv / annual) + '\u00d7'; }
       });
     }
     document.querySelectorAll('.bill-btn').forEach(function (btn) { btn.addEventListener('click', function () { BILL = btn.getAttribute('data-bill'); apply(); }); });
-    document.querySelectorAll('.tp-opt').forEach(function (btn) { btn.addEventListener('click', function () { BILL = btn.getAttribute('data-billing'); apply(); }); });
+    document.querySelectorAll('.tier-alt').forEach(function (btn) { btn.addEventListener('click', function () { BILL = btn.getAttribute('data-billing'); apply(); }); });
     apply();
     window.GH2_BILL = function () { return BILL; };
     window.GH2_APPLY = apply;
@@ -938,9 +941,9 @@
             if (titled) { if (window.GH2_APPLY) window.GH2_APPLY(); return; }
 
             var v = vs[0];
-            var amt = card.querySelector('.tp-opt[data-billing="month"] .tp-amt');
-            var unit = card.querySelector('.tp-opt[data-billing="month"] .tp-unit');
-            if (v && p) { p.setAttribute('data-month', v.price); p.removeAttribute('data-year'); }
+            var amt = card.querySelector('.tier-price-amount');
+            var unit = card.querySelector('.tier-price-unit');
+            if (v && p) { p.removeAttribute('data-month'); p.removeAttribute('data-year'); var altEl = card.querySelector('.tier-alt'); if (altEl) altEl.hidden = true; }
             if (v && amt) {
               amt.textContent = '$' + Number(v.price).toLocaleString('en-US', { maximumFractionDigits: 0 });
               if (unit) {
@@ -984,7 +987,7 @@
           if (!variant) return;
 
           // Shopify owns the number. The page owns everything around it.
-          var amount = card.querySelector('.tp-opt.on .tp-amt') || card.querySelector('.tp-amt');
+          var amount = card.querySelector('.tier-price-amount');
           if (amount) {
             amount.textContent = '$' + Number(variant.price)
               .toLocaleString('en-US', { maximumFractionDigits: 0 });
