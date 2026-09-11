@@ -14,7 +14,7 @@
       --border: #1F2940; --border-soft: #18213B;
       --text: #F5F7FA; --text-dim: #B6BFD0; --text-muted: #8693AC; --text-faint: #5A6680;
       --purple: #8B5CF6; --purple-2: #A78BFA; --purple-soft: rgba(139,92,246,0.14);
-      --green: #22C55E; --money: #10B981; --amber: #F97316; --red: #FF3B30;
+      --green: #22C55E; --money: #10B981; --amber: #F97316; --red: #FF3B30; --red-2: #FF5C52;
       --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
       --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
       --serif: "Instrument Serif", Georgia, serif;
@@ -35,17 +35,19 @@
     @keyframes pulseP { 0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0), 0 0 8px rgba(167,139,250,0.55); } 50% { box-shadow: 0 0 0 4px rgba(167,139,250,0.14), 0 0 16px rgba(167,139,250,0.95); } }
 
     /* ===== Layer 1: the verdict ===== */
-    .verdict { padding: 32px 36px 28px; border-color: rgba(255,59,48,0.45); background: radial-gradient(ellipse at 90% 30%, rgba(255,59,48,0.14), transparent 45%), var(--card-bg); display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: center; }
+    .verdict { position: relative; overflow: hidden; padding: 32px 36px 28px; border-color: rgba(255,59,48,0.45); background: radial-gradient(ellipse at 90% 30%, rgba(255,59,48,0.14), transparent 45%), radial-gradient(circle, rgba(255,255,255,0.045) 1px, transparent 1.4px) 0 0 / 22px 22px, var(--card-bg); display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: center; }
+    .verdict::before { content: ''; position: absolute; left: 8%; right: 8%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,92,82,0.9), transparent); }
+    .verdict > * { position: relative; }
     .pill { display: inline-flex; align-items: center; gap: 9px; background: rgba(0,0,0,0.45); border-radius: 99px; padding: 7px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; }
     .pill .d { width: 9px; height: 9px; border-radius: 50%; background: var(--red); animation: pulse 2.6s ease-in-out infinite; }
     /* Small badge: a 34px red circle with an "!" beside the pill. Breathes
        softly. Enough to catch the eye, not a siren. */
     .pillrow { display: flex; align-items: center; gap: 12px; }
-    .badge { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; font-weight: 800; color: #fff; background: radial-gradient(circle at 35% 30%, #FF5147, #D31408); box-shadow: 0 0 14px rgba(255,59,48,0.45); animation: badge 2.6s ease-in-out infinite; }
+    .badge { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; font-weight: 800; color: #fff; background: radial-gradient(circle at 35% 30%, var(--red-2), var(--red)); box-shadow: 0 0 14px rgba(255,59,48,0.45); animation: badge 2.6s ease-in-out infinite; }
     /* Glow only — scaling a 34px circle made the "!" shimmer on sub-pixels. */
     @keyframes badge { 0%,100% { box-shadow: 0 0 10px rgba(255,59,48,0.35); } 50% { box-shadow: 0 0 24px rgba(255,59,48,0.75); } }
     .verdict h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; margin: 16px 0 12px; letter-spacing: -0.01em; }
-    .verdict h1 em { font-style: italic; color: #FF6B61; }
+    .verdict h1 em { font-style: italic; color: var(--red-2); }
     .verdict h1 b { font-weight: 400; color: var(--money); }
     .verdict .sub { color: var(--text-dim); font-size: 15.5px; line-height: 1.55; max-width: 56ch; margin: 0 0 18px; }
     .verdict .acts { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
@@ -55,7 +57,7 @@
     .num { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 14px; padding: 14px 16px; }
     .num .k { margin-bottom: 4px; }
     .num b { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; display: block; }
-    .num b.red { color: #FF6B61; }
+    .num b.red { color: var(--red-2); }
     .num small { display: block; font-size: 12px; color: var(--text-muted); margin-top: 5px; }
     .num .bar { position: relative; height: 6px; border-radius: 99px; background: var(--border); margin-top: 10px; overflow: visible; }
     .num .bar i { display: block; height: 100%; width: 73%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #A78BFA); }
@@ -192,12 +194,12 @@
         <p class="sub">Your plan needs a 19.1% return to last to 100. That one move, sized to the dollar, plus one more change, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.</p>
         <div class="acts">
           <a class="btn" href="#">Get my exact number &rarr;</a>
-          <span class="alt">or <a href="#">adjust your inputs</a></span>
+          <span class="alt">or <a href="#">change your answers</a></span>
         </div>
       </div>
       <div class="numbers">
         <div class="num"><span class="k">Required portfolio return</span><b class="red">19.1%</b><small>Safe zone is under 5.0%</small></div>
-        <div class="num"><span class="k">How much EDGE has to work with</span><b>73%</b><small>5 more inputs close the gap</small><div class="bar"><i></i><em></em></div></div>
+        <div class="num"><span class="k">How much EDGE has to work with</span><b>73%</b><small>5 more data points close the gap</small><div class="bar"><i></i><em></em></div></div>
       </div>
     </section>
 
@@ -207,7 +209,7 @@
       <span class="it"><b>80</b><span>strategies, ranked</span></span>
       <span class="it"><b>7</b><span>wealth regimes</span></span>
       <span class="it"><b>45</b><span>years, year by year</span></span>
-      <span class="it"><b>437</b><span>inputs weighed</span></span>
+      <span class="it"><b>437</b><span>data points weighed</span></span>
       <span class="it"><b>3</b><span>tax codes: federal, NY, Medicare</span></span>
       <span class="it"><b>1</b><span>household: yours</span></span>
     </section>
@@ -230,7 +232,7 @@
 
       <section class="card gaps">
         <span class="k">The 27% EDGE doesn&rsquo;t have yet</span>
-        <h2>Five inputs <em>sharpen</em> this.</h2>
+        <h2>Five data points <em>sharpen</em> this.</h2>
         <p>Each one narrows your range. Right now your number could be off by as much as 4.3%, about $39,000 a year.</p>
         <div class="gap"><span class="n">1</span><span class="t">Other retirement income</span><span class="pct">+9%</span></div>
         <div class="gap"><span class="n">2</span><span class="t">Account mix: pre-tax, Roth, taxable</span><span class="pct">+7%</span></div>
