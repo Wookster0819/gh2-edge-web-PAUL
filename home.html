@@ -321,9 +321,9 @@
         tile('#update', ICO.edit, 'Update my info', 'Retired, moved, sold a home, new grandchild. Tell EDGE and it re-runs.') +
         tile('#settings', ICO.gear, 'Alerts &amp; settings', 'Email when the answer changes. Account, billing, sign out.') +
         (TIER === 3
-          ? tile('#jae', ICO.chat, 'Ask Jae', 'A question any time. Concierge service, not a ticket queue.', { cls: 'prop', txt: 'Concierge' }) +
+          ? tile('#ask', ICO.chat, 'Ask a question', 'Any time. A person answers, not a ticket queue.', { cls: 'prop', txt: 'Concierge' }) +
             tile('#brief', ICO.pdf, 'Quarterly review brief', 'Written for your household. Next one lands October 1.', { cls: 'prop', txt: 'Concierge' })
-          : tile('pricing.html', ICO.star, 'Upgrade to Concierge', 'Ask Jae any time, a quarterly review brief, and 4 proprietary GH2 strategies.', { cls: 'prop', txt: 'Upgrade' })) +
+          : tile('pricing.html', ICO.star, 'Upgrade to Concierge', 'Ask a question any time, a quarterly review brief, and 4 proprietary GH2 strategies.', { cls: 'prop', txt: 'Upgrade' })) +
         '</div>';
       html += '</div>';
       return html;
