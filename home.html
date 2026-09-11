@@ -333,14 +333,14 @@
       var na = db.nextAction || {};
       var rec = (na.title && na.title !== 'No action required') ? na : { title: 'Hold your current plan', sub: 'Nothing to change this year' };
       var html = '';
-      html += '<div class="greet"><div><h1>Welcome back</h1><p>Your annual EDGE recommendation and Jae’s latest notes.</p></div>' +
+      html += '<div class="greet"><div><h1>Welcome back</h1><p>Your annual EDGE recommendation and this week’s Jae’s Corner.</p></div>' +
               '<a class="btn primary" href="pricing.html">' + ICO.star + ' Upgrade to Full Plan</a></div>';
       html += '<div class="grid g-1-1">';
       html += '<section class="card"><div class="card-label">Your 2026 recommendation</div><div class="rec-big">' + esc(rec.title) + '</div><div class="hero-sub">' + esc(rec.sub || '') + '</div>' +
               '<div class="hero-row"><div class="kv"><div class="k">Run on your numbers</div><div class="v">' + fmtDate(asOf) + '</div><div class="s">Annual rerun</div></div>' +
               '<div class="kv"><div class="k">Next rerun</div><div class="v">' + fmtDate(asOf.slice(0, 4) * 1 + 1 + asOf.slice(4)) + '</div><div class="s">Or sooner with Full Plan</div></div></div>' +
               '<a class="foot-link" href="#plan">Download the one-page summary →</a></section>';
-      html += '<section class="card"><div class="card-label">Jae’s notes</div><div class="news">';
+      html += '<section class="card"><div class="card-label">Jae’s Corner</div><div class="news">';
       NEWSLETTER.forEach(function (n) { html += '<a href="#news"><div class="d">' + fmtDate(n.date) + '</div><div><div class="t">' + esc(n.title) + '</div><div class="s">' + esc(n.sub) + '</div></div><span style="color:var(--text-faint)">' + ICO.chev + '</span></a>'; });
       html += '</div><a class="foot-link" href="#news">All notes →</a></section>';
       html += '</div>';
