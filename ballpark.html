@@ -918,7 +918,11 @@
       background: var(--card-bg); border: 1px solid var(--border);
       border-radius: 16px; padding: 30px 36px; width: min(440px, 90vw);
     }
-    .rz-calc-title { font-weight: 800; font-size: 16.5px; margin-bottom: 14px; }
+    /* EDGE at the abacus while the engine runs (Paul, Sept 13). */
+    .rz-calc-mascot { display: block; width: 132px; height: auto; margin: -6px auto 12px; filter: drop-shadow(0 10px 24px rgba(139,92,246,0.35)); animation: rzBob 2.6s ease-in-out infinite; }
+    @keyframes rzBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @media (prefers-reduced-motion: reduce) { .rz-calc-mascot { animation: none; } }
+    .rz-calc-title { font-weight: 800; font-size: 16.5px; margin-bottom: 14px; text-align: center; }
     .rz-calc-step { font-size: 14px; color: var(--text-muted); padding: 5.5px 0; opacity: 0; transition: opacity 0.35s ease; }
     .rz-calc-step.on { opacity: 1; }
     .rz-calc-step.warn { color: #FBBF24; font-weight: 600; }
@@ -2872,7 +2876,8 @@
   <!-- "Computing" overlay -->
   <div class="rz-calc" id="rzCalc" aria-hidden="true">
     <div class="rz-calc-card">
-      <div class="rz-calc-title">Running your projection&hellip;</div>
+      <img class="rz-calc-mascot" src="assets/edge-abacus.png" alt="" />
+      <div class="rz-calc-title">EDGE is running your projection&hellip;</div>
       <div class="rz-calc-step">Projecting your portfolio year by year&hellip;</div>
       <div class="rz-calc-step">Applying federal + state + Medicare tax math&hellip;</div>
       <div class="rz-calc-step">Checking your confirmed inputs&hellip;</div>
