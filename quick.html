@@ -9,6 +9,8 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="apple-touch-icon" href="/favicon.svg" />
   <meta name="description" content="Five questions. Three numbers. About 10 seconds. A first look at whether your retirement savings will last." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #06080C;
@@ -16,6 +18,7 @@
       --card-bg-2: #161C27;
       --card-border: rgba(255,255,255,0.06);
       --text: #FFFFFF;
+      --text-dim: #B6BFD0;
       --text-muted: #8A98A8;
       --text-faint: #5A6B7B;
 
@@ -36,7 +39,7 @@
       --cta-grad: linear-gradient(90deg, #3B82F6 0%, #8B5CF6 50%, #EC4899 100%);
 
       --field-radius: 16px;
-      --button-radius: 14px;
+      --button-radius: 12px;
     }
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: var(--bg); }
@@ -74,6 +77,9 @@
       font-size: clamp(28px, 8vw, 36px); line-height: 1.1; letter-spacing: -0.02em;
       font-weight: 800; margin: 6px 0 10px;
     }
+    /* Serif headline, matching ballpark and results (Paul, Sept 13). */
+    h1 { font-family: "Instrument Serif", Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(38px, 7vw, 64px); letter-spacing: -0.01em; line-height: 1.05; }
+    h1 em { font-style: italic; color: var(--accent-purple, #A78BFA); background: linear-gradient(90deg, #A78BFA, #EC4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-right: 0.06em; }
     .sub { color: var(--text-muted); font-size: clamp(15px, 4vw, 16px); margin: 0 0 22px; }
 
     /* Smallest phones */
@@ -94,6 +100,7 @@
       display: flex; align-items: center; gap: 12px;
       transition: background 0.18s ease, border-color 0.18s ease;
     }
+    .row:hover { background: var(--card-bg-2); border-color: rgba(139,92,246,0.55); }
     .row:focus-within { background: var(--card-bg-2); border-color: rgba(167,139,250,0.35); }
     .row.with-sub { align-items: flex-start; padding: 12px 14px 12px; }
 
@@ -109,7 +116,9 @@
     .ico.green  { background: var(--icon-green-bg);  color: var(--icon-green); }
 
     .row-main { flex: 1 1 0; min-width: 0; }
-    .row-label { font-size: 14px; font-weight: 600; color: var(--text); line-height: 1.3; overflow-wrap: break-word; }
+    /* Contrast (Paul, Sept 14, matching ballpark): labels a step softer than the
+       values people type, helper text a step softer again. White is for their answers. */
+    .row-label { font-size: 13.5px; font-weight: 600; color: var(--text-dim); letter-spacing: 0.01em; line-height: 1.3; overflow-wrap: break-word; }
     .row-sub { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.4; overflow-wrap: break-word; }
 
     .row-control {
@@ -201,12 +210,68 @@
       font: inherit; font-size: 13px; font-weight: 600;
       padding: 5px 10px; border-radius: 6px; cursor: pointer;
     }
+    .seg button:not([aria-pressed="true"]):hover { background: rgba(139,92,246,0.14); color: var(--text); }
     .seg button[aria-pressed="true"] {
       background: rgba(167,139,250,0.18);
       color: #DDD6FE;
     }
 
+    /* Section heads, ballpark's numbering and icons (Paul, Sept 14). */
+    .qsec { display: flex; align-items: center; gap: 10px; margin: 22px 0 10px; }
+    .qsec:first-of-type { margin-top: 0; }
+    .sicon { width: 28px; height: 28px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; }
+    .sicon svg { width: 16px; height: 16px; }
+    .sicon.purple { background: var(--icon-purple-bg); color: var(--icon-purple); }
+    .sicon.green  { background: var(--icon-green-bg);  color: var(--icon-green); }
+    .sicon.blue   { background: var(--icon-blue-bg);   color: var(--icon-blue); }
+    .snum { font-size: 12px; font-weight: 700; letter-spacing: 0.16em; color: var(--text); }
+
+    .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+    .duo .row { margin-bottom: 0; flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 12px; min-width: 0; }
+    .row-head { display: flex; align-items: center; gap: 7px; min-width: 0; }
+    .row-head .ico { width: 22px; height: 22px; border-radius: 7px; }
+    .row-head .ico svg { width: 13px; height: 13px; }
+    .row-head .row-label { font-size: 12.5px; white-space: nowrap; }
+    .duo .row-control { margin-left: 0; }
+    .duo .row input, .duo .state-btn { text-align: left; width: 100%; }
+    .duo .seg button { font-size: 12.5px; padding: 5px 9px; }
+
+    /* Timeline card: the working toggle on top, the three ages as one strip. */
+    .tl-card { flex-direction: column; align-items: stretch; gap: 10px; padding: 10px 12px 12px; }
+    .tl-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .tl-head .seg button { font-size: 12.5px; padding: 5px 10px; }
+    /* Dividers a notch above the card border so the strip reads as three cells (Paul, Sept 14). */
+    .tl-cells { display: flex; border-top: 1px solid rgba(255,255,255,0.13); padding-top: 10px; }
+    .tl-cell { flex: 1 1 0; min-width: 0; padding: 0 12px; border-left: 1px solid rgba(255,255,255,0.13); }
+    .tl-cell:first-child { padding-left: 2px; border-left: 0; }
+    .tl-lab { font-size: 11.5px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.02em; margin-bottom: 2px; white-space: nowrap; }
+    .row .tl-cell input { text-align: left; width: 100%; font-size: 20px; padding: 0; }
+    @media (max-width: 420px) {
+      .tl-lab { white-space: normal; line-height: 1.25; }
+      .tl-cell { display: flex; flex-direction: column; justify-content: flex-end; padding: 0 8px; }
+    }
+
+    /* Spending tiers: same four names as the ballpark cards, pills on their own line. */
+    .spend-row { flex-wrap: wrap; }
+    .spend-row .seg { flex: 1 1 100%; display: grid; grid-template-columns: repeat(4, 1fr); margin-top: 6px; }
+    .spend-row .row-main { flex: 1 1 100%; }
+    .spend-row .seg button { padding: 7px 4px; text-align: center; white-space: nowrap; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    .spend-row .sp-ico { width: 24px; height: 24px; display: block; margin-bottom: 2px; }
+    .spend-row .sp-ico svg { width: 24px; height: 24px; }
+    .spend-row [data-spend="struggling"]  .sp-ico { color: #94A3B8; }
+    .spend-row [data-spend="average"]     .sp-ico { color: #60A5FA; }
+    .spend-row [data-spend="comfortable"] .sp-ico { color: #22C55E; }
+    .spend-row [data-spend="affluent"]    .sp-ico { color: #F59E0B; }
+    .spend-row .seg button { padding: 9px 4px 8px; }
+    .spend-row .sp-name { font-size: 12.5px; }
+    .spend-row .spend-note { flex: 1 1 100%; font-size: 11.5px; color: var(--text-faint); margin-top: 6px; line-height: 1.35; }
+    .spend-row .sp-amt { font-size: 13.5px; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .spend-row .seg button:not([aria-pressed="true"]) .sp-amt { color: var(--text-dim); }
+    @media (max-width: 380px) { .spend-row .seg button { font-size: 12px; } }
+
     /* ==== CTA ==== */
+    .pre-submit { margin: 18px 0 0; text-align: center; font-size: 13px; line-height: 1.45; color: var(--text-muted); }
+    .pre-submit + .submit { margin-top: 10px; }
     .submit {
       margin-top: 18px; width: 100%;
       padding: 16px;
@@ -241,13 +306,8 @@
     .arrow-down-circle svg { width: 18px; height: 18px; }
 
     /* ==== RESULT CARD ==== */
-    #result {
-      display: none;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--field-radius);
-      padding: 22px 20px 20px;
-    }
+    /* The verdict card carries its own frame now; the wrapper stays flat. */
+    #result { display: none; }
     #result.visible { display: block; }
 
     .result-grid {
@@ -285,6 +345,44 @@
     }
     .ring-pct.small { font-size: 16px; line-height: 1.1; max-width: 110px; text-align: center; }
     .ring-unit { font-size: 11px; color: var(--text-muted); margin-top: 2px; letter-spacing: 0.02em; }
+
+    /* Preview-only banner when sample numbers are shown */
+    .sample-banner { margin: 0 0 10px; padding: 8px 12px; border-radius: 10px; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.35); color: var(--amber); font-size: 12.5px; font-weight: 600; text-align: center; }
+
+    /* ===== Verdict card (matches concept-results / ballpark) ===== */
+    .qv { --t: #FF3B30; --t2: #FF5C52; position: relative; overflow: hidden; text-align: left; padding: 22px 20px 20px; border-radius: var(--field-radius); border: 1px solid rgba(167,139,250,0.28);
+      background: radial-gradient(ellipse at 90% 15%, rgba(139,92,246,0.26), transparent 55%), var(--card-bg); }
+    /* Dot grid lives in the top-right only and fades to nothing under the text. */
+    .qv::after { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1.5px) 0 0 / 20px 20px; -webkit-mask-image: radial-gradient(ellipse at 92% 8%, #000 0%, rgba(0,0,0,0.5) 28%, transparent 60%); mask-image: radial-gradient(ellipse at 92% 8%, #000 0%, rgba(0,0,0,0.5) 28%, transparent 60%); }
+    .qv[data-tier="middle"]   { --t: #F97316; --t2: #FB923C; }
+    .qv[data-tier="on-track"] { --t: #22C55E; --t2: #4ADE80; }
+    .qv::before { content: ''; position: absolute; left: 8%; right: 8%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(167,139,250,0.8), transparent); }
+    .qv > * { position: relative; }
+    .qv-pillrow { display: flex; align-items: center; gap: 10px; }
+    .qv-badge { position: relative; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 19px; font-weight: 800; color: #fff; background: var(--t); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22); }
+    .qv-badge::after { content: ''; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 22px 6px var(--t); opacity: .3; animation: qvGlow 2.6s ease-in-out infinite; }
+    .qv-badge.tri { background: none; }
+    .qv-badge.tri::after { display: none; }
+    .qv-badge.tri svg { width: 40px; height: 40px; filter: drop-shadow(0 0 8px var(--t)); animation: qvTri 2.6s ease-in-out infinite; }
+    .qv-pill { display: inline-flex; align-items: center; gap: 9px; background: rgba(0,0,0,0.45); border-radius: 99px; padding: 6px 13px; font-size: 12px; font-weight: 800; letter-spacing: .08em; color: var(--text); }
+    .qv-pill .d { width: 9px; height: 9px; border-radius: 50%; background: var(--t); box-shadow: 0 0 10px 2px var(--t); animation: qvGlow 2.6s ease-in-out infinite; }
+    @keyframes qvGlow { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+    @keyframes qvTri { 0%,100% { filter: drop-shadow(0 0 3px var(--t)); } 50% { filter: drop-shadow(0 0 14px var(--t)); } }
+    @media (prefers-reduced-motion: reduce) { .qv-badge::after, .qv-badge.tri svg, .qv-pill .d { animation: none; } }
+    .qv-head { font-family: "Instrument Serif", Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(27px, 7vw, 34px); line-height: 1.12; letter-spacing: -0.01em; margin: 14px 0 8px; color: var(--text); }
+    .qv-body { color: var(--text-dim); font-size: 15px; line-height: 1.55; margin: 0 0 16px; }
+    .qv-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .qv-num { background: rgba(0,0,0,0.18); border: 1px solid var(--card-border); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+    .qv-num .k { font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px; line-height: 1.3; }
+    .qv-num b { display: block; font-size: 26px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; color: var(--t2); font-variant-numeric: tabular-nums; }
+    .qv-num b.neutral { color: var(--text); }
+    .qv-num b.small { font-size: 17px; line-height: 1.15; }
+    .qv-num small { display: block; font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.35; }
+    .qv-ss { font-size: 11.5px; color: var(--text-faint); margin-top: 10px; }
+    .qv-acts { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+    .qv-cta { display: inline-flex; align-items: center; padding: 12px 18px; border-radius: 12px; background: var(--cta-grad); color: #fff; font-weight: 700; font-size: 14.5px; text-decoration: none; box-shadow: 0 8px 24px rgba(139,92,246,0.28); }
+    .qv-cta:hover { transform: translateY(-1px); }
+    @media (max-width: 380px) { .qv-nums { grid-template-columns: 1fr; } }
 
     .status-pill {
       display: inline-block;
@@ -360,8 +458,8 @@
       </div>
     </div>
 
-    <h1>Am I On Track?</h1>
-    <p class="sub">Five questions. Three numbers.<br/>About 10 seconds.</p>
+    <h1>Am I <em>On Track?</em></h1>
+    <p class="sub">A retirement checkup in 30 seconds. No sign-up.</p>
 
     <form id="quickForm" novalidate autocomplete="off" data-form-type="other"
           autocapitalize="off" autocorrect="off" spellcheck="false">
@@ -375,195 +473,126 @@
              tabindex="-1" aria-hidden="true"
              style="position:absolute;left:-9999px;opacity:0;height:0;width:0;pointer-events:none;" />
 
-      <!-- Age -->
-      <div class="row">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">Your age</div>
-        </div>
-        <div class="row-control">
-          <input type="text" id="age" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
-            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_age" data-lpignore="true" data-form-type="other"
-             />
-        </div>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-      </div>
+      <!-- Three groups (Paul, Sept 14): About you / Your timeline / Your money.
+           Grouped by how people think about it, not by field type: every age
+           sits in one timeline card with the working toggle that gates it. -->
 
-      <!-- Filing status -->
-      <div class="row">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M3 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M14 21c0-2.5 1.5-4.5 4-4.5s3 2 3 4.5"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">Filing status</div>
-        </div>
-        <div class="row-control">
-          <div class="seg" role="group" aria-label="Filing status">
-            <button type="button" data-filing="single" aria-pressed="true">Single</button>
-            <button type="button" data-filing="mfj" aria-pressed="false">Married</button>
+      <div class="qsec"><div class="sicon purple" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><span class="snum">1. ABOUT YOU</span></div>
+      <div class="duo">
+        <div class="row">
+          <div class="row-head">
+            <div class="ico purple" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="9" r="2.5"/><path d="M3 21c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M14 21c0-2.5 1.5-4.5 4-4.5s3 2 3 4.5"/></svg></div>
+            <div class="row-label">Filing status</div>
+          </div>
+          <div class="row-control">
+            <div class="seg" role="group" aria-label="Filing status">
+              <button type="button" data-filing="single" aria-pressed="true">Single</button>
+              <button type="button" data-filing="mfj" aria-pressed="false">Married</button>
+            </div>
           </div>
         </div>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
+        <div class="row">
+          <div class="row-head">
+            <div class="ico blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-6.5-7-12a7 7 0 1 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+            <div class="row-label">State of residence</div>
+          </div>
+          <div class="row-control state-wrap">
+            <select id="state" required class="state-native"
+              autocomplete="new-password" name="qa_state"
+              data-lpignore="true" data-form-type="other"></select>
+            <button type="button" id="stateBtn" class="state-btn" aria-haspopup="listbox" aria-expanded="false"><span id="stateBtnLabel">Florida</span></button>
+            <div id="stateMenu" class="state-menu" role="listbox" hidden></div>
+          </div>
+        </div>
       </div>
 
-      <!-- State -->
-      <div class="row">
-        <div class="ico blue" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-7-6.5-7-12a7 7 0 1 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>
+      <div class="row tl-card">
+        <div class="tl-head">
+          <div class="row-head">
+            <div class="ico purple" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="3.5" height="8" rx="1"/><rect x="10" y="9" width="3.5" height="12" rx="1"/><rect x="17" y="5" width="3.5" height="16" rx="1"/></svg></div>
+            <div class="row-label">Still working?</div>
+          </div>
+          <div class="seg" role="group" aria-label="Still working">
+            <button type="button" class="seg-btn" data-work="no" aria-pressed="false">No</button>
+            <button type="button" class="seg-btn" data-work="yes" aria-pressed="true">Yes</button>
+          </div>
         </div>
-        <div class="row-main">
-          <div class="row-label">State</div>
+        <div class="tl-cells">
+          <div class="tl-cell">
+            <div class="tl-lab">Your current age</div>
+            <input type="text" id="age" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
+              autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+              name="qa_age" data-lpignore="true" data-form-type="other" />
+          </div>
+          <div class="tl-cell work-only" id="retAgeRow">
+            <div class="tl-lab">Your retirement age</div>
+            <input type="text" id="retAge" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
+              autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+              name="qa_retage" data-lpignore="true" data-form-type="other" />
+          </div>
+          <div class="tl-cell">
+            <div class="tl-lab">Plan through age</div>
+            <input type="text" id="planThroughAge" inputmode="numeric" pattern="[0-9]*" maxlength="3" value="100"
+              autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
+              name="qa_planage" data-lpignore="true" data-form-type="other" />
+          </div>
         </div>
-        <div class="row-control state-wrap">
-          <select id="state" required class="state-native"
-            autocomplete="new-password" name="qa_state"
-            data-lpignore="true" data-form-type="other"></select>
-          <button type="button" id="stateBtn" class="state-btn" aria-haspopup="listbox" aria-expanded="false"><span id="stateBtnLabel">Florida</span></button>
-          <div id="stateMenu" class="state-menu" role="listbox" hidden></div>
-        </div>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
       </div>
 
-      <!-- Savings -->
+      <div class="qsec"><div class="sicon green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><span class="snum">2. MONEY</span></div>
       <div class="row with-sub">
-        <div class="ico green" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7"/></svg>
-        </div>
+        <div class="ico green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7"/></svg></div>
         <div class="row-main">
-          <div class="row-label">Total retirement savings</div>
+          <div class="row-label">Current retirement savings</div>
           <div class="row-sub">All accounts combined &mdash; 401(k), IRA, Roth, taxable, cash.</div>
         </div>
         <div class="row-control">
           <input type="text" id="totalSavings" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="500000"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_savings" data-lpignore="true" data-form-type="other"
-             />
-        </div>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg></span>
-      </div>
-
-      <!-- Annual spending -->
-      <div class="row with-sub">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="13" width="3.5" height="8" rx="1"/><rect x="10" y="9" width="3.5" height="12" rx="1"/><rect x="17" y="5" width="3.5" height="16" rx="1"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">Annual spending in retirement</div>
-          <div class="row-sub">How much do you expect to spend per year, in today&rsquo;s dollars?</div>
-        </div>
-        <div class="row-control">
-          <input type="text" id="annualExpenses" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="60000"
-            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_spending" data-lpignore="true" data-form-type="other"
-             />
-        </div>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
-      </div>
-
-      <!-- Optional: known SS benefit at full retirement age -->
-      <div class="row with-sub">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.2 9.3a3 3 0 0 1 5.6 1.1c0 2-3 2.4-3 4"/><circle cx="12" cy="17.3" r="0.6" fill="currentColor"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">SS benefit at full retirement age (optional)</div>
-          <div class="row-sub">Know your number from ssa.gov? Enter $/month &mdash; otherwise we estimate it.</div>
-        </div>
-        <div class="row-control ss-control">
-          <span class="unit">$</span>
-          <input type="text" id="ssMonthlyFRA" class="ss-field" inputmode="numeric" pattern="[0-9]*" maxlength="6" value=""
-            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_ssfra" data-lpignore="true" data-form-type="other"
-            aria-label="Monthly Social Security benefit at full retirement age" />
-          <span class="unit">/mo</span>
-        </div>
-        <span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span>
-      </div>
-
-      <!-- Still working? -->
-      <div class="row">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">Still working?</div>
-        </div>
-        <div class="seg" role="group" aria-label="Still working">
-          <button type="button" class="seg-btn" data-work="no" aria-pressed="false">No</button>
-          <button type="button" class="seg-btn" data-work="yes" aria-pressed="true">Yes</button>
+            name="qa_savings" data-lpignore="true" data-form-type="other" />
         </div>
       </div>
 
-      <!-- Annual salary (working only) -->
       <div class="row with-sub work-only" id="salaryRow">
-        <div class="ico green" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6H9a3 3 0 0 0 0 6h6a3 3 0 0 1 0 6H7"/></svg>
-        </div>
+        <div class="ico green" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div>
         <div class="row-main">
-          <div class="row-label">Annual salary</div>
-          <div class="row-sub">Your pre-tax pay today. We assume you save about 8% of it.</div>
+          <div class="row-label">Current annual salary</div>
+          <div class="row-sub">Gross, before tax. We assume you save about 8% of it.</div>
         </div>
         <div class="row-control">
           <input type="text" id="salary" inputmode="numeric" pattern="[0-9]*" maxlength="10" value="100000"
             autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_salary" data-lpignore="true" data-form-type="other"
-             />
+            name="qa_salary" data-lpignore="true" data-form-type="other" />
         </div>
       </div>
 
-      <!-- Retirement age (working only) -->
-      <div class="row with-sub work-only" id="retAgeRow">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        </div>
+      <div class="qsec"><div class="sicon blue" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg></div><span class="snum">3. LIFESTYLE TARGET</span></div>
+      <!-- Same four tiers, names, icons, and share-of-salary as the ballpark cards
+           (25/50/75/100%). Quick Check uses today's salary; ballpark projects it to
+           retirement. A fixed reference amount is used when retired. The hidden
+           #annualExpenses carries the figure to the engine and the ballpark handoff. -->
+      <div class="row with-sub spend-row">
         <div class="row-main">
-          <div class="row-label">Retirement age</div>
-          <div class="row-sub">When do you plan to stop working?</div>
+          <div class="row-label">What yearly spending should we plan for in retirement?</div>
+          <div class="row-sub">Pick the yearly spending that fits the retirement you want.</div>
         </div>
-        <div class="row-control">
-          <input type="text" id="retAge" inputmode="numeric" pattern="[0-9]*" maxlength="2" value="65"
-            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_retage" data-lpignore="true" data-form-type="other"
-             />
+        <input type="hidden" id="annualExpenses" value="75000" />
+        <div class="seg seg-spend" role="group" aria-label="Spending profile">
+          <button type="button" class="seg-btn" data-spend="struggling" aria-pressed="false"><span class="sp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg></span><span class="sp-name">Essentials</span><span class="sp-amt" data-spend-amt="struggling">&mdash;</span></button>
+          <button type="button" class="seg-btn" data-spend="average" aria-pressed="false"><span class="sp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg></span><span class="sp-name">Secure</span><span class="sp-amt" data-spend-amt="average">&mdash;</span></button>
+          <button type="button" class="seg-btn" data-spend="comfortable" aria-pressed="true"><span class="sp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4Z"/><path d="M21 14 10 2 3 14h18Z"/><path d="M10 2v16"/></svg></span><span class="sp-name">Comfortable</span><span class="sp-amt" data-spend-amt="comfortable">&mdash;</span></button>
+          <button type="button" class="seg-btn" data-spend="affluent" aria-pressed="false"><span class="sp-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg></span><span class="sp-name">Premium</span><span class="sp-amt" data-spend-amt="affluent">&mdash;</span></button>
         </div>
+        <div class="spend-note">Based on your current salary, in today&rsquo;s dollars.</div>
       </div>
 
-      <!-- Plan through age (deterministic goal age) -->
-      <div class="row with-sub">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">Plan through age</div>
-          <div class="row-sub">How long should the money last?</div>
-        </div>
-        <div class="row-control">
-          <input type="text" id="planThroughAge" inputmode="numeric" pattern="[0-9]*" maxlength="3" value="100"
-            autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false"
-            name="qa_planage" data-lpignore="true" data-form-type="other"
-             />
-        </div>
-      </div>
+      <!-- Jae: the optional "SS benefit at full retirement age" field and the
+           "How you invest" (Safer / Balanced / Growth) row were removed from Quick
+           Check (Paul, Sept 14) to keep this page fast. The engine still estimates
+           SS and receives the balanced mix by default; ballpark still asks for SS.
+           Restore from git if you consider either critical to the quick number. -->
 
-      <!-- How you invest — supplies "your mix" benchmark for the gap line. Default balanced. -->
-      <div class="row with-sub">
-        <div class="ico purple" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>
-        </div>
-        <div class="row-main">
-          <div class="row-label">How you invest</div>
-          <div class="row-sub">Sets what your mix is expected to earn.</div>
-        </div>
-        <div class="seg seg-risk" role="group" aria-label="How you invest">
-          <button type="button" class="seg-btn" data-risk="conservative" aria-pressed="false">Safer</button>
-          <button type="button" class="seg-btn" data-risk="balanced" aria-pressed="true">Balanced</button>
-          <button type="button" class="seg-btn" data-risk="aggressive" aria-pressed="false">Growth</button>
-        </div>
-      </div>
-
+      <p class="pre-submit">Just enough for a first read. You can add detail on the next page.</p>
       <button type="submit" class="submit" id="submitBtn">Check my plan</button>
       <div id="formErr" class="err" role="alert" aria-live="polite"></div>
     </form>
@@ -575,33 +604,31 @@
     </div>
 
     <div id="result" aria-live="polite">
-      <div class="result-grid">
-        <div class="ring-wrap">
-          <div class="ring">
-            <svg viewBox="0 0 180 180" aria-hidden="true">
-              <circle class="ring-track" cx="90" cy="90" r="76"/>
-              <circle class="ring-fill" id="ringFill" cx="90" cy="90" r="76"
-                stroke-dasharray="477.5" stroke-dashoffset="477.5" />
-            </svg>
-            <div class="ring-center">
-              <svg class="ring-check-icon" id="ringCheck" width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-              <div class="ring-pct" id="ringPct" style="display:none">&mdash;</div>
-              <div class="ring-unit" style="display:none">per year</div>
-            </div>
+      <!-- Verdict card: same treatment as the results concept and ballpark
+           (Paul, Sept 14). Tier colour lives only on the badge, the pill dot,
+           and the number; the card chrome stays purple. -->
+      <div class="qv" id="qv" data-tier="at-risk">
+        <div class="qv-pillrow">
+          <span class="qv-badge" id="qvBadge" aria-hidden="true">!</span>
+          <span class="qv-pill"><span class="d"></span><span id="rightPill">AT RISK</span></span>
+        </div>
+        <h2 class="qv-head" id="qvHead">&mdash;</h2>
+        <p class="qv-body" id="outcomeText">&mdash;</p>
+        <div class="qv-nums">
+          <div class="qv-num">
+            <div class="k">Required portfolio return</div>
+            <b id="reqIrr">&mdash;</b>
+            <small>Safe zone is under 5.0%</small>
+          </div>
+          <div class="qv-num">
+            <div class="k">A typical portfolio earns</div>
+            <b id="mixRet" class="neutral">&mdash;</b>
+            <small id="reqGap">&mdash;</small>
           </div>
         </div>
-
-        <div class="result-right">
-          <div id="rightPill" class="status-pill at-risk">&mdash;</div>
-          <div class="rr-label">Required portfolio return</div>
-          <div class="rr-value" id="reqIrr">&mdash;</div>
-          <div class="rr-unit">per year</div>
-          <div class="rr-ss-note" id="ssNote" style="margin-top:8px;font-size:13px;color:var(--text-muted);"></div>
-
-          <hr class="result-divider"/>
-
-          <div class="outcome-label">Plan outcome</div>
-          <div class="outcome-text" id="outcomeText">&mdash;</div>
+        <div class="qv-ss" id="ssNote"></div>
+        <div class="qv-acts">
+          <a class="qv-cta" href="/ballpark.html" id="seeFullLink">See the full plan &rarr;</a>
         </div>
       </div>
 
@@ -609,15 +636,6 @@
         <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
       </div>
 
-      <div class="see-full">
-        <a href="/ballpark.html" id="seeFullLink">See the full plan
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="13 5 19 12 13 19"/></svg>
-        </a>
-      </div>
-
-      <div class="ebook-line" style="text-align:center;margin:14px auto 0;font-size:14px;color:var(--text-muted);max-width:520px;line-height:1.55;">
-        <strong style="color:var(--text);">New to this?</strong> Get the free <a href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener" style="color:#C4B5FD;font-weight:600;text-decoration:none;">GH2 EDGE&trade; Beginner&rsquo;s Guide (PDF)</a> &middot; questions to <a href="mailto:info@gh2benefits.com" style="color:#C4B5FD;text-decoration:none;">info@gh2benefits.com</a>
-      </div>
     </div>
 
     <div class="how">
@@ -728,9 +746,48 @@
           syncWorkRows();
         });
       });
+      // Spending tiers — same keys and share-of-salary as the ballpark cards
+      // (25 / 50 / 75 / 100% of salary). When not working there is no salary to
+      // scale from, so a fixed reference amount is used. Jae: the fixed amounts are
+      // placeholders from the original ballpark profile data; set from your model.
+      var SPEND_TIERS = {
+        struggling:  { pct: 0.25, fixed: 28000 },
+        average:     { pct: 0.50, fixed: 45000 },
+        comfortable: { pct: 0.75, fixed: 60000 },
+        affluent:    { pct: 1.00, fixed: 80000 }
+      };
+      var selectedSpend = 'comfortable';
+      var spendBtns = document.querySelectorAll('[data-spend]');
+      function spendAmountFor(key) {
+        var t = SPEND_TIERS[key] || SPEND_TIERS.comfortable;
+        var sal = working ? parseFloat(document.getElementById('salary').value) : 0;
+        return (Number.isFinite(sal) && sal > 0) ? Math.round(sal * t.pct / 500) * 500 : t.fixed;
+      }
+      function spendAmount() { return spendAmountFor(selectedSpend); }
+      // Every pill shows its own dollar figure, like the ballpark cards, so the
+      // choice is between four numbers and nobody does percentages in their head.
+      function syncSpendHint() {
+        Object.keys(SPEND_TIERS).forEach(function (key) {
+          var el = document.querySelector('[data-spend-amt="' + key + '"]');
+          if (el) el.textContent = fmt$(spendAmountFor(key));
+        });
+        var hidden = document.getElementById('annualExpenses');
+        if (hidden) hidden.value = String(spendAmount());
+      }
+      spendBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          selectedSpend = btn.getAttribute('data-spend');
+          spendBtns.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+          syncSpendHint();
+        });
+      });
+      document.getElementById('salary').addEventListener('input', syncSpendHint);
+      workBtns.forEach(function (btn) { btn.addEventListener('click', syncSpendHint); });
       syncWorkRows();
+      syncSpendHint();
 
-      // "How you invest?" segmented control — Path B: supplies the mix the required
+      // "How you invest?" — the row was removed from Quick Check (Sept 14); the
+      // balanced default still goes to the engine. — Path B: supplies the mix the required
       // return is compared against (the gap line). Default balanced. Maps to the return
       // assumption sent to the engine, which drives expectedPortfolioReturn.
       var RISK_PROFILES = {
@@ -766,105 +823,94 @@
         if (tier === 'moderate') return 'middle';
         return 'at-risk';
       }
-      // Path B: pill describes how far the required return reaches past YOUR mix — not a
-      // safe/at-risk verdict. Color still comes from bucketFor(tier).
-      function pillLabelFor(tier) {
-        return ({ well_funded: 'WITHIN YOUR MIX', conservative: 'SLIGHT REACH', moderate: 'MODERATE REACH', aggressive: 'LARGE REACH', extremely_aggressive: 'BEYOND YOUR MIX' })[tier] || 'MODERATE REACH';
-      }
 
       // Ring sized at r=76 → circumference = 2πr ≈ 477.52
       var RING_C = 2 * Math.PI * 76;
 
+      // Same three tiers, same words, same glyphs as ballpark and the results concept.
+      var TIER = {
+        'at-risk':  { label: 'AT RISK',         badge: '!' },
+        'middle':   { label: 'NEEDS ATTENTION', badge: 'tri' },
+        'on-track': { label: 'ON TRACK',        badge: '\u2713' }
+      };
+      var TRI_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 22.6 21H1.4z" fill="#F97316"/><text x="12" y="18.6" text-anchor="middle" font-size="11.5" font-weight="800" font-family="-apple-system,Segoe UI,sans-serif" fill="#1a0d00">!</text></svg>';
+
+      // Preview-only safety net: on localhost (or any non-production host), if
+      // the engine refuses — rate limit, offline, 401 — render with sample
+      // numbers and say so, instead of dead-ending. ?demo=risk|middle|ontrack
+      // forces a tier without calling the engine at all. Production is untouched.
+      var IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
+      var SAMPLES = {
+        risk:    { feasibilityRating: 'aggressive', requiredIRR: 0.098, expectedPortfolioReturn: 0.053, requiredReturnGap: 0.045, estimatedAnnualSS: 46277, targetEndAge: 100, verdict: { showReturn: true, feasible: true } },
+        middle:  { feasibilityRating: 'moderate',   requiredIRR: 0.066, expectedPortfolioReturn: 0.053, requiredReturnGap: 0.013, estimatedAnnualSS: 46277, targetEndAge: 100, depletionAge: 91, verdict: { showReturn: true, feasible: true } },
+        ontrack: { feasibilityRating: 'well_funded', requiredIRR: 0.037, expectedPortfolioReturn: 0.053, requiredReturnGap: -0.016, estimatedAnnualSS: 46277, targetEndAge: 100, verdict: { showReturn: true, feasible: true } }
+      };
+      function demoTier() { var m = /[?&]demo=(risk|middle|ontrack)/.exec(location.search); return m ? m[1] : null; }
+      function showSampleBanner(why) {
+        var b = document.getElementById('sampleBanner');
+        if (!b) { b = document.createElement('div'); b.id = 'sampleBanner'; b.className = 'sample-banner'; document.getElementById('result').insertBefore(b, document.getElementById('result').firstChild); }
+        b.textContent = 'Sample numbers \u2014 ' + why + '. Not your result.';
+      }
+
       function renderResult(data) {
         var bucket = bucketFor(data.feasibilityRating);
-        var ringFillEl = document.getElementById('ringFill');
-        var ringPctEl = document.getElementById('ringPct');
-        var rightPillEl = document.getElementById('rightPill');
-        var reqIrrEl = document.getElementById('reqIrr');
-        var outcomeTextEl = document.getElementById('outcomeText');
-
-        // Required Return — driven by the verdict so an unachievable solver-ceiling rate is
-        // never shown as "the return you need" (identical behavior to /ballpark).
-        var irr = data.requiredIRR;
         var v = data.verdict || {};
-        var irrText, ringPctText;
-        if (v.showReturn) {
-          irrText = (irr * 100).toFixed(1) + '%';
-          ringPctText = irrText;
-          reqIrrEl.classList.remove('small');
-          ringPctEl.classList.remove('small');
-        } else if (v.feasible === false) {
-          irrText = 'Not feasible';
-          ringPctText = irrText;
-          reqIrrEl.classList.add('small');
-          ringPctEl.classList.add('small');
-        } else {
-          // Over-funded: needs no market growth; engine returns its -10% solver floor
-          // (a sentinel). Report the meaningful actual number: 0%.
-          irrText = '0%';
-          ringPctText = irrText;
-          reqIrrEl.classList.remove('small');
-          ringPctEl.classList.remove('small');
-        }
-        ringPctEl.textContent = ringPctText;
+        var irr = data.requiredIRR;
+        var endAge = data.targetEndAge || parseInt(document.getElementById('planThroughAge').value, 10) || 100;
+
+        var card = document.getElementById('qv');
+        card.setAttribute('data-tier', bucket);
+
+        // Pill + badge
+        document.getElementById('rightPill').textContent = (v.feasible === false) ? 'AT RISK' : TIER[bucket].label;
+        var badge = document.getElementById('qvBadge');
+        if (TIER[bucket].badge === 'tri') { badge.className = 'qv-badge tri'; badge.innerHTML = TRI_SVG; }
+        else { badge.className = 'qv-badge'; badge.textContent = TIER[bucket].badge; }
+
+        // Headline: ballpark's tier ladder, with their own ages.
+        var head = document.getElementById('qvHead');
+        if (bucket === 'at-risk') head.textContent = 'Savings may not last to age ' + endAge + '.';
+        else if (bucket === 'middle') head.textContent = (data.depletionAge && data.depletionAge < endAge)
+          ? 'Savings may run out by age ' + data.depletionAge + '.'
+          : 'Savings last through age ' + endAge + ' \u2014 barely.';
+        else head.textContent = 'Savings last through age ' + endAge + '.';
+
+        // Body: one plain sentence per tier (Paul, Sept 14). The engine's own
+        // `verdict.detail` was written for the old ring layout and named a number
+        // that no longer sits above it. Jae: swap in engine copy here if you'd rather.
+        var body;
+        if (bucket === 'on-track') body = 'Your savings and Social Security carry this plan to age ' + endAge + '. Worth confirming with the full picture before you count on it.';
+        else if (bucket === 'middle') body = 'Partly on track. The gap is small enough to fix, but it won\u2019t close on its own \u2014 take a closer look before it drifts.';
+        else if (v.feasible === false) body = 'No realistic market return covers this. It takes changes to spending, saving, or timing. The good news: the full plan sizes them.';
+        else body = 'Your savings need to earn more than markets reliably deliver. The good news: this is fixable, and the full plan shows how.';
+        document.getElementById('outcomeText').textContent = body;
+
+        // Required return — verdict-driven so a solver-ceiling rate is never shown
+        // as "the return you need" (identical to ballpark).
+        var reqIrrEl = document.getElementById('reqIrr');
+        var irrText;
+        if (v.showReturn) { irrText = (irr * 100).toFixed(1) + '%'; reqIrrEl.classList.remove('small'); }
+        else if (v.feasible === false) { irrText = 'Not feasible'; reqIrrEl.classList.add('small'); }
+        else { irrText = '0%'; reqIrrEl.classList.remove('small'); }
         reqIrrEl.textContent = irrText;
 
-        // §4 gap vs the plan's assumed return (quick uses a default mix, not a user allocation)
-        (function(){
-          var gapEl = document.getElementById('reqGap');
-          if (!gapEl && reqIrrEl && reqIrrEl.parentNode) { gapEl = document.createElement('div'); gapEl.id = 'reqGap'; gapEl.style.cssText = 'font-size:0.8rem;opacity:0.75;margin-top:6px;'; reqIrrEl.parentNode.appendChild(gapEl); }
-          var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
-          if (gapEl && v.showReturn && typeof g === 'number' && typeof mx === 'number') {
-            var mp = (mx*100).toFixed(1), gp = Math.abs(g*100).toFixed(1);
-            var mixName = (RISK_PROFILES[selectedRisk] || RISK_PROFILES.balanced).label;
-            gapEl.textContent = g > 0.001 ? ('your ' + mixName + ' mix is priced for ~' + mp + '% — short ~' + gp + '%')
-                              : g < -0.001 ? ('your ' + mixName + ' mix is priced for ~' + mp + '% — ahead ~' + gp + '%')
-                              : ('right on what your ' + mixName + ' mix is priced for (~' + mp + '%)');
-          } else if (gapEl) { gapEl.textContent = ''; }
-        })();
+        // What a balanced mix delivers, and the gap (quick sends the balanced default).
+        var mixEl = document.getElementById('mixRet'), gapEl = document.getElementById('reqGap');
+        var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
+        if (typeof mx === 'number') {
+          mixEl.textContent = (mx * 100).toFixed(1) + '%';
+          // Say the gap in plain words: how much more (or less) than a normal
+          // portfolio the plan needs.
+          if (v.showReturn && typeof g === 'number') {
+            var gp = Math.abs(g * 100).toFixed(1);
+            gapEl.textContent = g > 0.001 ? 'You need ' + gp + '% more than that' : g < -0.001 ? 'You need ' + gp + '% less than that' : 'Exactly what you need';
+          } else gapEl.textContent = v.feasible === false ? 'Far short of what you need' : 'More than you need';
+        } else { mixEl.textContent = '\u2014'; gapEl.textContent = ''; }
 
-        // Disclose the Social Security assumption already baked into the estimate
-        // (salary-derived bend-point PIA when working, spending-derived when
-        // retired; engine adds the 50% spousal benefit for MFJ on top).
+        // Disclose the Social Security assumption baked into the estimate.
         var ssNoteEl = document.getElementById('ssNote');
-        if (ssNoteEl) {
-          ssNoteEl.textContent = (Number.isFinite(data.estimatedAnnualSS) && data.estimatedAnnualSS > 0)
-            ? 'Assumes about ' + fmt$(data.estimatedAnnualSS) + '/yr in Social Security.'
-            : '';
-        }
-
-        // Ring fill: percentage of bracket [0, 10%] consumed
-        var rawIrr = (typeof irr === 'number' && irr > 0) ? irr : 0;
-        var rawPct = Math.max(0, Math.min(1, rawIrr / 0.10));
-        var dashOffset = RING_C * (1 - rawPct);
-        // Force a reflow so transition fires from the initial offset
-        ringFillEl.classList.remove('at-risk', 'on-track', 'middle');
-        // Color by bucket
-        ringFillEl.classList.add(bucket);
-        // Ring badge icon by tier: on-track = check, middle = !, at-risk = X (same as /ballpark)
-        var RING_ICONS = {
-          'on-track': '<polyline points="20 6 9 17 4 12"></polyline>',
-          'middle':   '<line x1="12" y1="7" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line>',
-          'at-risk':  '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
-        };
-        var ringCheckEl = document.getElementById('ringCheck');
-        if (ringCheckEl) {
-          ringCheckEl.setAttribute('class', 'ring-check-icon ' + bucket);
-          ringCheckEl.innerHTML = RING_ICONS[bucket] || RING_ICONS['middle'];
-        }
-        // Set dashoffset (animates due to CSS transition)
-        requestAnimationFrame(function () {
-          ringFillEl.setAttribute('stroke-dashoffset', String(dashOffset));
-        });
-
-        // Status pill (right column only) — reach label from the tier; not-fundable is its own case.
-        var pillLabel = (v.feasible === false) ? 'NO REALISTIC RETURN' : pillLabelFor(data.feasibilityRating);
-        rightPillEl.className = 'status-pill ' + bucket;
-        rightPillEl.textContent = pillLabel;
-
-        // Plan outcome — the verdict's plain-English detail (same narrative as /ballpark).
-        outcomeTextEl.className = 'outcome-text ' + bucket;
-        outcomeTextEl.textContent = v.detail || '';
+        ssNoteEl.textContent = (Number.isFinite(data.estimatedAnnualSS) && data.estimatedAnnualSS > 0)
+          ? 'Assumes about ' + fmt$(data.estimatedAnnualSS) + '/yr in Social Security.' : '';
 
         // Show + scroll
         document.getElementById('arrowDown').style.display = 'flex';
@@ -880,8 +926,8 @@
         var age = parseInt(document.getElementById('age').value, 10);
         var state = document.getElementById('state').value;
         var totalSavings = parseFloat(document.getElementById('totalSavings').value);
-        var annualExpenses = parseFloat(document.getElementById('annualExpenses').value);
-        var ssMonthlyFRA = Math.max(0, parseFloat(document.getElementById('ssMonthlyFRA').value) || 0);
+        var annualExpenses = spendAmount();
+        var ssMonthlyFRA = 0; // field removed from Quick Check; engine estimates SS
         var planThroughAge = parseInt(document.getElementById('planThroughAge').value, 10);
         if (!(planThroughAge >= 80 && planThroughAge <= 110)) planThroughAge = 100;
         var _howEnd = document.getElementById('howEndAge'); if (_howEnd) _howEnd.textContent = planThroughAge;
@@ -894,7 +940,7 @@
           showError('Enter your total retirement savings.'); return;
         }
         if (!Number.isFinite(annualExpenses) || annualExpenses <= 0) {
-          showError('Enter your annual spending.'); return;
+          showError('Pick a spending level.'); return;
         }
 
         // "Still working?" — when Yes, read salary + retirement age and let the
@@ -917,6 +963,11 @@
 
         var btn = document.getElementById('submitBtn');
         var orig = btn.textContent;
+        if (IS_LOCAL && demoTier()) {
+          showSampleBanner('forced with ?demo=' + demoTier());
+          renderResult(SAMPLES[demoTier()]);
+          return;
+        }
         btn.disabled = true;
         btn.textContent = 'Calculating…';
 
@@ -928,7 +979,11 @@
         //   - yearsOfRetirement = max(5, 100 - retirementAge)  → plan to age 100 (matches engine RETIREMENT_END_AGE + ballpark)
         var yorTarget = Math.max(5, planThroughAge - retAgeVal);
         var risk = RISK_PROFILES[selectedRisk] || RISK_PROFILES.balanced;
-        fetch('/api/optimize-quick', {
+        // Same as ballpark: on localhost / any non-production host, call the
+        // public engine directly (README: API is CORS-open) so the preview works.
+        var API = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:'
+          ? 'https://edge.gh2benefits.com/api/optimize-quick' : '/api/optimize-quick';
+        fetch(API, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -953,7 +1008,7 @@
             ssMonthlyFRA: ssMonthlyFRA
           })
         }).then(function (r) {
-          if (r.status === 401) {
+          if (r.status === 401 && !IS_LOCAL) {
             window.location.href = '/login.html?next=' + encodeURIComponent('/quick.html');
             return null;
           }
@@ -963,13 +1018,17 @@
           btn.disabled = false;
           btn.textContent = orig;
           if (out.status !== 200) {
-            showError((out.body && (out.body.message || out.body.error)) || 'Something went wrong. Try again.');
+            var msg = (out.body && (out.body.message || out.body.error)) || 'Something went wrong. Try again.';
+            if (IS_LOCAL) { showSampleBanner('the engine said \u201c' + msg + '\u201d'); renderResult(SAMPLES.risk); return; }
+            showError(msg);
             return;
           }
+          var sb = document.getElementById('sampleBanner'); if (sb) sb.remove();
           renderResult(out.body);
         }).catch(function () {
           btn.disabled = false;
           btn.textContent = orig;
+          if (IS_LOCAL) { showSampleBanner('the engine could not be reached'); renderResult(SAMPLES.risk); return; }
           showError('Network error. Please try again.');
         });
       });
@@ -1000,8 +1059,12 @@
               currentSalary: num('salary'),
               currentSavings: num('totalSavings'),
               customSpending: num('annualExpenses'),
+              spendingProfile: (function () { var b = document.querySelector('[data-spend][aria-pressed="true"]'); return b ? b.getAttribute('data-spend') : null; })(),
               ssMonthlyFRA: num('ssMonthlyFRA'),
-              targetEndAge: num('planThroughAge')
+              targetEndAge: num('planThroughAge'),
+              // Quick assumes 8% of salary saved while working; carry it so ballpark's
+              // required contribution-rate field is not the one thing left blank.
+              contributionRate: (function () { var w = document.querySelector('[data-work][aria-pressed="true"]'); return (!w || w.getAttribute('data-work') === 'yes') ? 8 : 0; })()
             }));
           } catch (e) { /* storage blocked: they retype, which is the old behaviour */ }
         });

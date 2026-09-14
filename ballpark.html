@@ -198,6 +198,14 @@
 
     /* ===== Main wrap ===== */
     .wrap { max-width: 1100px; margin: 0 auto; padding: 36px 40px 60px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
     .step-eyebrow {
       text-align: center;
       font-size: 11px;
@@ -286,14 +294,22 @@
 
     /* ===== Form fields ===== */
     .field { display: flex; flex-direction: column; gap: 6px; }
+    /* Missing required answers, marked on Check My Plan (Paul, Sept 14). */
+    .field.missing select, .field.missing input[type="number"], .field.missing input[type="text"],
+    .field.missing .toggle, .profiles.missing { border-color: var(--accent-red) !important; box-shadow: 0 0 0 1px var(--accent-red-ring) !important; }
+    .profiles.missing { border-radius: 16px; padding: 4px; margin: -4px; }
+    .miss-note { color: var(--accent-red); font-size: 12px; font-weight: 600; line-height: 1.3; }
+    .miss-note::before { content: '\2191\00a0'; }
     .field-label-row { display: flex; align-items: center; gap: 10px; }
     .field-label-row .field-icon {
       width: 24px; height: 24px;
       color: var(--text-dim);
       flex-shrink: 0;
     }
-    .field label, .field .field-text { color: var(--text); font-size: 14px; font-weight: 600; }
-    .field .field-hint { color: var(--text-muted); font-size: 12.5px; font-weight: 400; line-height: 1.4; margin-top: 2px; }
+    /* Contrast (Paul, Sept 13): labels a step softer than the values people
+       type, helper text a step softer again. The white is for their answers. */
+    .field label, .field .field-text { color: var(--text-dim); font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em; }
+    .field .field-hint, .field .ds { color: var(--text-muted); font-size: 12.5px; font-weight: 400; line-height: 1.45; margin-top: 2px; }
 
     select, input[type="text"], input[type="number"] {
       background: var(--bg-soft);
@@ -305,6 +321,10 @@
       font-family: inherit;
       width: 100%;
       transition: border-color 120ms, box-shadow 120ms;
+    }
+    select:hover, input[type="text"]:hover, input[type="number"]:hover {
+      border-color: rgba(139,92,246,0.55);
+      background-color: var(--card-bg-2);
     }
     select:focus, input:focus {
       outline: none;
@@ -332,6 +352,7 @@
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
+    .toggle button:not([aria-pressed="true"]):hover { background: rgba(139,92,246,0.14); color: var(--text); }
     /* Toggle (Single/Married) */
     .toggle {
       display: grid;
@@ -366,7 +387,9 @@
     .lifestyle-note { font-size: 11.5px; color: var(--text-faint); margin-top: 2px; line-height: 1.35; }
     .profiles {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      /* minmax(0,1fr): plain 1fr lets the widest label ("$100,000+") grow its
+         column, so the Premium card came out wider than the other three. */
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
     }
     .profile-card {
@@ -382,6 +405,7 @@
       transition: border-color 120ms, background 120ms, transform 120ms;
       text-align: center;
       position: relative;
+      min-width: 0;
     }
     .profile-card:hover { border-color: var(--accent-purple); background: rgba(139,92,246,0.06); }
     .profile-card[aria-checked="true"] {
@@ -466,7 +490,7 @@
       border: none;
       color: #FFF;
       padding: 18px 28px;
-      border-radius: 14px;
+      border-radius: 12px;
       font-size: 17px;
       font-weight: 700;
       cursor: pointer;
@@ -905,7 +929,7 @@
       display: inline-flex; align-items: center; gap: 10px;
       background: var(--grad-cta); color: #FFF;
       font-size: 17px; font-weight: 800; text-decoration: none;
-      padding: 17px 42px; border-radius: 13px;
+      padding: 17px 42px; border-radius: 12px;
       box-shadow: 0 10px 36px rgba(139,92,246,0.42);
       transition: transform 0.12s ease, box-shadow 0.2s ease;
     }
@@ -1193,12 +1217,12 @@
     }
     .tier-icon svg { width: 27px; height: 27px; }
     .tier-icon.jae svg { width: 30px; height: 30px; }
-    /* Quick Check is teal: distinct from Full Plan's purple and Concierge's gold. */
-    .tier-icon.jae   svg { filter: drop-shadow(0 0 7px rgba(45,212,191,0.6)); }
+    /* Quick Check is teal: distinct from Autopilot's purple and Concierge's gold. */
+    .tier-icon.jae   svg { filter: drop-shadow(0 0 7px rgba(96,165,250,0.6)); }
     .tier-icon.edge  svg { filter: drop-shadow(0 0 7px rgba(167,139,250,0.65)); }
     .tier-icon.ultra svg { filter: drop-shadow(0 0 7px rgba(252,211,77,0.6)); }
     .tier-icon .ico-fill { fill: currentColor; fill-opacity: 0.18; }
-    .tier-icon.jae   { background: radial-gradient(circle at 30% 30%, #0F2E2E, #05100f); border: 1px solid #1E4B48; color: #2DD4BF; }
+    .tier-icon.jae   { background: radial-gradient(circle at 30% 30%, #0F1F3A, #05090f); border: 1px solid #1E3A5F; color: #60A5FA; }
     .tier-icon.edge  { background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border: 1px solid #312E5B; color: #A78BFA; }
     .tier-icon.ultra { background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border: 1px solid #3A2F1F; color: #FCD34D; }
     /* Enterprise is a different species from the good/better/best ladder: an
@@ -1222,7 +1246,7 @@
     .tier-tag  { font-size: 13.5px; font-weight: 600; margin: 2px 0 0; }
     .tier-card.popular .tier-tag { color: var(--accent-purple); }
     .tier-card.ultra .tier-tag   { color: #FCD34D; }
-    .tier-card.jae .tier-tag { color: #2DD4BF; }
+    .tier-card.jae .tier-tag { color: #60A5FA; }
     .tier-card:not(.popular):not(.ultra):not(.enterprise):not(.jae) .tier-tag { color: var(--text-muted); }
 
     .tier-features {
@@ -1249,7 +1273,7 @@
       stroke-linecap: round; stroke-linejoin: round;
       margin-top: -1px;
     }
-    .tier-card.jae .feat-icon     { background: rgba(45,212,191,0.10); border-color: rgba(45,212,191,0.30); color: #5EEAD4; }
+    .tier-card.jae .feat-icon     { background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.30); color: #5EEAD4; }
     .tier-card.popular .feat-icon { background: rgba(139,92,246,0.14); border-color: rgba(139,92,246,0.32); color: #C4B5FD; }
     .tier-card.ultra .feat-icon   { background: rgba(252,211,77,0.10); border-color: rgba(252,211,77,0.30); color: #FCD34D; }
     .tier-features li .feat-text { color: var(--text); font-size: 13.5px; line-height: 1.45; }
@@ -1305,7 +1329,7 @@
     .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
     .tp-opt .tp-tag { display: inline-block; margin-top: 5px; align-self: flex-start; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
     .tp-opt.on { color: var(--text); border-color: var(--accent-purple); background: rgba(139,92,246,0.12); box-shadow: inset 0 0 0 1px var(--accent-purple); }
-    .tier-card.jae .tp-opt.on   { border-color: rgba(45,212,191,0.75); background: rgba(45,212,191,0.08); box-shadow: inset 0 0 0 1px rgba(45,212,191,0.75); }
+    .tier-card.jae .tp-opt.on   { border-color: rgba(96,165,250,0.75); background: rgba(96,165,250,0.08); box-shadow: inset 0 0 0 1px rgba(96,165,250,0.75); }
     .tier-card.ultra .tp-opt.on { border-color: rgba(252,211,77,0.75); background: rgba(252,211,77,0.08); box-shadow: inset 0 0 0 1px rgba(252,211,77,0.75); }
     .tp-opt[hidden] { display: none; }
     .tier-lock { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.28); font-size: 12.5px; line-height: 1.35; color: var(--text); }
@@ -1382,10 +1406,10 @@
       text-decoration: none;
       display: block;
     }
-    /* Every tier is buyable (Paul, Sept 10). Full Plan keeps the gradient;
+    /* Every tier is buyable (Paul, Sept 10). Autopilot keeps the gradient;
        the other two get outlined buttons so the popular card still leads. */
-    .tier-card.jae .tier-cta-btn { background: transparent; border: 1.5px solid rgba(45,212,191,0.6); color: #5EEAD4; }
-    .tier-card.jae .tier-cta-btn:hover { background: rgba(45,212,191,0.10); border-color: #5EEAD4; }
+    .tier-card.jae .tier-cta-btn { background: transparent; border: 1.5px solid rgba(96,165,250,0.6); color: #5EEAD4; }
+    .tier-card.jae .tier-cta-btn:hover { background: rgba(96,165,250,0.10); border-color: #5EEAD4; }
     .tier-card.ultra .tier-cta-btn { background: transparent; border: 1.5px solid rgba(252,211,77,0.6); color: #FCD34D; }
     .tier-card.ultra .tier-cta-btn:hover { background: rgba(252,211,77,0.08); border-color: #FCD34D; }
     .tier-card .tier-cta-btn + .tier-addon { margin-top: 12px; }
@@ -1455,7 +1479,7 @@
       .results-title { font-size: 30px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid > .span2 { grid-column: span 1; }
-      .profiles { grid-template-columns: repeat(2, 1fr); }
+      .profiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .advanced-grid { grid-template-columns: 1fr; }
       .result-hero-grid { grid-template-columns: 1fr; text-align: center; }
       .result-readout .result-value { font-size: 64px; }
@@ -1529,7 +1553,7 @@
                 <option value="">Select age</option>
               </select>
             </div>
-            <div class="field span2">
+            <div class="field span2" id="filingToggle">
               <label>Filing status</label>
               <div class="toggle" role="group" aria-label="Filing status">
                 <button type="button" data-filing="single" aria-pressed="false">Single</button>
@@ -1588,7 +1612,7 @@
                 <option value="69">69</option>
                 <option value="70">70 (maximum)</option>
               </select>
-              <div class="ds" style="margin-top:4px;">When you turn benefits on &mdash; a separate decision from when you retire. Waiting raises the check. If your savings can&rsquo;t cover the years between retiring and claiming, we&rsquo;ll model claiming at retirement instead.</div>
+              <div class="ds" style="margin-top:4px;">When your Social Security checks start. Waiting means a bigger check. It&rsquo;s a separate choice from when you retire.</div>
             </div>
             <div class="field span2">
               <label for="ssMonthlyFRA">SS benefit at full retirement age (optional)</label>
@@ -1596,7 +1620,7 @@
                 <span class="prefix">$</span>
                 <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="ssMonthlyFRA" placeholder="" />
               </div>
-              <div class="ds" style="margin-top:4px;">Know your number from ssa.gov? Enter $/month &mdash; otherwise we estimate it.</div>
+              <div class="ds" style="margin-top:4px;">From ssa.gov, if you have it. Otherwise we estimate it.</div>
             </div>
             <div class="field span2">
               <label for="planThroughAge">Plan through age</label>
@@ -1629,7 +1653,7 @@
 
           <div class="field">
             <div class="field-label-row">
-              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l4 6h-3v7a3 3 0 0 1-3 3 3 3 0 0 1-3-3V8H4z" transform="translate(2 0)"/></svg>
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="3"/><path d="M4.5 5.5v5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-5"/><path d="M4.5 10.5v5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-5"/></svg>
               <label for="currentSavings" class="field-text">Current retirement savings</label>
             </div>
             <div class="field-hint">All accounts combined &mdash; 401(k), IRA, Roth, taxable, cash.</div>
@@ -1945,15 +1969,15 @@
           <a href="mailto:jae@gh2benefits.com?subject=Quick%20Check%20inquiry" class="tier-cta-btn">Get Quick Check</a>
         </div>
 
-        <!-- Tier 2 — Full Plan (Most Popular) -->
+        <!-- Tier 2 — Autopilot (Most Popular) -->
         <div class="tier-card popular" data-shopify-tier="Tier 2">
           <span class="tier-badge">Most Popular</span>
           <div class="tier-head">
             <div class="tier-icon edge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor" fill-opacity="0.35"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 0 1 14.6-6"/><path d="M20.5 12a8.5 8.5 0 0 1-14.6 6"/><path d="M18 2.8v3.4h-3.4"/><path d="M6 21.2v-3.4h3.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
             </div>
             <div>
-              <h3 class="tier-name">Full Plan</h3>
+              <h3 class="tier-name">Autopilot</h3>
               <p class="tier-tag">Improve Your Number.</p>
             </div>
           </div>
@@ -1965,11 +1989,11 @@
           <ul class="tier-features">
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="feat-text">All 80 retirement strategies ranked for your household</span></li>
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><div class="feat-text"><strong>Your dashboard</strong><span>Projected liquid net worth, the drivers preserving it, your next key action and check-in date.</span></div></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg><div class="feat-text"><strong>Connect your accounts</strong><span>EDGE tracks them automatically. No re-typing.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg><div class="feat-text"><strong>Link your accounts</strong><span>EDGE tracks them automatically. No re-typing.</span></div></li>
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg><div class="feat-text"><strong>Heat map + Ask EDGE</strong><span>Seven wealth regimes at a glance, and chat grounded in your numbers.</span></div></li>
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.739-8z"/></svg><div class="feat-text"><strong>Continuous monitoring</strong><span>Re-run on every market move, rule change, and life event &mdash; email when the answer changes.</span></div></li>
           </ul>
-          <a href="mailto:jae@gh2benefits.com?subject=Full%20Plan%20inquiry" class="tier-cta-btn">Get Full Plan</a>
+          <a href="mailto:jae@gh2benefits.com?subject=Full%20Plan%20inquiry" class="tier-cta-btn">Get Autopilot</a>
         </div>
 
         <!-- Tier 3 — Concierge -->
@@ -1977,7 +2001,7 @@
         <div class="tier-card ultra" data-shopify-tier="Tier 3">
           <div class="tier-head">
             <div class="tier-icon ultra">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 9V7"/><path d="M10 7h4"/><path d="M2.5 20h19"/></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 7.5V5.5"/><path d="M10 5.5h4"/><path d="M2.5 18.5h19"/></svg>
             </div>
             <div>
               <h3 class="tier-name">Concierge</h3>
@@ -1990,7 +2014,7 @@
           </div>
           <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
           <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-5"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Everything in Full Plan</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-5"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Everything in Autopilot</span></li>
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg><div class="feat-text"><strong>Ask a question any time</strong><span>A person answers, not a ticket queue.</span></div></li>
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg><div class="feat-text"><strong>A quarterly review brief</strong><span>Written for your household.</span></div></li>
             <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg><span class="feat-text">4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</span></li>
@@ -2100,6 +2124,14 @@
       };
 
       var grp = document.getElementById('profileGroup');
+      // Number inputs step on scroll-wheel/trackpad while focused (Chromium), so
+      // clicking a field and scrolling to the next one wrote phantom values
+      // (Paul, Sept 14). Drop focus on wheel; the page still scrolls normally.
+      document.addEventListener('wheel', function () {
+        var a = document.activeElement;
+        if (a && a.tagName === 'INPUT' && a.type === 'number') a.blur();
+      }, { passive: true });
+
       var selectedProfile = null;
       var profileAmtEls = []; // { p, el, card } for live dollar updates
       PROFILES.forEach(function (p) {
@@ -2276,6 +2308,50 @@
       };
 
       function showError(msg) { document.getElementById('formErr').textContent = msg || ''; }
+
+      // ===== Missing-answer marks =====
+      // Required answers get a red frame and a short note under the field, all at
+      // once, and the page scrolls to the first one. Optional fields (SS benefit,
+      // pension, the spending override, plan-through, advanced) are never marked.
+      function wrapOf(id) {
+        var el = document.getElementById(id);
+        if (!el) return null;
+        if (id === 'profileGroup' || id === 'filingToggle') return el;
+        return el.closest('.field') || el;
+      }
+      function mark(id, note) {
+        var w = wrapOf(id); if (!w) return;
+        w.classList.add('missing');
+        if (note && !w.querySelector('.miss-note')) { var m = document.createElement('div'); m.className = 'miss-note'; m.textContent = note; w.appendChild(m); }
+      }
+      function clearMarks() {
+        document.querySelectorAll('.missing').forEach(function (w) { w.classList.remove('missing'); });
+        document.querySelectorAll('.miss-note').forEach(function (m) { m.remove(); });
+      }
+      function scrollToMark(id) {
+        var w = wrapOf(id); if (!w) return;
+        w.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var f = w.querySelector('select, input, button'); if (f && f.focus) setTimeout(function () { try { f.focus({ preventScroll: true }); } catch (e) {} }, 350);
+      }
+      function fail(id, msg) { mark(id, msg); showError(msg); scrollToMark(id); }
+      // A mark clears itself the moment the person answers that field.
+      document.getElementById('ballparkForm').addEventListener('input', function (e) {
+        var w = e.target.closest && e.target.closest('.missing'); if (!w) return;
+        w.classList.remove('missing'); var m = w.querySelector('.miss-note'); if (m) m.remove();
+        if (!document.querySelector('.missing')) showError('');
+      });
+      // Buttons (filing toggle, spending cards) don't fire input/change.
+      document.getElementById('ballparkForm').addEventListener('click', function (e) {
+        var t = e.target.closest && e.target.closest('[data-filing], .profile-card'); if (!t) return;
+        var w = t.closest('.missing'); if (!w) return;
+        w.classList.remove('missing'); var m = w.querySelector('.miss-note'); if (m) m.remove();
+        if (!document.querySelector('.missing')) showError('');
+      });
+      document.getElementById('ballparkForm').addEventListener('change', function (e) {
+        var w = e.target.closest && e.target.closest('.missing'); if (!w) return;
+        w.classList.remove('missing'); var m = w.querySelector('.miss-note'); if (m) m.remove();
+        if (!document.querySelector('.missing')) showError('');
+      });
 
       // ===== Render results =====
       function fmtK$(n) { if (!Number.isFinite(n)) return '\u2014'; return n >= 1e6 ? '$' + (n/1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : '$' + Math.round(n/1000) + 'k'; }
@@ -2756,6 +2832,7 @@
       document.getElementById('ballparkForm').addEventListener('submit', function (e) {
         e.preventDefault();
         showError('');
+        clearMarks();
 
         var age = parseInt(document.getElementById('age').value, 10);
         var retirementAge = parseInt(document.getElementById('retirementAge').value, 10);
@@ -2771,9 +2848,32 @@
         var customSpendOverrideRaw = document.getElementById('customSpendOverride').value;
         var customSpendOverride = customSpendOverrideRaw.trim() === '' ? null : parseFloat(customSpendOverrideRaw);
 
-        if (!Number.isFinite(age) || age < 35 || age > 80) { showError('Enter a current age between 35 and 80.'); return; }
-        if (!Number.isFinite(retirementAge) || retirementAge < 35 || retirementAge > 80) { showError('Enter a retirement age between 35 and 80 (use the age you retired if already retired).'); return; }
-        if (filing === null) { showError('Choose a filing status.'); return; }
+        // ---- Anything required still blank? Mark them all, say how many, stop. ----
+        var missing = [];
+        var blank = function (id) { var el = document.getElementById(id); return !el || String(el.value).trim() === ''; };
+        if (blank('age')) missing.push(['age', 'your current age']);
+        if (blank('retirementAge')) missing.push(['retirementAge', 'your retirement age']);
+        if (filing === null) missing.push(['filingToggle', 'filing status']);
+        if (filing === 'mfj') {
+          if (blank('spouseAge')) missing.push(['spouseAge', 'your spouse\u2019s current age']);
+          if (blank('spouseRetirementAge')) missing.push(['spouseRetirementAge', 'your spouse\u2019s retirement age']);
+        }
+        if (blank('state')) missing.push(['state', 'your state']);
+        if (blank('currentSalary')) missing.push(['currentSalary', 'your annual salary']);
+        if (blank('currentSavings')) missing.push(['currentSavings', 'your retirement savings']);
+        if (blank('contributionRate')) missing.push(['contributionRate', 'your contribution rate']);
+        if (selectedProfile === null && customSpendOverride === null) missing.push(['profileGroup', 'a spending level']);
+        if (missing.length) {
+          missing.forEach(function (m) { mark(m[0], m[0] === 'profileGroup' ? 'Pick one of the four, or enter your own amount below.' : 'Needed for your number.'); });
+          var names = missing.map(function (m) { return m[1]; });
+          var list = names.length === 1 ? names[0] : names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
+          showError((missing.length === 1 ? 'One thing is missing: ' : missing.length + ' things are missing: ') + list + '.');
+          scrollToMark(missing[0][0]);
+          return;
+        }
+
+        if (!Number.isFinite(age) || age < 35 || age > 80) { fail('age', 'Enter a current age between 35 and 80.'); return; }
+        if (!Number.isFinite(retirementAge) || retirementAge < 35 || retirementAge > 80) { fail('retirementAge', 'Enter a retirement age between 35 and 80 (use the age you retired if already retired).'); return; }
 
         // Spouse fields required when MFJ
         var spouseAge = null;
@@ -2784,20 +2884,19 @@
           spouseRetirementAge = parseInt(document.getElementById('spouseRetirementAge').value, 10);
           spouseSsClaimAge = parseInt(document.getElementById('spouseSsClaimAge').value, 10);
           if (!Number.isFinite(spouseAge) || spouseAge < 35 || spouseAge > 80) {
-            showError("Enter your spouse's current age between 35 and 80."); return;
+            fail('spouseAge', "Enter your spouse's current age between 35 and 80."); return;
           }
           if (!Number.isFinite(spouseRetirementAge) || spouseRetirementAge < 35 || spouseRetirementAge > 80) {
-            showError("Enter your spouse's retirement age between 35 and 80 (use the age they retired if already retired)."); return;
+            fail('spouseRetirementAge', "Enter your spouse's retirement age between 35 and 80 (use the age they retired if already retired)."); return;
           }
         }
 
-        if (!state) { showError('Choose your state.'); return; }
-        if (!Number.isFinite(currentSalary) || currentSalary < 0) { showError('Enter your current annual salary.'); return; }
-        if (!Number.isFinite(currentSavings) || currentSavings < 0) { showError('Enter your current retirement savings.'); return; }
-        if (!Number.isFinite(contributionRatePct) || contributionRatePct < 0 || contributionRatePct > 50) { showError('Enter a contribution rate between 0 and 50 (%).'); return; }
-        if (!Number.isFinite(monthlyPension) || monthlyPension < 0) { showError('Pension must be a non-negative number.'); return; }
-        if (customSpendOverride !== null && (!Number.isFinite(customSpendOverride) || customSpendOverride <= 0)) { showError('Enter a positive annual spending amount, or leave the override blank.'); return; }
-        if (selectedProfile === null && customSpendOverride === null) { showError('Pick a spending profile, or enter your own annual spending.'); return; }
+        if (!state) { fail('state', 'Choose your state.'); return; }
+        if (!Number.isFinite(currentSalary) || currentSalary < 0) { fail('currentSalary', 'Enter your current annual salary.'); return; }
+        if (!Number.isFinite(currentSavings) || currentSavings < 0) { fail('currentSavings', 'Enter your current retirement savings.'); return; }
+        if (!Number.isFinite(contributionRatePct) || contributionRatePct < 0 || contributionRatePct > 50) { fail('contributionRate', 'Enter a contribution rate between 0 and 50 (%).'); return; }
+        if (!Number.isFinite(monthlyPension) || monthlyPension < 0) { fail('monthlyPension', 'Pension must be a non-negative number.'); return; }
+        if (customSpendOverride !== null && (!Number.isFinite(customSpendOverride) || customSpendOverride <= 0)) { fail('customSpendOverride', 'Enter a positive annual spending amount, or leave the override blank.'); return; }
 
         // Send the engine the SAME dollar shown on the selected card (today's-dollars,
         // projected from salary at real wage growth; Premium = 100%, uncapped). Falls
@@ -2820,6 +2919,32 @@
         var orig = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = 'Calculating…';
+
+        // Results live on results.html (the three-layer verdict page). After the
+        // engine answers, the calculating card plays and we hand off there.
+        var IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
+        function goToResults() {
+          var ov = document.getElementById('rzCalc'), steps = ov ? ov.querySelectorAll('.rz-calc-step') : [];
+          if (!ov) { window.location.href = 'results.html'; return; }
+          ov.classList.add('on');
+          var k = 0;
+          (function next() {
+            if (k < steps.length) { steps[k].classList.add('on'); k++; setTimeout(next, 560); }
+            else setTimeout(function () { window.location.href = 'results.html'; }, 520);
+          })();
+        }
+        function storeResult(body, extra) {
+          var rec = {
+            inputs: { age: age, retirementAge: retirementAge, planThroughAge: planThroughAge, filingStatus: filing,
+                      spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge, state: state,
+                      currentSalary: currentSalary, currentSavings: currentSavings,
+                      contributionRate: contributionRatePct / 100,
+                      spendingProfile: customSpending != null ? 'custom' : selectedProfile, customSpending: customSpending, monthlyPension: monthlyPension },
+            result: body, savedAt: Date.now()
+          };
+          if (extra) for (var k2 in extra) rec[k2] = extra[k2];
+          try { sessionStorage.setItem('gh2_ballpark_last_result', JSON.stringify(rec)); } catch (e) {}
+        }
 
         // Local preview has no /api — use the public CORS-open production API
         // there (per README); same-origin relative path everywhere else.
@@ -2851,24 +2976,19 @@
           if (out === null) return;
           if (out.status !== 200) {
             btn.disabled = false; btn.innerHTML = orig;
-            showError(out.body && out.body.message ? out.body.message : (out.body && out.body.error) || 'Something went wrong. Try again.');
+            var msg = out.body && out.body.message ? out.body.message : (out.body && out.body.error) || 'Something went wrong. Try again.';
+            // Local preview only: show the results page on sample numbers with a
+            // banner saying why. Production says so and stops (see catch below).
+            if (IS_LOCAL) { storeResult(null, { sample: true, why: 'the engine said \u201c' + msg + '\u201d' }); goToResults(); return; }
+            showError(msg);
             return;
           }
           btn.disabled = false; btn.innerHTML = orig;
-          try {
-            sessionStorage.setItem('gh2_ballpark_last_result', JSON.stringify({
-              inputs: { age: age, retirementAge: retirementAge, filingStatus: filing,
-                        spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge,
-                        state: state,
-                        currentSalary: currentSalary, currentSavings: currentSavings,
-                        contributionRate: contributionRatePct / 100,
-                        spendingProfile: customSpending != null ? 'custom' : selectedProfile, customSpending: customSpending, monthlyPension: monthlyPension },
-              result: out.body, savedAt: Date.now()
-            }));
-          } catch (e) {}
-          runCalcTheater(out.body);
+          storeResult(out.body);
+          goToResults();
         }).catch(function () {
           btn.disabled = false; btn.innerHTML = orig;
+          if (IS_LOCAL) { storeResult(null, { sample: true, why: 'the engine could not be reached' }); goToResults(); return; }
           // The engine could not be reached. Say so. Never render a number
           // the engine did not produce -- an invented projection someone can
           // act on is worse than an error they can retry.
@@ -2934,13 +3054,22 @@
     if (set('state', d.state)) filled++;
     if (set('currentSalary', d.currentSalary)) filled++;
     if (set('currentSavings', d.currentSavings)) filled++;
-    if (set('customSpendOverride', d.customSpending)) filled++;
+    if (set('contributionRate', d.contributionRate)) filled++;
+    // Quick Check now asks spending as the same four tiers, so the tier card
+    // carries the choice (below). Only fill the override when no tier came
+    // over; filling both dims the cards and reads as "you typed a number".
+    if (!d.spendingProfile && set('customSpendOverride', d.customSpending)) filled++;
     if (set('ssMonthlyFRA', d.ssMonthlyFRA)) filled++;
     if (set('planThroughAge', d.targetEndAge)) filled++;
 
     if (d.filingStatus) {
       var btn = document.querySelector('.toggle [data-filing="' + d.filingStatus + '"]');
       if (btn) { btn.click(); filled++; }
+    }
+    // Quick Check now asks spending as the same four tiers; land on the same card.
+    if (d.spendingProfile) {
+      var card = document.querySelector('.profile-card[data-profile="' + d.spendingProfile + '"]');
+      if (card) { card.click(); filled++; }
     }
 
     if (!filled) return;   // nothing landed: leave the handoff for a retry

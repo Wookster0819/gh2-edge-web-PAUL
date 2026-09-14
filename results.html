@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDGE — Your Results</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- CONCEPT: ballpark results in three layers — verdict, the receipt, the reasoning. Sample numbers. Not wired. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0A0E1A; --bg-soft: #0E1424; --card-bg: #11172A; --card-bg-2: #161D33;
+      --border: #1F2940; --border-soft: #18213B;
+      --text: #F5F7FA; --text-dim: #B6BFD0; --text-muted: #8693AC; --text-faint: #5A6680;
+      --purple: #8B5CF6; --purple-2: #A78BFA; --purple-soft: rgba(139,92,246,0.14);
+      --green: #22C55E; --money: #10B981; --amber: #F97316; --red: #FF3B30; --red-2: #FF5C52;
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+      --serif: "Instrument Serif", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    a { color: inherit; text-decoration: none; }
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; }
+    /* Stepper, matching ballpark.html */
+    .stepper { --tier: var(--red); display: flex; justify-content: center; align-items: flex-start; gap: 0; position: relative; margin: 6px auto 0; max-width: 640px; }
+    .stepper::before { content: ''; position: absolute; top: 15px; left: 14%; right: 14%; height: 1.5px; background: var(--border); z-index: 0; }
+    .step { flex: 1; text-align: center; font-size: 13.5px; font-weight: 600; color: var(--text-muted); position: relative; }
+    .step .dot { display: grid; place-items: center; width: 30px; height: 30px; margin: 0 auto 8px; border-radius: 50%; background: var(--bg); border: 1.5px solid var(--border); font-size: 12.5px; font-weight: 800; color: var(--text-faint); position: relative; z-index: 1; }
+    .step.done .dot { color: var(--text-dim); border-color: #3B4560; }
+    .step.active { color: var(--text); }
+    .step.active .dot { background: var(--tier); border-color: var(--tier); color: #fff; animation: stepGlow 2.6s ease-in-out infinite; }
+    @keyframes stepGlow { 0%,100% { box-shadow: 0 0 6px var(--tier); } 50% { box-shadow: 0 0 16px 3px var(--tier); } }
+    .stepper::after { content: ''; position: absolute; top: 15px; left: 14%; width: 72%; height: 1.5px; background: linear-gradient(90deg, #3B4560, var(--tier)); z-index: 0; }
+    .topbar .tag { margin-left: auto; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--purple-2); border: 1px dashed rgba(139,92,246,0.4); padding: 5px 10px; border-radius: 999px; }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 28px 32px 90px; display: grid; gap: 18px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); }
+    .k { font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--text-faint); }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 18px; border-radius: 12px; font-size: 14.5px; font-weight: 800; color: #fff; background: var(--grad-cta); border: 0; cursor: pointer; background-origin: border-box; }
+    .btn.ghost { background: var(--card-bg-2); border: 1px solid var(--border); color: var(--text); font-weight: 700; }
+    @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(255,59,48,0), 0 0 8px rgba(255,59,48,0.55); opacity: .88; } 50% { box-shadow: 0 0 0 4px rgba(255,59,48,0.14), 0 0 16px rgba(255,59,48,0.95); opacity: 1; } }
+    @keyframes pulseP { 0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0), 0 0 8px rgba(167,139,250,0.55); } 50% { box-shadow: 0 0 0 4px rgba(167,139,250,0.14), 0 0 16px rgba(167,139,250,0.95); } }
+
+    /* ===== Layer 1: the verdict ===== */
+    /* Red is a signal, not a theme: badge, dot, and the number only.
+       The card itself stays neutral with the site's purple. */
+    .verdict { position: relative; overflow: hidden; padding: 32px 36px 28px; background: radial-gradient(ellipse at 90% 20%, rgba(139,92,246,0.26), transparent 50%), radial-gradient(circle, rgba(255,255,255,0.10) 1px, transparent 1.5px) 0 0 / 20px 20px, var(--card-bg); display: grid; grid-template-columns: 1fr 250px; gap: 28px; align-items: center; }
+    .verdict::before { content: ''; position: absolute; left: 8%; right: 8%; top: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(167,139,250,0.8), transparent); }
+    .verdict > * { position: relative; }
+    .verdict { --t: var(--red); --t2: var(--red-2); }
+    .verdict[data-tier="middle"]   { --t: #F97316; --t2: #FB923C; }
+    .verdict[data-tier="on-track"] { --t: #22C55E; --t2: #4ADE80; }
+    .verdict .pill .d { background: var(--t); box-shadow: 0 0 8px var(--t); animation: pulseO 2.6s ease-in-out infinite; }
+    .verdict .badge { background: var(--t); box-shadow: inset 0 1px 0 rgba(255,255,255,0.22), 0 0 14px var(--t); animation: pulseO 2.6s ease-in-out infinite; }
+    .verdict .badge.tri { background: none; box-shadow: none; }
+    .verdict .badge.tri svg { width: 38px; height: 38px; filter: drop-shadow(0 0 8px var(--t)); }
+    .verdict .num b.tnum { color: var(--t2); }
+    .verdict .num b.small { font-size: 20px; line-height: 1.15; }
+    @keyframes pulseO { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
+    .sample-banner { margin: 0 0 14px; padding: 10px 14px; border-radius: 10px; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.4); color: #FBBF24; font-size: 13px; font-weight: 600; text-align: center; }
+    .gaps .empty { color: var(--text-muted); font-size: 14px; margin: 6px 0 14px; }
+    .pill { display: inline-flex; align-items: center; gap: 9px; background: rgba(0,0,0,0.45); border-radius: 99px; padding: 7px 14px; font-size: 12.5px; font-weight: 800; letter-spacing: .08em; }
+    .pill .d { width: 9px; height: 9px; border-radius: 50%; background: var(--red); animation: pulse 2.6s ease-in-out infinite; }
+    /* Small badge: a 34px red circle with an "!" beside the pill. Breathes
+       softly. Enough to catch the eye, not a siren. */
+    .pillrow { display: flex; align-items: center; gap: 12px; }
+    .badge { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-size: 17px; font-weight: 800; color: #fff; background: radial-gradient(circle at 35% 30%, var(--red-2), var(--red)); box-shadow: 0 0 14px rgba(255,59,48,0.45); animation: badge 2.6s ease-in-out infinite; }
+    /* Glow only — scaling a 34px circle made the "!" shimmer on sub-pixels. */
+    @keyframes badge { 0%,100% { box-shadow: 0 0 10px rgba(255,59,48,0.35); } 50% { box-shadow: 0 0 24px rgba(255,59,48,0.75); } }
+    .verdict h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 44px); line-height: 1.12; margin: 16px 0 12px; letter-spacing: -0.01em; }
+    .verdict h1 em { font-style: italic; color: var(--purple-2); }
+    .verdict h1 b { font-weight: 400; color: var(--money); }
+    .verdict .sub { color: var(--text-dim); font-size: 15.5px; line-height: 1.55; max-width: 56ch; margin: 0 0 18px; }
+    .verdict .acts { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .verdict .acts .alt { font-size: 13.5px; color: var(--text-muted); }
+    .verdict .acts .alt a { color: var(--purple-2); font-weight: 700; }
+    /* Two equal tiles; each centres its content so neither looks padded or cramped. */
+    .numbers { display: grid; grid-template-rows: auto auto; gap: 10px; align-self: center; }
+    .num { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 14px; padding: 16px 16px 15px; }
+    .num .k { margin-bottom: 8px; }
+    .num b { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; line-height: 1; display: block; }
+    .num b.red { color: var(--red-2); }
+    .num small { display: block; font-size: 12px; color: var(--text-muted); margin-top: 7px; }
+    .num .bar { position: relative; height: 6px; border-radius: 99px; background: var(--border); margin-top: 10px; overflow: visible; }
+    .num .bar i { display: block; height: 100%; width: 73%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #A78BFA); }
+    .num .bar em { position: absolute; top: 50%; left: 73%; width: 13px; height: 13px; border-radius: 50%; background: #100A24; border: 3px solid #A78BFA; transform: translate(-50%, -50%); animation: pulseP 2.6s ease-in-out infinite; }
+
+    /* ===== Layer 2: the receipt ===== */
+    .receipt { display: flex; align-items: center; gap: 0; padding: 14px 24px; flex-wrap: wrap; }
+    .receipt .lead { font-size: 12px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: var(--purple-2); margin-right: 22px; display: inline-flex; align-items: center; gap: 8px; }
+    .receipt .lead .d { width: 7px; height: 7px; border-radius: 50%; background: var(--purple); animation: pulseP 2.6s ease-in-out infinite; }
+    .receipt .it { display: flex; align-items: baseline; gap: 6px; padding: 6px 22px 6px 0; margin-right: 22px; border-right: 1px solid var(--border-soft); }
+    .receipt .it:last-child { border-right: 0; margin-right: 0; }
+    .receipt .it b { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+    .receipt .it span { font-size: 12.5px; color: var(--text-muted); }
+
+    /* ===== Layer 3: the reasoning ===== */
+    .two { display: grid; grid-template-columns: 1.35fr 1fr; gap: 18px; }
+    .why { padding: 24px 28px 22px; }
+    .why h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 6px 0 16px; }
+    .why h2 em { font-style: italic; color: var(--purple-2); }
+    .reasons { display: grid; gap: 0; }
+    .r { display: grid; grid-template-columns: 34px 1fr auto; gap: 14px; align-items: start; padding: 13px 0; border-top: 1px solid var(--border-soft); }
+    .r:first-child { border-top: 0; padding-top: 2px; }
+    .r .ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.3); color: var(--purple-2); }
+    .r .ico svg { width: 16px; height: 16px; }
+    .r .t { font-size: 15px; font-weight: 700; }
+    .r .s { font-size: 13px; color: var(--text-muted); margin-top: 2px; line-height: 1.45; }
+    .r .w { font-size: 13px; font-weight: 800; color: var(--money); white-space: nowrap; padding-top: 2px; }
+    .r .w.neg { color: var(--text-muted); font-weight: 600; }
+    .rej { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .rej b { color: var(--text-dim); font-weight: 700; }
+    .rej .lk { color: var(--purple-2); font-weight: 700; }
+
+    .gaps { padding: 24px 28px 22px; }
+    .gaps h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 6px 0 6px; }
+    .gaps h2 em { font-style: italic; color: var(--purple-2); }
+    .gaps p { color: var(--text-muted); font-size: 13.5px; margin: 0 0 14px; line-height: 1.5; }
+    .gap { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; background: var(--card-bg-2); border: 1px solid var(--border-soft); margin-bottom: 8px; }
+    .gap .n { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: var(--purple-soft); color: var(--purple-2); flex: none; }
+    .gap .t { font-size: 14px; font-weight: 700; flex: 1; }
+    .gap .pct { font-size: 12.5px; font-weight: 800; color: var(--purple-2); }
+    .gaps .btn { width: 100%; justify-content: center; margin-top: 10px; }
+    .gaps .fine { font-size: 12px; color: var(--text-faint); text-align: center; margin-top: 10px; }
+
+    /* regimes strip */
+    .regimes { padding: 22px 28px; }
+    .regimes .head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .regimes h2 { font-family: var(--serif); font-weight: 400; font-size: 26px; margin: 0; }
+    .regimes h2 em { font-style: italic; color: var(--purple-2); }
+    .regimes .head a { font-size: 13px; font-weight: 700; color: var(--purple-2); }
+    .rg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .g { padding: 16px 16px 14px; border-radius: 14px; background: var(--card-bg-2); border: 1px solid var(--border-soft); }
+    .g .lbl { display: flex; align-items: center; gap: 7px; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--text-dim); margin-bottom: 8px; }
+    .g .lbl .d { width: 7px; height: 7px; border-radius: 50%; }
+    .g .lbl .d.hot { background: var(--amber); box-shadow: 0 0 8px rgba(249,115,22,0.7); }
+    .g .lbl .d.ok { background: var(--green); }
+    .g .lbl .d.lk { background: var(--text-faint); }
+    .g p { font-family: var(--serif); font-size: 17px; line-height: 1.35; margin: 0; }
+    .g p b { font-weight: 400; color: var(--money); }
+    .g.locked p { filter: blur(4px); user-select: none; }
+    .g.locked { position: relative; }
+    .g.locked .veil { position: absolute; inset: 0; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: var(--text-dim); }
+
+    /* ===== Locked bits: show the shape, hide the answer ===== */
+    .blur { filter: blur(6px); user-select: none; pointer-events: none; }
+    .lockchip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #FBBF24; background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3); padding: 3px 8px; border-radius: 999px; vertical-align: middle; white-space: nowrap; }
+    .lockchip svg { width: 10px; height: 10px; }
+    .h1lock { display: inline-flex; align-items: center; gap: 10px; }
+    .r.locked .t, .r.locked .s, .r.locked .w { filter: blur(5px); user-select: none; }
+    .r.locked { position: relative; }
+    .r.locked .lockchip { position: absolute; right: 0; top: 16px; }
+    .rej.locked .txt { filter: blur(5px); user-select: none; }
+    .rej.locked { position: relative; }
+    .rej.locked .lockchip { position: absolute; right: 0; top: 14px; }
+    .unlock { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.35); display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+    .unlock p { margin: 0; font-size: 13.5px; color: var(--text-dim); }
+    .unlock p b { color: var(--text); }
+    .unlock a { font-size: 13px; font-weight: 800; color: var(--purple-2); white-space: nowrap; }
+
+    /* ===== Tiers ===== */
+    .tiers-head { text-align: center; padding: 30px 0 6px; }
+    .tiers-head h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 40px); margin: 0 0 8px; }
+    .tiers-head h2 em { font-style: italic; color: var(--purple-2); }
+    .tiers-head p { color: var(--text-muted); font-size: 15px; margin: 0; }
+    .tiers-head p b { color: var(--green); font-weight: 700; }
+    .tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .tier { padding: 24px 24px 22px; display: flex; flex-direction: column; gap: 12px; text-align: left; }
+    .tier.pop { border-color: rgba(139,92,246,0.6); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); position: relative; }
+    .tier .badge2 { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--purple); color: #fff; font-size: 10.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; }
+    .tier .head { display: flex; align-items: center; gap: 12px; }
+    /* Concierge+: one quiet line under the button, no box (Paul, Sept 14). */
+    /* Concierge+: faint gold panel so it reads as its own thing inside the tile (Paul, Sept 14, option A). */
+    .tier .addon { margin-top: auto; margin-bottom: 4px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(180deg, rgba(252,211,77,0.10), rgba(252,211,77,0.04)); border: 1px solid rgba(252,211,77,0.35); display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; line-height: 1.45; }
+    .tier .addon b { display: block; font-weight: 800; color: #FCD34D; }
+    .tier .addon .ap { display: block; color: var(--text-muted); }
+    .tier .addon a { flex: none; color: #FCD34D; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .tier .addon a:hover { text-decoration: underline; }
+    .tier .addon + .btn { margin-top: 10px; }
+    .tier .ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; border: 1px solid; }
+    .tier .ico svg { width: 22px; height: 22px; }
+    .tier .ico.t { color: #60A5FA; background: #0F1F3A; border-color: #1E3A5F; }
+    .tier .ico.p { color: var(--purple-2); background: #1E1B4B; border-color: #312E5B; }
+    .tier .ico.gold { color: #FCD34D; background: #292015; border-color: #3A2F1F; }
+    .tier h3 { margin: 0; font-size: 19px; font-weight: 800; }
+    .tier .tag2 { font-size: 12.5px; font-weight: 600; margin-top: 2px; }
+    .tier .ico.t + div .tag2 { color: #60A5FA; } .tier .ico.p + div .tag2 { color: var(--purple-2); } .tier .ico.g + div .tag2 { color: #FCD34D; }
+    .tier .price { margin-top: 4px; display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+    .tier .price b { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; }
+    .tier .price span { color: var(--text-muted); font-size: 13.5px; font-weight: 600; }
+    .tier .price small { flex-basis: 100%; font-size: 12.5px; color: var(--text-muted); margin-top: -2px; }
+    .tier .price em.lock { font-style: normal; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--green); background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); padding: 3px 8px; border-radius: 999px; align-self: center; }
+    .tier .value { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 10px 0; margin: 10px 0 4px; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .tier .value span { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+    .tier .value b { font-size: 18px; font-weight: 800; color: var(--green); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .tier ul { list-style: none; margin: 4px 0 0; padding: 12px 0 0; border-top: 1px solid var(--border-soft); display: grid; gap: 9px; flex: 1; }
+    .tier li { font-size: 13.5px; color: var(--text-dim); padding-left: 20px; position: relative; line-height: 1.4; }
+    .tier li::before { content: ''; position: absolute; left: 0; top: 7px; width: 9px; height: 9px; border-radius: 50%; background: var(--purple-soft); border: 1px solid rgba(139,92,246,0.5); }
+    .tier li.you { color: var(--text); font-weight: 600; }
+    .tier li.you::before { background: var(--green); border-color: var(--green); }
+    .tier .btn { width: 100%; justify-content: center; margin-top: auto; }
+    /* All three buttons match: muted at rest, the same gradient when the card is hovered (Paul, Sept 14). */
+    .tier .btn, .tier .btn.ghost { background: var(--card-bg-2); border: 1px solid var(--border); color: var(--text); font-weight: 800; box-shadow: none; transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease; }
+    .tier:hover .btn, .tier:hover .btn.ghost { background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat; border-color: transparent; color: #fff; box-shadow: 0 8px 24px rgba(139,92,246,0.28); }
+    @media (max-width: 880px) { .tiers { grid-template-columns: 1fr; } }
+
+    .foot { text-align: center; color: var(--text-faint); font-size: 12.5px; padding-top: 10px; }
+
+    @media (max-width: 880px) {
+      .verdict { grid-template-columns: 1fr; }
+      .two { grid-template-columns: 1fr; }
+      .rg { grid-template-columns: 1fr 1fr; }
+      .wrap { padding: 20px 18px 70px; }
+      .receipt .it { border-right: 0; margin-right: 0; padding-right: 0; width: 50%; }
+    }
+    @media (max-width: 520px) { .rg { grid-template-columns: 1fr; } .receipt .it { width: 100%; } }
+    @media (prefers-reduced-motion: reduce) { .pill .d, .receipt .lead .d, .num .bar em, .badge { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="topbar"><a class="wordmark" href="quick.html">EDGE</a></div>
+  <nav class="stepper" aria-label="Progress">
+    <a class="step done" href="quick.html"><span class="dot">&#10003;</span>Quick Check</a>
+    <a class="step done" href="ballpark.html"><span class="dot">&#10003;</span>Your Profile</a>
+    <span class="step active"><span class="dot">3</span>Your Results</span>
+  </nav>
+
+  <main class="wrap">
+    <div class="sample-banner" id="sampleBanner" hidden></div>
+
+    <!-- ===== 1. VERDICT ===== -->
+    <section class="card verdict">
+      <div>
+        <div class="pillrow"><span class="badge" id="badge" aria-hidden="true">!</span><span class="pill"><span class="d"></span><span id="pillText">AT RISK</span></span></div>
+        <h1><span id="headline">Savings may run out at 72.</span> <em id="fixLead">The biggest fix:</em> a Roth conversion this year of <span class="h1lock"><b class="blur">$122,898</b><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot</span></span></h1>
+        <p class="sub" id="sub">Your plan needs a 19.1% return to last to 100. That one move, sized to the dollar, plus one more change, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.</p>
+        <div class="acts">
+          <a class="btn" href="#tiers">Get my exact number &rarr;</a>
+          <span class="alt">or <a href="ballpark.html">change your answers</a></span>
+        </div>
+      </div>
+      <div class="numbers">
+        <div class="num"><span class="k">Required portfolio return</span><b class="tnum" id="reqIrr">19.1%</b><small>Safe zone is under 5.0%</small></div>
+        <div class="num"><span class="k">How much EDGE has to work with</span><b id="precPct">73%</b><small id="precNote">5 more data points close the gap</small><div class="bar" id="precBar"><i></i><em></em></div></div>
+      </div>
+    </section>
+
+    <!-- ===== 2. THE RECEIPT ===== -->
+    <section class="card receipt">
+      <span class="lead"><span class="d"></span>To get here, EDGE ran</span>
+      <span class="it"><b>80</b><span>strategies, ranked</span></span>
+      <span class="it"><b>7</b><span>wealth regimes</span></span>
+      <span class="it"><b id="rcYears">45</b><span>years, year by year</span></span>
+      <span class="it"><b>437</b><span>data points weighed</span></span>
+      <span class="it"><b>3</b><span id="rcTax">tax codes: federal, NY, Medicare</span></span>
+      <span class="it"><b>1</b><span>household: yours</span></span>
+    </section>
+
+    <!-- ===== 3. THE REASONING ===== -->
+    <div class="two">
+      <section class="card why">
+        <span class="k">Why this move ranked first</span>
+        <h2>Five things <em>work in your favor</em>.</h2>
+        <div class="reasons">
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span><div><div class="t">Your income drops this year</div><div class="s">Retiring at 65 opens a low-income window. Dollars converted now are taxed at 12%, not the 24% they&rsquo;d face at 75.</div></div><span class="w">+$4,300</span></div>
+          <div class="r"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg></span><div><div class="t">$38,400 of room in the 12% bracket</div><div class="s">EDGE fills the bracket to the dollar and stops. Converting more would spill into 22%.</div></div><span class="w">sized to fit</span></div>
+          <div class="r locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><rect x="4" y="14" width="4.5" height="7"/><rect x="9.75" y="9" width="4.5" height="12"/><rect x="15.5" y="4" width="4.5" height="17"/></svg></span><div><div class="t">Medicare surcharge stays clear</div><div class="s">The conversion keeps you $18,400 under the first IRMAA tier. Bigger conversions would cost $1,140 a year in premiums.</div></div><span class="w">$0 surcharge</span></div>
+          <div class="r locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></span><div><div class="t">Thirteen years before RMDs</div><div class="s">Every dollar moved to Roth now is a dollar the IRS can&rsquo;t force out at 75.</div></div><span class="w">+$2,100/yr later</span></div>
+          <div class="r locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span><div><div class="t">New York taxes the withdrawal, not the growth</div><div class="s">State tax is paid once on the conversion. Thirty years of Roth growth after that is untaxed.</div></div><span class="w">+$9,800 lifetime</span></div>
+        </div>
+        <div class="rej locked"><span class="lockchip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Autopilot</span><b>Also considered, ranked lower for you:</b> <span class="txt">delaying Social Security to 70 (+$3,100/yr, but it needs cash you don&rsquo;t have in years 65&ndash;70) &middot; taxable-first drawdown (+$2,900/yr, ranked #3) &middot; a qualified charitable distribution (not until 70&frac12;).</span></div>
+        <div class="unlock"><p><b>2 of 5 reasons shown.</b> Autopilot opens all five, the exact dollar amount of the move, and the other 79 strategies ranked for you.</p><a href="#tiers">See plans &darr;</a></div>
+      </section>
+
+      <section class="card gaps">
+        <span class="k" id="gapsK">The 27% EDGE doesn&rsquo;t have yet</span>
+        <h2 id="gapsH"><span id="gapsCount">Five</span> data points <em>sharpen</em> this.</h2>
+        <p id="gapsP">Each one narrows your range. Right now your number could be off by as much as 4.3%, about $39,000 a year.</p>
+        <div id="gapRows">
+        <div class="gap"><span class="n">1</span><span class="t">Other retirement income</span><span class="pct">+9%</span></div>
+        <div class="gap"><span class="n">2</span><span class="t">Account mix: pre-tax, Roth, taxable</span><span class="pct">+7%</span></div>
+        <div class="gap"><span class="n">3</span><span class="t">Spouse&rsquo;s Social Security estimate</span><span class="pct">+5%</span></div>
+        <div class="gap"><span class="n">4</span><span class="t">Health and longevity</span><span class="pct">+4%</span></div>
+        <div class="gap"><span class="n">5</span><span class="t">Home equity and plans for it</span><span class="pct">+2%</span></div>
+        </div>
+        <a class="btn" href="#tiers">Add these with Autopilot &rarr;</a>
+        <div class="fine">Autopilot re-runs all 80 strategies on the complete picture.</div>
+      </section>
+    </div>
+
+    <!-- ===== regimes: what else EDGE is already watching ===== -->
+    <section class="card regimes">
+      <div class="head"><h2>Four other things EDGE is <em>already</em> watching.</h2><a href="heatmap.html">All seven regimes &rarr;</a></div>
+      <div class="rg">
+        <div class="g"><div class="lbl"><span class="d ok"></span>IRMAA</div><p>Your income stays <b>$18,400</b> under the first Medicare tier through 95.</p></div>
+        <div class="g"><div class="lbl"><span class="d ok"></span>RMD runway</div><p>Thirteen years until required withdrawals begin at 75.</p></div>
+        <div class="g locked"><div class="lbl"><span class="d hot"></span>Social Security</div><p>Claiming at 67 beats 70 for you by <b>$14,200</b>, because of the cash gap.</p><div class="veil">&#128274; Autopilot</div></div>
+        <div class="g locked"><div class="lbl"><span class="d lk"></span>State tax</div><p>Moving to Florida at 70 would keep about $61,000 more.</p><div class="veil">&#128274; Autopilot</div></div>
+      </div>
+    </section>
+
+    <!-- ===== TIERS ===== -->
+    <div class="tiers-head" id="tiers">
+      <h2>Unlock the <em>whole</em> answer.</h2>
+      <p><b>Founders pricing, for a limited time.</b> Go yearly and today&rsquo;s price is locked for as long as you stay.</p>
+    </div>
+    <div class="tiers">
+      <div class="card tier">
+        <div class="head"><div class="ico t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg></div><div><h3>Quick Check</h3></div></div>
+        <div class="price"><b>$89</b><span>/ year</span><em class="lock">price locked</em><small>or $9 / month</small></div>
+        <div class="value"><span>Savings this year</span><b>~$2,500</b></div>
+        <ul><li>Jae&rsquo;s Corner, weekly &mdash; newsletter pack with valuable info and updates</li><li>One EDGE recommendation a year, on your numbers</li><li>Ask EDGE, 24/7</li></ul>
+        <a class="btn ghost" href="login.html?next=dashboard.html%3Ftier%3D1">Get Quick Check</a>
+      </div>
+      <div class="card tier pop">
+        <span class="badge2">Most popular</span>
+        <div class="head"><div class="ico p"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 0 1 14.6-6"/><path d="M20.5 12a8.5 8.5 0 0 1-14.6 6"/><path d="M18 2.8v3.4h-3.4"/><path d="M6 21.2v-3.4h3.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div><div><h3>Autopilot</h3></div></div>
+        <div class="price"><b>$290</b><span>/ year</span><em class="lock">price locked</em><small>or $29 / month</small></div>
+        <div class="value"><span>Savings this year</span><b>~$10,000</b></div>
+        <ul><li class="you">The move EDGE ranked first for you, sized to the dollar, with every reason behind it</li><li>All 80 strategies, ranked for your household</li><li>Link your accounts &mdash; EDGE tracks them automatically</li><li>Dashboard, heat map, Ask EDGE on your numbers</li><li>Re-run on every market move, rule change, life event</li></ul>
+        <a class="btn" href="login.html?next=dashboard.html%3Ftier%3D2">Get Autopilot</a>
+      </div>
+      <div class="card tier">
+        <div class="head"><div class="ico gold"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 7.5V5.5"/><path d="M10 5.5h4"/><path d="M2.5 18.5h19"/></svg></div><div><h3>Concierge</h3></div></div>
+        <div class="price"><b>$990</b><span>/ year</span><em class="lock">price locked</em><small>or $99 / month</small></div>
+        <div class="value"><span>Savings this year</span><b>~$30,000</b></div>
+        <ul><li>Everything in Autopilot</li><li><b>4 proprietary GH2 EDGE strategies the public never sees &mdash; they work your tax bracket, the Medicare surcharge line, and required withdrawals in a single move</b></li><li>A quarterly review brief for your household</li></ul>
+        <div class="addon">
+          <div><b>Concierge+</b><span class="ap">Add a dedicated, full-time advisor to your plan.</span></div>
+          <a href="https://jaeoh.com/" target="_blank" rel="noopener">See details &rarr;</a>
+        </div>
+        <a class="btn ghost" href="login.html?next=dashboard.html%3Ftier%3D3">Get Concierge</a>
+      </div>
+    </div>
+
+    <div class="foot">GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</div>
+  </main>
+
+  <script>
+  (function () {
+    // ===================================================================
+    // Real results. Ballpark stores the engine response in sessionStorage
+    // (gh2_ballpark_last_result) and sends people here. Everything the engine
+    // returns is used; everything it doesn't yet (the ranked move, reasons,
+    // regimes, receipt counts) is the illustrative sample, marked below.
+    // Jae: the "// placeholder" blocks are the ones your endpoints replace.
+    // ===================================================================
+    var IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
+    var SAMPLE = { feasibilityRating: 'extremely_aggressive', requiredIRR: 0.191, targetEndAge: 100, depletionAge: 72, projectedRetirementBalance: 907000,
+      verdict: { showReturn: true, feasible: true },
+      precision: { precisionPct: 73, halfWidthPp: 4.3, sharpen: [ { key: 'income', impactPp: 9 }, { key: 'mix', impactPp: 7 }, { key: 'spouse', impactPp: 5 }, { key: 'health', impactPp: 4 }, { key: 'home', impactPp: 2 } ] } };
+    var STATE_NAMES = { AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'DC',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming' };
+    var SHARPEN_LABELS = { spouse: 'Spouse’s income and Social Security', ssopt: 'Social Security claiming', health: 'Health and long-term care', mix: 'Account mix: pre-tax, Roth, taxable', income: 'Other retirement income', home: 'Home equity and plans for it', pension: 'Pension details', taxes: 'Tax details' };
+    var WORDS = ['Zero','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
+    var TRI = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5 22.6 21H1.4z" fill="#F97316"/><text x="12" y="18.6" text-anchor="middle" font-size="11.5" font-weight="800" font-family="-apple-system,Segoe UI,sans-serif" fill="#1a0d00">!</text></svg>';
+    function $(id) { return document.getElementById(id); }
+    function fmt$(x) { return '$' + Math.round(x).toLocaleString('en-US'); }
+    function bucketFor(t) { if (t === 'well_funded' || t === 'conservative') return 'on-track'; if (t === 'moderate') return 'middle'; return 'at-risk'; }
+
+    var stored = null, sample = false, why = '';
+    try { stored = JSON.parse(sessionStorage.getItem('gh2_ballpark_last_result') || 'null'); } catch (e) {}
+    var d = stored && stored.result, inp = (stored && stored.inputs) || {};
+    if (stored && stored.sample) { sample = true; why = stored.why || 'the engine could not be reached'; d = SAMPLE; }
+    if (!d) {
+      if (!IS_LOCAL) { location.replace('ballpark.html'); return; }
+      sample = true; why = 'no ballpark result in this tab'; d = SAMPLE;
+    }
+    if (sample) { $('sampleBanner').textContent = 'Sample numbers — ' + why + '. Not your result.'; $('sampleBanner').hidden = false; }
+
+    var v = d.verdict || {};
+    var bucket = (v.feasible === false) ? 'at-risk' : bucketFor(d.feasibilityRating);
+    var endAge = d.targetEndAge || inp.planThroughAge || 100;
+    var irr = d.requiredIRR;
+    var irrText = v.showReturn ? (irr * 100).toFixed(1) + '%' : (v.feasible === false ? 'Not feasible' : '0%');
+    var irrPct = v.showReturn ? (irr * 100).toFixed(1) : null;
+
+    // Verdict
+    var card = document.querySelector('.verdict'); card.setAttribute('data-tier', bucket);
+    var badge = $('badge');
+    if (bucket === 'middle') { badge.className = 'badge tri'; badge.innerHTML = TRI; }
+    else { badge.className = 'badge'; badge.textContent = bucket === 'on-track' ? '✓' : '!'; }
+    $('pillText').textContent = bucket === 'at-risk' ? 'AT RISK' : bucket === 'middle' ? 'NEEDS ATTENTION' : 'ON TRACK';
+    // Stepper dot and progress line follow the verdict colour.
+    document.querySelector('.stepper').style.setProperty('--tier', { 'at-risk': '#FF3B30', 'middle': '#F97316', 'on-track': '#22C55E' }[bucket]);
+    var head;
+    if (bucket === 'at-risk') head = 'Savings may not last to age ' + endAge + '.';
+    else if (bucket === 'middle') head = (d.depletionAge && d.depletionAge < endAge) ? 'Savings may run out by age ' + d.depletionAge + '.' : 'Savings last through age ' + endAge + ' — barely.';
+    else head = 'Savings last through age ' + endAge + '.';
+    $('headline').textContent = head;
+    $('fixLead').textContent = bucket === 'on-track' ? 'The biggest gain:' : 'The biggest fix:';
+    // placeholder: the ranked move ("a Roth conversion this year of $…") and the
+    // blurred amount are illustrative until the engine returns its top strategy.
+    var sub;
+    if (v.feasible === false) sub = 'No realistic market return gets your plan to ' + endAge + ' on its own. The moves EDGE ranked, starting with this one, are how the gap closes.';
+    else if (bucket === 'at-risk') sub = 'Your plan needs a ' + irrPct + '% return to last to ' + endAge + '. That one move, sized to the dollar, plus one more change, brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.';
+    else if (bucket === 'middle') sub = 'Your plan needs a ' + irrPct + '% return to last to ' + endAge + ', just past what a balanced mix delivers. This move brings it inside the safe zone. EDGE ranked it first out of 80 strategies for your household.';
+    else sub = 'Your plan lasts to ' + endAge + ' on a ' + irrPct + '% return, inside the safe zone. This move keeps it there with room to spare. EDGE ranked it first out of 80 strategies for your household.';
+    $('sub').textContent = sub;
+
+    // Numbers
+    $('reqIrr').textContent = irrText; $('reqIrr').className = 'tnum' + (v.showReturn ? '' : ' small');
+    var prec = d.precision || null;
+    var live = prec ? prec.sharpen.filter(function (x) { return x.impactPp >= 0.05; }).sort(function (a, b) { return b.impactPp - a.impactPp; }) : [];
+    if (prec && typeof prec.precisionPct === 'number') {
+      var pct = Math.round(prec.precisionPct);
+      $('precPct').textContent = pct + '%';
+      $('precNote').textContent = live.length ? live.length + ' more data point' + (live.length === 1 ? '' : 's') + ' close the gap' : 'Nothing left to sharpen';
+      $('precBar').querySelector('i').style.width = pct + '%'; $('precBar').querySelector('em').style.left = pct + '%';
+      $('gapsK').textContent = 'The ' + (100 - pct) + '% EDGE doesn’t have yet';
+    } else {
+      $('precPct').textContent = '—'; $('precNote').textContent = 'Not measured for this result'; $('precBar').style.display = 'none';
+      $('gapsK').textContent = 'What EDGE doesn’t have yet';
+    }
+
+    // Receipt (counts other than years/tax codes are placeholders for the engine)
+    if (inp.age) $('rcYears').textContent = Math.max(1, endAge - inp.age);
+    $('rcTax').textContent = 'tax codes: federal, ' + (STATE_NAMES[inp.state] || inp.state || 'state') + ', Medicare';
+
+    // Gaps
+    var rows = $('gapRows');
+    if (prec) {
+      var top = live.slice(0, 5);
+      $('gapsCount').textContent = top.length < 10 ? WORDS[top.length] : String(top.length);
+      var proj = d.projectedRetirementBalance, half = prec.halfWidthPp;
+      $('gapsP').textContent = (typeof half === 'number')
+        ? 'Each one narrows your range. Right now your number could be off by as much as ' + half.toFixed(1) + '%' + ((typeof proj === 'number' && proj > 0) ? ', about ' + fmt$(Math.round(half / 100 * proj / 1000) * 1000) + ' a year' : '') + '.'
+        : 'Each one narrows your range.';
+      rows.innerHTML = top.map(function (x, i) {
+        var label = SHARPEN_LABELS[x.key] || String(x.key).replace(/[_-]/g, ' ').replace(/^\w/, function (c) { return c.toUpperCase(); });
+        return '<div class="gap"><span class="n">' + (i + 1) + '</span><span class="t">' + label + '</span><span class="pct">+' + (x.impactPp % 1 ? x.impactPp.toFixed(1) : x.impactPp) + '%</span></div>';
+      }).join('');
+    } else {
+      $('gapsH').innerHTML = 'More data points <em>sharpen</em> this.';
+      $('gapsP').textContent = 'EDGE measures exactly how much once it has your full profile.';
+      rows.innerHTML = '';
+    }
+    // placeholder: reasons, "also considered", and the regimes cards stay
+    // illustrative until the engine returns ranked strategies and regime status.
+  })();
+  </script>
+</body>
+</html>
