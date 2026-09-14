@@ -12,7 +12,7 @@
       { email, password, remember }  ->  200 { ok: true }   (session cookie set)
                                           401               (bad credentials)
     On success the page sends the member to ?next= (same-origin path only),
-    defaulting to home.html. Sign-out links on the member pages land here
+    defaulting to dashboard.html. Sign-out links on the member pages land here
     with ?signedout=1; wire LOGOUT_ENDPOINT to clear the session cookie.
 
     In preview mode any email + any password signs in and the member pages
@@ -38,12 +38,22 @@
     .topbar .right { margin-left: auto; font-size: 13px; color: var(--text-muted); }
     .topbar .right a { color: var(--text); font-weight: 600; }
     .topbar .right a:hover { color: #C4B5FD; }
+    .legal { max-width: 1180px; margin: 0 auto; padding: 0 32px 40px; font-size: 11.5px; line-height: 1.6; color: var(--text-faint); }
 
     .stage { min-height: calc(100vh - 62px); display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; max-width: 1180px; margin: 0 auto; padding: 48px 32px 80px; gap: 48px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
 
     /* Left: why you're here */
-    .pitch h1 { font-size: clamp(30px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; margin: 0 0 14px; font-weight: 800; }
-    .pitch h1 .grad { background: linear-gradient(90deg, #A78BFA, #EC4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    /* Serif headline, same as quick / ballpark / results (Paul, Sept 14). */
+    .pitch h1 { font-family: "Instrument Serif", Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(40px, 4.6vw, 58px); line-height: 1.05; letter-spacing: -0.01em; margin: 0 0 14px; }
+    .pitch h1 .grad { font-style: italic; padding-right: 0.06em; background: linear-gradient(90deg, #A78BFA, #EC4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .pitch p { color: var(--text-muted); font-size: 16px; line-height: 1.55; margin: 0 0 26px; max-width: 46ch; }
     .pitch ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
     .pitch li { display: flex; align-items: center; gap: 12px; color: var(--text-dim); font-size: 14.5px; }
@@ -54,7 +64,7 @@
     @keyframes tierPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(139,92,246,0), 0 0 6px rgba(139,92,246,0.45); opacity: .85; } 50% { box-shadow: 0 0 0 4px rgba(139,92,246,0.12), 0 0 14px rgba(139,92,246,0.85); opacity: 1; } }
 
     /* Right: the card */
-    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 18px; padding: 30px 30px 26px; box-shadow: var(--shadow-card); max-width: 440px; width: 100%; justify-self: end; }
+    .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px 30px 26px; box-shadow: var(--shadow-card); max-width: 440px; width: 100%; justify-self: end; }
     .card h2 { margin: 0 0 4px; font-size: 22px; font-weight: 800; letter-spacing: -0.01em; }
     .card .sub { margin: 0 0 22px; color: var(--text-muted); font-size: 14px; }
     .notice { display: none; padding: 10px 12px; border-radius: 10px; font-size: 13px; margin-bottom: 16px; line-height: 1.4; }
@@ -77,13 +87,16 @@
     .row input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--accent-purple); margin: 0; }
     .row a { color: #C4B5FD; font-weight: 600; }
     .row a:hover { text-decoration: underline; }
-    .btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 16px; border-radius: 11px; font: inherit; font-size: 15px; font-weight: 800; color: #fff; background: var(--grad-cta); border: 0; cursor: pointer; background-origin: border-box; }
+    .btn { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 16px; border-radius: 12px; font: inherit; font-size: 15px; font-weight: 800; color: #fff; background: var(--grad-cta); border: 0; cursor: pointer; background-origin: border-box; }
     .btn:hover { filter: brightness(1.06); }
     .btn[disabled] { opacity: .7; cursor: default; filter: none; }
     .btn svg { width: 15px; height: 15px; }
     .foot { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--border-soft); font-size: 13.5px; color: var(--text-muted); display: grid; gap: 8px; }
     .foot a { color: var(--text); font-weight: 700; }
     .foot a:hover { color: #C4B5FD; }
+    .signup { text-align: center; font-size: 13px; color: var(--text-muted); margin: 12px 0 2px; }
+    .signup a { color: #C4B5FD; font-weight: 700; text-decoration: none; }
+    .signup a:hover { color: #DDD6FE; text-decoration: underline; }
     .secure { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-faint); margin-top: 14px; }
     .secure svg { width: 12px; height: 12px; }
 
@@ -98,6 +111,8 @@
     @media (max-width: 480px) { .topbar { padding: 14px 18px; } .card { padding: 24px 20px 22px; } }
     @media (prefers-reduced-motion: reduce) { .pitch .live .dot { animation: none; } }
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="topbar">
@@ -136,15 +151,13 @@
         <a href="#forgot" id="forgotLink">Forgot password?</a>
       </div>
       <button type="submit" class="btn" id="submitBtn">Sign in <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <div class="signup">No account yet? <a href="pricing.html">Sign up</a></div>
 
-      <div class="foot">
-        <div>New to EDGE? <a href="pricing.html">Pick a plan</a></div>
-        <div>Just want the free check? <a href="ballpark.html">Run the ballpark</a></div>
-      </div>
       <div class="secure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Secure. Private. Your data is never sold.</div>
       <div class="preview-tag">Preview mode: just click Sign in. The member pages open on sample data.</div>
     </form>
   </main>
+  <footer class="legal">GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</footer>
 
   <script>
     (function () {
@@ -154,7 +167,7 @@
       var AUTH_ENABLED = false;
       var LOGIN_ENDPOINT = '/api/login';
       var LOGOUT_ENDPOINT = '/api/logout';   // member pages' "Sign out" should POST here, then land on login.html?signedout=1
-      var DEFAULT_NEXT = 'home.html';
+      var DEFAULT_NEXT = 'dashboard.html';
 
       if (!AUTH_ENABLED) document.body.classList.add('preview');
 
@@ -169,6 +182,8 @@
 
       var form = document.getElementById('loginForm'), notice = document.getElementById('notice');
       var email = document.getElementById('email'), pw = document.getElementById('password'), btn = document.getElementById('submitBtn');
+      // Preview: the note says a bare click signs in, so the browser's own required-field check must not get in the way.
+      if (!AUTH_ENABLED) { email.required = false; pw.required = false; }
       function say(kind, msg) { notice.className = 'notice show ' + kind; notice.textContent = msg; }
       function clear() { notice.className = 'notice'; notice.textContent = ''; }
 

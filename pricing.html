@@ -7,112 +7,27 @@
   <title>GH2 EDGE™ — Choose Your Plan</title>
   <meta name="description" content="Turn your retirement ballpark into a real plan. Pick the GH2 EDGE™ tier that fits how often you want to revisit your numbers." />
   <style>
+    /* The page's one theme: EDGE, the member-facing look (Sept 14; the
+       Trust/Warm/Fresh/Calm light variants live in git history). */
     :root {
-      /* ===== THEME: Trust (default) ===== */
-      --brand-blue: #1B4F72;
-      --brand-blue-dark: #143A56;
-      --bg: #F7F9FB;
-      --card-bg: #FFFFFF;
-      --text: #1A2733;
-      --text-muted: #5A6B7B;
-      --text-faint: #8A98A8;
-      --border: #D6DDE4;
-      --shadow: 0 1px 3px rgba(20,40,60,0.06), 0 4px 12px rgba(20,40,60,0.05);
-      --card-radius: 14px;
-      --button-radius: 10px;
-      --field-radius: 10px;
-      --chip-radius: 999px;
-      --hero-grad-start: #143A56;
-      --hero-grad-end: #1B4F72;
-      --hero-accent: #FFD96B;
-      --section-accent: #1B4F72;
-      --green: #1F7A4D;
-      --green-bg: #E8F4EC;
-      --amber: #B8860B;
-      --amber-bg: #FFF8E6;
-      --red: #B33A3A;
-    }
-    body[data-theme="warm"] {
-      --brand-blue: #0D5C63; --brand-blue-dark: #084043; --bg: #FAF6F0; --card-bg: #FFFEFB;
-      --text: #2A2520; --text-muted: #6B5F52; --text-faint: #A89B8B; --border: #E8DFD3;
-      --shadow: 0 2px 4px rgba(80,50,20,0.05), 0 8px 20px rgba(80,50,20,0.06);
-      --card-radius: 18px; --button-radius: 14px; --field-radius: 12px;
-      --hero-grad-start: #084043; --hero-grad-end: #0D5C63; --hero-accent: #F5C16C; --section-accent: #E8826B;
-      --green: #2A7A5C; --green-bg: #EAF3EE; --amber: #B8860B; --amber-bg: #FFF5E1;
-    }
-    body[data-theme="fresh"] {
-      --brand-blue: #06A77D; --brand-blue-dark: #048963; --bg: #F4FAF7; --card-bg: #FFFFFF;
-      --text: #1A2E2A; --text-muted: #5A6F6A; --text-faint: #93A6A1; --border: #DCE9E4;
-      --shadow: 0 2px 6px rgba(6,167,125,0.05), 0 10px 24px rgba(6,167,125,0.08);
-      --card-radius: 22px; --button-radius: 16px; --field-radius: 14px;
-      --hero-grad-start: #048963; --hero-grad-end: #06A77D; --hero-accent: #FFE07A; --section-accent: #48ACF0;
-    }
-    /* ===== THEME: EDGE — the member-facing UI (dashboard / heat map / home).
-       Default for the preview (Paul, Sept 10). Trust/Warm/Fresh/Calm stay
-       selectable from the ?design=1 bar. ===== */
-    body[data-theme="edge"] {
       --brand-blue: #8B5CF6; --brand-blue-dark: #7C3AED; --bg: #0A0E1A; --card-bg: #11172A;
       --text: #F5F7FA; --text-muted: #8693AC; --text-faint: #5A6680; --border: #1F2940;
       --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
-      --card-radius: 16px; --button-radius: 10px; --field-radius: 12px;
+      --card-radius: 16px; --button-radius: 12px; --field-radius: 12px;
       --hero-grad-start: #1E1B4B; --hero-grad-end: #312E81; --hero-accent: #FBBF24; --section-accent: #8B5CF6;
       --green: #22C55E; --green-bg: rgba(34,197,94,0.12); --amber: #F97316; --amber-bg: rgba(249,115,22,0.12); --red: #FF3B30;
       --card-bg-2: #161D33; --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+          --chip-radius: 999px;
     }
-    body[data-theme="edge"] .theme-bar { background: rgba(10,14,26,0.92); }
-    body[data-theme="edge"] .theme-btn { background: var(--card-bg); }
-    body[data-theme="edge"] .tier-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 16px 40px rgba(139,92,246,0.10); }
-    body[data-theme="edge"] .tier-card.popular { border-color: var(--brand-blue); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); }
-    body[data-theme="edge"] .tier-cta.primary { background: var(--grad-cta); border-color: transparent; background-origin: border-box; }
-    body[data-theme="edge"] .tier-cta.primary:hover { filter: brightness(1.08); }
-    body[data-theme="edge"] .tier-cta.secondary { background: var(--card-bg-2); color: var(--text); border-color: var(--border); }
-    body[data-theme="edge"] .tier-cta.secondary:hover { border-color: var(--brand-blue); background: rgba(139,92,246,0.14); color: var(--text); }
-    body[data-theme="edge"] .back-link:hover { background: rgba(139,92,246,0.14); color: var(--text); border-color: var(--brand-blue); }
-    body[data-theme="edge"] .tier-value-block { border: 1px solid rgba(139,92,246,0.35); }
-    body[data-theme="edge"] .tier-ratio-value { color: #A78BFA; }
-    body[data-theme="edge"] .bill-toggle { background: var(--card-bg-2); }
-    body[data-theme="edge"] .vs-table td.cross { opacity: 0.7; }
-    body[data-theme="edge"] .b2b-tier { background: var(--card-bg-2); }
-    body[data-theme="edge"] .theme-btn[data-theme="edge"] .swatch { background: #8B5CF6; }
-    .theme-btn[data-theme="edge"] .swatch { background: #8B5CF6; }
+    .tier-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 16px 40px rgba(139,92,246,0.10); }
+    .tier-card.popular { border-color: var(--brand-blue); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); }
+    .back-link:hover { background: rgba(139,92,246,0.14); color: var(--text); border-color: var(--brand-blue); }
+    .tier-ratio-value { color: #A78BFA; }
+    .bill-toggle { background: var(--card-bg-2); }
+    .vs-table td.cross { opacity: 0.7; }
+    .b2b-tier { background: var(--card-bg-2); }
 
-    body[data-theme="calm"] {
-      --brand-blue: #5B6EAE; --brand-blue-dark: #3F5191; --bg: #F6F4EE; --card-bg: #FFFFFF;
-      --text: #2C2E3A; --text-muted: #6E707F; --text-faint: #A0A2B0; --border: #E1DFD7;
-      --shadow: 0 1px 2px rgba(60,60,80,0.04), 0 12px 32px rgba(60,60,80,0.06);
-      --card-radius: 16px; --button-radius: 12px; --field-radius: 12px;
-      --hero-grad-start: #3F5191; --hero-grad-end: #5B6EAE; --hero-accent: #F2C28B; --section-accent: #D4A5A5;
-    }
 
-    /* Theme selector — INTERNAL. Hidden from customers by default.
-       Reveal it with ?design=1 on the URL; that also remembers the choice
-       for this browser, so you keep the tool and visitors never see it. */
-    .theme-bar { display: none !important; }
-    body.design-mode .theme-bar { display: flex !important; }
-
-    .theme-bar {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 20px;
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      transition: background-color 0.25s ease, border-color 0.25s ease;
-    }
-    .theme-bar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-    .theme-bar-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
-    .theme-btn {
-      padding: 6px 14px; font-size: 13px; font-weight: 600;
-      border: 1px solid var(--border); background: #FFF; color: var(--text);
-      border-radius: 999px; cursor: pointer; font-family: inherit; transition: all 0.18s ease;
-    }
-    .theme-btn:hover { border-color: var(--brand-blue); }
-    .theme-btn[aria-pressed="true"] { background: var(--brand-blue); color: #FFF; border-color: var(--brand-blue); }
-    .theme-btn .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.08); }
-    .theme-btn[data-theme=""] .swatch      { background: #1B4F72; }
-    .theme-btn[data-theme="warm"] .swatch  { background: #0D5C63; }
-    .theme-btn[data-theme="fresh"] .swatch { background: #06A77D; }
-    .theme-btn[data-theme="calm"] .swatch  { background: #5B6EAE; }
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -124,9 +39,25 @@
     }
 
     .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 48px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
     header { text-align: center; margin-bottom: 32px; }
+    /* Shared top bar, same as sign-in (Paul, Sept 14). */
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; color: var(--text); text-decoration: none; }
+    .topbar .right { margin-left: auto; font-size: 13px; color: var(--text-muted); }
+    .topbar .right a { color: var(--text); font-weight: 600; text-decoration: none; }
+    .topbar .right a:hover { color: #C4B5FD; }
     .brand { font-size: 13px; letter-spacing: 0.12em; color: var(--brand-blue); font-weight: 600; text-transform: uppercase; }
-    h1 { font-size: clamp(25px, 6vw, 32px); line-height: 1.15; margin: 8px 0 6px; color: var(--text); font-weight: 700; letter-spacing: -0.01em; }
+    /* Serif headline, same as the other public pages (Paul, Sept 14). */
+    h1 { font-family: "Instrument Serif", Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(34px, 6vw, 48px); line-height: 1.08; margin: 8px 0 6px; color: var(--text); letter-spacing: -0.01em; }
+    h1 em { font-style: italic; background: linear-gradient(90deg, #A78BFA, #EC4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-right: 0.06em; }
     .sub { color: var(--text-muted); font-size: clamp(15px, 3.5vw, 16px); margin: 0 auto; max-width: 64ch; }
 
     /* Result teaser card (carried over from ballpark.html sessionStorage) */
@@ -246,23 +177,16 @@
     .tier-icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; flex: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 18px rgba(0,0,0,0.25); }
     .tier-icon svg { width: 24px; height: 24px; }
     .tier-icon .ico-fill { fill: currentColor; fill-opacity: 0.18; }
-    .tier-card[data-tier="Tier 1"] .tier-icon { color: #0D9488; background: rgba(45,212,191,0.14); border: 1px solid rgba(45,212,191,0.35); }
+    .tier-card[data-tier="Tier 1"] .tier-icon { color: #60A5FA; background: rgba(96,165,250,0.14); border: 1px solid rgba(96,165,250,0.35); }
     .tier-card[data-tier="Tier 2"] .tier-icon { color: var(--brand-blue); background: rgba(139,92,246,0.14); border: 1px solid rgba(139,92,246,0.35); }
     .tier-card[data-tier="Tier 3"] .tier-icon { color: #B45309; background: rgba(252,211,77,0.16); border: 1px solid rgba(217,119,6,0.35); }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 1"] .tier-icon { color: #2DD4BF; background: radial-gradient(circle at 30% 30%, #0F2E2E, #05100f); border-color: #1E4B48; }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 2"] .tier-icon { color: #A78BFA; background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border-color: #312E5B; }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 3"] .tier-icon { color: #FCD34D; background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border-color: #3A2F1F; }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 1"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(45,212,191,0.55)); }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 2"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(167,139,250,0.6)); }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 3"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(252,211,77,0.55)); }
+    .tier-card[data-tier="Tier 1"] .tier-icon { color: #60A5FA; background: radial-gradient(circle at 30% 30%, #0F1F3A, #05090f); border-color: #1E3A5F; }
+    .tier-card[data-tier="Tier 2"] .tier-icon { color: #A78BFA; background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border-color: #312E5B; }
+    .tier-card[data-tier="Tier 3"] .tier-icon { color: #FCD34D; background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border-color: #3A2F1F; }
+    .tier-card[data-tier="Tier 1"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(96,165,250,0.55)); }
+    .tier-card[data-tier="Tier 2"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(167,139,250,0.6)); }
+    .tier-card[data-tier="Tier 3"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(252,211,77,0.55)); }
     .tier-name { font-size: 20px; font-weight: 700; margin: 0; }
-    .tier-tag { font-size: 13px; font-weight: 600; margin: 2px 0 0; }
-    .tier-card[data-tier="Tier 1"] .tier-tag { color: #0D9488; }
-    .tier-card[data-tier="Tier 2"] .tier-tag { color: var(--brand-blue); }
-    .tier-card[data-tier="Tier 3"] .tier-tag { color: #B45309; }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 1"] .tier-tag { color: #2DD4BF; }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 2"] .tier-tag { color: #A78BFA; }
-    body[data-theme="edge"] .tier-card[data-tier="Tier 3"] .tier-tag { color: #FCD34D; }
     .tier-tagline { font-size: 13px; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4; min-height: 36px; }
     /* Per-card price options: monthly and yearly both visible, one selected.
        Clicking either switches the page's billing period. */
@@ -273,7 +197,7 @@
     .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
     .tp-opt .tp-tag { display: inline-block; margin-top: 5px; align-self: flex-start; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: var(--green-bg); color: var(--green); }
     .tp-opt.on { color: var(--text); border-color: var(--brand-blue); background: var(--card-bg); box-shadow: inset 0 0 0 1px var(--brand-blue); }
-    body[data-theme="edge"] .tp-opt.on { background: rgba(139,92,246,0.12); }
+    .tp-opt.on { background: rgba(139,92,246,0.12); }
     .tp-opt[hidden] { display: none; }
     .tier-price-amount { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
     .tier-price-unit { font-size: 14px; color: var(--text-muted); font-weight: 600; }
@@ -290,29 +214,14 @@
 
     /* Concierge add-on: a teaser line; click opens a bubble with the detail
        and a link out to Jae's site. Price stays inside the bubble. */
-    .tier-addon { position: relative; margin-top: 16px; }
-    .addon-toggle { width: 100%; text-align: left; cursor: pointer; font-family: inherit; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--field-radius); border: 1px dashed var(--border); background: var(--bg); color: var(--text); transition: border-color 0.15s ease; }
-    .addon-toggle:hover, .addon-toggle[aria-expanded="true"] { border-style: solid; border-color: var(--brand-blue); }
-    .addon-toggle .at-ico { width: 30px; height: 30px; flex: none; border-radius: 9px; display: grid; place-items: center; background: var(--card-bg); border: 1px solid var(--border); color: var(--brand-blue); }
-    .addon-toggle .at-ico svg { width: 15px; height: 15px; }
-    .addon-toggle .at-text { flex: 1; }
-    .addon-toggle .at-eyebrow { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: var(--brand-blue); margin-bottom: 2px; }
-    .addon-toggle .at-title { display: block; font-size: 14px; font-weight: 700; }
-    .addon-toggle .at-chev { width: 16px; height: 16px; color: var(--text-muted); transition: transform 0.18s ease; flex: none; }
-    .addon-toggle[aria-expanded="true"] .at-chev { transform: rotate(90deg); }
-    .addon-pop { position: absolute; left: 0; right: 0; bottom: calc(100% + 12px); z-index: 5; background: var(--card-bg); border: 1px solid var(--brand-blue); border-radius: var(--card-radius); padding: 16px 18px; box-shadow: 0 18px 48px rgba(0,0,0,0.35); }
-    .addon-pop::after { content: ''; position: absolute; left: 28px; bottom: -8px; width: 14px; height: 14px; background: var(--card-bg); border-right: 1px solid var(--brand-blue); border-bottom: 1px solid var(--brand-blue); transform: rotate(45deg); }
-    .addon-pop[hidden] { display: none; }
-    .addon-pop-h { font-size: 15px; font-weight: 800; margin: 0 0 6px; }
-    .addon-pop p { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0 0 12px; }
-    .addon-pop-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 12px; }
-    .addon-pop-price b { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
-    .addon-pop-price small { font-size: 12px; color: var(--text-muted); font-weight: 600; }
-    .addon-pop-price .pp-lock { margin-left: auto; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--green); background: var(--green-bg); padding: 3px 8px; border-radius: 999px; }
-    .addon-pop-cta { display: block; text-align: center; text-decoration: none; background: var(--brand-blue); color: #FFF; font-weight: 800; font-size: 13.5px; padding: 11px 14px; border-radius: var(--button-radius); }
-    .addon-pop-cta:hover { background: var(--brand-blue-dark); }
-    body[data-theme="edge"] .addon-pop-cta { background: var(--grad-cta); }
-    .addon-pop-x { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: var(--text-muted); font-size: 18px; cursor: pointer; line-height: 1; font-family: inherit; }
+    .tier-addon { position: relative; margin-top: auto; margin-bottom: 14px; }
+    /* Advisor add-on: always visible inside Concierge with its own button (Paul, Sept 14). */
+    /* Concierge+: faint gold panel so it reads as its own thing inside the tile (Paul, Sept 14, option A). */
+    .addon-line { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(180deg, rgba(252,211,77,0.10), rgba(252,211,77,0.04)); border: 1px solid rgba(252,211,77,0.35); display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; line-height: 1.45; }
+    .addon-line b { display: block; font-weight: 800; color: #FCD34D; }
+    .addon-line span { display: block; color: var(--text-muted); }
+    .addon-line a { flex: none; color: #FCD34D; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .addon-line a:hover { text-decoration: underline; }
     .lock-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #86EFAC; background: rgba(34,197,94,0.12); padding: 2px 7px; border-radius: 999px; vertical-align: 1px; }
 
     /* ===== Billing toggle + founding price lock ===== */
@@ -329,7 +238,7 @@
     @media (max-width: 560px) { .bill-row { gap: 12px; } .lock-note { font-size: 13px; } }
 
     .tier-cadence { font-size: 12px; color: var(--text-faint); margin-top: -10px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-    .tier-features { list-style: none; padding: 0; margin: 0 0 22px; flex: 1; }
+    .tier-features { list-style: none; padding: 0; margin: 0 0 22px; }
     .tier-features li {
       padding: 8px 0 8px 26px; position: relative;
       font-size: 14px; color: var(--text);
@@ -344,6 +253,7 @@
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' fill='%23000'/%3E%3C/svg%3E") center/contain no-repeat;
       -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' fill='%23000'/%3E%3C/svg%3E") center/contain no-repeat;
     }
+    .tier-cta { margin-top: auto; }
     .tier-cta {
       display: block; text-align: center;
       padding: 13px 16px; font-size: 15px; font-weight: 700;
@@ -351,34 +261,32 @@
       text-decoration: none; transition: all 0.18s ease;
       font-family: inherit;
     }
-    .tier-cta.primary {
-      background: var(--brand-blue); color: #FFF; border: 1.5px solid var(--brand-blue);
+    /* All three buttons match: muted at rest, the same gradient when the card is hovered (Paul, Sept 14). */
+    .tier-cta.primary, .tier-cta.secondary {
+      background: var(--card-bg-2); color: var(--text); border: 1.5px solid var(--border);
+      background-origin: border-box; transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
-    .tier-cta.primary:hover { background: var(--brand-blue-dark); border-color: var(--brand-blue-dark); }
-    .tier-cta.secondary {
-      background: var(--card-bg); color: var(--brand-blue); border: 1.5px solid var(--brand-blue);
+    .tier-card:hover .tier-cta.primary, .tier-card:hover .tier-cta.secondary,
+    .tier-cta.primary:hover, .tier-cta.secondary:hover {
+      background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat; color: #FFF; border-color: transparent;
+      box-shadow: 0 8px 24px rgba(139,92,246,0.28);
     }
-    .tier-cta.secondary:hover { background: var(--brand-blue); color: #FFF; }
 
     /* Tier value-block + value/cost ratio */
-    .tier-value-block {
-      background: linear-gradient(135deg, var(--hero-grad-start), var(--hero-grad-end));
-      color: #FFF;
-      padding: 16px 18px;
-      border-radius: var(--field-radius);
-      margin: 4px 0 14px;
+    /* Savings figure as a single quiet row, not a window (Paul, Sept 14). */
+    .tier-value {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+      padding: 10px 0; margin: 0 0 14px;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     }
     .tier-value-label {
-      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-      font-weight: 700; opacity: 0.85;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 700; color: var(--text-muted); white-space: nowrap;
     }
     .tier-value-amount {
-      font-size: 28px; font-weight: 800; line-height: 1.1;
-      letter-spacing: -0.02em; margin: 4px 0 2px;
-      font-variant-numeric: tabular-nums;
-    }
-    .tier-value-note {
-      font-size: 12px; opacity: 0.9; line-height: 1.4;
+      font-size: 18px; font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.01em; color: var(--green);
+      font-variant-numeric: tabular-nums; white-space: nowrap;
     }
     .tier-ratio {
       display: flex; justify-content: space-between; align-items: baseline;
@@ -484,23 +392,17 @@
       .teaser-value { font-size: 36px; }
     }
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="theme-bar" role="region" aria-label="Design preview">
-    <span class="theme-bar-label">Design preview</span>
-    <div class="theme-bar-buttons" role="group" aria-label="Pick a theme">
-      <button type="button" class="theme-btn" data-theme="edge"  aria-pressed="false"><span class="swatch"></span>EDGE</button>
-      <button type="button" class="theme-btn" data-theme=""      aria-pressed="false"><span class="swatch"></span>Trust</button>
-      <button type="button" class="theme-btn" data-theme="warm"  aria-pressed="false"><span class="swatch"></span>Warm</button>
-      <button type="button" class="theme-btn" data-theme="fresh" aria-pressed="false"><span class="swatch"></span>Fresh</button>
-      <button type="button" class="theme-btn" data-theme="calm"  aria-pressed="false"><span class="swatch"></span>Calm</button>
-    </div>
+  <div class="topbar">
+    <a class="wordmark" href="quick.html">EDGE</a>
+    <div class="right">Already a member? <a href="login.html">Sign in &rarr;</a></div>
   </div>
-
   <div class="wrap">
     <header>
-      <div class="brand">GH2 EDGE&trade;</div>
-      <h1>You have your number. Now act on it.</h1>
+      <h1>You have your number. <em>Now act on it.</em></h1>
       <p class="sub">Three tiers, each running on the same patent-pending engine. Pick the cadence that fits your life.</p>
     </header>
 
@@ -544,7 +446,7 @@
       <!-- Jae: the \$2,500 Quick Check figure is a placeholder (Paul, Sept 11:
            'this needs to be a number'). Set it to whatever your math supports. -->
       <div class="tier-card" data-tier="Tier 1" data-savings="2500">
-        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle class="ico-fill" cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg></div><div><h3 class="tier-name">Quick Check</h3><p class="tier-tag">Stay informed.</p></div></div>
+        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle class="ico-fill" cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg></div><div><h3 class="tier-name">Quick Check</h3></div></div>
         <div class="tier-price" data-month="9" data-year="89">
           <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$9</span><span class="tp-unit">/ month</span></button>
           <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$89</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
@@ -552,11 +454,7 @@
         <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Jae&rsquo;s Corner weekly + annual rerun</div>
 
-        <div class="tier-value-block">
-          <div class="tier-value-label">Projected savings this year</div>
-          <div class="tier-value-amount">~$2,500</div>
-          <div class="tier-value-note">One avoided tax mistake on a $500K household. One recommendation a year, run on your numbers.</div>
-        </div>
+        <div class="tier-value" title="One avoided tax mistake on a $500K household. One recommendation a year, run on your numbers."><span class="tier-value-label">Savings this year</span><span class="tier-value-amount">~$2,500</span></div>
 
 
         <ul class="tier-features">
@@ -573,7 +471,7 @@
       <!-- GH2 EDGE -->
       <div class="tier-card popular" data-tier="Tier 2" data-savings="10000">
         <span class="tier-badge">Most popular</span>
-        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M15.5 8.5l-2 5-5 2 2-5z" fill="currentColor" fill-opacity="0.35"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2"/></svg></div><div><h3 class="tier-name">Full Plan</h3><p class="tier-tag">Improve Your Number.</p></div></div>
+        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 0 1 14.6-6"/><path d="M20.5 12a8.5 8.5 0 0 1-14.6 6"/><path d="M18 2.8v3.4h-3.4"/><path d="M6 21.2v-3.4h3.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div><div><h3 class="tier-name">Autopilot</h3></div></div>
         <div class="tier-price" data-month="29" data-year="290">
           <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$29</span><span class="tp-unit">/ month</span></button>
           <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$290</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
@@ -581,70 +479,48 @@
         <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
 
-        <div class="tier-value-block">
-          <div class="tier-value-label">Projected savings this year</div>
-          <div class="tier-value-amount">~$10,000</div>
-          <div class="tier-value-note">100 bp of Required IRR saved on a $1M household. Math is public.</div>
-        </div>
+        <div class="tier-value" title="100 bp of Required IRR saved on a $1M household. Math is public."><span class="tier-value-label">Savings this year</span><span class="tier-value-amount">~$10,000</span></div>
 
 
         <ul class="tier-features">
           <li>All 80 retirement strategies ranked for your household</li>
-          <li><strong>Connect your accounts</strong> &mdash; EDGE tracks them automatically, no re-typing</li>
+          <li><strong>Link your accounts</strong> &mdash; EDGE tracks them automatically, no re-typing</li>
           <li><strong>Your dashboard:</strong> projected liquid net worth, the drivers preserving it, your next key action and check-in date</li>
           <li><strong>The heat map</strong> across your seven wealth regimes, and <strong>Ask EDGE</strong> chat grounded in your numbers</li>
           <li>Re-run on every market move, rule change, and life event &mdash; email when the answer changes</li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=Tier%202%20Full%20Plan%20inquiry" class="tier-cta primary">Get Full Plan</a>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%202%20Autopilot%20inquiry" class="tier-cta primary">Get Autopilot</a>
       </div>
 
       <!-- Tier 3 -->
-      <!-- Jae: Concierge "ask Jae any time" is served by Ask EDGE first; the
-           chat handles the bulk and only routes true anomalies to you for a
-           personal reply. Members just see one promise. (Paul, Sept 10) -->
       <div class="tier-card" data-tier="Tier 3" data-savings="30000">
-        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 9V7"/><path d="M10 7h4"/><path d="M2.5 20h19"/></svg></div><div><h3 class="tier-name">Concierge</h3><p class="tier-tag">A person behind your plan.</p></div></div>
+        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 7.5V5.5"/><path d="M10 5.5h4"/><path d="M2.5 18.5h19"/></svg></div><div><h3 class="tier-name">Concierge</h3></div></div>
         <div class="tier-price" data-month="99" data-year="990">
           <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$99</span><span class="tp-unit">/ month</span></button>
           <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$990</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
         </div>
         <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
-        <div class="tier-cadence">Everything in Full Plan, plus a person behind it</div>
+        <div class="tier-cadence">Everything in Autopilot, plus four strategies that reach further</div>
 
-        <div class="tier-value-block">
-          <div class="tier-value-label">Projected savings this year</div>
-          <div class="tier-value-amount">~$30,000</div>
-          <div class="tier-value-note">150 bp on a $2M household, monitored continuously. Itemized as it happens.</div>
-        </div>
+        <div class="tier-value" title="150 bp on a $2M household, monitored continuously. Itemized as it happens."><span class="tier-value-label">Savings this year</span><span class="tier-value-amount">~$30,000</span></div>
 
 
         <ul class="tier-features">
-          <li>Everything in Full Plan</li>
-          <li><strong>Ask a question any time</strong> &mdash; a person answers, not a ticket queue</li>
+          <li>Everything in Autopilot</li>
+          <li><strong>4 proprietary GH2 EDGE strategies the public never sees &mdash; they work your tax bracket, the Medicare surcharge line, and required withdrawals in a single move</strong></li>
           <li><strong>A quarterly review brief</strong> written for your household</li>
-          <li>4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=Tier%203%20Concierge%20inquiry" class="tier-cta secondary">Get Concierge Plan</a>
-
-        <!-- Jae: the $4,000 is a placeholder (Paul, Sept 10) and annual-only by
-             design. The bubble's button goes to your advisory offer — set
-             ADVISOR_URL in the script below to the exact page. -->
         <div class="tier-addon" data-placeholder-price="true">
-          <button type="button" class="addon-toggle" aria-expanded="false" aria-controls="advisorPop">
-            <span class="at-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
-            <span class="at-text"><span class="at-eyebrow">Within Concierge</span><span class="at-title">Want Jae as your personal advisor?</span></span>
-            <svg class="at-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-          </button>
-          <div class="addon-pop" id="advisorPop" hidden role="dialog" aria-label="Jae as your personal advisor">
-            <button type="button" class="addon-pop-x" aria-label="Close">&times;</button>
-            <div class="addon-pop-h">Jae, personally, all year</div>
-            <p>Not just the engine &mdash; Jae works your plan himself and stays on it as your life changes. Annual only.</p>
-            <div class="addon-pop-price"><b>$4,000</b><small>/ year</small><span class="pp-lock">price locked</span></div>
-            <a class="addon-pop-cta" data-advisor-link href="https://jaeoh.com/" target="_blank" rel="noopener">See Jae&rsquo;s advisory offer &nearr;</a>
+          <div class="addon-line">
+            <div><b>Concierge+</b><span>Add a dedicated, full-time advisor to your plan.</span></div>
+            <a data-advisor-link href="https://jaeoh.com/" target="_blank" rel="noopener">See details &rarr;</a>
           </div>
+          <!-- Jae: price hidden until you set it (Paul, Sept 14; $4,000 was the Sept 10 placeholder), annual-only by
+               design. "See details" goes to your advisory offer — set ADVISOR_URL in the script below to the exact page. -->
         </div>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%203%20Concierge%20inquiry" class="tier-cta secondary">Get Concierge</a>
       </div>
     </div>
 
@@ -714,48 +590,13 @@
     </div>
 
     <footer>
-      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Quick Check, 80+ for Full Plan, 80+ plus proprietary for Concierge), how often the plan is rerun (annual for Quick Check, continuous for Full Plan and Concierge), whether a person is behind the plan (Concierge), and whether the firm gets the Strategy Builder and full grid access.</p>
+      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Quick Check, 80+ for Autopilot, 80+ plus proprietary for Concierge), how often the plan is rerun (annual for Quick Check, continuous for Autopilot and Concierge), whether a person is behind the plan (Concierge), and whether the firm gets the Strategy Builder and full grid access.</p>
       <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
     </footer>
   </div>
 
   <script>
     (function () {
-      // ===== Design-preview bar: internal only =====
-      // Off for everyone. ?design=1 turns it on and remembers it for this
-      // browser; ?design=0 turns it back off. Customers never see the menu.
-      try {
-        var dq = new URLSearchParams(location.search).get('design');
-        if (dq === '1') localStorage.setItem('gh2_design_mode', '1');
-        if (dq === '0') localStorage.removeItem('gh2_design_mode');
-        if (localStorage.getItem('gh2_design_mode') === '1') {
-          document.body.classList.add('design-mode');
-        }
-      } catch (e) { /* private mode: bar stays hidden, which is the safe default */ }
-
-      // ===== Theme selector (shared with ballpark.html via localStorage) =====
-      var THEME_KEY = 'gh2_ballpark_theme';
-      // EDGE (our member UI) is the default; a stored choice from the design bar wins.
-      var savedTheme = 'edge';
-      try { var storedTheme = localStorage.getItem(THEME_KEY); if (storedTheme !== null) savedTheme = storedTheme; } catch (e) {}
-      if (savedTheme && ['edge', 'warm', 'fresh', 'calm'].indexOf(savedTheme) !== -1) {
-        document.body.setAttribute('data-theme', savedTheme);
-      }
-      var themeBtns = document.querySelectorAll('.theme-btn');
-      themeBtns.forEach(function (btn) {
-        var t = btn.getAttribute('data-theme') || '';
-        btn.setAttribute('aria-pressed', t === savedTheme ? 'true' : 'false');
-        btn.addEventListener('click', function () {
-          var newTheme = btn.getAttribute('data-theme') || '';
-          if (newTheme) document.body.setAttribute('data-theme', newTheme);
-          else document.body.removeAttribute('data-theme');
-          try { localStorage.setItem(THEME_KEY, newTheme); } catch (e) {}
-          themeBtns.forEach(function (b) {
-            b.setAttribute('aria-pressed', (b.getAttribute('data-theme') || '') === newTheme ? 'true' : 'false');
-          });
-        });
-      });
-
       // ===== Restore ballpark result from sessionStorage =====
       var RESULT_KEY = 'gh2_ballpark_last_result';
       var raw = null;
@@ -848,17 +689,11 @@
     window.GH2_BILL = function () { return BILL; };
     window.GH2_APPLY = apply;
 
-    // Advisor add-on bubble. Jae: point ADVISOR_URL at your advisory offer page.
+    // Advisor add-on. Jae: point ADVISOR_URL at your advisory offer page.
     var ADVISOR_URL = 'https://jaeoh.com/';
     var wrap = document.querySelector('.tier-addon');
     if (wrap) {
-      var abtn = wrap.querySelector('.addon-toggle'), apop = wrap.querySelector('.addon-pop'), ax = wrap.querySelector('.addon-pop-x');
       var alink = wrap.querySelector('[data-advisor-link]'); if (alink) alink.href = ADVISOR_URL;
-      var setOpen = function (o) { apop.hidden = !o; abtn.setAttribute('aria-expanded', o ? 'true' : 'false'); };
-      abtn.addEventListener('click', function () { setOpen(apop.hidden); });
-      ax.addEventListener('click', function () { setOpen(false); });
-      document.addEventListener('click', function (e) { if (!apop.hidden && !wrap.contains(e.target)) setOpen(false); });
-      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
     }
   })();
   </script>
