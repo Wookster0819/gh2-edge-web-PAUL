@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>EDGE — Profile</title>
+  <!-- Member profile: who you are, the numbers EDGE runs on, alerts and
+       settings. Built Sept 14 so "Profile", "Update my info" and "Alerts &
+       settings" have a destination. Jae: the three endpoints this needs are
+       flagged inline (GET/POST /api/profile, POST /api/settings, billing URL). -->
+  <style>
+    :root {
+      --bg: #0A0E1A;
+      --bg-soft: #0E1424;
+      --card-bg: #11172A;
+      --card-bg-2: #161D33;
+      --border: #1F2940;
+      --border-soft: #18213B;
+      --text: #F5F7FA;
+      --text-dim: #B6BFD0;
+      --text-muted: #8693AC;
+      --text-faint: #5A6680;
+      --accent-purple: #8B5CF6;
+      --accent-purple-soft: rgba(139,92,246,0.14);
+      --accent-blue: #3B82F6;
+      --accent-blue-soft: rgba(59,130,246,0.14);
+      --accent-green: #22C55E;
+      --accent-green-soft: rgba(34,197,94,0.12);
+      --accent-amber: #F97316;
+      --accent-amber-soft: rgba(249,115,22,0.12);
+      --accent-red: #FF3B30;
+      --accent-red-soft: rgba(255,59,48,0.12);
+      --accent-money: #10B981;
+      --accent-money-soft: rgba(16,185,129,0.14);
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "SF Pro Text", Roboto, Inter, sans-serif;
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    a { color: inherit; }
+
+    /* ===== Top bar ===== */
+    .topbar {
+      display: flex; align-items: center; gap: 20px;
+      max-width: 1280px; margin: 0 auto;
+      padding: 20px 28px 0;
+    }
+    .wordmark { font-size: 17px; font-weight: 800; letter-spacing: 0.3em; }
+    /* Tier indicator — a label, deliberately NOT button-shaped */
+    .tier-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-left: 18px; padding-left: 18px; border-left: 1px solid var(--border);
+      font-size: 12.5px; white-space: nowrap; color: var(--text);
+      font-weight: 700; letter-spacing: 0.02em;
+    }
+    .tier-label .tier-k { color: var(--text-faint); font-weight: 500; letter-spacing: 0; }
+    .tier-label .tier-dot {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent-purple);
+      box-shadow: 0 0 6px rgba(139,92,246,0.7);
+      animation: tierPulse 2.6s ease-in-out infinite; /* slow "always on" breathing */
+    }
+    @keyframes tierPulse {
+      0%, 100% { box-shadow: 0 0 4px rgba(139,92,246,0.45), 0 0 0 0 rgba(139,92,246,0.35); opacity: 0.85; }
+      50%      { box-shadow: 0 0 10px rgba(139,92,246,0.95), 0 0 0 5px rgba(139,92,246,0.10); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { .tier-label .tier-dot { animation: none; } }
+
+    /* Chart focal points breathe on the same 2.6s cadence as the tier dot,
+       so the eye lands on the latest value and the crossover first. */
+    #heroChart svg { overflow: visible; }
+    .ch-halo {
+      transform-box: fill-box; transform-origin: center;
+      animation: haloPulse 2.6s ease-in-out infinite;
+    }
+    @keyframes haloPulse {
+      0%, 100% { transform: scale(1);   opacity: 0.55; }
+      50%      { transform: scale(1.7); opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) { .ch-halo { animation: none; } }
+    .nav { display: flex; align-items: center; gap: 4px; margin-left: 6px; }
+    .nav a {
+      font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; padding: 7px 12px; border-radius: 8px;
+    }
+    .nav a:hover { color: var(--text); background: var(--card-bg-2); }
+    .nav a.active { color: var(--text); background: var(--accent-purple-soft); }
+    .asof {
+      margin-left: auto;
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; color: var(--text-muted);
+      background: var(--card-bg); border: 1px solid var(--border);
+      padding: 7px 12px; border-radius: 9px; white-space: nowrap;
+    }
+    .asof svg { width: 13px; height: 13px; color: var(--text-faint); }
+    .signout { font-size: 12.5px; font-weight: 600; color: var(--text-muted); padding: 7px 10px; border-radius: 8px; white-space: nowrap; }
+    .signout:hover { color: var(--text); background: var(--card-bg-2); }
+
+
+    /* ===== Page ===== */
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 22px 28px 96px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: var(--shadow-card);
+      padding: 22px 24px;
+    }
+    .card-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--text-muted);
+    }
+    .signout { font-size: 12.5px; font-weight: 600; color: var(--text-muted); padding: 7px 10px; border-radius: 8px; white-space: nowrap; text-decoration: none; }
+    .signout:hover { color: var(--text); background: var(--card-bg-2); }
+    .profile-btn { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 700; color: var(--text); background: var(--card-bg); border: 1px solid var(--border); padding: 7px 12px; border-radius: 9px; text-decoration: none; white-space: nowrap; }
+    .profile-btn svg { width: 14px; height: 14px; color: var(--accent-purple); }
+    .profile-btn:hover, .profile-btn.active { border-color: var(--accent-purple); background: var(--accent-purple-soft); }
+    /* Icon-only top-bar buttons: bell = alerts, gear = settings; the label lives in the tooltip for now (Paul, Sept 14). */
+    .icon-btn { display: inline-grid; place-items: center; width: 32px; height: 32px; color: var(--text-muted); background: var(--card-bg); border: 1px solid var(--border); border-radius: 9px; text-decoration: none; flex: none; }
+    .icon-btn svg { width: 15px; height: 15px; }
+    .icon-btn:hover { border-color: var(--accent-purple); background: var(--accent-purple-soft); color: var(--text); }
+    /* "As of" chip: one text run so the flex gap doesn't read as a double space; hide the empty name slot. */
+    .asof { gap: 6px; padding: 6px 10px; }
+    #whoAmI:empty { display: none; }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 22px 28px 96px; display: grid; grid-template-columns: 1fr 1.4fr; gap: 22px; align-items: start; }
+    .stack { display: grid; gap: 22px; }
+    h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 4px; }
+    .sub { color: var(--text-muted); font-size: 13.5px; margin: 0 0 18px; }
+    .who { display: flex; align-items: center; gap: 14px; margin: 14px 0 18px; }
+    .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--accent-purple-soft); color: var(--accent-purple); display: grid; place-items: center; font-weight: 800; font-size: 17px; }
+    .who .n { font-weight: 800; font-size: 15px; }
+    .who .e { color: var(--text-muted); font-size: 13px; }
+    .kv { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--border-soft); font-size: 13.5px; }
+    .kv:first-of-type { border-top: 0; }
+    .kv .k { color: var(--text-muted); }
+    .kv .v { font-weight: 700; }
+    .kv a { color: #C4B5FD; font-weight: 700; text-decoration: none; font-size: 13px; }
+    .kv a:hover { text-decoration: underline; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; margin-top: 14px; }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: 12.5px; font-weight: 600; color: var(--text-dim); }
+    .field input, .field select { background: var(--bg-soft); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 10px 12px; font: inherit; font-size: 14px; }
+    .field input:focus, .field select:focus { outline: none; border-color: var(--accent-purple); box-shadow: 0 0 0 3px var(--accent-purple-soft); }
+    .field .hint { font-size: 11.5px; color: var(--text-faint); }
+    .seg { display: inline-flex; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 10px; padding: 3px; }
+    .seg button { background: transparent; border: 0; color: var(--text-muted); font: inherit; font-size: 13px; font-weight: 600; padding: 7px 12px; border-radius: 7px; cursor: pointer; }
+    .seg button[aria-pressed="true"] { background: var(--accent-purple-soft); color: #DDD6FE; }
+    .actions { display: flex; align-items: center; gap: 14px; margin-top: 20px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; font-size: 14px; font-weight: 700; border: 0; cursor: pointer; font-family: inherit; text-decoration: none; }
+    .btn.primary { background: var(--grad-cta); color: #fff; box-shadow: 0 8px 24px rgba(139,92,246,0.28); }
+    .btn.ghost { background: var(--card-bg-2); color: var(--text); border: 1px solid var(--border); }
+    .note { font-size: 12.5px; color: var(--text-muted); }
+    .toast { display: none; margin-top: 12px; padding: 10px 14px; border-radius: 10px; background: var(--accent-green-soft); border: 1px solid rgba(34,197,94,0.35); color: #86EFAC; font-size: 13px; font-weight: 600; }
+    .toast.on { display: block; }
+    .toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 13px 0; border-top: 1px solid var(--border-soft); }
+    .toggle-row:first-of-type { border-top: 0; }
+    .toggle-row .t { font-size: 14px; font-weight: 600; }
+    .toggle-row .s { font-size: 12.5px; color: var(--text-muted); margin-top: 2px; }
+    .sw { position: relative; width: 42px; height: 24px; border-radius: 999px; background: var(--border); border: 0; cursor: pointer; flex: none; transition: background .15s; }
+    .sw::after { content: ''; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .15s; }
+    .sw[aria-checked="true"] { background: var(--accent-purple); }
+    .sw[aria-checked="true"]::after { transform: translateX(18px); }
+    .tag { display: inline-block; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(251,191,36,0.14); color: #FCD34D; margin-left: 8px; vertical-align: 2px; }
+    @media (max-width: 980px) { .wrap { grid-template-columns: 1fr; } .topbar { flex-wrap: wrap; row-gap: 10px; } }
+    @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } .topbar { padding: 16px 16px 0; } .wrap { padding: 16px 16px 80px; } }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="wordmark">EDGE</div>
+    <span class="tier-label"><span class="tier-k">Your plan</span><span class="tier-dot"></span><span id="userTier">Autopilot</span></span>
+    <nav class="nav" aria-label="Member pages">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="heatmap.html">Heat Map</a>
+    </nav>
+    <div class="asof">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>As of <span id="asofDate">&mdash;</span></span>
+    </div>
+    <a class="icon-btn" href="profile.html#settings" title="Alerts" aria-label="Alerts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></a>
+    <a class="icon-btn" href="profile.html#settings" title="Settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></a>
+    <a class="profile-btn active" href="profile.html" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Profile</a>
+    <a class="signout" href="login.html?signedout=1" data-signout>Sign out</a>
+  </div>
+
+  <main class="wrap">
+    <div class="stack">
+      <section class="card" aria-label="Your profile">
+        <div class="card-label">Your profile</div>
+        <div class="who"><div class="avatar" id="avatar">P</div><div><div class="n" id="whoName">Preview member</div><div class="e" id="whoEmail">preview@gh2edge.com</div></div></div>
+        <div class="kv"><span class="k">Plan</span><span><span class="v" id="planName">Autopilot</span> &nbsp;<a href="pricing.html">Change plan &rarr;</a></span></div>
+        <div class="kv"><span class="k">Billing</span><span><span class="v">$290 / year</span> &nbsp;<a href="pricing.html" id="billingLink">Manage &rarr;</a></span></div>
+        <div class="kv"><span class="k">Member since</span><span class="v" id="memberSince">2026</span></div>
+        <div class="kv"><span class="k">Password</span><a href="login.html#forgot">Change &rarr;</a></div>
+        <div class="kv" id="planPdfRow"><span class="k">My plan</span><a href="#" id="planPdf" title="Jae: server-side PDF of the projection and scheduled actions">Download PDF &rarr;</a></div>
+      </section>
+
+      <section class="card" id="settings" aria-label="Alerts and settings">
+        <div class="card-label">Alerts &amp; settings</div>
+        <div style="margin-top:8px">
+          <div class="toggle-row"><div><div class="t">Email me when my answer changes</div><div class="s">Only when EDGE’s re-run moves your number or your next action.</div></div><button type="button" class="sw" role="switch" aria-checked="true" aria-label="Email when the answer changes"></button></div>
+          <div class="toggle-row"><div><div class="t">Jae’s Corner, weekly</div><div class="s">The newsletter, every week.</div></div><button type="button" class="sw" role="switch" aria-checked="true" aria-label="Weekly newsletter"></button></div>
+          <div class="toggle-row"><div><div class="t">Quarterly review brief<span class="tag">Concierge</span></div><div class="s">Written for your household, four times a year.</div></div><button type="button" class="sw" role="switch" aria-checked="false" aria-label="Quarterly brief"></button></div>
+        </div>
+        <div class="actions"><a class="btn ghost" href="login.html?signedout=1">Sign out</a><span class="note">Settings save on the spot in preview. Jae: POST /api/settings.</span></div>
+      </section>
+    </div>
+
+    <section class="card" id="info" aria-label="Your information">
+      <div class="card-label">Your information</div>
+      <h1>The numbers EDGE runs on</h1>
+      <p class="sub">Change anything and EDGE re-runs your plan. Retired, moved, sold a home, new grandchild &mdash; this is where you tell it.</p>
+      <div class="grid2">
+        <div class="field"><label for="age">Your current age</label><input id="age" type="number" min="18" max="100" /></div>
+        <div class="field"><label for="retAge">Your retirement age</label><input id="retAge" type="number" min="18" max="100" /><span class="hint">The age you retired, if already retired.</span></div>
+        <div class="field"><label>Filing status</label><div class="seg" id="filing"><button type="button" data-v="single" aria-pressed="true">Single</button><button type="button" data-v="mfj" aria-pressed="false">Married</button></div></div>
+        <div class="field"><label for="state">State of residence</label><select id="state"></select></div>
+        <div class="field"><label for="salary">Current annual salary</label><input id="salary" type="number" min="0" step="1000" /></div>
+        <div class="field"><label for="savings">Current retirement savings</label><input id="savings" type="number" min="0" step="1000" /><span class="hint">All accounts combined.</span></div>
+        <div class="field"><label for="contrib">Contribution rate (%)</label><input id="contrib" type="number" min="0" max="50" step="0.5" /></div>
+        <div class="field"><label for="spend">Spending in retirement</label><select id="spend"><option value="struggling">Essentials</option><option value="average">Secure</option><option value="comfortable">Comfortable</option><option value="affluent">Premium</option></select></div>
+        <div class="field"><label for="planAge">Plan through age</label><input id="planAge" type="number" min="80" max="110" /></div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn primary" id="saveBtn">Save &amp; re-run my plan &rarr;</button>
+        <span class="note">Jae: POST /api/profile, then a plan re-run; the dashboard reads the new snapshot.</span>
+      </div>
+      <div class="toast" id="toast">Saved. EDGE will re-run your plan and update your dashboard.</div>
+    </section>
+  </main>
+
+  <script>
+  (function () {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var now = new Date(); document.getElementById('asofDate').textContent = months[now.getMonth()] + ' ' + now.getDate() + ', ' + now.getFullYear();
+    var TIER_NAME = { 1: 'Quick Check', 2: 'Autopilot', 3: 'Concierge' };
+    var PRICE = { 1: '$89 / year', 2: '$290 / year', 3: '$990 / year' };
+    var tier = parseInt(new URLSearchParams(location.search).get('tier') || (function () { try { return sessionStorage.getItem('gh2_preview_tier'); } catch (e) { return null; } })() || '2', 10); if (!(tier >= 1 && tier <= 3)) tier = 2;
+    try { sessionStorage.setItem('gh2_preview_tier', String(tier)); } catch (e) {}
+    Array.prototype.forEach.call(document.querySelectorAll('.nav a[href^="dashboard.html"], .nav a[href^="heatmap.html"], .icon-btn'), function (a) { var h = a.getAttribute('href').split('#'); a.href = h[0] + '?tier=' + tier + (h[1] ? '#' + h[1] : ''); });
+    document.getElementById('userTier').textContent = TIER_NAME[tier];
+    document.getElementById('planName').textContent = TIER_NAME[tier];
+    if (tier === 1) { var pr = document.getElementById('planPdfRow'); if (pr) pr.style.display = 'none'; }
+    document.querySelector('.kv .v + a') && (document.querySelectorAll('.kv .v')[1].textContent = PRICE[tier]);
+    Array.prototype.forEach.call(document.querySelectorAll('.nav a, .signout'), function (a) { if (/dashboard|heatmap/.test(a.getAttribute('href'))) a.href += '?tier=' + tier; });
+
+    // Who: the preview session from sign-in, else a placeholder. Jae: GET /api/profile.
+    try { var sess = JSON.parse(sessionStorage.getItem('gh2_demo_session') || 'null'); if (sess && sess.email) { document.getElementById('whoEmail').textContent = sess.email; document.getElementById('avatar').textContent = sess.email[0].toUpperCase(); } } catch (e) {}
+
+    // States
+    var STATES = ['AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+    var sel = document.getElementById('state'); STATES.forEach(function (s) { var o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o); });
+
+    // Prefill from the last ballpark run in this tab, else a sample household. Jae: GET /api/profile.
+    var inp = null; try { var r = JSON.parse(sessionStorage.getItem('gh2_ballpark_last_result') || 'null'); inp = r && r.inputs; } catch (e) {}
+    var d = inp || { age: 55, retirementAge: 67, filingStatus: 'single', state: 'FL', currentSalary: 100000, currentSavings: 500000, contributionRate: 0.10, spendingProfile: 'comfortable', planThroughAge: 100 };
+    var set = function (id, v) { var el = document.getElementById(id); if (el && v != null && v !== '') el.value = v; };
+    set('age', d.age); set('retAge', d.retirementAge); set('state', d.state); set('salary', d.currentSalary); set('savings', d.currentSavings);
+    set('contrib', d.contributionRate != null ? Math.round(d.contributionRate * 100 * 10) / 10 : ''); set('spend', d.spendingProfile === 'custom' ? 'comfortable' : d.spendingProfile); set('planAge', d.planThroughAge || 100);
+    var filing = d.filingStatus || 'single';
+    Array.prototype.forEach.call(document.querySelectorAll('#filing button'), function (b) {
+      b.setAttribute('aria-pressed', b.dataset.v === filing ? 'true' : 'false');
+      b.addEventListener('click', function () { filing = b.dataset.v; Array.prototype.forEach.call(document.querySelectorAll('#filing button'), function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); });
+    });
+
+    // Save: preview writes back to the same sessionStorage record ballpark uses, so the walk stays consistent.
+    document.getElementById('saveBtn').addEventListener('click', function () {
+      var num = function (id) { var v = parseFloat(document.getElementById(id).value); return isFinite(v) ? v : null; };
+      var out = { age: num('age'), retirementAge: num('retAge'), filingStatus: filing, state: sel.value, currentSalary: num('salary'), currentSavings: num('savings'), contributionRate: (num('contrib') || 0) / 100, spendingProfile: document.getElementById('spend').value, planThroughAge: num('planAge') };
+      try { var r = JSON.parse(sessionStorage.getItem('gh2_ballpark_last_result') || '{}'); r.inputs = out; r.savedAt = Date.now(); sessionStorage.setItem('gh2_ballpark_last_result', JSON.stringify(r)); } catch (e) {}
+      var t = document.getElementById('toast'); t.classList.add('on'); setTimeout(function () { t.classList.remove('on'); }, 4000);
+    });
+
+    // Switches (preview: local only)
+    Array.prototype.forEach.call(document.querySelectorAll('.sw'), function (sw) { sw.addEventListener('click', function () { sw.setAttribute('aria-checked', sw.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); }); });
+    // Quick Check members don't have the member pages; keep the nav honest.
+    if (tier === 1) Array.prototype.forEach.call(document.querySelectorAll('.nav a'), function (a) { a.href = 'pricing.html'; a.title = 'Included with Autopilot'; });
+  })();
+  </script>
+</body>
+</html>
