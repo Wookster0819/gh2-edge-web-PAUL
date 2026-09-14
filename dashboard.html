@@ -311,13 +311,13 @@
     }
     .driver-ico svg { width: 16px; height: 16px; }
     .driver-name { font-size: 13px; font-weight: 600; color: var(--text-dim); }
-    .driver-amt { font-size: 21px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+    .driver-amt { font-size: 21px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; letter-spacing: -0.01em; display: flex; align-items: baseline; gap: 6px; white-space: nowrap; }
     .driver-amt.in { color: var(--accent-money); }
     .driver-amt .dir { font-size: 15px; font-weight: 700; opacity: 0.8; }
     .driver-amt.out .dir { color: var(--text-muted); }
-    .driver-amt .dir-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-left: 2px; white-space: nowrap; }
-    .driver-amt.in .dir-lbl { color: var(--accent-money); opacity: 0.8; }
-    .driver-share { font-size: 11.5px; color: var(--text-muted); }
+    .dir-lbl { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); margin-top: -4px; }
+    .dir-lbl.in { color: var(--accent-money); opacity: 0.8; }
+    .driver-share { font-size: 11.5px; color: var(--text-muted); margin-top: auto; }
     .driver-bar { height: 4px; border-radius: 4px; background: var(--border-soft); overflow: hidden; }
     .driver-bar i { display: block; height: 100%; border-radius: 4px; background: var(--accent-purple); }
 
@@ -1182,8 +1182,10 @@
         drHtml += '<div class="driver">' +
           '<div class="driver-top"><span class="driver-ico">' + driverIcon(d.name) + '</span>' +
           '<span class="driver-name">' + d.name + '</span></div>' +
-          '<div class="driver-amt ' + dir + '"><span class="dir" aria-hidden="true">' + (dir === 'in' ? '&uarr;' : '&darr;') + '</span>' + fmt$(d.amount) +
-          '<span class="dir-lbl">' + (dir === 'in' ? 'money in' : 'money out') + '</span></div>' +
+          // Label on its own line under the amount, so every card stacks the same
+          // way no matter how wide the number is (Paul, Sept 14).
+          '<div class="driver-amt ' + dir + '"><span class="dir" aria-hidden="true">' + (dir === 'in' ? '&uarr;' : '&darr;') + '</span>' + fmt$(d.amount) + '</div>' +
+          '<div class="dir-lbl ' + dir + '">' + (dir === 'in' ? 'money in' : 'money out') + '</div>' +
           '<div class="driver-share">' + driverCaption + '</div>' +
           // The share bar (each flow vs. the largest) is dropped: nothing on the
           // card explained it, so it read as progress toward something (Paul, Sept 14).
