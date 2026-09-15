@@ -516,8 +516,11 @@
     .locked { position: relative; overflow: hidden; }
     /* Quick Check: heat-map rows keep their dot and colour; titles and subs blur (Paul, Sept 14). */
     .tier-blur .hot-title, .tier-blur .hot-sub { filter: blur(5px); user-select: none; }
-    .tier-blur .feed .t, .tier-blur .feed .s, .tier-blur .feed .amt, .tier-blur .ledger .big,
-    .tier-blur .rank .name, .tier-blur .rank .imp { filter: blur(5px); user-select: none; }
+    .tier-note { display: flex; align-items: flex-start; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-soft); font-size: 12.5px; line-height: 1.5; color: var(--text-muted); }
+    .tier-note .lk { flex: none; display: inline-grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--card-bg-2); border: 1px solid var(--border); color: var(--accent-purple); margin-top: 1px; }
+    .tier-note .lk svg { width: 11px; height: 11px; }
+    .tier-note a { color: var(--accent-purple); font-weight: 700; text-decoration: none; }
+    .tier-note a:hover { text-decoration: underline; }
     .tier-tag { margin-left: 10px; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-purple); background: var(--accent-purple-soft); border: 1px solid rgba(139,92,246,0.35); padding: 2px 8px; border-radius: 999px; text-decoration: none; vertical-align: middle; }
     .tier-tag:hover { background: rgba(139,92,246,0.25); }
     .locked .veil { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; background: linear-gradient(180deg, rgba(10,14,26,0.35), rgba(10,14,26,0.85)); border-radius: 16px; }
@@ -1316,16 +1319,10 @@
         });
         document.getElementById('strategiesCard').innerHTML = rk + '</tbody></table><a class="foot-link" href="#strategies">See all 80 strategies \u2192</a>';
         if (TIER === 1) {
-          // Quick Check pays too: no veil. The ranked strategies are fully open (the four Concierge
-          // proprietary rows blur for every tier below Concierge, as before). On the change feed the
-          // dates and chips stay readable; the specifics blur, because the feed is what automatic
-          // re-runs produce (Paul, Sept 14).
-          ['changedCard'].forEach(function (id) {
-            var card = document.getElementById(id); if (!card) return;
-            card.classList.add('tier-blur');
-            var lbl = card.querySelector('.card-label');
-            if (lbl) lbl.insertAdjacentHTML('beforeend', '<a class="tier-tag" href="pricing.html" title="Autopilot re-runs your plan and ranks all 80 strategies">Autopilot &rarr;</a>');
-          });
+          // Quick Check (Paul, Sept 14): nothing on this card blurs. The feed only fills when the
+          // member updates their info and re-runs, so say that, and say Autopilot does it for them.
+          var cc = document.getElementById('changedCard');
+          if (cc) cc.insertAdjacentHTML('beforeend', '<div class="tier-note"><span class="lk">' + ICO.lock + '</span><div>On Quick Check this list grows when you <a href="profile.html?tier=1#info">update your info</a> and re-run. <a href="pricing.html">Autopilot</a> re-runs your plan for you on every market move, rule change, and life event.</div></div>');
         }
       }
 

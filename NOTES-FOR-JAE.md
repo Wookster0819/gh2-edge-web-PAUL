@@ -212,7 +212,9 @@ map is fully open: every tile shows its colour and its status (AT RISK / NEEDS
 ATTENTION / ON TRACK), and the numbers and labels on the tile are blurred, with
 one line under the header pointing at Autopilot. The dashboard's attention card
 works the same way (dots and colours visible, words blurred). The change feed
-keeps its dates and chips and blurs the specifics; nothing is veiled. Tier bullets on pricing.html and results.html say the
+is fully open with a note that on Quick Check it grows only when the member
+updates their info and re-runs, and that Autopilot does that for them.
+Nothing is veiled. Tier bullets on pricing.html and results.html say the
 same thing. Engine side: Quick Check members will need the profile endpoint
 (`POST /api/profile` + a re-run) but never a connector.
 
