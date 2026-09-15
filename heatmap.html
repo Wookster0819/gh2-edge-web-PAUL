@@ -348,6 +348,20 @@
     .hm-head-simple .hm-sub { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
     .hm-head-simple .lg { display: inline-flex; align-items: center; gap: 6px; margin-left: 12px; color: var(--text-dim); font-size: 13px; white-space: nowrap; }
     .hm-head-simple .lg .legend-dot { width: 8px; height: 8px; }
+    /* Compact header on phones and tablets (Paul, Sept 14): wordmark + bell/gear/profile/sign-out
+       on row one, Dashboard / Heat Map + the as-of date on row two. Tier label lives in the pages. */
+    @media (max-width: 900px) {
+      .topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 6px; padding: 12px 16px 0; }
+      .topbar .wordmark { order: 0; margin-right: auto; }
+      .topbar .tier-label { display: none; }
+      .topbar .icon-btn { order: 1; width: 34px; height: 34px; }
+      .topbar .profile-btn { order: 2; font-size: 0; gap: 0; padding: 0; width: 34px; height: 34px; display: inline-grid; place-items: center; }
+      .topbar .profile-btn svg { width: 15px; height: 15px; }
+      .topbar .signout { order: 3; padding: 7px 8px; }
+      .topbar::after { content: ''; order: 4; flex-basis: 100%; height: 0; }
+      .topbar .nav { order: 5; margin-left: 0; }
+      .topbar .asof { order: 6; margin-left: auto; }
+    }
   </style>
 </head>
 <body>

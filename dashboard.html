@@ -564,8 +564,22 @@
     .member-extras .card { margin: 0; }
     @media (max-width: 980px) { .member-extras { grid-template-columns: 1fr; } .g-4 { grid-template-columns: repeat(2, 1fr); } .g-1-1, .g-3 { grid-template-columns: 1fr; } }
     @media (max-width: 720px) { .feed .item { grid-template-columns: 1fr; gap: 6px; } .rank .st { display: none; } .util { padding: 10px 18px 0; } }
-    @media (max-width: 720px) { .mockbar { flex-wrap: wrap; row-gap: 8px; padding: 8px 16px; } .mockbar .seg a { padding: 5px 10px; white-space: nowrap; } .mockbar > span:last-child { margin-left: 0; flex-basis: 100%; } }
+    @media (max-width: 900px) { .mockbar { flex-wrap: wrap; row-gap: 8px; padding: 8px 16px; } .mockbar .seg a { padding: 5px 10px; white-space: nowrap; } .mockbar > span:last-child { margin-left: 0; flex-basis: 100%; } }
     @media (max-width: 480px) { .g-4 { grid-template-columns: 1fr; } }
+    /* Compact header on phones and tablets (Paul, Sept 14): wordmark + bell/gear/profile/sign-out
+       on row one, Dashboard / Heat Map + the as-of date on row two. Tier label lives in the pages. */
+    @media (max-width: 900px) {
+      .topbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 6px; padding: 12px 16px 0; }
+      .topbar .wordmark { order: 0; margin-right: auto; }
+      .topbar .tier-label { display: none; }
+      .topbar .icon-btn { order: 1; width: 34px; height: 34px; }
+      .topbar .profile-btn { order: 2; font-size: 0; gap: 0; padding: 0; width: 34px; height: 34px; display: inline-grid; place-items: center; }
+      .topbar .profile-btn svg { width: 15px; height: 15px; }
+      .topbar .signout { order: 3; padding: 7px 8px; }
+      .topbar::after { content: ''; order: 4; flex-basis: 100%; height: 0; }
+      .topbar .nav { order: 5; margin-left: 0; }
+      .topbar .asof { order: 6; margin-left: auto; }
+    }
   </style>
 </head>
 <body>
