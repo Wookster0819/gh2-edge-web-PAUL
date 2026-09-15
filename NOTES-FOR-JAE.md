@@ -213,9 +213,12 @@ profile alerts).
 
 The sell is the Net Outcome Trend. On Quick Check the trend card shows the
 member's own projection, then an "Autopilot — same household, re-run for you
-automatically" block with the three horizons at Autopilot's efficacy. Send
-`comparison.tiers.autopilot.outcomes` (same shape as `outcomes`); until you
-do, the front-end scales the Quick Check rows by 1.45 as a sample. See the
+automatically" block with the three horizons at Autopilot's efficacy. Autopilot
+members get the same thing one tier up: "Concierge — same household, plus the
+four proprietary strategies." Send `comparison.tiers.autopilot.outcomes` and
+`comparison.tiers.concierge.outcomes` (same shape as `outcomes`); until you
+do, the front-end scales the member's own rows as a sample (×1.45 for
+Autopilot, ×1.25 for Concierge). See the
 IMPORTANT note in section 0: the projection itself must be computed per tier.
 The trend card's upgrade hook is now tier-aware: Quick Check sees the
 Autopilot tease, Autopilot sees the long-term-care hook for Concierge, and

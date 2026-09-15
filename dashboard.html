@@ -160,7 +160,7 @@
     .trend-row .v.pos { color: #4ADE80; }
     .ap-tease { margin-top: 12px; padding: 10px 14px 4px; border-radius: 12px; background: var(--accent-purple-soft); border: 1px solid rgba(139,92,246,0.35); }
     .ap-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
-    .ap-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: var(--accent-purple); padding: 2px 8px; border-radius: 999px; }
+    .ap-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: var(--accent-purple); padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
     .ap-tease .trend-row { border-color: rgba(139,92,246,0.25); }
     .ap-tease .trend-row .v.ap { color: #C4B5FD; }
     .trend-legend { display: flex; flex-wrap: wrap; gap: 5px 18px; margin-top: 8px; font-size: 12px; color: var(--text-muted); align-items: center; }
@@ -1172,23 +1172,27 @@
           }
           var upBtn = tw.parentElement.querySelector('.tw-upgrade');
           var safeMsg = msg ? msg.replace(/</g, '&lt;') : '';
-          if (TIER === 1) {
-            // Quick Check (Paul, Sept 14): the projection they see is the manual-tier one. Show what
-            // the same household does on Autopilot, as the reason to upgrade.
-            // Jae: send comparison.tiers.autopilot.outcomes (same shape as outcomes) computed with
-            // Autopilot's efficacy. Until then the tease scales the Quick Check rows (sample only).
-            var apo = (cmp.tiers && cmp.tiers.autopilot && cmp.tiers.autopilot.outcomes) ||
-              DATA.outcomes.map(function (o) { return { label: o.label, value: Math.round(o.value * 1.45) }; });
-            var tease = '<div class="ap-tease"><div class="ap-head"><span class="ap-tag">Autopilot</span><span>Same household, re-run for you automatically</span></div>';
+          // Every tier below Concierge sees what the same household does on the next tier up
+          // (Paul, Sept 14/15): Quick Check sees Autopilot, Autopilot sees Concierge.
+          // Jae: send comparison.tiers.autopilot.outcomes and comparison.tiers.concierge.outcomes
+          // (same shape as outcomes), each computed with that tier's efficacy. Until then the
+          // tease scales the member's own rows (sample only): ×1.45 for Autopilot, ×1.25 for Concierge.
+          function nextTierTease(key, factor, name, sub) {
+            var t = cmp.tiers && cmp.tiers[key] && cmp.tiers[key].outcomes;
+            var apo = t || DATA.outcomes.map(function (o) { return { label: o.label, value: Math.round(o.value * factor) }; });
+            var tease = '<div class="ap-tease"><div class="ap-head"><span class="ap-tag">' + name + '</span><span>' + sub + '</span></div>';
             apo.forEach(function (o) {
               var sign = o.value > 0 ? '+' : (o.value < 0 ? '−' : '');
               tease += '<div class="trend-row"><span class="k">' + (ROW_LABELS[o.label] || o.label) + '</span><span class="v ap">' + sign + fmtK(Math.abs(o.value)) + '</span></div>';
             });
-            tease += '</div>';
-            var hookEl = tw.parentElement; hookEl.insertAdjacentHTML('beforebegin', tease);
+            tw.parentElement.insertAdjacentHTML('beforebegin', tease + '</div>');
+          }
+          if (TIER === 1) {
+            nextTierTease('autopilot', 1.45, 'Autopilot', 'Same household, re-run for you automatically');
             tw.innerHTML = safeMsg + 'This is your Quick Check projection, run on the numbers you typed in and re-run when you update them. On Autopilot, EDGE links your accounts and re-runs the plan on every market move, rule change, and life event.';
             if (upBtn) upBtn.innerHTML = 'Upgrade to Autopilot <span aria-hidden="true">&rarr;</span>';
           } else if (TIER === 2) {
+            nextTierTease('concierge', 1.25, 'Concierge', 'Same household, plus the four proprietary strategies');
             // The tier hook, Founder-ruled: LTSS pricing is the next tier's work.
             // Accent asterisk marks it as the upgrade item.
             var hook = 'Long-term care is not yet priced into this plan. Pricing it in — and planning through it — is what the next tier adds.';
