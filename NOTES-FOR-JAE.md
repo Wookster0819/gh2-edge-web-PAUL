@@ -224,6 +224,15 @@ Concierge sees no upgrade button at all.
 Engine side: Quick Check members need the profile endpoint (`POST
 /api/profile` + a re-run) but never a connector.
 
+**Decision for you — where does long-term care live?** The dashboard's trend
+card tells Autopilot members that long-term care is "not yet priced into
+this plan" and that pricing it in is what the next tier adds, so today the
+front-end treats LTC planning as Concierge-only. Paul wants that to be your
+call: does Autopilot get long-term care priced in too, with Concierge adding
+only the four proprietary strategies and the quarterly brief? If so, say so
+and the hook comes off the Autopilot dashboard and moves into the tier
+bullets. If LTC stays Concierge, nothing changes.
+
 ## 1d. Small things fixed in the final check (Sept 14 evening)
 
 - Quick Check → Ballpark handoff now carries the 8% contribution assumption,
