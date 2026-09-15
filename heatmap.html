@@ -196,7 +196,7 @@
     .tier-veil .lk svg { width: 18px; height: 18px; }
     .tier-veil .h { font-weight: 800; font-size: 17px; }
     .tier-veil .p { font-size: 13.5px; color: var(--text-muted); margin: 6px 0 14px; max-width: 360px; }
-    .tier-veil-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; background: var(--grad-cta); color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; }
+    .tier-veil-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat; color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; }
 
     /* Guide: one tidy row, same words as the status line on every card. */
     .guide { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 10px 0 0; }
@@ -244,7 +244,7 @@
     .ask-edge {
       position: fixed; right: 22px; bottom: 22px; z-index: 60;
       display: inline-flex; align-items: center; gap: 9px;
-      background: var(--grad-cta);
+      background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat;
       color: #FFF; border: 0; cursor: pointer; font-family: inherit;
       font-size: 14.5px; font-weight: 700; letter-spacing: 0.01em;
       padding: 11px 18px 11px 12px; border-radius: 999px;
