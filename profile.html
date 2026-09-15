@@ -263,9 +263,7 @@
     Array.prototype.forEach.call(document.querySelectorAll('.nav a[href^="dashboard.html"], .nav a[href^="heatmap.html"], .icon-btn'), function (a) { var h = a.getAttribute('href').split('#'); a.href = h[0] + '?tier=' + tier + (h[1] ? '#' + h[1] : ''); });
     document.getElementById('userTier').textContent = TIER_NAME[tier];
     document.getElementById('planName').textContent = TIER_NAME[tier];
-    if (tier === 1) { var pr = document.getElementById('planPdfRow'); if (pr) pr.style.display = 'none'; }
     document.querySelector('.kv .v + a') && (document.querySelectorAll('.kv .v')[1].textContent = PRICE[tier]);
-    Array.prototype.forEach.call(document.querySelectorAll('.nav a, .signout'), function (a) { if (/dashboard|heatmap/.test(a.getAttribute('href'))) a.href += '?tier=' + tier; });
 
     // Who: the preview session from sign-in, else a placeholder. Jae: GET /api/profile.
     try { var sess = JSON.parse(sessionStorage.getItem('gh2_demo_session') || 'null'); if (sess && sess.email) { document.getElementById('whoEmail').textContent = sess.email; document.getElementById('avatar').textContent = sess.email[0].toUpperCase(); } } catch (e) {}
@@ -297,7 +295,13 @@
     // Switches (preview: local only)
     Array.prototype.forEach.call(document.querySelectorAll('.sw'), function (sw) { sw.addEventListener('click', function () { sw.setAttribute('aria-checked', sw.getAttribute('aria-checked') === 'true' ? 'false' : 'true'); }); });
     // Quick Check members don't have the member pages; keep the nav honest.
-    if (tier === 1) Array.prototype.forEach.call(document.querySelectorAll('.nav a'), function (a) { a.href = 'pricing.html'; a.title = 'Included with Autopilot'; });
+    // Quick Check (Paul, Sept 14): the member pages are open; only automatic alerts belong to Autopilot.
+    if (tier === 1) Array.prototype.forEach.call(document.querySelectorAll('.toggle-row'), function (row) {
+      var t = row.querySelector('.t'); if (!t || !/answer changes/i.test(t.textContent)) return;
+      t.insertAdjacentHTML('beforeend', '<span class="tag">Autopilot</span>');
+      var sub = row.querySelector('.s'); if (sub) sub.textContent = 'Autopilot re-runs your plan on every market move and emails you when the answer changes.';
+      var sw = row.querySelector('.sw'); if (sw) { sw.setAttribute('aria-checked', 'false'); sw.disabled = true; sw.style.opacity = '.45'; sw.style.cursor = 'not-allowed'; }
+    });
   })();
   </script>
 </body>

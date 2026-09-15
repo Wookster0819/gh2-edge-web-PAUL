@@ -188,6 +188,15 @@
     .regime[data-status="na"]        .disc { background: var(--na-soft); color: var(--na); }
     @keyframes discGlow { 0%,100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
     @media (prefers-reduced-motion: reduce) { .regime .disc { animation: none; } }
+    /* Quick Check: computed, shown, blurred (Paul, Sept 14). */
+    body.tier-locked .regime { filter: blur(7px); pointer-events: none; user-select: none; }
+    body.tier-locked .regime:hover { transform: none; }
+    .tier-veil { position: absolute; inset: -6px; display: grid; place-items: center; text-align: center; padding: 24px; z-index: 5; background: linear-gradient(180deg, rgba(10,14,26,0.25), rgba(10,14,26,0.7)); border-radius: 18px; }
+    .tier-veil .lk { width: 42px; height: 42px; border-radius: 50%; background: var(--card-bg-2); border: 1px solid var(--border); display: grid; place-items: center; margin: 0 auto 12px; color: var(--accent-purple); }
+    .tier-veil .lk svg { width: 18px; height: 18px; }
+    .tier-veil .h { font-weight: 800; font-size: 17px; }
+    .tier-veil .p { font-size: 13.5px; color: var(--text-muted); margin: 6px 0 14px; max-width: 360px; }
+    .tier-veil-btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 12px; background: var(--grad-cta); color: #fff; font-weight: 800; font-size: 14px; text-decoration: none; }
 
     /* Guide: one tidy row, same words as the status line on every card. */
     .guide { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 10px 0 0; }
@@ -807,6 +816,13 @@
     (function () {
       var t = parseInt(new URLSearchParams(location.search).get('tier') || (function () { try { return sessionStorage.getItem('gh2_preview_tier'); } catch (e) { return null; } })() || '2', 10); if (!(t >= 1 && t <= 3)) t = 2;
       try { sessionStorage.setItem('gh2_preview_tier', String(t)); } catch (e) {}
+      var tl = document.getElementById('userTier'); if (tl) tl.textContent = { 1: 'Quick Check', 2: 'Autopilot', 3: 'Concierge' }[t];
+      // Quick Check (Paul, Sept 14): the page runs and renders, then blurs. The map itself is Autopilot and up.
+      if (t === 1) {
+        document.body.classList.add('tier-locked');
+        var board = document.getElementById('rowTop').parentElement; board.style.position = 'relative';
+        board.insertAdjacentHTML('beforeend', '<div class="tier-veil"><div><div class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div><div class="h">The heat map is Autopilot and up</div><div class="p">Your seven regimes are computed on your numbers. Upgrade to see them.</div><a class="tier-veil-btn" href="pricing.html">Upgrade to Autopilot &rarr;</a></div></div>');
+      }
       Array.prototype.forEach.call(document.querySelectorAll('.profile-btn, .icon-btn, .nav a[href^="dashboard.html"]'), function (a) {
         var h = a.getAttribute('href').split('#'); a.href = h[0] + (h[0].indexOf('?') < 0 ? '?' : '&') + 'tier=' + t + (h[1] ? '#' + h[1] : '');
       });

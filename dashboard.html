@@ -1270,7 +1270,7 @@
         var util = document.getElementById('utilRow');
         if (util) {
           util.innerHTML = TIER === 1
-            ? utilLink('profile.html#info', ICO.edit, 'Update my info') + utilLink('ballpark.html', ICO.dash, 'Ballpark check') + utilLink('pricing.html', ICO.star, 'Compare plans', 'Upgrade')
+            ? utilLink('profile.html#info', ICO.edit, 'Update my info') + utilLink('ballpark.html', ICO.dash, 'Ballpark check') + utilLink('pricing.html', ICO.star, 'Upgrade to Autopilot', 'Upgrade')
             : utilLink('profile.html#info', ICO.edit, 'Update my info') +
               (TIER === 3
                 ? utilLink('#brief', ICO.pdf, 'Quarterly review brief', 'Concierge')
@@ -1279,27 +1279,10 @@
 
         var extras = document.getElementById('memberExtras'), quick = document.getElementById('quickExtras');
         if (TIER === 1) {
-          // Quick Check: the annual recommendation + Jae's Corner up front; everything else is a locked preview.
-          extras.style.display = 'none'; quick.style.display = '';
-          var na = DATA.nextAction || {};
-          var rec = (na.title && na.title !== 'No action required') ? na : { title: 'Hold your current plan', sub: 'Nothing to change this year' };
-          var asOf = DATA.asOf || new Date().toISOString().slice(0, 10);
-          document.getElementById('recCard').innerHTML = '<div class="card-label">Your ' + asOf.slice(0, 4) + ' recommendation</div><div class="rec-big">' + escH(rec.title) + '</div><div class="hero-sub">' + escH(rec.sub || '') + '</div>' +
-            '<div class="hero-row"><div class="kv"><div class="k">Run on your numbers</div><div class="v">' + fmtDate(asOf) + '</div><div class="s">Annual rerun</div></div>' +
-            '<div class="kv"><div class="k">Next rerun</div><div class="v">' + fmtDate((asOf.slice(0, 4) * 1 + 1) + asOf.slice(4)) + '</div><div class="s">Or sooner with Autopilot</div></div></div>' +
-            '<a class="btn primary" href="pricing.html" style="margin-top:14px">' + ICO.star + ' Upgrade to Autopilot</a>';
-          var news = '<div class="card-label">Jae\u2019s Corner</div><div class="news">';
-          NEWSLETTER.forEach(function (x) { news += '<a href="#news"><div class="d">' + fmtDate(x.date) + '</div><div><div class="t">' + escH(x.title) + '</div><div class="s">' + escH(x.sub) + '</div></div><span style="color:var(--text-faint)">' + ICO.chev + '</span></a>'; });
-          document.getElementById('newsCard').innerHTML = news + '</div><a class="foot-link" href="#news">All notes \u2192</a>';
-          // Move the Tier 1 cards above the locked dashboard content.
-          var main = document.querySelector('main.wrap'); main.insertBefore(quick, main.firstChild);
-          lockSection(document.querySelector('.card.hero'), 'Dashboard', 'Included with Autopilot.');
-          lockSection(document.querySelector('[aria-label="What\'s hot right now"]'), 'Heat map', 'Included with Autopilot.');
-          lockSection(document.querySelector('[aria-label="Next key action and next check-in"]'), 'Next actions', 'Included with Autopilot.');
-          lockSection(document.querySelector('[aria-label="Net outcome trend"]'), 'Net outcome trend', 'Included with Autopilot.');
-          var drv = document.querySelector('[aria-label="Wealth preservation drivers"]'); if (drv) { drv.classList.add('card'); lockSection(drv, 'Where the money goes', 'Included with Autopilot.'); }
-          Array.prototype.forEach.call(document.querySelectorAll('.nav a'), function (a) { if (/heatmap/.test(a.getAttribute('href'))) { a.href = 'pricing.html'; a.title = 'Included with Autopilot'; } });
-          return;
+          // Quick Check (Paul, Sept 14): the full plan on the numbers you type in yourself. Everything is
+          // computed and shown; only what needs connectors or automatic re-runs is blurred behind a veil.
+          quick.style.display = 'none';
+          lockSection(document.querySelector('[aria-label="What\'s hot right now"]'), 'Heat map', 'Autopilot and up. Your seven regimes are computed on your numbers.');
         }
 
         // Autopilot / Concierge: change feed + rankings
@@ -1320,6 +1303,10 @@
                 '<td class="st">' + (st.status === 'in' ? '<span class="tag in">In plan</span>' : st.status === 'prop' ? '<span class="tag prop">' + (lockedProp ? ICO.lock : ICO.star) + ' Concierge</span>' : '<span class="tag avail">Available</span>') + '</td></tr>';
         });
         document.getElementById('strategiesCard').innerHTML = rk + '</tbody></table><a class="foot-link" href="#strategies">See all 80 strategies \u2192</a>';
+        if (TIER === 1) {
+          lockSection(document.getElementById('changedCard'), 'What changed since your last visit', 'Autopilot re-runs your plan on every market move, rule change, and life event.');
+          lockSection(document.getElementById('strategiesCard'), 'Your strategies, ranked', 'Autopilot ranks all 80 strategies for your household.');
+        }
       }
 
       // =================================================================

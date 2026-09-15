@@ -186,6 +186,20 @@ Check and Ballpark left as they are so the 30-second promise holds. Needs the
 engine to accept it first — say what the input contract looks like and the
 form is a small addition.
 
+## 1e. Quick Check is the manual tier (Paul, Sept 14, after the PR went up)
+
+Quick Check = the full plan on numbers the member types in themselves: the
+dashboard, the profile form with "Save & re-run", Ask EDGE, Jae's Corner, the
+PDF. What it does NOT get is anything that needs connectors or automatic work:
+linked accounts, re-runs on market moves / rule changes / life events, the
+email alert when the answer changes, the ranked strategies, the change feed,
+and the heat map. Those are Autopilot and up. On Quick Check the heat map page
+still loads and computes, then blurs behind an upgrade veil, so people see
+what they are missing. Same on the dashboard for the heat-map card, the change
+feed, and the rankings. Tier bullets on pricing.html and results.html say the
+same thing. Engine side: Quick Check members will need the profile endpoint
+(`POST /api/profile` + a re-run) but never a connector.
+
 ## 1d. Small things fixed in the final check (Sept 14 evening)
 
 - Quick Check → Ballpark handoff now carries the 8% contribution assumption,
