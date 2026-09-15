@@ -7,78 +7,27 @@
   <title>GH2 EDGE™ — Choose Your Plan</title>
   <meta name="description" content="Turn your retirement ballpark into a real plan. Pick the GH2 EDGE™ tier that fits how often you want to revisit your numbers." />
   <style>
+    /* The page's one theme: EDGE, the member-facing look (Sept 14; the
+       Trust/Warm/Fresh/Calm light variants live in git history). */
     :root {
-      /* ===== THEME: Trust (default) ===== */
-      --brand-blue: #1B4F72;
-      --brand-blue-dark: #143A56;
-      --bg: #F7F9FB;
-      --card-bg: #FFFFFF;
-      --text: #1A2733;
-      --text-muted: #5A6B7B;
-      --text-faint: #8A98A8;
-      --border: #D6DDE4;
-      --shadow: 0 1px 3px rgba(20,40,60,0.06), 0 4px 12px rgba(20,40,60,0.05);
-      --card-radius: 14px;
-      --button-radius: 10px;
-      --field-radius: 10px;
-      --chip-radius: 999px;
-      --hero-grad-start: #143A56;
-      --hero-grad-end: #1B4F72;
-      --hero-accent: #FFD96B;
-      --section-accent: #1B4F72;
-      --green: #1F7A4D;
-      --green-bg: #E8F4EC;
-      --amber: #B8860B;
-      --amber-bg: #FFF8E6;
-      --red: #B33A3A;
-    }
-    body[data-theme="warm"] {
-      --brand-blue: #0D5C63; --brand-blue-dark: #084043; --bg: #FAF6F0; --card-bg: #FFFEFB;
-      --text: #2A2520; --text-muted: #6B5F52; --text-faint: #A89B8B; --border: #E8DFD3;
-      --shadow: 0 2px 4px rgba(80,50,20,0.05), 0 8px 20px rgba(80,50,20,0.06);
-      --card-radius: 18px; --button-radius: 14px; --field-radius: 12px;
-      --hero-grad-start: #084043; --hero-grad-end: #0D5C63; --hero-accent: #F5C16C; --section-accent: #E8826B;
-      --green: #2A7A5C; --green-bg: #EAF3EE; --amber: #B8860B; --amber-bg: #FFF5E1;
-    }
-    body[data-theme="fresh"] {
-      --brand-blue: #06A77D; --brand-blue-dark: #048963; --bg: #F4FAF7; --card-bg: #FFFFFF;
-      --text: #1A2E2A; --text-muted: #5A6F6A; --text-faint: #93A6A1; --border: #DCE9E4;
-      --shadow: 0 2px 6px rgba(6,167,125,0.05), 0 10px 24px rgba(6,167,125,0.08);
-      --card-radius: 22px; --button-radius: 16px; --field-radius: 14px;
-      --hero-grad-start: #048963; --hero-grad-end: #06A77D; --hero-accent: #FFE07A; --section-accent: #48ACF0;
-    }
-    body[data-theme="calm"] {
-      --brand-blue: #5B6EAE; --brand-blue-dark: #3F5191; --bg: #F6F4EE; --card-bg: #FFFFFF;
-      --text: #2C2E3A; --text-muted: #6E707F; --text-faint: #A0A2B0; --border: #E1DFD7;
-      --shadow: 0 1px 2px rgba(60,60,80,0.04), 0 12px 32px rgba(60,60,80,0.06);
+      --brand-blue: #8B5CF6; --brand-blue-dark: #7C3AED; --bg: #0A0E1A; --card-bg: #11172A;
+      --text: #F5F7FA; --text-muted: #8693AC; --text-faint: #5A6680; --border: #1F2940;
+      --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
       --card-radius: 16px; --button-radius: 12px; --field-radius: 12px;
-      --hero-grad-start: #3F5191; --hero-grad-end: #5B6EAE; --hero-accent: #F2C28B; --section-accent: #D4A5A5;
+      --hero-grad-start: #1E1B4B; --hero-grad-end: #312E81; --hero-accent: #FBBF24; --section-accent: #8B5CF6;
+      --green: #22C55E; --green-bg: rgba(34,197,94,0.12); --amber: #F97316; --amber-bg: rgba(249,115,22,0.12); --red: #FF3B30;
+      --card-bg-2: #161D33; --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+          --chip-radius: 999px;
     }
+    .tier-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.35), 0 16px 40px rgba(139,92,246,0.10); }
+    .tier-card.popular { border-color: var(--brand-blue); box-shadow: 0 0 0 1px rgba(139,92,246,0.25), 0 16px 40px rgba(139,92,246,0.14); }
+    .back-link:hover { background: rgba(139,92,246,0.14); color: var(--text); border-color: var(--brand-blue); }
+    .tier-ratio-value { color: #A78BFA; }
+    .bill-toggle { background: var(--card-bg-2); }
+    .vs-table td.cross { opacity: 0.7; }
+    .b2b-tier { background: var(--card-bg-2); }
 
-    /* Theme selector */
-    .theme-bar {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--border);
-      padding: 10px 20px;
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      transition: background-color 0.25s ease, border-color 0.25s ease;
-    }
-    .theme-bar-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
-    .theme-bar-buttons { display: flex; gap: 6px; flex-wrap: wrap; }
-    .theme-btn {
-      padding: 6px 14px; font-size: 13px; font-weight: 600;
-      border: 1px solid var(--border); background: #FFF; color: var(--text);
-      border-radius: 999px; cursor: pointer; font-family: inherit; transition: all 0.18s ease;
-    }
-    .theme-btn:hover { border-color: var(--brand-blue); }
-    .theme-btn[aria-pressed="true"] { background: var(--brand-blue); color: #FFF; border-color: var(--brand-blue); }
-    .theme-btn .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; border: 1px solid rgba(0,0,0,0.08); }
-    .theme-btn[data-theme=""] .swatch      { background: #1B4F72; }
-    .theme-btn[data-theme="warm"] .swatch  { background: #0D5C63; }
-    .theme-btn[data-theme="fresh"] .swatch { background: #06A77D; }
-    .theme-btn[data-theme="calm"] .swatch  { background: #5B6EAE; }
+
 
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; }
@@ -90,10 +39,26 @@
     }
 
     .wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 48px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
     header { text-align: center; margin-bottom: 32px; }
+    /* Shared top bar, same as sign-in (Paul, Sept 14). */
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; color: var(--text); text-decoration: none; }
+    .topbar .right { margin-left: auto; font-size: 13px; color: var(--text-muted); }
+    .topbar .right a { color: var(--text); font-weight: 600; text-decoration: none; }
+    .topbar .right a:hover { color: #C4B5FD; }
     .brand { font-size: 13px; letter-spacing: 0.12em; color: var(--brand-blue); font-weight: 600; text-transform: uppercase; }
-    h1 { font-size: 32px; line-height: 1.15; margin: 8px 0 6px; color: var(--text); font-weight: 700; letter-spacing: -0.01em; }
-    .sub { color: var(--text-muted); font-size: 16px; margin: 0 auto; max-width: 64ch; }
+    /* Serif headline, same as the other public pages (Paul, Sept 14). */
+    h1 { font-family: "Instrument Serif", Georgia, "Times New Roman", serif; font-weight: 400; font-size: clamp(34px, 6vw, 48px); line-height: 1.08; margin: 8px 0 6px; color: var(--text); letter-spacing: -0.01em; }
+    h1 em { font-style: italic; background: linear-gradient(90deg, #A78BFA, #EC4899); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-right: 0.06em; }
+    .sub { color: var(--text-muted); font-size: clamp(15px, 3.5vw, 16px); margin: 0 auto; max-width: 64ch; }
 
     /* Result teaser card (carried over from ballpark.html sessionStorage) */
     #teaser {
@@ -192,13 +157,88 @@
       font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
       padding: 5px 12px; border-radius: 999px;
     }
-    .tier-name { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+
+    /* ===== Commerce OFF until the store opens (same switch as ballpark) =====
+       What a tier DOES stays visible. What it COSTS does not: the price, and
+       the value-for-what-you-pay ratio, which reconstructs the price from the
+       savings figure in one division. The mailto buttons are selling, so they
+       go too. ?upsell=1 restores all of it; ?upsell=0 hides it again. */
+    body:not(.upsell-on) .tier-price,
+    body:not(.upsell-on) .tier-ratio,
+    body:not(.upsell-on) .tier-cta,
+    body:not(.upsell-on) .tier-price-sub,
+    body:not(.upsell-on) .tier-lock,
+    body:not(.upsell-on) .tier-addon,
+    body:not(.upsell-on) .bill-row { display: none !important; }
+    body:not(.upsell-on) .pt-sell { display: none; }
+    body.upsell-on .pt-tell { display: none; }
+
+    .tier-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .tier-icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; flex: none; box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 6px 18px rgba(0,0,0,0.25); }
+    .tier-icon svg { width: 24px; height: 24px; }
+    .tier-icon .ico-fill { fill: currentColor; fill-opacity: 0.18; }
+    .tier-card[data-tier="Tier 1"] .tier-icon { color: #60A5FA; background: rgba(96,165,250,0.14); border: 1px solid rgba(96,165,250,0.35); }
+    .tier-card[data-tier="Tier 2"] .tier-icon { color: var(--brand-blue); background: rgba(139,92,246,0.14); border: 1px solid rgba(139,92,246,0.35); }
+    .tier-card[data-tier="Tier 3"] .tier-icon { color: #B45309; background: rgba(252,211,77,0.16); border: 1px solid rgba(217,119,6,0.35); }
+    .tier-card[data-tier="Tier 1"] .tier-icon { color: #60A5FA; background: radial-gradient(circle at 30% 30%, #0F1F3A, #05090f); border-color: #1E3A5F; }
+    .tier-card[data-tier="Tier 2"] .tier-icon { color: #A78BFA; background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border-color: #312E5B; }
+    .tier-card[data-tier="Tier 3"] .tier-icon { color: #FCD34D; background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border-color: #3A2F1F; }
+    .tier-card[data-tier="Tier 1"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(96,165,250,0.55)); }
+    .tier-card[data-tier="Tier 2"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(167,139,250,0.6)); }
+    .tier-card[data-tier="Tier 3"] .tier-icon svg { filter: drop-shadow(0 0 6px rgba(252,211,77,0.55)); }
+    .tier-name { font-size: 20px; font-weight: 700; margin: 0; }
     .tier-tagline { font-size: 13px; color: var(--text-muted); margin: 0 0 14px; line-height: 1.4; min-height: 36px; }
-    .tier-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 16px; }
+    /* Per-card price options: monthly and yearly both visible, one selected.
+       Clicking either switches the page's billing period. */
+    .tier-price { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+    .tp-opt { position: relative; text-align: left; cursor: pointer; font-family: inherit; padding: 10px 12px 9px; border-radius: var(--field-radius); border: 1px solid var(--border); background: var(--bg); color: var(--text-muted); display: flex; flex-direction: column; gap: 2px; transition: border-color 0.15s ease, background 0.15s ease; }
+    .tp-opt:hover { border-color: var(--text-faint); }
+    .tp-opt .tp-amt { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+    .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
+    .tp-opt .tp-tag { display: inline-block; margin-top: 5px; align-self: flex-start; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: var(--green-bg); color: var(--green); }
+    .tp-opt.on { color: var(--text); border-color: var(--brand-blue); background: var(--card-bg); box-shadow: inset 0 0 0 1px var(--brand-blue); }
+    .tp-opt.on { background: rgba(139,92,246,0.12); }
+    .tp-opt[hidden] { display: none; }
     .tier-price-amount { font-size: 36px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
     .tier-price-unit { font-size: 14px; color: var(--text-muted); font-weight: 600; }
+    .tier-price-amount.tbd { font-size: 22px; color: var(--text-muted); }
+    .tier-price-sub { font-size: 12.5px; color: var(--text-muted); margin: -10px 0 10px; line-height: 1.4; min-height: 18px; }
+    /* Founding price lock: one quiet line, not a box (Paul, Sept 11). */
+    .tier-lock { display: flex; align-items: center; gap: 7px; margin: 2px 0 12px; font-size: 12.5px; line-height: 1.35; color: var(--green); font-weight: 600; }
+    .tier-lock .lk { display: inline-grid; place-items: center; width: 16px; height: 16px; flex: none; }
+    .tier-lock .lk svg { width: 12px; height: 12px; }
+    .tier-lock strong { font-weight: 700; }
+    .tier-lock.off { color: var(--text-muted); font-weight: 500; }
+    .bill-hint { font-size: 13.5px; color: var(--text-muted); }
+    .bill-hint strong { color: var(--text); }
+
+    /* Concierge add-on: a teaser line; click opens a bubble with the detail
+       and a link out to Jae's site. Price stays inside the bubble. */
+    .tier-addon { position: relative; margin-top: auto; margin-bottom: 14px; }
+    /* Advisor add-on: always visible inside Concierge with its own button (Paul, Sept 14). */
+    /* Concierge+: faint gold panel so it reads as its own thing inside the tile (Paul, Sept 14, option A). */
+    .addon-line { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: linear-gradient(180deg, rgba(252,211,77,0.10), rgba(252,211,77,0.04)); border: 1px solid rgba(252,211,77,0.35); display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 13px; line-height: 1.45; }
+    .addon-line b { display: block; font-weight: 800; color: #FCD34D; }
+    .addon-line span { display: block; color: var(--text-muted); }
+    .addon-line a { flex: none; color: #FCD34D; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .addon-line a:hover { text-decoration: underline; }
+    .lock-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #86EFAC; background: rgba(34,197,94,0.12); padding: 2px 7px; border-radius: 999px; vertical-align: 1px; }
+
+    /* ===== Billing toggle + founding price lock ===== */
+    .bill-row { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; margin: 0 auto 26px; max-width: 900px; }
+    .bill-toggle { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 4px; background: var(--card-bg); }
+    .bill-btn { border: 0; background: transparent; color: var(--text-muted); font: inherit; font-size: 14px; font-weight: 700; padding: 8px 16px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+    .bill-btn.on { background: var(--brand-blue); color: #FFF; }
+    .bill-save { font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
+    .bill-btn.on .bill-save { background: rgba(255,255,255,0.22); color: #FFF; }
+    .lock-note { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--text-muted); line-height: 1.45; max-width: 520px; padding: 10px 14px; border: 1px dashed var(--border); border-radius: 12px; }
+    .lock-note strong { color: var(--text); }
+    .lock-note .lock-ico { width: 26px; height: 26px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.12); color: #86EFAC; }
+    .lock-note .lock-ico svg { width: 13px; height: 13px; }
+    @media (max-width: 560px) { .bill-row { gap: 12px; } .lock-note { font-size: 13px; } }
+
     .tier-cadence { font-size: 12px; color: var(--text-faint); margin-top: -10px; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
-    .tier-features { list-style: none; padding: 0; margin: 0 0 22px; flex: 1; }
+    .tier-features { list-style: none; padding: 0; margin: 0 0 22px; }
     .tier-features li {
       padding: 8px 0 8px 26px; position: relative;
       font-size: 14px; color: var(--text);
@@ -213,6 +253,7 @@
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' fill='%23000'/%3E%3C/svg%3E") center/contain no-repeat;
       -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z' fill='%23000'/%3E%3C/svg%3E") center/contain no-repeat;
     }
+    .tier-cta { margin-top: auto; }
     .tier-cta {
       display: block; text-align: center;
       padding: 13px 16px; font-size: 15px; font-weight: 700;
@@ -220,34 +261,32 @@
       text-decoration: none; transition: all 0.18s ease;
       font-family: inherit;
     }
-    .tier-cta.primary {
-      background: var(--brand-blue); color: #FFF; border: 1.5px solid var(--brand-blue);
+    /* All three buttons match: muted at rest, the same gradient when the card is hovered (Paul, Sept 14). */
+    .tier-cta.primary, .tier-cta.secondary {
+      background: var(--card-bg-2); color: var(--text); border: 1.5px solid var(--border);
+      background-origin: border-box; transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease;
     }
-    .tier-cta.primary:hover { background: var(--brand-blue-dark); border-color: var(--brand-blue-dark); }
-    .tier-cta.secondary {
-      background: var(--card-bg); color: var(--brand-blue); border: 1.5px solid var(--brand-blue);
+    .tier-card:hover .tier-cta.primary, .tier-card:hover .tier-cta.secondary,
+    .tier-cta.primary:hover, .tier-cta.secondary:hover {
+      background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat; color: #FFF; border-color: transparent;
+      box-shadow: 0 8px 24px rgba(139,92,246,0.28);
     }
-    .tier-cta.secondary:hover { background: var(--brand-blue); color: #FFF; }
 
     /* Tier value-block + value/cost ratio */
-    .tier-value-block {
-      background: linear-gradient(135deg, var(--hero-grad-start), var(--hero-grad-end));
-      color: #FFF;
-      padding: 16px 18px;
-      border-radius: var(--field-radius);
-      margin: 4px 0 14px;
+    /* Savings figure as a single quiet row, not a window (Paul, Sept 14). */
+    .tier-value {
+      display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
+      padding: 10px 0; margin: 0 0 14px;
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     }
     .tier-value-label {
-      font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
-      font-weight: 700; opacity: 0.85;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 700; color: var(--text-muted); white-space: nowrap;
     }
     .tier-value-amount {
-      font-size: 28px; font-weight: 800; line-height: 1.1;
-      letter-spacing: -0.02em; margin: 4px 0 2px;
-      font-variant-numeric: tabular-nums;
-    }
-    .tier-value-note {
-      font-size: 12px; opacity: 0.9; line-height: 1.4;
+      font-size: 18px; font-weight: 800; line-height: 1.1;
+      letter-spacing: -0.01em; color: var(--green);
+      font-variant-numeric: tabular-nums; white-space: nowrap;
     }
     .tier-ratio {
       display: flex; justify-content: space-between; align-items: baseline;
@@ -344,25 +383,26 @@
       .tier-grid { grid-template-columns: 1fr; }
       .b2b-tiers { grid-template-columns: 1fr; }
       .tier-card.popular { transform: none; }
-      h1 { font-size: 26px; }
+    }
+
+    /* Phones */
+    @media (max-width: 560px) {
+      .wrap { padding: 22px 14px 40px; }
+      .teaser-hero { padding: 20px 18px 18px; }
+      .teaser-value { font-size: 36px; }
     }
   </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="theme-bar" role="region" aria-label="Design preview">
-    <span class="theme-bar-label">Design preview</span>
-    <div class="theme-bar-buttons" role="group" aria-label="Pick a theme">
-      <button type="button" class="theme-btn" data-theme=""      aria-pressed="false"><span class="swatch"></span>Trust</button>
-      <button type="button" class="theme-btn" data-theme="warm"  aria-pressed="false"><span class="swatch"></span>Warm</button>
-      <button type="button" class="theme-btn" data-theme="fresh" aria-pressed="false"><span class="swatch"></span>Fresh</button>
-      <button type="button" class="theme-btn" data-theme="calm"  aria-pressed="false"><span class="swatch"></span>Calm</button>
-    </div>
+  <div class="topbar">
+    <a class="wordmark" href="quick.html">EDGE</a>
+    <div class="right">Already a member? <a href="login.html">Sign in &rarr;</a></div>
   </div>
-
   <div class="wrap">
     <header>
-      <div class="brand">GH2 EDGE&trade;</div>
-      <h1>You have your number. Now act on it.</h1>
+      <h1>You have your number. <em>Now act on it.</em></h1>
       <p class="sub">Three tiers, each running on the same patent-pending engine. Pick the cadence that fits your life.</p>
     </header>
 
@@ -389,97 +429,99 @@
     </div>
 
     <div class="pricing-intro">
-      <h2>Pick your tier</h2>
+      <h2><span class="pt-tell">The three tiers</span><span class="pt-sell">Pick your tier</span></h2>
       <p>All consumer tiers include the full federal + state + Medicare tax math, year-by-year projections, and a downloadable PDF plan.</p>
     </div>
 
+    <div class="bill-row">
+      <div class="bill-toggle" role="group" aria-label="Billing period">
+        <button type="button" class="bill-btn" data-bill="month">Monthly</button>
+        <button type="button" class="bill-btn on" data-bill="year">Yearly <span class="bill-save">2 months free</span></button>
+      </div>
+      <div class="bill-hint"><strong>Founders pricing, for a limited time:</strong> go yearly and today&rsquo;s price is yours for as long as you stay.</div>
+    </div>
+
     <div class="tier-grid">
-      <!-- Jae's Corner -->
-      <div class="tier-card">
-        <h3 class="tier-name">Jae&rsquo;s Corner</h3>
-        <div class="tier-price">
-          <span class="tier-price-amount">$50</span>
-          <span class="tier-price-unit">/ year</span>
+      <!-- Tier 1 -->
+      <!-- Jae: the \$2,500 Quick Check figure is a placeholder (Paul, Sept 11:
+           'this needs to be a number'). Set it to whatever your math supports. -->
+      <div class="tier-card" data-tier="Tier 1" data-savings="2500">
+        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><circle class="ico-fill" cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg></div><div><h3 class="tier-name">Quick Check</h3></div></div>
+        <div class="tier-price" data-month="9" data-year="89">
+          <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$9</span><span class="tp-unit">/ month</span></button>
+          <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$89</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
         </div>
-        <div class="tier-cadence">Weekly newsletter + annual rerun</div>
+        <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
+        <div class="tier-cadence">Manual &mdash; your numbers, typed in by you</div>
 
-        <div class="tier-value-block">
-          <div class="tier-value-label">What you save this year</div>
-          <div class="tier-value-amount">Unbounded</div>
-          <div class="tier-value-note">One article that helps you dodge one tax mistake pays for 100 years.</div>
-        </div>
+        <div class="tier-value" title="Your full plan on the numbers you type in. One avoided tax mistake on a $500K household."><span class="tier-value-label">Savings this year</span><span class="tier-value-amount">~$2,500</span></div>
 
-        <div class="tier-ratio">
-          <span class="tier-ratio-label">Value for what you pay</span>
-          <span class="tier-ratio-value">&infin;</span>
-        </div>
 
         <ul class="tier-features">
-          <li>Jae&rsquo;s working notes on the tax law and rule changes that matter</li>
-          <li>One EDGE recommendation per year, run on your numbers</li>
-          <li><strong>Best for:</strong> anyone retired, planning to retire, or curious</li>
+          <!-- Quick Check = the full plan on numbers you type in yourself. No connectors, no automatic
+               re-runs, no alerts: those are what Autopilot adds (Paul, Sept 14). -->
+          <li><strong>Your full plan</strong> on the numbers you type in &mdash; projected net worth, the outcome trend, where the money goes</li>
+          <li><strong>Update your info</strong> any time and re-run it yourself</li>
+          <li><strong>All 80 retirement strategies</strong> ranked for your household</li>
+          <li><strong>Jae&rsquo;s Corner</strong> &mdash; the weekly newsletter with Jae&rsquo;s working notes on the tax law and rule changes that matter</li>
+          <li>The <em>Beginner&rsquo;s Guide</em> and Jae&rsquo;s library of plain-English explainers</li>
+          <li><strong>24/7 chat support with Ask EDGE</strong></li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=Jae%27s%20Corner%20inquiry" class="tier-cta secondary">Get Jae&rsquo;s Corner</a>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%201%20Quick%20Check%20inquiry" class="tier-cta secondary">Get Quick Check</a>
       </div>
 
       <!-- GH2 EDGE -->
-      <div class="tier-card popular">
+      <div class="tier-card popular" data-tier="Tier 2" data-savings="10000">
         <span class="tier-badge">Most popular</span>
-        <h3 class="tier-name">GH2 EDGE&trade;</h3>
-        <div class="tier-price">
-          <span class="tier-price-amount">$250</span>
-          <span class="tier-price-unit">/ year</span>
+        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 0 1 14.6-6"/><path d="M20.5 12a8.5 8.5 0 0 1-14.6 6"/><path d="M18 2.8v3.4h-3.4"/><path d="M6 21.2v-3.4h3.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg></div><div><h3 class="tier-name">Autopilot</h3></div></div>
+        <div class="tier-price" data-month="29" data-year="290">
+          <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$29</span><span class="tp-unit">/ month</span></button>
+          <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$290</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
         </div>
-        <div class="tier-cadence">Quarterly + every life event</div>
-
-        <div class="tier-value-block">
-          <div class="tier-value-label">What you save this year</div>
-          <div class="tier-value-amount">~$10,000</div>
-          <div class="tier-value-note">100 bp of Required IRR saved on a $1M household. Math is public.</div>
-        </div>
-
-        <div class="tier-ratio">
-          <span class="tier-ratio-label">Value for what you pay</span>
-          <span class="tier-ratio-value">40&times;</span>
-        </div>
-
-        <ul class="tier-features">
-          <li>All 80 retirement strategies ranked for your household</li>
-          <li>Email when the answer changes (market, tax law, life event)</li>
-          <li><strong>Best for:</strong> $500K&ndash;$2M households with life events ahead</li>
-        </ul>
-
-        <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry" class="tier-cta primary">Get GH2 EDGE&trade;</a>
-      </div>
-
-      <!-- GH2 EDGE Ultra -->
-      <div class="tier-card">
-        <h3 class="tier-name">GH2 EDGE&trade; Ultra</h3>
-        <div class="tier-price">
-          <span class="tier-price-amount">$2,500</span>
-          <span class="tier-price-unit">/ year</span>
-        </div>
+        <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
         <div class="tier-cadence">Continuous &mdash; every market move, rule change, life event</div>
 
-        <div class="tier-value-block">
-          <div class="tier-value-label">What you save this year</div>
-          <div class="tier-value-amount">~$30,000</div>
-          <div class="tier-value-note">150 bp on a $2M household, monitored continuously. Itemized as it happens.</div>
-        </div>
+        <div class="tier-value" title="100 bp of Required IRR saved on a $1M household. Math is public."><span class="tier-value-label">Savings this year</span><span class="tier-value-amount">~$10,000</span></div>
 
-        <div class="tier-ratio">
-          <span class="tier-ratio-label">Value for what you pay</span>
-          <span class="tier-ratio-value">12&times;</span>
-        </div>
 
         <ul class="tier-features">
-          <li>All 80 strategies + 4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</li>
-          <li>Direct access to Jae once a year</li>
-          <li><strong>Best for:</strong> $2M+ households with IRMAA and SECURE-Act-heir-tax exposure</li>
+          <li><strong>Everything in Quick Check</strong>, with no typing: <strong>link your accounts</strong> and EDGE tracks them</li>
+          <li><strong>Automatic re-runs</strong> on every market move, rule change, and life event &mdash; and an email when the answer changes</li>
+          <li><strong>A higher projection</strong> &mdash; the same plan, kept current, compounds further than one re-run by hand</li>
         </ul>
 
-        <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20Ultra%20inquiry" class="tier-cta secondary">Get GH2 EDGE&trade; Ultra</a>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%202%20Autopilot%20inquiry" class="tier-cta primary">Get Autopilot</a>
+      </div>
+
+      <!-- Tier 3 -->
+      <div class="tier-card" data-tier="Tier 3" data-savings="30000">
+        <div class="tier-head"><div class="tier-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 7.5V5.5"/><path d="M10 5.5h4"/><path d="M2.5 18.5h19"/></svg></div><div><h3 class="tier-name">Concierge</h3></div></div>
+        <div class="tier-price" data-month="99" data-year="990">
+          <button type="button" class="tp-opt" data-billing="month"><span class="tp-amt">$99</span><span class="tp-unit">/ month</span></button>
+          <button type="button" class="tp-opt on" data-billing="year"><span class="tp-amt">$990</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+        </div>
+        <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
+        <div class="tier-cadence">Everything in Autopilot, plus four strategies that reach further</div>
+
+        <div class="tier-value" title="150 bp on a $2M household, monitored continuously. Itemized as it happens."><span class="tier-value-label">Savings this year</span><span class="tier-value-amount">~$30,000</span></div>
+
+
+        <ul class="tier-features">
+          <li>Everything in Autopilot</li>
+          <li><strong>4 proprietary GH2 EDGE strategies the public never sees &mdash; they work your tax bracket, the Medicare surcharge line, and required withdrawals in a single move</strong></li>
+          <li><strong>A quarterly review brief</strong> written for your household</li>
+        </ul>
+
+        <div class="tier-addon" data-placeholder-price="true">
+          <div class="addon-line">
+            <div><b>Concierge+</b><span>Add a dedicated, full-time advisor to your plan.</span></div>
+            <a data-advisor-link href="https://jaeoh.com/" target="_blank" rel="noopener">See details &rarr;</a>
+          </div>
+          <!-- Jae: price hidden until you set it (Paul, Sept 14; $4,000 was the Sept 10 placeholder), annual-only by
+               design. "See details" goes to your advisory offer — set ADVISOR_URL in the script below to the exact page. -->
+        </div>
+        <a href="mailto:jae@gh2benefits.com?subject=Tier%203%20Concierge%20inquiry" class="tier-cta secondary">Get Concierge</a>
       </div>
     </div>
 
@@ -549,35 +591,13 @@
     </div>
 
     <footer>
-      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Jae&rsquo;s Corner, 80+ for GH2 EDGE&trade;, 80+ proprietary for Ultra), how often the plan is rerun (annual / quarterly / continuous), and whether the firm gets the Strategy Builder and full grid access.</p>
+      <p><strong>How tiers map to engine capability.</strong> Every tier runs on the same coupled-regime simulation engine. What differs is the strategy roster the engine ranks over (one strategy for Quick Check, 80+ for Autopilot, 80+ plus proprietary for Concierge), how often the plan is rerun (annual for Quick Check, continuous for Autopilot and Concierge), whether a person is behind the plan (Concierge), and whether the firm gets the Strategy Builder and full grid access.</p>
       <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
     </footer>
   </div>
 
   <script>
     (function () {
-      // ===== Theme selector (shared with ballpark.html via localStorage) =====
-      var THEME_KEY = 'gh2_ballpark_theme';
-      var savedTheme = '';
-      try { savedTheme = localStorage.getItem(THEME_KEY) || ''; } catch (e) {}
-      if (savedTheme && ['warm', 'fresh', 'calm'].indexOf(savedTheme) !== -1) {
-        document.body.setAttribute('data-theme', savedTheme);
-      }
-      var themeBtns = document.querySelectorAll('.theme-btn');
-      themeBtns.forEach(function (btn) {
-        var t = btn.getAttribute('data-theme') || '';
-        btn.setAttribute('aria-pressed', t === savedTheme ? 'true' : 'false');
-        btn.addEventListener('click', function () {
-          var newTheme = btn.getAttribute('data-theme') || '';
-          if (newTheme) document.body.setAttribute('data-theme', newTheme);
-          else document.body.removeAttribute('data-theme');
-          try { localStorage.setItem(THEME_KEY, newTheme); } catch (e) {}
-          themeBtns.forEach(function (b) {
-            b.setAttribute('aria-pressed', (b.getAttribute('data-theme') || '') === newTheme ? 'true' : 'false');
-          });
-        });
-      });
-
       // ===== Restore ballpark result from sessionStorage =====
       var RESULT_KEY = 'gh2_ballpark_last_result';
       var raw = null;
@@ -632,6 +652,211 @@
         prompt.classList.add('visible');
       }
     })();
+  </script>
+  <script>
+  /* Billing period + founding price lock.
+     Cards carry data-month / data-year (fallback prices; Shopify overwrites
+     them below when its variants are titled with "month" / "year").
+     ?bill=month|year presets the toggle. Tier 3 has no data-* yet, so it
+     shows "Pricing coming soon" until Jae sets it. */
+  (function () {
+    var BILL = 'year';
+    try { var b = new URLSearchParams(location.search).get('bill'); if (b === 'month' || b === 'year') BILL = b; } catch (e) {}
+    function money(n) { return '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+    function apply() {
+      document.querySelectorAll('.bill-btn').forEach(function (btn) { btn.classList.toggle('on', btn.getAttribute('data-bill') === BILL); });
+      document.querySelectorAll('.tier-card[data-tier]').forEach(function (card) {
+        var p = card.querySelector('.tier-price'); if (!p) return;
+        var m = p.getAttribute('data-month'), y = p.getAttribute('data-year');
+        if (m == null && y == null) return;                       // price not set yet
+        var useYear = BILL === 'year' ? y != null : m == null;    // fall back to whichever exists
+        var om = p.querySelector('.tp-opt[data-billing="month"]'), oy = p.querySelector('.tp-opt[data-billing="year"]');
+        if (om) { om.hidden = m == null; if (m != null) om.querySelector('.tp-amt').textContent = money(m); om.classList.toggle('on', !useYear); }
+        if (oy) { oy.hidden = y == null; if (y != null) oy.querySelector('.tp-amt').textContent = money(y); oy.classList.toggle('on', useYear); }
+        var lock = card.querySelector('.tier-lock'), lockText = card.querySelector('.tier-lock-text');
+        if (lock && lockText && y != null) {
+          lock.classList.toggle('off', !useYear);
+          lockText.innerHTML = useYear
+            ? '<strong>Price locked</strong> for as long as you stay'
+            : 'Go yearly to lock today\u2019s price';
+        }
+        var ratio = card.querySelector('.tier-ratio-value'), sv = +card.getAttribute('data-savings');
+        if (ratio && sv) { var annual = useYear ? +y : +m * 12; ratio.textContent = Math.round(sv / annual) + '\u00d7'; }
+      });
+    }
+    document.querySelectorAll('.bill-btn').forEach(function (btn) { btn.addEventListener('click', function () { BILL = btn.getAttribute('data-bill'); apply(); }); });
+    document.querySelectorAll('.tp-opt').forEach(function (btn) { btn.addEventListener('click', function () { BILL = btn.getAttribute('data-billing'); apply(); }); });
+    apply();
+    window.GH2_BILL = function () { return BILL; };
+    window.GH2_APPLY = apply;
+
+    // Advisor add-on. Jae: point ADVISOR_URL at your advisory offer page.
+    var ADVISOR_URL = 'https://jaeoh.com/';
+    var wrap = document.querySelector('.tier-addon');
+    if (wrap) {
+      var alink = wrap.querySelector('[data-advisor-link]'); if (alink) alink.href = ADVISOR_URL;
+    }
+  })();
+  </script>
+  <!-- ===================================================================
+       Shopify catalogue binding.
+
+       The three consumer cards carry data-tier="Tier 1|2|3". Shopify holds
+       the same three products, titled "GH2 EDGE(tm) - Tier N: ...". This
+       matches on the tier number rather than the product handle, because
+       the handles are auto-generated from titles containing a trademark
+       symbol and an em dash, and that encoding is not worth depending on.
+
+       Until the store is public, /products.json returns 401 and nothing
+       here runs. The prices printed in the markup are what the page has
+       always said, so the page reads correctly either way.
+
+       WHAT DOES NOT HAPPEN ON FAILURE: no price is invented, and no
+       purchase is offered against a price we could not confirm. If the
+       catalogue is unreachable the buy button falls back to a contact
+       link -- because a stale price someone can click is worse than no
+       button at all.
+       =================================================================== -->
+  <script>
+  (function () {
+    var SHOP = '43itxk-wa.myshopify.com';
+
+      /* Shopify is the source of truth for what the tiers say and cost
+         (Founder, 2026-08-31: "just stay w shopify, I will modify later on
+         that end"). CONTENT -- titles, descriptions, prices -- syncs from the
+         store on every load and fails silently while the store is locked
+         (products.json returns 401 until launch), so the hardcoded copy below
+         is only the fallback. Edits made in the Shopify admin reach the page
+         with no deploy. This supersedes the earlier don't-call-the-store note:
+         that guarded the BUY binding, which still stays behind ?shopify=1. */
+    // Commerce switch, same key as ballpark: ?upsell=1 persists, ?upsell=0 clears.
+    try {
+      var uq = new URLSearchParams(location.search).get('upsell');
+      if (uq === '1') localStorage.setItem('gh2_upsell', '1');
+      if (uq === '0') localStorage.removeItem('gh2_upsell');
+      if (localStorage.getItem('gh2_upsell') === '1') document.body.classList.add('upsell-on');
+    } catch (e) { /* storage blocked — commerce simply stays off */ }
+
+    // ---- content sync: Shopify owns the words and the numbers ----------
+      function shopifyLines(html) {
+        try {
+          var doc = new DOMParser().parseFromString(html || '', 'text/html');
+          var nodes = doc.querySelectorAll('li, p');
+          var out = [];
+          (nodes.length ? [].slice.call(nodes) : [doc.body]).forEach(function (n) {
+            n.textContent.split(/\n+/).forEach(function (t) {
+              t = t.trim(); if (t) out.push(t);
+            });
+          });
+          return out;
+        } catch (e) { return []; }
+      }
+      fetch('https://' + SHOP + '/products.json?limit=50', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data || !data.products) return;   // locked store: keep the fallback copy
+          document.querySelectorAll('.tier-card[data-tier]').forEach(function (card) {
+            var tier = card.getAttribute('data-tier');           // "Tier 1"
+            var m = data.products.filter(function (p) {
+              return (p.title || '').indexOf(tier) !== -1;
+            })[0];
+            if (!m) return;
+
+            var nameEl = card.querySelector('.tier-name');
+            // Jae: cards show the plain name (Paul: never "Tier 1"). Any
+            // "GH2 EDGE(tm) - Tier N:" prefix on the Shopify title is dropped.
+            if (nameEl && m.title) nameEl.textContent = m.title.replace(/^.*?tier\s*\d\s*[:\u2014\u2013-]\s*/i, '').replace(/\s*plan$/i, function (s) { return s; });
+
+            var lines = shopifyLines(m.body_html);
+            var ul = card.querySelector('.tier-features');
+            if (ul && lines.length) {
+              ul.textContent = '';
+              lines.forEach(function (t) {
+                var li = document.createElement('li');
+                li.textContent = t;
+                ul.appendChild(li);
+              });
+            }
+
+            // Jae: title the variants "Monthly" / "Yearly" (any text containing
+            // month / year) and the billing toggle picks between them.
+            var p = card.querySelector('.tier-price'), vs = m.variants || [], titled = false;
+            vs.forEach(function (x) {
+              var t = (x.title || '').toLowerCase();
+              if (t.indexOf('month') > -1) { p.setAttribute('data-month', x.price); titled = true; }
+              else if (t.indexOf('year') > -1 || t.indexOf('annual') > -1) { p.setAttribute('data-year', x.price); titled = true; }
+            });
+            if (titled) { if (window.GH2_APPLY) window.GH2_APPLY(); return; }
+
+            var v = vs[0];
+            var amt = card.querySelector('.tp-opt[data-billing="month"] .tp-amt');
+            var unit = card.querySelector('.tp-opt[data-billing="month"] .tp-unit');
+            if (v && p) { p.setAttribute('data-month', v.price); p.removeAttribute('data-year'); }
+            if (v && amt) {
+              amt.textContent = '$' + Number(v.price).toLocaleString('en-US', { maximumFractionDigits: 0 });
+              if (unit) {
+                // Only claim a cadence the store states. A wrong unit beside a
+                // right amount is the 12x bug again.
+                var vt = (v.title || '').toLowerCase();
+                unit.textContent = vt.indexOf('month') > -1 ? '/ month'
+                  : vt.indexOf('year') > -1 ? '/ year' : '';
+              }
+            }
+          });
+        })
+        .catch(function () { /* offline or locked: fallback copy stands */ });
+
+      var shopifyOn = false;
+    try {
+      var sq = new URLSearchParams(location.search).get('shopify');
+      if (sq === '1') localStorage.setItem('gh2_shopify', '1');
+      if (sq === '0') localStorage.removeItem('gh2_shopify');
+      shopifyOn = localStorage.getItem('gh2_shopify') === '1';
+    } catch (e) { /* storage blocked: stays off, which is the safe default */ }
+    if (!shopifyOn) return;
+
+    fetch('https://' + SHOP + '/products.json?limit=50')
+      .then(function (r) { if (!r.ok) throw new Error('catalogue ' + r.status); return r.json(); })
+      .then(function (data) {
+        var products = (data && data.products) || [];
+
+        document.querySelectorAll('.tier-card[data-tier]').forEach(function (card) {
+          var tier = card.getAttribute('data-tier');            // "Tier 1"
+          var match = products.filter(function (p) {
+            return (p.title || '').indexOf(tier) !== -1;
+          })[0];
+          if (!match) return;
+
+          var want = window.GH2_BILL ? window.GH2_BILL() : 'year';
+          var variant = (match.variants || []).filter(function (x) {
+            var t = (x.title || '').toLowerCase();
+            return want === 'month' ? t.indexOf('month') > -1 : (t.indexOf('year') > -1 || t.indexOf('annual') > -1);
+          })[0] || (match.variants || [])[0];
+          if (!variant) return;
+
+          // Shopify owns the number. The page owns everything around it.
+          var amount = card.querySelector('.tp-opt.on .tp-amt') || card.querySelector('.tp-amt');
+          if (amount) {
+            amount.textContent = '$' + Number(variant.price)
+              .toLocaleString('en-US', { maximumFractionDigits: 0 });
+          }
+
+          var cta = card.querySelector('.tier-cta');
+          if (cta && variant.id) {
+            cta.href = 'https://' + SHOP + '/cart/' + variant.id + ':1';
+            cta.removeAttribute('target');
+          }
+        });
+      })
+      .catch(function () {
+        // Catalogue unreachable. Keep the stated prices, remove the ability
+        // to transact against them.
+        document.querySelectorAll('.tier-card[data-tier] .tier-cta').forEach(function (cta) {
+          if (cta.href && cta.href.indexOf('mailto:') === 0) return;   // already a contact link
+          cta.href = 'mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry';
+        });
+      });
+  })();
   </script>
 </body>
 </html>

@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="index,follow" />
   <title>GH2 EDGE™ — Discover Your Required Portfolio Return</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
   <meta name="description" content="A friendly retirement ballpark check, with the GH2 EDGE™ Required Portfolio Return — the one number most calculators don't compute." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #0A0E1A;
@@ -59,7 +63,7 @@
     /* ===== Top bar: wordmark + stepper + secure chip ===== */
     .topbar {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: 1fr auto 1fr;
       align-items: center;
       gap: 24px;
       padding: 22px 40px 0;
@@ -81,8 +85,9 @@
     }
     .stepper .step {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       padding: 0 26px;
       font-size: 14px;
       color: var(--text-muted);
@@ -100,7 +105,7 @@
       color: var(--text-muted);
     }
     .stepper .step.done .dot {
-      background: transparent;
+      background: var(--bg);
       border-color: var(--text-muted);
       color: var(--text);
     }
@@ -152,8 +157,27 @@
     .stepper.profile-active::before {
       background: linear-gradient(90deg, var(--text-muted) 0%, var(--text-muted) 50%, var(--border) 50%, var(--border) 100%);
     }
+    .ebook-cta {
+      max-width: 760px; margin: 28px auto 0;
+      padding: 18px 22px; border: 1px solid var(--border);
+      border-radius: 14px; background: var(--bg-soft);
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .ebook-cta .ec-text { font-size: 15px; color: var(--text-muted); max-width: 430px; line-height: 1.45; }
+    .ebook-cta .ec-text strong { color: var(--text); }
+    .ebook-cta .ec-actions { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
+    .ebook-cta .ec-dl {
+      display: inline-block; padding: 10px 18px; border-radius: 10px;
+      background: var(--accent-purple); color: #fff; font-weight: 600;
+      text-decoration: none; font-size: 14px;
+    }
+    .ebook-cta .ec-dl:hover { filter: brightness(1.08); }
+    .ebook-cta .ec-email { font-size: 13px; color: var(--text-muted); }
+    .ebook-cta .ec-email a { color: var(--accent-purple); text-decoration: none; }
     .secure-chip {
       display: flex;
+      justify-self: end;
       align-items: center;
       gap: 10px;
       padding: 10px 14px;
@@ -174,6 +198,14 @@
 
     /* ===== Main wrap ===== */
     .wrap { max-width: 1100px; margin: 0 auto; padding: 36px 40px 60px; }
+    /* Proportional scale (Paul, Sept 14): wide screens get the same layout,
+       bigger. Everything grows together; nothing is re-flowed. */
+    @media (min-width: 1500px) { body { zoom: 1.12; } }
+    @media (min-width: 1700px) { body { zoom: 1.24; } }
+    @media (min-width: 1900px) { body { zoom: 1.36; } }
+    @media (min-width: 2200px) { body { zoom: 1.5; } }
+    @media (min-width: 2800px) { body { zoom: 1.6; } }
+
     .step-eyebrow {
       text-align: center;
       font-size: 11px;
@@ -182,19 +214,22 @@
       color: var(--text-muted);
       margin-bottom: 10px;
     }
+    /* Serif headline to match the results screen (Paul, Sept 13). Gradient stays. */
     h1.page-title {
       text-align: center;
-      font-size: 44px;
-      font-weight: 700;
+      font-family: "Instrument Serif", Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 6.4vw, 60px);
+      font-weight: 400;
       letter-spacing: -0.01em;
       margin: 8px 0 14px;
-      line-height: 1.15;
+      line-height: 1.08;
     }
-    h1.page-title .accent { color: var(--accent-purple); background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    h1.page-title .accent { font-style: italic; color: var(--accent-purple); background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; padding-right: 0.06em; }
+    h1.page-title sup { font-size: 0.42em; font-style: normal; vertical-align: 0.9em; margin-left: 0.05em; }
     .page-sub {
       text-align: center;
       color: var(--text-dim);
-      font-size: 17px;
+      font-size: clamp(15px, 2.2vw, 17px);
       max-width: 720px;
       margin: 0 auto 36px;
       line-height: 1.55;
@@ -214,6 +249,7 @@
       gap: 22px;
     }
     .form-grid > .span2 { grid-column: span 2; }
+    .spouse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
     .section-card {
       background: var(--card-bg);
@@ -258,14 +294,22 @@
 
     /* ===== Form fields ===== */
     .field { display: flex; flex-direction: column; gap: 6px; }
+    /* Missing required answers, marked on Check My Plan (Paul, Sept 14). */
+    .field.missing select, .field.missing input[type="number"], .field.missing input[type="text"],
+    .field.missing .toggle, .profiles.missing { border-color: var(--accent-red) !important; box-shadow: 0 0 0 1px var(--accent-red-ring) !important; }
+    .profiles.missing { border-radius: 16px; padding: 4px; margin: -4px; }
+    .miss-note { color: var(--accent-red); font-size: 12px; font-weight: 600; line-height: 1.3; }
+    .miss-note::before { content: '\2191\00a0'; }
     .field-label-row { display: flex; align-items: center; gap: 10px; }
     .field-label-row .field-icon {
       width: 24px; height: 24px;
       color: var(--text-dim);
       flex-shrink: 0;
     }
-    .field label, .field .field-text { color: var(--text); font-size: 14px; font-weight: 600; }
-    .field .field-hint { color: var(--text-muted); font-size: 12.5px; font-weight: 400; line-height: 1.4; margin-top: 2px; }
+    /* Contrast (Paul, Sept 13): labels a step softer than the values people
+       type, helper text a step softer again. The white is for their answers. */
+    .field label, .field .field-text { color: var(--text-dim); font-size: 13.5px; font-weight: 600; letter-spacing: 0.01em; }
+    .field .field-hint, .field .ds { color: var(--text-muted); font-size: 12.5px; font-weight: 400; line-height: 1.45; margin-top: 2px; }
 
     select, input[type="text"], input[type="number"] {
       background: var(--bg-soft);
@@ -277,6 +321,10 @@
       font-family: inherit;
       width: 100%;
       transition: border-color 120ms, box-shadow 120ms;
+    }
+    select:hover, input[type="text"]:hover, input[type="number"]:hover {
+      border-color: rgba(139,92,246,0.55);
+      background-color: var(--card-bg-2);
     }
     select:focus, input:focus {
       outline: none;
@@ -291,14 +339,20 @@
       position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
       color: var(--text-muted); font-size: 15px; pointer-events: none;
     }
-    .input-with-prefix input { padding-left: 28px; text-align: right; }
+    .input-with-prefix input { padding-left: 28px; text-align: left; }
     .input-with-suffix { position: relative; }
     .input-with-suffix .suffix {
       position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
       color: var(--text-muted); font-size: 14px; pointer-events: none;
     }
-    .input-with-suffix input { padding-right: 30px; text-align: right; }
+    .input-with-suffix input { padding-right: 30px; text-align: left; }
 
+    /* No spinner arrows on number inputs — users type the value */
+    input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    .toggle button:not([aria-pressed="true"]):hover { background: rgba(139,92,246,0.14); color: var(--text); }
     /* Toggle (Single/Married) */
     .toggle {
       display: grid;
@@ -330,16 +384,19 @@
     /* Lifestyle target cards */
     .lifestyle-prompt { font-size: 15px; font-weight: 600; color: var(--text); }
     .lifestyle-sub { font-size: 13px; color: var(--text-muted); margin-top: -6px; }
+    .lifestyle-note { font-size: 11.5px; color: var(--text-faint); margin-top: 2px; line-height: 1.35; }
     .profiles {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      /* minmax(0,1fr): plain 1fr lets the widest label ("$100,000+") grow its
+         column, so the Premium card came out wider than the other three. */
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 12px;
     }
     .profile-card {
       background: var(--bg-soft);
       border: 1.5px solid var(--border);
       border-radius: 14px;
-      padding: 18px 14px 16px;
+      padding: 18px 14px 18px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -348,6 +405,7 @@
       transition: border-color 120ms, background 120ms, transform 120ms;
       text-align: center;
       position: relative;
+      min-width: 0;
     }
     .profile-card:hover { border-color: var(--accent-purple); background: rgba(139,92,246,0.06); }
     .profile-card[aria-checked="true"] {
@@ -360,13 +418,20 @@
       display: inline-flex; align-items: center; justify-content: center;
       color: var(--text-dim);
     }
-    .profile-card[data-profile="struggling"]  .pf-icon { color: #EC4899; }
+    .profile-card[data-profile="struggling"]  .pf-icon { color: #94A3B8; }
     .profile-card[data-profile="average"]     .pf-icon { color: #60A5FA; }
-    .profile-card[data-profile="comfortable"] .pf-icon { color: #14B8A6; }
+    .profile-card[data-profile="comfortable"] .pf-icon { color: #22C55E; }
     .profile-card[data-profile="affluent"]    .pf-icon { color: #F59E0B; }
     .profile-card .pf-label { font-size: 15px; font-weight: 700; color: var(--text); }
     .profile-card .pf-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
-    .profile-card .pf-dollars { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 4px; }
+    .profile-card .pf-dollars { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 4px; letter-spacing: -0.01em; }
+    .profile-card .pf-name { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.03em; margin-top: 1px; }
+    .profile-card .pf-accent {
+      width: 30px; height: 2px; border-radius: 2px;
+      background: var(--border); margin-top: 4px;
+      transition: background 120ms;
+    }
+    .profile-card[aria-checked="true"] .pf-accent { background: var(--accent-purple); }
     .profile-card .pf-badge {
       font-size: 11.5px;
       font-weight: 700;
@@ -421,11 +486,11 @@
     /* Submit CTA */
     .submit-row { display: flex; flex-direction: column; align-items: center; margin-top: 26px; }
     .submit-cta {
-      background: var(--grad-cta);
+      background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat;
       border: none;
       color: #FFF;
       padding: 18px 28px;
-      border-radius: 14px;
+      border-radius: 12px;
       font-size: 17px;
       font-weight: 700;
       cursor: pointer;
@@ -447,6 +512,476 @@
     .persist-note { color: var(--text-faint); font-size: 12px; margin: 14px 0 0; text-align: center; }
 
     /* ===== RESULTS PAGE (hidden until submit) ===== */
+    /* ===== Results v2 — precision / range / verdict bento (concept: FOMO hierarchy) ===== */
+    /* Break the results out of the narrow form column: the reference is a
+       full-viewport dashboard. */
+    #resultsSection.visible {
+      display: block;
+      position: relative;
+      width: min(1520px, calc(100vw - 44px));
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .rz-top { display: grid; grid-template-columns: 1fr 1.32fr 2.15fr; gap: 22px; }
+    .rz-card {
+      background: var(--card-bg); border: 1px solid var(--border-soft);
+      border-radius: 16px; padding: 26px 30px; position: relative;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .rz-card-title {
+      font-size: 12.5px; font-weight: 700; letter-spacing: 0.12em;
+      color: var(--text-dim); display: flex; align-items: center; gap: 7px;
+    }
+    .rz-info { opacity: 0.5; font-size: 13px; cursor: help; font-weight: 400; }
+    .rz-note { font-size: 15px; color: var(--text-muted); line-height: 1.55; }
+    .rz-note strong { color: var(--text); }
+
+    /* Card 1 — precision */
+    .rz-precision-pct {
+      font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05;
+      color: var(--text-dim);
+    }
+    .rz-mini-steps { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 7px; font-size: 12px; color: var(--text-muted); }
+    .rz-mini-steps .ms { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+    .rz-mini-steps .ms.done { color: var(--text); }
+    .rz-mini-steps .ms.cur  { color: var(--text); font-weight: 700; }
+    .rz-mini-steps .ms.cur .msdot { width: 13px; height: 13px; border-radius: 50%; background: #FFF; box-shadow: 0 0 0 3px rgba(255,255,255,0.18); display: inline-block; }
+    .rz-mini-steps .ms.lock { color: var(--text-faint); }
+    .rz-mini-steps i { display: none; }
+    .rz-mini-steps i.off { background: var(--border); }
+
+    /* Card 2 — required return + range */
+    .rz-irr { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+    #rzCard2[data-tier="at_risk"]  .rz-irr { color: #FF3B30; }
+    #rzCard2[data-tier="stretch"]  .rz-irr { color: #F97316; }
+    #rzCard2[data-tier="on_track"] .rz-irr { color: #22C55E; }
+    .rz-range-label { font-size: 13px; font-weight: 500; color: var(--text-faint); margin-top: 10px; }
+    .rz-range-row { display: flex; align-items: center; gap: 14px; font-size: 16px; font-weight: 700; margin: 6px 0 40px; }
+    .rz-range-track {
+      flex: 1 1 auto; height: 8px; border-radius: 99px; position: relative;
+      background: linear-gradient(90deg, #3B4BD8 0%, #7C3AED 40%, #C0264B 75%, #FF3B30 100%);
+    }
+    .rz-range-marker {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 19px; height: 19px; border-radius: 50%;
+      background: #16060A; border: 4px solid #FF3B30;
+      box-shadow: 0 0 12px rgba(255,59,48,0.7);
+    }
+    #rzCard2[data-tier="stretch"]  .rz-range-marker { border-color: #F97316; box-shadow: 0 0 12px rgba(249,115,22,0.7); }
+    #rzCard2[data-tier="on_track"] .rz-range-marker { border-color: #22C55E; box-shadow: 0 0 12px rgba(34,197,94,0.7); }
+    .rz-range-your-wrap {
+      position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; line-height: 1.3; white-space: nowrap;
+    }
+    .rz-range-your-wrap span { font-size: 15px; font-weight: 800; }
+    #rzCard2[data-tier="at_risk"]  .rz-range-your-wrap span { color: #FF3B30; }
+    #rzCard2[data-tier="stretch"]  .rz-range-your-wrap span { color: #F97316; }
+    #rzCard2[data-tier="on_track"] .rz-range-your-wrap span { color: #22C55E; }
+    .rz-range-your-wrap em { font-style: normal; font-size: 12px; color: var(--text-muted); }
+    .rz-target { display: none; }
+    .rz-target-fixed { font-size: 13px; color: var(--text-dim); margin-top: auto; }
+    .rz-target-fixed span { color: var(--text-faint); }
+
+    /* Card 3 — verdict (the loudest thing on screen) */
+    .rz-verdict { padding: 30px 34px; padding-right: 205px; overflow: hidden; justify-content: center; gap: 14px; }
+    .rz-verdict[data-tier="at_risk"] {
+      border: 1.5px solid rgba(255,59,48,0.55);
+      background: radial-gradient(ellipse at 88% 45%, rgba(255,59,48,0.16) 0%, rgba(30,6,10,0.5) 45%, var(--card-bg) 75%);
+      box-shadow: 0 0 40px rgba(255,59,48,0.10);
+    }
+    .rz-verdict[data-tier="stretch"] {
+      border: 1.5px solid rgba(249,115,22,0.5);
+      background: radial-gradient(ellipse at 88% 45%, rgba(249,115,22,0.15) 0%, rgba(28,12,3,0.5) 45%, var(--card-bg) 75%);
+      box-shadow: 0 0 40px rgba(249,115,22,0.09);
+    }
+    .rz-verdict[data-tier="on_track"] {
+      border: 1.5px solid rgba(34,197,94,0.5);
+      background: radial-gradient(ellipse at 88% 45%, rgba(34,197,94,0.14) 0%, rgba(4,24,12,0.5) 45%, var(--card-bg) 75%);
+      box-shadow: 0 0 40px rgba(34,197,94,0.09);
+    }
+    .rz-pill {
+      display: inline-flex; align-items: center; gap: 9px; align-self: flex-start;
+      background: rgba(0,0,0,0.45); border-radius: 99px; padding: 7px 16px;
+      font-size: 13px; font-weight: 800; letter-spacing: 0.06em; color: var(--text);
+    }
+    .rz-pill .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .rz-verdict[data-tier="at_risk"]  .rz-pill .dot { background: #FF3B30; box-shadow: 0 0 9px #FF3B30; }
+    .rz-verdict[data-tier="stretch"]  .rz-pill .dot { background: #F97316; box-shadow: 0 0 9px #F97316; }
+    .rz-verdict[data-tier="on_track"] .rz-pill .dot { background: #22C55E; box-shadow: 0 0 9px #22C55E; }
+    .rz-verdict-head { font-size: clamp(28px, 2.9vw, 42px); font-weight: 800; letter-spacing: -0.015em; line-height: 1.12; }
+    .rz-verdict[data-tier="at_risk"]  .rz-verdict-head { color: #FF453A; }
+    .rz-verdict[data-tier="stretch"]  .rz-verdict-head { color: #F97316; }
+    .rz-verdict[data-tier="on_track"] .rz-verdict-head { color: #22C55E; }
+    .rz-verdict-body { font-size: 15.5px; color: var(--text-dim); line-height: 1.55; max-width: 52ch; }
+    .rz-verdict-cta { font-size: 15.5px; font-weight: 700; text-decoration: none; padding-top: 4px; }
+    .rz-verdict[data-tier="at_risk"]  .rz-verdict-cta { color: #FF453A; }
+    .rz-verdict[data-tier="stretch"]  .rz-verdict-cta { color: #F97316; }
+    .rz-verdict[data-tier="on_track"] .rz-verdict-cta { color: #22C55E; }
+    .rz-verdict-cta:hover { text-decoration: underline; }
+    .rz-verdict-badge {
+      position: absolute; right: 34px; top: 50%; transform: translateY(-50%);
+      width: 150px; height: 150px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rz-verdict[data-tier="at_risk"] .rz-verdict-badge { background: radial-gradient(circle, rgba(255,59,48,0.38) 0%, rgba(255,59,48,0.10) 55%, transparent 72%); }
+    .rz-verdict[data-tier="stretch"] .rz-verdict-badge { background: radial-gradient(circle, rgba(249,115,22,0.34) 0%, rgba(249,115,22,0.09) 55%, transparent 72%); }
+    .rz-verdict[data-tier="on_track"] .rz-verdict-badge { background: radial-gradient(circle, rgba(34,197,94,0.32) 0%, rgba(34,197,94,0.09) 55%, transparent 72%); }
+    .rz-verdict-badge .ring {
+      width: 96px; height: 96px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 48px; font-weight: 900; color: #FFF; line-height: 1;
+    }
+    .rz-verdict[data-tier="at_risk"]  .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #FF5147, #D31408); box-shadow: 0 0 55px rgba(255,59,48,0.6); }
+    .rz-verdict[data-tier="stretch"]  .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #FB8B3C, #CE5A05); box-shadow: 0 0 55px rgba(249,115,22,0.55); }
+    .rz-verdict[data-tier="on_track"] .rz-verdict-badge .ring { background: radial-gradient(circle at 35% 30%, #34D871, #12933F); box-shadow: 0 0 55px rgba(34,197,94,0.55); }
+
+    /* Recommended action bar */
+    .rz-action {
+      display: grid; grid-template-columns: auto auto 1fr auto auto; align-items: center; gap: 34px;
+      margin-top: 22px; padding: 20px 30px;
+      background: linear-gradient(90deg, rgba(59,60,200,0.16) 0%, rgba(89,60,200,0.10) 50%, rgba(59,60,200,0.14) 100%);
+      border: 1px solid rgba(120,110,255,0.45); border-radius: 14px;
+    }
+    .rz-action-ico {
+      width: 56px; height: 56px; border-radius: 13px; flex: none;
+      background: rgba(99,102,241,0.16); color: #818CF8;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rz-action-amt { font-size: 30px; font-weight: 800; letter-spacing: -0.01em; margin-top: 4px; }
+    .rz-action-exp { font-size: 15.5px; color: var(--text-dim); line-height: 1.5; border-left: 1px solid rgba(255,255,255,0.09); padding-left: 34px; }
+    .rz-action-nums { display: grid; grid-template-columns: auto auto auto; align-items: center; column-gap: 18px; border-left: 1px solid rgba(255,255,255,0.09); padding-left: 34px; }
+    .rz-action-nums .cur { font-size: 27px; font-weight: 800; color: var(--text); }
+    .rz-action-nums .arr { color: var(--text); font-size: 22px; }
+    .rz-action-nums .tgt { font-size: 27px; font-weight: 800; color: #22C55E; }
+    .rz-action-nums .lbls { grid-column: 1 / span 3; display: flex; justify-content: space-between; gap: 12px; font-size: 12px; color: var(--text-muted); margin-top: 3px; }
+    .rz-action[data-ok="1"] .rz-action-nums .cur { color: #22C55E; }
+    .rz-action-note { font-size: 14.5px; color: var(--text-dim); max-width: 26ch; line-height: 1.5; }
+
+    /* Bottom row */
+    .rz-bottom { display: block; margin-top: 46px; }
+    .rz-chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 2px; }
+    .rz-chip {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.4);
+      color: #6EE7A0; border-radius: 99px; padding: 7px 15px;
+      font-size: 13.5px; font-weight: 700;
+    }
+    .rz-sharpen-title { margin-top: 22px; }
+    .rz-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 13px 16px; border-radius: 10px; margin-top: 9px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
+    }
+    .rz-row-main { flex: 1 1 auto; min-width: 0; }
+    .rz-row-name { font-size: 15px; font-weight: 700; }
+    .rz-row-sub { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    .rz-row-sub b { font-weight: 700; }
+    .rz-row.na { background: rgba(255,255,255,0.012); }
+    .rz-row.na .rz-row-name { color: var(--text-muted); }
+    .rz-row.na .rz-row-sub { color: var(--text-faint); }
+    .rz-lock {
+      flex: none; display: inline-flex; align-items: center; gap: 8px;
+      font-size: 13.5px; font-weight: 600; color: var(--text-muted);
+      text-decoration: none; white-space: nowrap;
+      transition: color 0.15s ease;
+    }
+    .rz-lock:hover { color: var(--text); }
+    .rz-lock svg { width: 14px; height: 14px; color: #FBBF24; filter: drop-shadow(0 0 4px rgba(251,191,36,0.45)); }
+    .imp-purple { color: #A78BFA; } .imp-blue { color: #60A5FA; }
+    .imp-green { color: #4ADE80; } .imp-amber { color: #FBBF24; }
+    .bg-purple { background: rgba(139,92,246,0.16); }
+    .bg-blue   { background: rgba(59,130,246,0.16); }
+    .bg-green  { background: rgba(34,197,94,0.14); }
+    .bg-amber  { background: rgba(245,158,11,0.14); }
+
+    .rz-impact-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .rz-impact-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
+    .rz-impact-head a:hover { text-decoration: underline; }
+    .rz-imp {
+      display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 18px;
+      padding: 17px 2px; border-bottom: 1px solid var(--border-soft);
+    }
+    .rz-imp:last-of-type { border-bottom: 0; padding-bottom: 6px; }
+    .rz-imp-ico {
+      width: 52px; height: 52px; border-radius: 50%; flex: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .rz-imp-ico svg { width: 24px; height: 24px; }
+    .rz-imp-main { min-width: 0; }
+    .rz-imp-name { font-size: 16px; font-weight: 700; }
+    .rz-imp-sub { font-size: 13.5px; color: var(--text-muted); margin-top: 3px; line-height: 1.45; max-width: 34ch; }
+    .rz-imp-val { text-align: left; }
+    .rz-imp-val .lab { font-size: 13px; color: var(--text-dim); display: block; }
+    .rz-imp-val .num { font-size: 25px; font-weight: 800; letter-spacing: -0.01em; }
+    .rz-imp-lk { color: #FBBF24; opacity: 0.95; padding-left: 4px; filter: drop-shadow(0 0 4px rgba(251,191,36,0.4)); }
+    .rz-imp-lk svg { width: 16px; height: 16px; }
+
+    /* Page footer: assumptions left, adjust right */
+    .rz-pagefoot { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-top: 24px; }
+    .rz-foot-tax { display: flex; align-items: center; gap: 9px; font-size: 13.5px; color: var(--text-muted); }
+    .rz-foot-tax svg { width: 16px; height: 16px; color: var(--text-faint); flex: none; }
+    .rz-adjust {
+      display: inline-flex; align-items: center; gap: 9px;
+      font-size: 15px; font-weight: 700; color: var(--text); font-family: inherit;
+      background: transparent; border: 1.5px solid var(--accent-purple);
+      border-radius: 11px; padding: 12px 22px; cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .rz-adjust:hover { background: rgba(139,92,246,0.12); }
+
+    /* Steady "always on" glow — the same 2.6s breath as the dashboard tier dot,
+       the chart markers and the heat-map pills. Applied to: the verdict pill
+       dot, the stepper's results dot, the precision marker, and the verdict
+       badge. Paul, Sept 10. */
+    @keyframes bpGlowRed    { 0%,100% { box-shadow: 0 0 0 0 rgba(255,59,48,0),   0 0 8px rgba(255,59,48,0.55);  opacity: .88; } 50% { box-shadow: 0 0 0 4px rgba(255,59,48,0.14),   0 0 16px rgba(255,59,48,0.95);  opacity: 1; } }
+    @keyframes bpGlowAmber  { 0%,100% { box-shadow: 0 0 0 0 rgba(249,115,22,0),  0 0 8px rgba(249,115,22,0.55); opacity: .88; } 50% { box-shadow: 0 0 0 4px rgba(249,115,22,0.14),  0 0 16px rgba(249,115,22,0.95); opacity: 1; } }
+    @keyframes bpGlowGreen  { 0%,100% { box-shadow: 0 0 0 0 rgba(34,197,94,0),   0 0 8px rgba(34,197,94,0.55);  opacity: .88; } 50% { box-shadow: 0 0 0 4px rgba(34,197,94,0.14),   0 0 16px rgba(34,197,94,0.95);  opacity: 1; } }
+    @keyframes bpGlowPurple { 0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0), 0 0 8px rgba(167,139,250,0.6); } 50% { box-shadow: 0 0 0 5px rgba(167,139,250,0.14), 0 0 18px rgba(167,139,250,1); } }
+    .rz-verdict[data-tier="at_risk"]  .rz-pill .dot { animation: bpGlowRed 2.6s ease-in-out infinite; }
+    .rz-verdict[data-tier="stretch"]  .rz-pill .dot { animation: bpGlowAmber 2.6s ease-in-out infinite; }
+    .rz-verdict[data-tier="on_track"] .rz-pill .dot { animation: bpGlowGreen 2.6s ease-in-out infinite; }
+    .stepper .step.active.results .dot { animation: bpGlowRed 2.6s ease-in-out infinite; }
+    .stepper .step.active.results-stretch .dot { animation: bpGlowAmber 2.6s ease-in-out infinite; }
+    .stepper .step.active.results-on-track .dot { animation: bpGlowGreen 2.6s ease-in-out infinite; }
+    .rz-prec-marker { animation: bpGlowPurple 2.6s ease-in-out infinite; }
+    #rzCard2[data-tier="at_risk"]  .rz-range-marker { animation: bpGlowRed 2.6s ease-in-out infinite; }
+    #rzCard2[data-tier="stretch"]  .rz-range-marker { animation: bpGlowAmber 2.6s ease-in-out infinite; }
+    #rzCard2[data-tier="on_track"] .rz-range-marker { animation: bpGlowGreen 2.6s ease-in-out infinite; }
+
+    /* Verdict badge: a slow breathing halo instead of the old two-beat bounce */
+    @keyframes bpBadgeRed   { 0%,100% { box-shadow: 0 0 40px rgba(255,59,48,0.45);  transform: scale(1); } 50% { box-shadow: 0 0 75px rgba(255,59,48,0.85);  transform: scale(1.04); } }
+    @keyframes bpBadgeAmber { 0%,100% { box-shadow: 0 0 40px rgba(249,115,22,0.42); transform: scale(1); } 50% { box-shadow: 0 0 75px rgba(249,115,22,0.8);  transform: scale(1.04); } }
+    @keyframes bpBadgeGreen { 0%,100% { box-shadow: 0 0 40px rgba(34,197,94,0.42);  transform: scale(1); } 50% { box-shadow: 0 0 75px rgba(34,197,94,0.8);   transform: scale(1.04); } }
+    .rz-verdict[data-tier="at_risk"]  .rz-verdict-badge .ring { animation: bpBadgeRed 2.6s ease-in-out infinite; }
+    .rz-verdict[data-tier="stretch"]  .rz-verdict-badge .ring { animation: bpBadgeAmber 2.6s ease-in-out infinite; }
+    .rz-verdict[data-tier="on_track"] .rz-verdict-badge .ring { animation: bpBadgeGreen 2.6s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .rz-pill .dot, .stepper .step .dot, .rz-prec-marker, .rz-range-marker, .rz-verdict-badge .ring { animation: none !important; }
+    }
+
+    /* Hover glow — same treatment as the dashboard cards (cursor devices only) */
+    @media (hover: hover) and (pointer: fine) {
+      .rz-card, .rz-row, .rz-action { transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+      .rz-card:not(.rz-verdict):hover {
+        border-color: rgba(139,92,246,0.55);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3), 0 0 22px rgba(139,92,246,0.20);
+      }
+      .rz-row:hover { border-color: rgba(139,92,246,0.45); }
+      .rz-action:hover {
+        border-color: rgba(139,92,246,0.65);
+        box-shadow: 0 0 26px rgba(139,92,246,0.22);
+      }
+      .rz-item:hover { border-color: rgba(139,92,246,0.5); box-shadow: 0 0 18px rgba(139,92,246,0.15); }
+    }
+
+    /* Stretch tier: amber warning triangle instead of a circle */
+    .rz-verdict[data-tier="stretch"] .rz-verdict-badge .ring {
+      background: transparent; box-shadow: none;
+      filter: drop-shadow(0 0 26px rgba(249,115,22,0.65));
+    }
+
+
+    /* Premium blur: computed magnitudes locked behind Full Profile */
+    .rz-blurwrap { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+
+    /* ===== Commerce: OFF for visitors ==================================
+       Only the navigation to pricing is removed -- the buttons and the
+       links. The blurred figures and their padlocks stay exactly as Paul
+       drew them, because a lock tells the reader there is more precision
+       available, which is information. A button telling them to buy it is
+       commerce, and commerce is off until the store opens.
+
+       ?upsell=1 restores the buttons; ?upsell=0 hides them again. Hidden,
+       not deleted -- turning selling back on is a URL parameter. */
+    body:not(.upsell-on) .rz-cta-btn,
+    body:not(.upsell-on) .rz-verdict-cta { display: none !important; }
+
+    /* Tier block: what each tier DOES stays visible, what it COSTS does not.
+       The prices, the monthly/yearly cadence toggle and the buy buttons are all
+       commerce. ?upsell=1 brings them back, same switch as everything else. */
+    body:not(.upsell-on) .tier-prices,
+    body:not(.upsell-on) .tier-billing,
+    body:not(.upsell-on) .bp-bill-row,
+    body:not(.upsell-on) .tier-price,
+    body:not(.upsell-on) .tier-price-sub,
+    body:not(.upsell-on) .tier-lock,
+    body:not(.upsell-on) .tier-addon,
+    body:not(.upsell-on) .tier-cta-btn { display: none !important; }
+    body:not(.upsell-on) .cadence-sell { display: none; }
+    body.upsell-on .cadence-tell { display: none; }
+
+    /* Teasers keep their look, lose their destination. */
+    body:not(.upsell-on) .rz-blurwrap,
+    body:not(.upsell-on) .rz-item[href*="pricing.html"] { pointer-events: none; cursor: default; }
+
+    .rz-blur { filter: blur(8px); user-select: none; pointer-events: none; }
+    .rz-blur-sm { filter: blur(6px); }
+    .rz-blur-lock { color: #FBBF24; display: inline-flex; filter: drop-shadow(0 0 5px rgba(251,191,36,0.5)); }
+    .rz-blurwrap:hover .rz-blur-lock { transform: scale(1.12); transition: transform 0.15s ease; }
+
+    /* Compact convenience CTA (precision card) */
+    .rz-cta-btn.rz-cta-sm {
+      display: inline-flex; width: auto; font-size: 13px; font-weight: 700; padding: 9px 14px; border-radius: 10px;
+      align-self: flex-start; margin-top: 4px; gap: 6px; white-space: nowrap;
+      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
+      box-shadow: 0 6px 22px rgba(139,92,246,0.35);
+    }
+
+    /* --- Bottom cleanup --- */
+    .detail-panel { margin-top: 26px; }
+    .rz-adjust-link { background: none; border: 0; cursor: pointer; font-family: inherit; font-size: 13.5px; color: var(--text-muted); text-decoration: underline; text-underline-offset: 3px; padding: 2px; }
+    .rz-adjust-link:hover { color: var(--text); }
+    .rz-resources { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 42px; align-items: stretch; }
+    .rz-callout { padding: 20px 22px; border-left: 3px solid var(--accent-purple); background: rgba(139,92,246,0.06); border-radius: 12px; font-size: 14.5px; line-height: 1.55; color: var(--text-muted); }
+    .rz-resources .ebook-cta { margin: 0; }
+    @media (max-width: 880px) { .rz-resources { grid-template-columns: 1fr; } }
+
+    /* V3: original sizes; hierarchy via surface elevation + verdict leads (LTR) */
+    .rz-top { grid-template-columns: 1.9fr 1.3fr 1.15fr; }
+    .rz-precision-pct { font-size: 64px; background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+    .rz-irr { font-size: 64px; }
+    .rz-card { background: #0D1220; }
+    .rz-card .rz-card-title { color: var(--text-faint); }
+    .rz-verdict .rz-card-title { color: var(--text-dim); }
+    /* Demo-fallback banner (localhost preview only) */
+    .rz-demo-note {
+      margin-bottom: 16px; padding: 11px 16px; border-radius: 10px;
+      background: rgba(251,191,36,0.10); border: 1px solid rgba(251,191,36,0.45);
+      color: #FBBF24; font-size: 13.5px; font-weight: 600;
+    }
+
+    /* Precision progress bar (endowed progress) */
+    /* Precision as a journey axis (same grammar as the return range bar) */
+    .rz-prec-axis { margin: 12px 0 38px; }
+    .rz-prec-axis .ends { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 7px; }
+    .rz-prec-axis .pend { font-size: 11.5px; font-weight: 600; color: var(--text-muted); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
+    .rz-prec-axis .pend.lock { color: var(--text-faint); }
+    .rz-prec-track { width: 100%; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-prec-track i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, #4F46E5, #8B5CF6, #A78BFA); transition: width 0.8s ease; }
+    .rz-prec-marker {
+      position: absolute; top: 50%; transform: translate(-50%, -50%);
+      width: 17px; height: 17px; border-radius: 50%;
+      background: #100A24; border: 3.5px solid #A78BFA;
+      box-shadow: 0 0 10px rgba(167,139,250,0.65);
+    }
+    .rz-prec-you {
+      position: absolute; top: 19px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; line-height: 1.25; white-space: nowrap;
+    }
+    .rz-prec-you span { font-size: 13.5px; font-weight: 800; color: #C4B5FD; }
+    .rz-prec-you em { font-style: normal; font-size: 10.5px; color: var(--text-muted); }
+
+    /* Plain-language accuracy line (replaces the second range bar) */
+    .rz-acc { margin-top: 26px; margin-bottom: 10px; font-size: 18px; color: var(--text-dim); line-height: 1.7; max-width: 72ch; }
+    .rz-acc b.now { font-size: 28px; font-weight: 800; color: #FBBF24; line-height: 1; }
+    .rz-acc b.full { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
+    .rz-acc b.money { font-size: 28px; font-weight: 800; color: #4ADE80; line-height: 1; }
+
+    /* Merged section head + one-bar comparison */
+    .rz-merge-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
+    .rz-merge-head a { font-size: 14px; font-weight: 700; color: var(--accent-purple); text-decoration: none; white-space: nowrap; }
+    .rz-merge-head a:hover { text-decoration: underline; }
+    .rz-onebar { margin: 14px 2px 6px; }
+    .ob-labels { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 12.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; }
+    .ob-note { display: inline-flex; align-items: center; gap: 7px; color: #4ADE80; }
+    .ob-note i { width: 18px; height: 8px; border-radius: 99px; background: #22C55E; box-shadow: 0 0 6px rgba(34,197,94,0.6); }
+    .ob-row { display: flex; align-items: center; gap: 12px; }
+    .ob-row .cv { font-size: 12.5px; font-weight: 700; white-space: nowrap; }
+    .ob-track { flex: 1 1 auto; height: 10px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); position: relative; }
+    .ob-band { position: absolute; top: -3px; bottom: -3px; border-radius: 99px; background: #22C55E; border: 2px solid #0B0F1E; box-shadow: 0 0 10px rgba(34,197,94,0.7); }
+    .rz-item {
+      display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 18px;
+      padding: 14px 16px; border-radius: 12px; margin-top: 10px;
+      background: rgba(255,255,255,0.025); border: 1px solid var(--border-soft);
+      text-decoration: none; color: inherit;
+    }
+    .rz-item-main { min-width: 0; }
+    .rz-item-name { font-size: 15.5px; font-weight: 700; }
+    .rz-item-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+
+    /* Legacy two-bar styles (superseded) */
+    /* Section thesis: today's span vs the Full Profile band, to scale */
+    .rz-compare { margin: 10px 0 6px; display: flex; flex-direction: column; gap: 9px; }
+    .rz-cmp-row { display: grid; grid-template-columns: 118px 1fr; align-items: center; gap: 12px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .rz-cmp-row .cmpwrap { display: flex; align-items: center; gap: 10px; }
+    .rz-cmp-row .cv { font-size: 12px; font-weight: 700; white-space: nowrap; }
+    .rz-cmp-row .cv.green { color: #4ADE80; }
+    .rz-cmp-row .cv.ghost { visibility: hidden; }
+    .rz-cmp-row .bar { flex: 1 1 auto; height: 8px; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #FF3B30); }
+    .rz-cmp-row .trk { flex: 1 1 auto; height: 8px; border-radius: 99px; background: var(--border-soft); position: relative; }
+    .rz-cmp-row .trk i {
+      position: absolute; top: 0; height: 100%; border-radius: 99px;
+      background: #22C55E; box-shadow: 0 0 8px rgba(34,197,94,0.6);
+    }
+
+    .rz-total {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      margin-top: 14px; padding: 13px 16px; border-radius: 10px;
+      background: rgba(139,92,246,0.10); border: 1px solid rgba(139,92,246,0.4);
+      font-size: 14.5px; font-weight: 700;
+    }
+    .rz-total b { font-size: 17px; color: #C4B5FD; white-space: nowrap; }
+    .rz-chips-note { font-size: 12.5px; color: var(--text-faint); margin-top: 9px; }
+
+    /* Primary CTA + trust microcopy */
+    .rz-cta-block { margin-top: 28px; display: flex; flex-direction: column; align-items: center; gap: 11px; }
+    .rz-cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat; color: #FFF;
+      font-size: 17px; font-weight: 800; text-decoration: none;
+      padding: 17px 42px; border-radius: 12px;
+      box-shadow: 0 10px 36px rgba(139,92,246,0.42);
+      transition: transform 0.12s ease, box-shadow 0.2s ease;
+    }
+    .rz-cta-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 42px rgba(139,92,246,0.55); }
+    .rz-trust { font-size: 12.5px; color: var(--text-muted); text-align: center; }
+
+    /* "Computing" overlay (labor illusion — honest steps, ~2.5s) */
+    .rz-calc {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(4,6,14,0.88);
+      display: none; align-items: center; justify-content: center;
+    }
+    .rz-calc.on { display: flex; }
+    .rz-calc-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 30px 36px; width: min(440px, 90vw);
+    }
+    /* EDGE at the abacus while the engine runs (Paul, Sept 13). */
+    .rz-calc-mascot { display: block; width: 132px; height: auto; margin: -6px auto 12px; filter: drop-shadow(0 10px 24px rgba(139,92,246,0.35)); animation: rzBob 2.6s ease-in-out infinite; }
+    @keyframes rzBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @media (prefers-reduced-motion: reduce) { .rz-calc-mascot { animation: none; } }
+    .rz-calc-title { font-weight: 800; font-size: 16.5px; margin-bottom: 14px; text-align: center; }
+    .rz-calc-step { font-size: 14px; color: var(--text-muted); padding: 5.5px 0; opacity: 0; transition: opacity 0.35s ease; }
+    .rz-calc-step.on { opacity: 1; }
+    .rz-calc-step.warn { color: #FBBF24; font-weight: 600; }
+
+    @media (max-width: 1180px) {
+      .rz-top { grid-template-columns: 1fr 1.35fr; }
+      .rz-verdict { grid-column: 1 / -1; }
+    }
+    @media (max-width: 880px) {
+      .rz-top, .rz-bottom { grid-template-columns: 1fr; }
+      .rz-action { grid-template-columns: auto 1fr; row-gap: 16px; }
+      .rz-action-exp, .rz-action-nums { border-left: 0; padding-left: 0; }
+      .rz-action-exp { grid-column: 1 / -1; }
+      .rz-action-note { max-width: none; grid-column: 1 / -1; }
+      .rz-verdict { padding-right: 34px; }
+      .rz-verdict-badge { display: none; }
+      .rz-verdict-head { max-width: none; }
+      .rz-imp { grid-template-columns: auto 1fr auto; }
+      .rz-imp-lk { display: none; }
+      .rz-item { grid-template-columns: auto 1fr auto; }
+      .rz-pagefoot { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .rz-action { grid-template-columns: 1fr; gap: 14px; padding: 18px 20px; }
+      .rz-action-ico { display: none; }
+      .rz-card { padding: 20px 18px; }
+      .rz-verdict { padding: 22px 20px; }
+      .rz-precision-pct, .rz-irr { font-size: 48px; }
+    }
+
     #resultsSection { display: none; }
     #resultsSection.visible { display: block; }
 
@@ -499,7 +1034,7 @@
       display: inline-flex; align-items: center; justify-content: center;
       position: relative;
     }
-    .result-ring svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+    .result-ring > svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
     .result-ring .ring-track { fill: none; stroke: var(--border-soft); stroke-width: 4; }
     .result-ring .ring-arc   { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 535; stroke-dashoffset: 0; transition: stroke-dashoffset 800ms cubic-bezier(0.22,1,0.36,1); }
     .result-ring[data-tier="at_risk"]  .ring-arc { stroke: var(--accent-red);   filter: drop-shadow(0 0 6px rgba(255,59,48,0.7)); }
@@ -593,6 +1128,19 @@
       max-width: 460px;
     }
 
+    .result-move {
+      display: flex; align-items: flex-start; gap: 11px;
+      margin-top: 22px; padding-top: 18px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 16.5px; font-weight: 600; line-height: 1.45;
+      color: var(--text);
+    }
+    .result-move .rm-arrow { flex: 0 0 auto; font-size: 19px; font-weight: 800; line-height: 1.35; }
+    .result-move[data-tier="at_risk"]  .rm-arrow { color: var(--accent-red); }
+    .result-move[data-tier="stretch"]  .rm-arrow { color: var(--accent-amber); }
+    .result-move[data-tier="on_track"] .rm-arrow { color: var(--accent-green); }
+    .result-move .rm-text strong { color: var(--text); font-weight: 800; }
+
     .result-foot {
       display: flex;
       justify-content: space-between;
@@ -665,15 +1213,41 @@
       border-radius: 16px;
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08), 0 8px 22px rgba(0,0,0,0.38);
     }
-    .tier-icon.jae   { background: radial-gradient(circle at 30% 30%, #2A2520, #0a0a0a); border: 1px solid #3A3530; color: #C9A876; }
+    .tier-icon svg { width: 27px; height: 27px; }
+    .tier-icon.jae svg { width: 30px; height: 30px; }
+    /* Quick Check is teal: distinct from Autopilot's purple and Concierge's gold. */
+    .tier-icon.jae   svg { filter: drop-shadow(0 0 7px rgba(96,165,250,0.6)); }
+    .tier-icon.edge  svg { filter: drop-shadow(0 0 7px rgba(167,139,250,0.65)); }
+    .tier-icon.ultra svg { filter: drop-shadow(0 0 7px rgba(252,211,77,0.6)); }
+    .tier-icon .ico-fill { fill: currentColor; fill-opacity: 0.18; }
+    .tier-icon.jae   { background: radial-gradient(circle at 30% 30%, #0F1F3A, #05090f); border: 1px solid #1E3A5F; color: #60A5FA; }
     .tier-icon.edge  { background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border: 1px solid #312E5B; color: #A78BFA; }
     .tier-icon.ultra { background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border: 1px solid #3A2F1F; color: #FCD34D; }
+    /* Enterprise is a different species from the good/better/best ladder: an
+       institutional door, not a fourth rung. Teal, never 'popular', no billing,
+       no price, and DELIBERATELY no data-shopify-tier — it is a negotiated
+       license, not a shelf product, and must never pick up a store price by a
+       'Tier 4' being created in Shopify. Its contact line is plain text, not a
+       button: no store is ever coming for this card, so hiding its only action
+       would make it a permanent dead end. A lock is information, a button is
+       selling — an email address is neither; it is a door. */
+    .tier-card.enterprise { border-color: rgba(50,206,190,0.35); }
+    .tier-icon.enterprise { background: radial-gradient(circle at 30% 30%, #0F2E2A, #05100e); border: 1px solid #1E4B44; color: #32CEBE; }
+    .tier-card.enterprise .tier-tag { color: #32CEBE; }
+    .tier-card.enterprise .feat-icon { color: #32CEBE; }
+    .tier-contact {
+      margin-top: auto; padding-top: 14px; font-size: 13px; color: var(--text-muted);
+    }
+    .tier-contact a { color: #32CEBE; text-decoration: none; }
+    .tier-contact a:hover { text-decoration: underline; }
     .tier-name { font-size: 19px; font-weight: 700; color: var(--text); margin: 0; }
     .tier-tag  { font-size: 13.5px; font-weight: 600; margin: 2px 0 0; }
     .tier-card.popular .tier-tag { color: var(--accent-purple); }
     .tier-card.ultra .tier-tag   { color: #FCD34D; }
-    .tier-card:not(.popular):not(.ultra) .tier-tag { color: var(--text-muted); }
+    .tier-card.jae .tier-tag { color: #60A5FA; }
+    .tier-card:not(.popular):not(.ultra):not(.enterprise):not(.jae) .tier-tag { color: var(--text-muted); }
 
     .tier-features {
       list-style: none;
@@ -687,17 +1261,21 @@
     }
     .tier-features li {
       display: grid;
-      grid-template-columns: 22px 1fr;
-      gap: 10px;
+      grid-template-columns: 30px 1fr;
+      gap: 12px;
       align-items: start;
     }
     .tier-features li .feat-icon {
-      width: 18px; height: 18px;
+      width: 30px; height: 30px; box-sizing: border-box; padding: 7px;
+      border-radius: 9px;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border-soft);
       color: var(--text-dim);
-      margin-top: 2px;
+      stroke-linecap: round; stroke-linejoin: round;
+      margin-top: -1px;
     }
-    .tier-card.popular .feat-icon { color: var(--accent-purple); }
-    .tier-card.ultra .feat-icon { color: #FCD34D; }
+    .tier-card.jae .feat-icon     { background: rgba(96,165,250,0.10); border-color: rgba(96,165,250,0.30); color: #5EEAD4; }
+    .tier-card.popular .feat-icon { background: rgba(139,92,246,0.14); border-color: rgba(139,92,246,0.32); color: #C4B5FD; }
+    .tier-card.ultra .feat-icon   { background: rgba(252,211,77,0.10); border-color: rgba(252,211,77,0.30); color: #FCD34D; }
     .tier-features li .feat-text { color: var(--text); font-size: 13.5px; line-height: 1.45; }
     .tier-features li .feat-text strong { display: block; font-weight: 600; }
     .tier-features li .feat-text span { display: block; color: var(--text-muted); font-size: 12.5px; margin-top: 2px; }
@@ -727,6 +1305,84 @@
     .tier-card.popular .billing-toggle button[aria-pressed="true"] { background: rgba(139,92,246,0.18); }
     .tier-card.ultra .billing-toggle button[aria-pressed="true"] { background: rgba(252,211,77,0.15); }
 
+    /* Shared billing toggle + founding price lock (mirrors pricing.html) */
+    .bp-bill-row { display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; margin-top: 22px; }
+    .billing-toggle.bp-shared { display: inline-grid; grid-template-columns: auto auto; border-radius: 999px; }
+    .billing-toggle.bp-shared button { padding: 8px 16px; font-size: 13px; border-radius: 999px; display: inline-flex; align-items: center; gap: 8px; }
+    .billing-toggle.bp-shared button[aria-pressed="true"] { background: var(--accent-purple); color: #FFF; }
+    .bp-save { font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
+    .billing-toggle.bp-shared button[aria-pressed="true"] .bp-save { background: rgba(255,255,255,0.22); color: #FFF; }
+    .bp-bill-hint { font-size: 13px; color: var(--text-muted); }
+    .bp-bill-hint strong { color: var(--text); }
+    /* Per-card price options: monthly and yearly both visible, one selected.
+       Clicking either switches the whole grid (shared billing state). */
+    .tier-price { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 2px; }
+    .tp-opt {
+      position: relative; text-align: left; cursor: pointer; font-family: inherit;
+      padding: 10px 12px 9px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--bg-soft); color: var(--text-muted);
+      display: flex; flex-direction: column; gap: 2px;
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .tp-opt:hover { border-color: var(--text-muted); }
+    .tp-opt .tp-amt { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; line-height: 1.1; }
+    .tp-opt .tp-unit { font-size: 12px; font-weight: 600; }
+    .tp-opt .tp-tag { display: inline-block; margin-top: 5px; align-self: flex-start; font-size: 9.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; padding: 2px 7px; border-radius: 999px; background: rgba(34,197,94,0.18); color: #86EFAC; }
+    .tp-opt.on { color: var(--text); border-color: var(--accent-purple); background: rgba(139,92,246,0.12); box-shadow: inset 0 0 0 1px var(--accent-purple); }
+    .tier-card.jae .tp-opt.on   { border-color: rgba(96,165,250,0.75); background: rgba(96,165,250,0.08); box-shadow: inset 0 0 0 1px rgba(96,165,250,0.75); }
+    .tier-card.ultra .tp-opt.on { border-color: rgba(252,211,77,0.75); background: rgba(252,211,77,0.08); box-shadow: inset 0 0 0 1px rgba(252,211,77,0.75); }
+    .tp-opt[hidden] { display: none; }
+    .tier-lock { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; background: rgba(34,197,94,0.10); border: 1px solid rgba(34,197,94,0.28); font-size: 12.5px; line-height: 1.35; color: var(--text); }
+    .tier-lock .lk { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; background: rgba(34,197,94,0.18); color: #22C55E; }
+    .tier-lock .lk svg { width: 11px; height: 11px; }
+    .tier-lock strong { color: #4ADE80; font-weight: 800; }
+    .tier-lock.off { background: transparent; border-style: dashed; border-color: var(--border); color: var(--text-muted); }
+    .tier-lock.off .lk { background: var(--border); color: var(--text-muted); }
+    .tier-lock.off strong { color: var(--text); }
+    .tier-features { flex: 1; }
+    /* Advisor add-on: a teaser line; click opens a bubble with the detail
+       and a link out to Jae's site. Price stays inside the bubble. */
+    .tier-addon { position: relative; }
+    .addon-toggle {
+      width: 100%; text-align: left; cursor: pointer; font-family: inherit;
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px; border-radius: 12px;
+      border: 1px dashed rgba(252,211,77,0.35); background: var(--bg-soft); color: var(--text);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+    .addon-toggle:hover, .addon-toggle[aria-expanded="true"] { border-style: solid; border-color: rgba(252,211,77,0.6); background: rgba(252,211,77,0.06); }
+    .addon-toggle .at-ico { width: 30px; height: 30px; flex: none; border-radius: 9px; display: grid; place-items: center; background: rgba(252,211,77,0.12); border: 1px solid rgba(252,211,77,0.3); color: #FCD34D; }
+    .addon-toggle .at-ico svg { width: 15px; height: 15px; }
+    .addon-toggle .at-text { flex: 1; }
+    .addon-toggle .at-eyebrow { display: block; font-size: 10.5px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; color: #FCD34D; margin-bottom: 2px; }
+    .addon-toggle .at-title { display: block; font-size: 14px; font-weight: 700; }
+    .addon-toggle .at-chev { width: 16px; height: 16px; color: var(--text-muted); transition: transform 0.18s ease; flex: none; }
+    .addon-toggle[aria-expanded="true"] .at-chev { transform: rotate(90deg); }
+    .addon-pop {
+      position: absolute; left: 0; right: 0; bottom: calc(100% + 12px); z-index: 5;
+      background: #161D33; border: 1px solid rgba(252,211,77,0.45); border-radius: 14px;
+      padding: 16px 18px; box-shadow: 0 18px 48px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.3);
+    }
+    .addon-pop::after {
+      content: ''; position: absolute; left: 28px; bottom: -8px; width: 14px; height: 14px;
+      background: #161D33; border-right: 1px solid rgba(252,211,77,0.45); border-bottom: 1px solid rgba(252,211,77,0.45);
+      transform: rotate(45deg);
+    }
+    .addon-pop[hidden] { display: none; }
+    .addon-pop-h { font-size: 15px; font-weight: 800; color: var(--text); margin: 0 0 6px; }
+    .addon-pop p { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin: 0 0 12px; }
+    .addon-pop-price { display: flex; align-items: baseline; gap: 6px; margin-bottom: 12px; }
+    .addon-pop-price b { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+    .addon-pop-price small { font-size: 12px; color: var(--text-muted); font-weight: 600; }
+    .addon-pop-price .pp-lock { margin-left: auto; font-size: 10.5px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #4ADE80; background: rgba(34,197,94,0.12); padding: 3px 8px; border-radius: 999px; }
+    .addon-pop-cta {
+      display: block; text-align: center; text-decoration: none;
+      background: linear-gradient(90deg, #B45309, #F59E0B); color: #1A1200;
+      font-weight: 800; font-size: 13.5px; padding: 11px 14px; border-radius: 10px;
+    }
+    .addon-pop-cta:hover { filter: brightness(1.06); }
+    .addon-pop-x { position: absolute; top: 8px; right: 10px; background: none; border: 0; color: var(--text-muted); font-size: 18px; cursor: pointer; line-height: 1; font-family: inherit; }
+
     .tier-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
     .tier-price-cell {
       display: flex; align-items: baseline; gap: 6px;
@@ -735,7 +1391,7 @@
     .tier-price-unit { font-size: 13.5px; color: var(--text-muted); }
 
     .tier-cta-btn {
-      background: var(--grad-cta);
+      background: var(--grad-cta); background-origin: border-box; background-repeat: no-repeat;
       border: none;
       color: #FFF;
       padding: 12px 18px;
@@ -750,7 +1406,13 @@
       text-decoration: none;
       display: block;
     }
-    .tier-card:not(.popular) .tier-cta-btn { display: none; }
+    /* Every tier is buyable (Paul, Sept 10). Autopilot keeps the gradient;
+       the other two get outlined buttons so the popular card still leads. */
+    .tier-card.jae .tier-cta-btn { background: transparent; border: 1.5px solid rgba(96,165,250,0.6); color: #5EEAD4; }
+    .tier-card.jae .tier-cta-btn:hover { background: rgba(96,165,250,0.10); border-color: #5EEAD4; }
+    .tier-card.ultra .tier-cta-btn { background: transparent; border: 1.5px solid rgba(252,211,77,0.6); color: #FCD34D; }
+    .tier-card.ultra .tier-cta-btn:hover { background: rgba(252,211,77,0.08); border-color: #FCD34D; }
+    .tier-card .tier-cta-btn + .tier-addon { margin-top: 12px; }
 
     /* Detail section */
     .detail-panel { margin-top: 36px; }
@@ -811,18 +1473,37 @@
 
     @media (max-width: 880px) {
       .topbar { grid-template-columns: 1fr; gap: 14px; padding: 18px 20px 0; }
-      .stepper { justify-content: flex-start; overflow-x: auto; }
-      .secure-chip { justify-self: flex-start; }
+      .stepper { justify-content: center; overflow-x: auto; }
+      .secure-chip { justify-self: center; }
       .wrap { padding: 24px 20px 40px; }
-      h1.page-title, .results-title { font-size: 30px; }
+      .results-title { font-size: 30px; }
       .form-grid { grid-template-columns: 1fr; }
       .form-grid > .span2 { grid-column: span 1; }
-      .profiles { grid-template-columns: repeat(2, 1fr); }
+      .profiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .advanced-grid { grid-template-columns: 1fr; }
       .result-hero-grid { grid-template-columns: 1fr; text-align: center; }
       .result-readout .result-value { font-size: 64px; }
-      .tier-grid { grid-template-columns: 1fr; }
       .detail-grid { grid-template-columns: 1fr; }
+    }
+    /* Three consumer tiers: stay 3-up until tablet width, then stack.
+       Two-up would orphan the third card. */
+    @media (max-width: 1180px) { .tier-grid { gap: 14px; } .tier-card { padding: 22px 18px 20px; } }
+    @media (max-width: 980px)  { .tier-grid { grid-template-columns: 1fr; max-width: 560px; margin-left: auto; margin-right: auto; } }
+
+    /* ===== Phones ===== */
+    @media (max-width: 560px) {
+      .topbar { padding: 14px 14px 0; }
+      .stepper .step { padding: 0 12px; font-size: 12.5px; gap: 7px; }
+      .wrap { padding: 20px 14px 36px; }
+      .card { padding: 20px 16px; }
+      .section-card { padding: 18px 16px; }
+      .profiles { gap: 10px; }
+      .profile-card { padding: 16px 8px 14px; }
+      .profile-card .pf-dollars { font-size: 15px; }
+      .result-readout .result-value { font-size: 48px; }
+      .tier-grid { grid-template-columns: 1fr; }
+      .tier-prices { grid-template-columns: 1fr; }
+      .spouse-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -872,7 +1553,7 @@
                 <option value="">Select age</option>
               </select>
             </div>
-            <div class="field span2">
+            <div class="field span2" id="filingToggle">
               <label>Filing status</label>
               <div class="toggle" role="group" aria-label="Filing status">
                 <button type="button" data-filing="single" aria-pressed="false">Single</button>
@@ -881,7 +1562,7 @@
             </div>
             <!-- Spouse fields: hidden by default, revealed on "Married" -->
             <div class="field span2" id="spouseFields" style="display:none;">
-              <div style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px; display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div class="spouse-grid" style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px;">
                 <div class="field" style="margin:0;">
                   <label for="spouseAge" style="font-size:13px;">Spouse&rsquo;s current age</label>
                   <select id="spouseAge" autocomplete="off">
@@ -894,6 +1575,20 @@
                     <option value="">Select age</option>
                   </select>
                 </div>
+                <div class="field" style="margin:0; grid-column:1 / -1;">
+                  <label for="spouseSsClaimAge" style="font-size:13px;">Spouse&rsquo;s Social Security claim age</label>
+                  <select id="spouseSsClaimAge" autocomplete="off">
+                    <option value="62">62 (earliest)</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                    <option value="67" selected>67 &mdash; full retirement age</option>
+                    <option value="68">68</option>
+                    <option value="69">69</option>
+                    <option value="70">70 (maximum)</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div class="field span2">
@@ -904,29 +1599,38 @@
                 </select>
               </div>
             </div>
+            <div class="field span2">
+              <label for="ssClaimAge">Claim Social Security at</label>
+              <select id="ssClaimAge" autocomplete="off">
+                <option value="62">62 (earliest)</option>
+                <option value="63">63</option>
+                <option value="64">64</option>
+                <option value="65">65</option>
+                <option value="66">66</option>
+                <option value="67" selected>67 &mdash; full retirement age</option>
+                <option value="68">68</option>
+                <option value="69">69</option>
+                <option value="70">70 (maximum)</option>
+              </select>
+              <div class="ds" style="margin-top:4px;">When your Social Security checks start. Waiting means a bigger check. It&rsquo;s a separate choice from when you retire.</div>
+            </div>
+            <div class="field span2">
+              <label for="ssMonthlyFRA">SS benefit at full retirement age (optional)</label>
+              <div class="input-with-prefix">
+                <span class="prefix">$</span>
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="ssMonthlyFRA" placeholder="" />
+              </div>
+              <div class="ds" style="margin-top:4px;">From ssa.gov, if you have it. Otherwise we estimate it.</div>
+            </div>
+            <div class="field span2">
+              <label for="planThroughAge">Plan through age</label>
+              <input type="number" id="planThroughAge" min="80" max="110" step="1" inputmode="numeric" value="100" />
+              <div class="ds" style="margin-top:4px;">How long the money needs to last. Default 100.</div>
+            </div>
           </div>
         </section>
 
         <!-- 3. LIFESTYLE TARGET (right column top) -->
-        <section class="section-card lifestyle" style="grid-row: span 1;">
-          <div class="section-head">
-            <div class="section-icon blue">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
-            </div>
-            <span class="section-num">3. LIFESTYLE TARGET</span>
-          </div>
-          <div class="lifestyle-prompt">Which retirement lifestyle best describes you?</div>
-          <div class="lifestyle-sub">This helps us estimate your future spending needs.</div>
-          <div class="profiles" id="profileGroup" role="radiogroup" aria-label="Spending profile">
-            <!-- injected by JS -->
-          </div>
-          <div class="lifestyle-foot">
-            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Your lifestyle target drives your Required Portfolio Return&trade;.
-          </div>
-        </section>
-
-        <!-- 2. MONEY (left column second) -->
         <section class="section-card">
           <div class="section-head">
             <div class="section-icon green">
@@ -943,19 +1647,19 @@
             <div class="field-hint">Gross household salary, before tax.</div>
             <div class="input-with-prefix">
               <span class="prefix">$</span>
-              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="currentSalary" min="0" step="1000" inputmode="numeric" placeholder="0" required />
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="currentSalary" min="0" step="1000" inputmode="numeric" required />
             </div>
           </div>
 
           <div class="field">
             <div class="field-label-row">
-              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l4 6h-3v7a3 3 0 0 1-3 3 3 3 0 0 1-3-3V8H4z" transform="translate(2 0)"/></svg>
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5.5" rx="7.5" ry="3"/><path d="M4.5 5.5v5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-5"/><path d="M4.5 10.5v5c0 1.7 3.4 3 7.5 3s7.5-1.3 7.5-3v-5"/></svg>
               <label for="currentSavings" class="field-text">Current retirement savings</label>
             </div>
             <div class="field-hint">All accounts combined &mdash; 401(k), IRA, Roth, taxable, cash.</div>
             <div class="input-with-prefix">
               <span class="prefix">$</span>
-              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="currentSavings" min="0" step="1000" inputmode="numeric" placeholder="0" required />
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="currentSavings" min="0" step="1000" inputmode="numeric" required />
             </div>
           </div>
 
@@ -966,7 +1670,7 @@
             </div>
             <div class="field-hint">What share of your salary you currently save each year.</div>
             <div class="input-with-suffix">
-              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="contributionRate" min="0" max="50" step="0.5" inputmode="decimal" placeholder="0" required />
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="contributionRate" min="0" max="50" step="0.5" inputmode="decimal" required />
               <span class="suffix">%</span>
             </div>
           </div>
@@ -979,12 +1683,41 @@
             <div class="field-hint">Leave blank if you don&rsquo;t have a pension.</div>
             <div class="input-with-prefix">
               <span class="prefix">$</span>
-              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="monthlyPension" min="0" step="50" inputmode="numeric" placeholder="0" />
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="monthlyPension" min="0" step="50" inputmode="numeric" />
             </div>
           </div>
+
         </section>
 
         <!-- 4. ADVANCED ASSUMPTIONS (full width below) -->
+        <section class="section-card lifestyle" style="grid-row: span 1;">
+          <div class="section-head">
+            <div class="section-icon blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+            </div>
+            <span class="section-num">3. LIFESTYLE TARGET</span>
+          </div>
+          <div class="lifestyle-prompt">What yearly spending should we plan for in retirement?*</div>
+          <div class="lifestyle-sub">Pick the yearly spending that fits the retirement you want.</div>
+          <div class="profiles" id="profileGroup" role="radiogroup" aria-label="Spending profile">
+            <!-- injected by JS -->
+          </div>
+          <div class="lifestyle-note">*Projected from your current salary at typical wage growth through retirement.</div>
+          <div class="field" id="customSpendWrap" style="margin-top:16px;">
+            <label for="customSpendOverride" class="field-text">Or enter your own annual spending (optional)</label>
+            <div class="input-with-prefix">
+              <span class="prefix">$</span>
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="customSpendOverride" min="0" step="1000" inputmode="numeric" />
+            </div>
+            <div class="lifestyle-note">Overrides the cards above when filled. Today&rsquo;s dollars.</div>
+          </div>
+          <div class="lifestyle-foot">
+            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Your lifestyle target drives your Required Portfolio Return&trade;.
+          </div>
+        </section>
+
+        <!-- 2. MONEY (left column second) -->
         <details class="advanced span2">
           <summary>
             <div class="section-icon purple" style="width:32px;height:32px;border-radius:8px;">
@@ -1032,13 +1765,6 @@
                 <span class="suffix">%</span>
               </div>
             </div>
-            <div class="field">
-              <label for="yearsOfRetirement" class="field-text">Years of retirement</label>
-              <div class="input-with-suffix">
-                <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="yearsOfRetirement" min="5" max="50" step="1" inputmode="numeric" value="25" />
-                <span class="suffix">years</span>
-              </div>
-            </div>
           </div>
         </details>
 
@@ -1060,143 +1786,91 @@
 
     <!-- ============== RESULTS (hidden until submit) ============== -->
     <section id="resultsSection" aria-live="polite">
-      <h1 class="results-title">Here&rsquo;s Your <span class="accent purple" id="resultsAccent">Required Portfolio Return<sup>™</sup></span></h1>
-      <p class="results-sub">This is the average annual return your portfolio needs to earn to support your lifestyle through retirement.</p>
-
-      <div class="result-hero" id="resultHero" data-tier="on_track">
-        <div class="result-hero-grid">
-          <div class="result-ring" id="resultRing" data-tier="on_track">
-            <svg viewBox="0 0 200 200">
-              <circle class="ring-track" cx="100" cy="100" r="85"/>
-              <circle class="ring-arc" cx="100" cy="100" r="85"/>
-            </svg>
-            <div class="ring-check">
-              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <!-- ===== Results v2: precision / range / verdict bento ===== -->
+      <div class="rz-demo-note" id="rzDemoNote" style="display:none;">
+        Preview mode: the live engine couldn&rsquo;t be reached, so these are <strong>sample numbers</strong> to show the layout. Hit &ldquo;Adjust inputs&rdquo; and try again for your real result.
+      </div>
+      <div class="rz-top">
+        <!-- 3. Verdict (dominant) -->
+        <div class="rz-card rz-verdict" id="rzVerdict" data-tier="on_track">
+          <div class="rz-pill"><span class="dot"></span><span id="rzVerdictPill">&mdash;</span></div>
+          <div class="rz-verdict-head" id="rzVerdictHead"></div>
+          <div class="rz-verdict-body" id="rzVerdictBody"></div>
+          <a class="rz-verdict-cta" id="rzVerdictCta" href="pricing.html"></a>
+          <div class="rz-verdict-badge" aria-hidden="true"><div class="ring" id="rzVerdictGlyph">!</div></div>
+        </div>
+        <!-- 2. Required return + possible range -->
+        <div class="rz-card" id="rzCard2" data-tier="on_track">
+          <div class="rz-card-title">REQUIRED PORTFOLIO RETURN <span class="rz-info" title="The average annual return your whole portfolio needs.">&#9432;</span></div>
+          <div class="rz-irr" id="rzIrr">&mdash;</div>
+          <div class="rz-note" id="rzIrrSub"></div>
+          <div class="rz-range-label" id="rzRangeLabel">Current possible range</div>
+          <div class="rz-range-row" id="rzRangeRow">
+            <span id="rzRangeLo">&mdash;</span>
+            <div class="rz-range-track">
+              <div class="rz-range-marker" id="rzRangeMarker">
+                <span class="rz-range-your-wrap"><span id="rzRangeYour"></span><em>Your ballpark</em></span>
+              </div>
             </div>
+            <span id="rzRangeHi">&mdash;</span>
           </div>
-
-          <div class="result-readout" id="resultReadout" data-tier="on_track">
-            <div class="result-eyebrow"><strong>GH2 EDGE&trade;</strong> <span class="you">YOUR RESULT</span></div>
-            <div class="result-label">Required Portfolio Return</div>
-            <div class="result-value" id="irr">0.00%</div>
-            <div class="result-explainer" id="irrTagline">This is the return your portfolio has to earn every year of retirement for your plan to last to age <span class="age-accent" id="endAgeLabel">100</span>.</div>
-          </div>
-
-          <div class="result-status">
-            <div class="status-row">
-              <div class="status-pill" id="statusPill"><span class="pill-dot"></span><span id="statusPillLabel">ON TRACK</span></div>
-              <div class="status-cta" id="statusCta">Let&rsquo;s keep it that way. &darr;</div>
-            </div>
-            <div class="status-headline" id="statusHeadline">Savings last through age 100.</div>
-            <div class="status-body" id="statusBody">Your plan looks good. You have a healthy margin for market ups and downs and unexpected costs.</div>
-          </div>
+          <div class="rz-target" id="rzMixNote"></div>
+          <div class="rz-target-fixed">&#9650; Target: 5.0% <span>(safe zone)</span></div>
         </div>
 
-        <div class="result-foot">
-          <div class="result-foot-tax">
-            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Assumptions include the full federal + state + Medicare tax math.
+        <!-- 1. Ballpark precision -->
+        <div class="rz-card" id="rzPrecisionCard">
+          <div class="rz-card-title">BALLPARK PRECISION <span class="rz-info" title="How complete your inputs are. More inputs = tighter range.">&#9432;</span></div>
+          <div class="rz-precision-pct" id="rzPrecisionPct">&mdash;</div>
+          <div class="rz-note" id="rzPrecisionNote"></div>
+          <div class="rz-prec-axis">
+            <div class="ends">
+              <span class="pend">&#10003; Quick Check</span>
+              <span class="pend lock"><svg viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2.4" stroke-linecap="round" style="width:11px;height:11px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Full Profile</span>
+            </div>
+            <div class="rz-prec-track">
+              <i id="rzPrecBarFill" style="width:0%"></i>
+              <div class="rz-prec-marker" id="rzPrecMarker">
+                <span class="rz-prec-you"><span id="rzPrecYou">&mdash;</span><em>You &mdash; Ballpark</em></span>
+              </div>
+            </div>
           </div>
-          <button type="button" class="adjust-inputs-btn" id="adjustInputsBtn">Adjust inputs</button>
+          <a class="rz-cta-btn rz-cta-sm" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
+        </div>
+
+      </div>
+
+      <!-- Recommended action bar -->
+      <div class="rz-action" id="rzAction">
+        <div class="rz-action-ico">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        </div>
+        <div class="rz-action-main">
+          <div class="rz-card-title">RECOMMENDED ACTION <span class="rz-info" title="The single move that brings your plan to the safe zone.">&#9432;</span></div>
+          <div class="rz-action-amt" id="rzActionAmt">&mdash;</div>
+        </div>
+        <div class="rz-action-exp" id="rzActionExplainer"></div>
+        <div class="rz-action-nums">
+          <span class="cur" id="rzActionCur">&mdash;</span>
+          <span class="arr">&rarr;</span>
+          <span class="tgt" id="rzActionTgt">5.0%</span>
+          <div class="lbls"><span>Current</span><span>Target (safe zone)</span></div>
+        </div>
+        <div class="rz-action-note" id="rzActionNote">This gets you to a safe 5% return with more margin for the future.</div>
+      </div>
+
+      <!-- Bottom: confirmed + sharpen | impact column -->
+      <div class="rz-bottom">
+        <div class="rz-card">
+          <div class="rz-card-title">FROM YOUR BALLPARK &mdash; CONFIRMED</div>
+          <div class="rz-chips" id="rzChips"></div>
+          <div class="rz-chips-note" id="rzChipsNote"></div>
+          <div class="rz-acc" id="rzAccLine">Right now, your number could be off by as much as <b class="now"><span id="rzAccNow">&mdash;</span>%</b><span id="rzAccDollar"></span>. Full Profile narrows that to <b class="full">0.2%</b>.</div>
+          <div id="rzSharpenList"></div>
+          <div class="rz-total" id="rzTotalRow"><span>Unlock all four and your number is accurate to within</span><b id="rzTotalPts">0.2%</b></div>
         </div>
       </div>
 
-      <!-- Cadence pricing -->
-      <div class="cadence-head">
-        <h2>Choose the cadence that fits your life.</h2>
-        <p>All consumer tiers include the full federal + state + Medicare tax math,<br/>year-by-year projections, and a downloadable PDF plan.</p>
-      </div>
-
-      <div class="tier-grid">
-        <!-- Jae's Corner -->
-        <div class="tier-card jae">
-          <div class="tier-head">
-            <div class="tier-icon jae">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-            </div>
-            <div>
-              <h3 class="tier-name">Jae&rsquo;s Corner</h3>
-              <p class="tier-tag">Stay informed</p>
-            </div>
-          </div>
-          <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 13.03 12.7 2 7"/></svg><span class="feat-text">Weekly insights</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg><span class="feat-text">Annual rerun of key episodes</span></li>
-          </ul>
-          <div class="tier-billing">
-            <div class="billing-toggle" data-tier="jae" role="group" aria-label="Billing cadence">
-              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly (Save 17%)</button>
-            </div>
-          </div>
-          <div class="tier-prices">
-            <div class="tier-price-cell"><span class="tier-price-amount">$50</span><span class="tier-price-unit">/ month</span></div>
-            <div class="tier-price-cell"><span class="tier-price-amount">$500</span><span class="tier-price-unit">/ year</span></div>
-          </div>
-          <a href="mailto:jae@gh2benefits.com?subject=Jae%27s%20Corner%20inquiry" class="tier-cta-btn">Get Jae&rsquo;s Corner</a>
-        </div>
-
-        <!-- GH2 EDGE (Most Popular) -->
-        <div class="tier-card popular">
-          <span class="tier-badge">Most Popular</span>
-          <div class="tier-head">
-            <div class="tier-icon edge">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M22 12c-2.667 4-6 6-10 6s-7.333-2-10-6c2.667-4 6-6 10-6s7.333 2 10 6z"/></svg>
-            </div>
-            <div>
-              <h3 class="tier-name">GH2 EDGE&trade;</h3>
-              <p class="tier-tag">Improve Your Number.</p>
-            </div>
-          </div>
-          <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.739-8z"/></svg><div class="feat-text"><strong>Continuous monitoring</strong><span>We monitor the markets and your plan 24/7.</span></div></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="feat-text">Updates with every market move</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="feat-text">Life-event driven recalcs</span></li>
-          </ul>
-          <div class="tier-billing">
-            <div class="billing-toggle" data-tier="edge" role="group" aria-label="Billing cadence">
-              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly (Save 17%)</button>
-            </div>
-          </div>
-          <div class="tier-prices">
-            <div class="tier-price-cell"><span class="tier-price-amount">$250</span><span class="tier-price-unit">/ month</span></div>
-            <div class="tier-price-cell"><span class="tier-price-amount">$2,500</span><span class="tier-price-unit">/ year</span></div>
-          </div>
-          <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry" class="tier-cta-btn">View details</a>
-        </div>
-
-        <!-- GH2 EDGE Ultra -->
-        <div class="tier-card ultra">
-          <div class="tier-head">
-            <div class="tier-icon ultra">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6 22V8"/><path d="M18 22V8"/><path d="M10 22V12h4v10"/><circle cx="12" cy="4" r="3" fill="currentColor" stroke="none"/></svg>
-            </div>
-            <div>
-              <h3 class="tier-name">GH2 EDGE&trade; Ultra</h3>
-              <p class="tier-tag">Protect Your Number.</p>
-            </div>
-          </div>
-          <ul class="tier-features">
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Priority continuous monitoring</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="feat-text">Direct alerts for critical changes</span></li>
-            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="feat-text">Concierge-level guidance</span></li>
-          </ul>
-          <div class="tier-billing">
-            <div class="billing-toggle" data-tier="ultra" role="group" aria-label="Billing cadence">
-              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
-              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly (Save 17%)</button>
-            </div>
-          </div>
-          <div class="tier-prices">
-            <div class="tier-price-cell"><span class="tier-price-amount">$2,500</span><span class="tier-price-unit">/ month</span></div>
-            <div class="tier-price-cell"><span class="tier-price-amount">$25,000</span><span class="tier-price-unit">/ year</span></div>
-          </div>
-          <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20Ultra%20inquiry" class="tier-cta-btn">Get Ultra</a>
-        </div>
-      </div>
-
-      <!-- Details collapsible (projected balance, SS, spending) -->
       <div class="detail-panel">
         <details class="details">
           <summary>
@@ -1217,28 +1891,163 @@
               <div class="ds" id="projBalanceSub"></div>
             </div>
             <div class="detail-cell">
-              <div class="dl">Estimated annual Social Security</div>
+              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
               <div class="dv" id="ssAnnual"></div>
-              <div class="ds">at retirement age, today&rsquo;s dollars equivalent</div>
+              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
             </div>
           </div>
 
           <table class="spending-table" id="spendingTable">
             <thead>
-              <tr><th>Category</th><th>% of total</th><th>$/yr at retirement</th></tr>
+              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
             </thead>
             <tbody id="spendingTbody"></tbody>
             <tfoot>
-              <tr><td colspan="2">Total annual spending in retirement</td><td id="spendingTotal"></td></tr>
+              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
+              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
             </tfoot>
           </table>
         </details>
       </div>
 
+      <!-- Primary CTA (first-person + trust microcopy) -->
+      <div class="rz-cta-block">
+        <a class="rz-cta-btn" href="pricing.html">Get my exact number &nbsp;&rarr;</a>
+        <div class="rz-trust">Cancel anytime &middot; Clear pricing, no surprise charges &middot; Your data is never sold.</div>
+        <button type="button" class="rz-adjust-link" id="adjustInputsBtn">or adjust your inputs</button>
+      </div>
+
+
+
+      <div class="rz-resources">
+      <div class="rz-callout">
+        <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
+      </div>
+
+      <!-- Free beginner's e-book -->
+      <div class="ebook-cta rz-res-card">
+        <div class="ec-text"><strong>New to all this?</strong> The free <em>GH2 EDGE&trade; Beginner&rsquo;s Guide</em> walks you through your number in plain English &mdash; no login, no jargon.</div>
+        <div class="ec-actions">
+          <a class="ec-dl" href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener">Download the guide (PDF)</a>
+          <span class="ec-email">Questions? <a href="mailto:info@gh2benefits.com">info@gh2benefits.com</a></span>
+        </div>
+      </div>
+      </div><!-- /rz-resources -->
+
+      <!-- Tier descriptions. Visible; prices and buy buttons gated on .upsell-on. -->
+      <div class="cadence-head">
+        <h2><span class="cadence-tell">Three ways people use GH2 EDGE&trade;.</span><span class="cadence-sell">Choose the cadence that fits your life.</span></h2>
+        <p>All consumer tiers include the full federal + state + Medicare tax math,<br/>year-by-year projections, and a downloadable PDF plan.</p>
+      </div>
+
+      <div class="bp-bill-row">
+        <div class="bp-bill-hint"><strong>Founders pricing, for a limited time:</strong> go yearly and today&rsquo;s price is yours for as long as you stay.</div>
+      </div>
+
+      <div class="tier-grid">
+        <!-- Tier 1 — Quick Check -->
+        <div class="tier-card jae" data-shopify-tier="Tier 1">
+          <div class="tier-head">
+            <div class="tier-icon jae">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-label="Quick check"><circle class="ico-fill" cx="12" cy="12" r="9.5"/><path d="M7.5 12.5l3 3 6-7" stroke-width="2.6"/></svg>
+            </div>
+            <div>
+              <h3 class="tier-name">Quick Check</h3>
+              <p class="tier-tag">Stay informed.</p>
+            </div>
+          </div>
+          <div class="tier-price" data-month="9" data-year="89">
+            <button type="button" class="tp-opt" data-billing="monthly"><span class="tp-amt">$9</span><span class="tp-unit">/ month</span></button>
+            <button type="button" class="tp-opt on" data-billing="yearly"><span class="tp-amt">$89</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          </div>
+          <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
+          <ul class="tier-features">
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 13.03 12.7 2 7"/></svg><div class="feat-text"><strong>Jae&rsquo;s Corner subscription</strong><span>The weekly newsletter &mdash; Jae&rsquo;s working notes on the tax law and rule changes that matter.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg><div class="feat-text"><strong>One EDGE recommendation a year</strong><span>Run on your numbers.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg><div class="feat-text"><strong>24/7 chat support</strong><span>Ask EDGE, any hour.</span></div></li>
+          </ul>
+          <a href="mailto:jae@gh2benefits.com?subject=Quick%20Check%20inquiry" class="tier-cta-btn">Get Quick Check</a>
+        </div>
+
+        <!-- Tier 2 — Autopilot (Most Popular) -->
+        <div class="tier-card popular" data-shopify-tier="Tier 2">
+          <span class="tier-badge">Most Popular</span>
+          <div class="tier-head">
+            <div class="tier-icon edge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 0 1 14.6-6"/><path d="M20.5 12a8.5 8.5 0 0 1-14.6 6"/><path d="M18 2.8v3.4h-3.4"/><path d="M6 21.2v-3.4h3.4"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div>
+              <h3 class="tier-name">Autopilot</h3>
+              <p class="tier-tag">Improve Your Number.</p>
+            </div>
+          </div>
+          <div class="tier-price" data-month="29" data-year="290">
+            <button type="button" class="tp-opt" data-billing="monthly"><span class="tp-amt">$29</span><span class="tp-unit">/ month</span></button>
+            <button type="button" class="tp-opt on" data-billing="yearly"><span class="tp-amt">$290</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          </div>
+          <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
+          <ul class="tier-features">
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg><span class="feat-text">All 80 retirement strategies ranked for your household</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg><div class="feat-text"><strong>Your dashboard</strong><span>Projected liquid net worth, the drivers preserving it, your next key action and check-in date.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.5-1.5"/></svg><div class="feat-text"><strong>Link your accounts</strong><span>EDGE tracks them automatically. No re-typing.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg><div class="feat-text"><strong>Heat map + Ask EDGE</strong><span>Seven wealth regimes at a glance, and chat grounded in your numbers.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.739-8z"/></svg><div class="feat-text"><strong>Continuous monitoring</strong><span>Re-run on every market move, rule change, and life event &mdash; email when the answer changes.</span></div></li>
+          </ul>
+          <a href="mailto:jae@gh2benefits.com?subject=Full%20Plan%20inquiry" class="tier-cta-btn">Get Autopilot</a>
+        </div>
+
+        <!-- Tier 3 — Concierge -->
+        <!-- Jae: "ask Jae any time" is served by Ask EDGE first; true anomalies route to you. Members see one promise. (Paul, Sept 10) -->
+        <div class="tier-card ultra" data-shopify-tier="Tier 3">
+          <div class="tier-head">
+            <div class="tier-icon ultra">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5a8 8 0 0 1 16 0z" fill="currentColor" fill-opacity="0.22"/><path d="M12 7.5V5.5"/><path d="M10 5.5h4"/><path d="M2.5 18.5h19"/></svg>
+            </div>
+            <div>
+              <h3 class="tier-name">Concierge</h3>
+              <p class="tier-tag">A person behind your plan.</p>
+            </div>
+          </div>
+          <div class="tier-price" data-month="99" data-year="990">
+            <button type="button" class="tp-opt" data-billing="monthly"><span class="tp-amt">$99</span><span class="tp-unit">/ month</span></button>
+            <button type="button" class="tp-opt on" data-billing="yearly"><span class="tp-amt">$990</span><span class="tp-unit">/ year</span><span class="tp-tag">2 months free</span></button>
+          </div>
+          <div class="tier-lock"><span class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span class="tier-lock-text"></span></div>
+          <ul class="tier-features">
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-5"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Everything in Autopilot</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.9-5.4A8 8 0 1 1 21 12z"/></svg><div class="feat-text"><strong>Ask a question any time</strong><span>A person answers, not a ticket queue.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8"/><path d="M8 17h5"/></svg><div class="feat-text"><strong>A quarterly review brief</strong><span>Written for your household.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.5 7 .8-5.2 4.8 1.4 7L12 17.6 5.8 21l1.4-7L2 9.3l7-.8z"/></svg><span class="feat-text">4 proprietary GH2 EDGE strategies the public doesn&rsquo;t see</span></li>
+          </ul>
+          <a href="mailto:jae@gh2benefits.com?subject=Concierge%20inquiry" class="tier-cta-btn">Get Concierge</a>
+          <!-- Jae: the $4,000 is a placeholder (Paul, Sept 10) and annual-only by
+               design. The bubble's button should go to your advisory offer —
+               set ADVISOR_URL below to the exact page. -->
+          <div class="tier-addon" data-placeholder-price="true">
+            <button type="button" class="addon-toggle" aria-expanded="false" aria-controls="advisorPop">
+              <span class="at-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+              <span class="at-text"><span class="at-eyebrow">Within Concierge</span><span class="at-title">Want Jae as your personal advisor?</span></span>
+              <svg class="at-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+            <div class="addon-pop" id="advisorPop" hidden role="dialog" aria-label="Jae as your personal advisor">
+              <button type="button" class="addon-pop-x" aria-label="Close">&times;</button>
+              <div class="addon-pop-h">Jae, personally, all year</div>
+              <p>Not just the engine &mdash; Jae works your plan himself and stays on it as your life changes. Annual only.</p>
+              <div class="addon-pop-price"><b>$4,000</b><small>/ year</small><span class="pp-lock">price locked</span></div>
+              <a class="addon-pop-cta" data-advisor-link href="https://jaeoh.com/" target="_blank" rel="noopener">See Jae&rsquo;s advisory offer &nearr;</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Enterprise card removed from the results page (Paul, Sept 10):
+             the B2B door lives on pricing.html. Restore from git if needed. -->
+      </div>
+
+      <!-- Details collapsible (projected balance, SS, spending) -->
       <div class="results-foot">
         <div class="left">
           <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          Your data is secure and encrypted. We never sell your information.
+          Assumptions include the full federal + state + Medicare tax math &middot; Your data is secure, encrypted, and never sold.
         </div>
         <div class="right">
           Required Portfolio Return&trade; is a patent-pending retirement metric developed by GH2 EDGE.
@@ -1274,12 +2083,12 @@
         stateSel.appendChild(opt);
       });
 
-      // Ages 50-80 — populate all four age selects (primary + spouse)
+      // Ages 35-80 — populate all four age selects (primary + spouse). Floor 35 matches the v7 grid's youngest cohort (accumulation-phase engine wired).
       var ageSel = document.getElementById('age');
       var retSel = document.getElementById('retirementAge');
       var spouseAgeSel = document.getElementById('spouseAge');
       var spouseRetSel = document.getElementById('spouseRetirementAge');
-      for (var a = 50; a <= 80; a++) {
+      for (var a = 35; a <= 80; a++) {
         var o1 = document.createElement('option'); o1.value = a; o1.textContent = a; ageSel.appendChild(o1);
         var o2 = document.createElement('option'); o2.value = a; o2.textContent = a; retSel.appendChild(o2);
         var o3 = document.createElement('option'); o3.value = a; o3.textContent = a; spouseAgeSel.appendChild(o3);
@@ -1301,21 +2110,30 @@
 
       // ===== 4 profiles =====
       var PROFILES = [
-        { key: 'struggling',  label: 'Struggling',  desc: 'Lowest spending quartile.',         dollars: 28000, bp: '' },
-        { key: 'average',     label: 'Average',     desc: 'Second-lowest spending quartile.',  dollars: 45000, bp: '' },
-        { key: 'comfortable', label: 'Comfortable', desc: 'Second-highest spending quartile.', dollars: 60000, bp: '' },
-        { key: 'affluent',    label: 'Affluent',    desc: 'Highest spending quartile.',        dollars: 80000, bp: '150+ bp' }
+        { key: 'struggling',  pct: 0.25, label: 'Essentials' },
+        { key: 'average',     pct: 0.50, label: 'Secure' },
+        { key: 'comfortable', pct: 0.75, label: 'Comfortable' },
+        { key: 'affluent',    pct: 1.00, plus: true, label: 'Premium' }
       ];
 
       var PROFILE_ICONS = {
-        struggling:  '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="12" rx="9" ry="6"/><circle cx="9" cy="11" r="0.8" fill="currentColor"/><circle cx="15" cy="11" r="0.8" fill="currentColor"/><path d="M9.5 14a3 3 0 0 0 5 0"/></svg>',
-        average:     '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6z"/><path d="M5 12V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v4"/><line x1="7" y1="20" x2="7" y2="22"/><line x1="17" y1="20" x2="17" y2="22"/></svg>',
-        comfortable: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M21 16H3"/><path d="M8 8V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v3"/><circle cx="12" cy="3" r="1" fill="currentColor"/></svg>',
+        struggling:  '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>',
+        average:     '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>',
+        comfortable: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4Z"/><path d="M21 14 10 2 3 14h18Z"/><path d="M10 2v16"/></svg>',
         affluent:    '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>'
       };
 
       var grp = document.getElementById('profileGroup');
+      // Number inputs step on scroll-wheel/trackpad while focused (Chromium), so
+      // clicking a field and scrolling to the next one wrote phantom values
+      // (Paul, Sept 14). Drop focus on wheel; the page still scrolls normally.
+      document.addEventListener('wheel', function () {
+        var a = document.activeElement;
+        if (a && a.tagName === 'INPUT' && a.type === 'number') a.blur();
+      }, { passive: true });
+
       var selectedProfile = null;
+      var profileAmtEls = []; // { p, el, card } for live dollar updates
       PROFILES.forEach(function (p) {
         var card = document.createElement('button');
         card.type = 'button';
@@ -1323,11 +2141,21 @@
         card.setAttribute('role', 'radio');
         card.setAttribute('aria-checked', 'false');
         card.setAttribute('data-profile', p.key);
-        var html = '<div class="pf-icon">' + (PROFILE_ICONS[p.key] || '') + '</div>' +
-                   '<div class="pf-label">' + p.label + '</div>' +
-                   '<div class="pf-desc">' + p.desc + '</div>';
-        if (p.bp) html += '<div class="pf-badge">' + p.bp + '</div>';
-        card.innerHTML = html;
+        var amt = document.createElement('div');
+        amt.className = 'pf-dollars';
+        amt.textContent = '—';
+        card.innerHTML = '<div class="pf-icon">' + (PROFILE_ICONS[p.key] || '') + '</div>';
+        card.appendChild(amt);
+        if (p.label) {
+          var name = document.createElement('div');
+          name.className = 'pf-name';
+          name.textContent = p.label;
+          card.appendChild(name);
+        }
+        var accent = document.createElement('div');
+        accent.className = 'pf-accent';
+        card.appendChild(accent);
+        profileAmtEls.push({ p: p, el: amt, card: card });
         card.addEventListener('click', function () {
           selectedProfile = p.key;
           Array.prototype.forEach.call(grp.querySelectorAll('.profile-card'), function (c) {
@@ -1336,6 +2164,49 @@
         });
         grp.appendChild(card);
       });
+
+      // ===== Age-adjusted salary → live dollar targets on the profile cards =====
+      function realWageGrowth(a) {
+        if (a < 30) return 0.040;
+        if (a < 40) return 0.025;
+        if (a < 50) return 0.015;
+        if (a < 55) return 0.010;
+        if (a < 60) return 0.006;
+        if (a < 65) return 0.003;
+        return 0.001;
+      }
+      function projectedSalary(salary, ageNow, retAge) {
+        if (!Number.isFinite(salary) || salary <= 0) return NaN;
+        var s = salary;
+        if (Number.isFinite(ageNow)) {
+          var end = (Number.isFinite(retAge) && retAge > ageNow) ? retAge : 65;
+          for (var a = ageNow; a < end; a++) s *= (1 + realWageGrowth(a));
+        }
+        return s;
+      }
+      function refreshProfileAmounts() {
+        var salary = parseFloat(document.getElementById('currentSalary').value);
+        var ageNow = parseInt(document.getElementById('age').value, 10);
+        var retAge = parseInt(document.getElementById('retirementAge').value, 10);
+        var base = projectedSalary(salary, ageNow, retAge);
+        profileAmtEls.forEach(function (item) {
+          if (!Number.isFinite(base)) {
+            item.el.textContent = '—';
+            item.card.setAttribute('aria-label', 'Spending target');
+            return;
+          }
+          var dollars = base * item.p.pct;
+          var text = fmt$(dollars) + (item.p.plus ? '+' : '');
+          item.el.textContent = text;
+          item.card.setAttribute('aria-label', 'Annual spending target ' + text);
+        });
+      }
+      document.getElementById('currentSalary').addEventListener('input', refreshProfileAmounts);
+      document.getElementById('age').addEventListener('change', refreshProfileAmounts);
+      document.getElementById('retirementAge').addEventListener('change', refreshProfileAmounts);
+      refreshProfileAmounts();
+      var _ovrEl = document.getElementById('customSpendOverride');
+      if (_ovrEl) _ovrEl.addEventListener('input', function () { if (grp) grp.style.opacity = _ovrEl.value.trim() !== '' ? '0.45' : ''; });
 
       // ===== Filing toggle (toggles spouse fields visibility) =====
       var filing = null;
@@ -1349,16 +2220,49 @@
         });
       });
 
-      // ===== Billing toggle (per-tier) =====
-      var billingGroups = document.querySelectorAll('.billing-toggle');
-      billingGroups.forEach(function (g) {
-        var btns = g.querySelectorAll('button');
-        btns.forEach(function (b) {
-          b.addEventListener('click', function () {
-            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
-          });
+      // ===== Billing toggle (shared) + founding price lock — mirrors pricing.html =====
+      var BP_BILL = 'yearly';
+      function bpMoney(n) { return '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }); }
+      function bpApplyBilling() {
+        document.querySelectorAll('.billing-toggle.bp-shared button').forEach(function (b) {
+          b.setAttribute('aria-pressed', b.getAttribute('data-billing') === BP_BILL ? 'true' : 'false');
         });
+        document.querySelectorAll('.tier-card[data-shopify-tier]').forEach(function (card) {
+          var p = card.querySelector('.tier-price'); if (!p) return;
+          var m = p.getAttribute('data-month'), y = p.getAttribute('data-year');
+          if (m == null && y == null) return;
+          var useYear = BP_BILL === 'yearly' ? y != null : m == null;
+          var om = p.querySelector('.tp-opt[data-billing="monthly"]'), oy = p.querySelector('.tp-opt[data-billing="yearly"]');
+          if (om) { om.hidden = m == null; if (m != null) om.querySelector('.tp-amt').textContent = bpMoney(m); om.classList.toggle('on', !useYear); }
+          if (oy) { oy.hidden = y == null; if (y != null) oy.querySelector('.tp-amt').textContent = bpMoney(y); oy.classList.toggle('on', useYear); }
+          var lock = card.querySelector('.tier-lock'), lt = card.querySelector('.tier-lock-text');
+          if (lock && lt && y != null) {
+            lock.classList.toggle('off', !useYear);
+            lt.innerHTML = useYear
+              ? '<strong>Founding price lock</strong> \u2014 ' + bpMoney(y) + ' a year is yours for as long as you stay.'
+              : '<strong>Go yearly</strong> to lock ' + bpMoney(y) + ' a year for as long as you stay.';
+          }
+        });
+      }
+      document.querySelectorAll('.billing-toggle.bp-shared button, .tp-opt').forEach(function (b) {
+        b.addEventListener('click', function () { BP_BILL = b.getAttribute('data-billing'); bpApplyBilling(); });
       });
+      bpApplyBilling();
+      window.GH2_BP_APPLY = bpApplyBilling;
+
+      // ===== Advisor add-on bubble =====
+      // Jae: point this at your advisory offer page.
+      var ADVISOR_URL = 'https://jaeoh.com/';
+      (function () {
+        var wrap = document.querySelector('.tier-addon'); if (!wrap) return;
+        var btn = wrap.querySelector('.addon-toggle'), pop = wrap.querySelector('.addon-pop'), x = wrap.querySelector('.addon-pop-x');
+        var link = wrap.querySelector('[data-advisor-link]'); if (link) link.href = ADVISOR_URL;
+        function setOpen(o) { pop.hidden = !o; btn.setAttribute('aria-expanded', o ? 'true' : 'false'); }
+        btn.addEventListener('click', function () { setOpen(pop.hidden); });
+        x.addEventListener('click', function () { setOpen(false); });
+        document.addEventListener('click', function (e) { if (!pop.hidden && !wrap.contains(e.target)) setOpen(false); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
+      })();
 
       // ===== Formatters =====
       function fmt$(n) { if (!Number.isFinite(n)) return '—'; return '$' + Math.round(n).toLocaleString('en-US'); }
@@ -1367,35 +2271,36 @@
       // ===== Tier mapping =====
       // map feasibility tier → on_track / stretch / at_risk visual
       function visualTier(feasibility, irr) {
-        // Prefer IRR-based thresholds for clean breaks; fall back to feasibility tier
-        if (Number.isFinite(irr)) {
-          if (irr < 0.045) return 'on_track';
-          if (irr < 0.07)  return 'stretch';
-          return 'at_risk';
-        }
+        // Path B: map the engine's GAP-based tier (required return vs what YOUR mix is
+        // priced to earn) to the 3 visual tiers — never re-derive from absolute IRR bands.
         if (feasibility === 'well_funded' || feasibility === 'conservative') return 'on_track';
-        if (feasibility === 'moderate' || feasibility === 'aggressive')      return 'stretch';
-        return 'at_risk';
+        if (feasibility === 'moderate') return 'stretch';
+        if (feasibility === 'aggressive' || feasibility === 'extremely_aggressive') return 'at_risk';
+        // Fallback only if the engine tier is missing.
+        if (Number.isFinite(irr)) return irr < 0.045 ? 'on_track' : irr < 0.07 ? 'stretch' : 'at_risk';
+        return 'stretch';
       }
 
+      // Path B: pills describe how far the required return reaches past YOUR mix — not a
+      // safe/at-risk verdict. Color/accent still key off the 3 visual tiers.
       var TIER_COPY = {
         on_track: {
-          pill: 'ON TRACK',
+          pill: 'WITHIN YOUR MIX',
           cta: 'Let’s keep it that way. ↓',
           accentClass: 'green',
           stepperState: 'results-on-track',
           stepperLine: 'results-on-track-active'
         },
         stretch: {
-          pill: 'STRETCH',
-          cta: 'Let’s make sure you’re good. ↓',
+          pill: 'A REACH',
+          cta: 'Let’s look at the gap. ↓',
           accentClass: 'amber',
           stepperState: 'results-stretch',
           stepperLine: 'results-stretch-active'
         },
         at_risk: {
-          pill: 'AT RISK',
-          cta: 'Let’s fix this. ↓',
+          pill: 'BEYOND YOUR MIX',
+          cta: 'Let’s close the gap. ↓',
           accentClass: 'red',
           stepperState: 'results',
           stepperLine: 'results-active'
@@ -1404,81 +2309,337 @@
 
       function showError(msg) { document.getElementById('formErr').textContent = msg || ''; }
 
+      // ===== Missing-answer marks =====
+      // Required answers get a red frame and a short note under the field, all at
+      // once, and the page scrolls to the first one. Optional fields (SS benefit,
+      // pension, the spending override, plan-through, advanced) are never marked.
+      function wrapOf(id) {
+        var el = document.getElementById(id);
+        if (!el) return null;
+        if (id === 'profileGroup' || id === 'filingToggle') return el;
+        return el.closest('.field') || el;
+      }
+      function mark(id, note) {
+        var w = wrapOf(id); if (!w) return;
+        w.classList.add('missing');
+        if (note && !w.querySelector('.miss-note')) { var m = document.createElement('div'); m.className = 'miss-note'; m.textContent = note; w.appendChild(m); }
+      }
+      function clearMarks() {
+        document.querySelectorAll('.missing').forEach(function (w) { w.classList.remove('missing'); });
+        document.querySelectorAll('.miss-note').forEach(function (m) { m.remove(); });
+      }
+      function scrollToMark(id) {
+        var w = wrapOf(id); if (!w) return;
+        w.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var f = w.querySelector('select, input, button'); if (f && f.focus) setTimeout(function () { try { f.focus({ preventScroll: true }); } catch (e) {} }, 350);
+      }
+      function fail(id, msg) { mark(id, msg); showError(msg); scrollToMark(id); }
+      // A mark clears itself the moment the person answers that field.
+      document.getElementById('ballparkForm').addEventListener('input', function (e) {
+        var w = e.target.closest && e.target.closest('.missing'); if (!w) return;
+        w.classList.remove('missing'); var m = w.querySelector('.miss-note'); if (m) m.remove();
+        if (!document.querySelector('.missing')) showError('');
+      });
+      // Buttons (filing toggle, spending cards) don't fire input/change.
+      document.getElementById('ballparkForm').addEventListener('click', function (e) {
+        var t = e.target.closest && e.target.closest('[data-filing], .profile-card'); if (!t) return;
+        var w = t.closest('.missing'); if (!w) return;
+        w.classList.remove('missing'); var m = w.querySelector('.miss-note'); if (m) m.remove();
+        if (!document.querySelector('.missing')) showError('');
+      });
+      document.getElementById('ballparkForm').addEventListener('change', function (e) {
+        var w = e.target.closest && e.target.closest('.missing'); if (!w) return;
+        w.classList.remove('missing'); var m = w.querySelector('.miss-note'); if (m) m.remove();
+        if (!document.querySelector('.missing')) showError('');
+      });
+
       // ===== Render results =====
+      function fmtK$(n) { if (!Number.isFinite(n)) return '\u2014'; return n >= 1e6 ? '$' + (n/1e6).toFixed(n >= 1e7 ? 0 : 1) + 'M' : '$' + Math.round(n/1000) + 'k'; }
+
       function renderResult(data) {
         var irr = Number(data.requiredIRR);
         var feas = data.feasibilityRating;
         var tier = visualTier(feas, irr);
         var copy = TIER_COPY[tier];
+        var v = data.verdict || {};
+        var endAge = (data.assumptions && data.assumptions.targetEndAge) || 100;
 
         // Update stepper
         var stepper = document.getElementById('stepper');
         stepper.className = 'stepper ' + copy.stepperLine;
         document.getElementById('stepProfile').className = 'step done';
-        var resStep = document.getElementById('stepResults');
-        resStep.className = 'step active ' + copy.stepperState;
+        document.getElementById('stepResults').className = 'step active ' + copy.stepperState;
 
-        // Update accent on title
-        var accent = document.getElementById('resultsAccent');
-        accent.className = 'accent ' + copy.accentClass;
-
-        // Hero / ring / readout / status — set data-tier so CSS applies
-        document.getElementById('resultHero').setAttribute('data-tier', tier);
-        var ring = document.getElementById('resultRing');
-        ring.setAttribute('data-tier', tier);
-        document.getElementById('resultReadout').setAttribute('data-tier', tier);
-
-        // Ring arc: longer arc for higher IRR (more "filling")
-        var arc = ring.querySelector('.ring-arc');
-        var circumference = 2 * Math.PI * 85; // ~534
-        var pct = tier === 'on_track' ? 0.25 : tier === 'stretch' ? 0.6 : 0.92;
-        var dashOffset = circumference * (1 - pct);
-        arc.setAttribute('stroke-dasharray', circumference);
-        arc.setAttribute('stroke-dashoffset', dashOffset);
-
-        // IRR number
-        var irrEl = document.getElementById('irr');
-        if (irr < 0) {
-          irrEl.textContent = 'Any positive return';
-          irrEl.style.fontSize = '40px';
+        // Displayed return — mirrors the verdict branches so a solver-bound
+        // sentinel is never printed as "the return you need".
+        var irrPct, irrText;
+        if (v.showReturn) {
+          irrPct = irr * 100; irrText = irrPct.toFixed(1) + '%';
+        } else if (v.feasible === false) {
+          irrPct = Math.min(irr, 0.30) * 100;
+          irrText = (irr >= 0.2999) ? '30%+' : irrPct.toFixed(1) + '%';
         } else {
-          irrEl.textContent = (irr * 100).toFixed(2) + '%';
-          irrEl.style.fontSize = '';
+          irrPct = 0; irrText = '0%';
         }
 
-        // Age in tagline
-        var yearsOfRet = (data.assumptions && data.assumptions.yearsOfRetirement) || 25;
-        var retAge = parseInt(document.getElementById('retirementAge').value, 10) || 65;
-        var endAge = retAge + yearsOfRet;
-        document.getElementById('endAgeLabel').textContent = endAge;
-        document.getElementById('irrTagline').innerHTML =
-          'This is the return your portfolio has to earn every year of retirement for your plan to last to age <span class="age-accent" id="endAgeLabel">' + endAge + '</span>.';
+        // ===================================================================
+        // PRECISION + RANGE — engine-measured.
+        // data.precision = { precisionPct, requiredIRRLow, requiredIRRHigh,
+        //                    halfWidthPp, referenceHalfPp, floorPp, highOpen,
+        //                    suppliedKeys[], sharpen:[{key, impactPp}] }
+        // The engine sweeps each unknown input across its plausible range and
+        // re-solves; the spread of solved answers is the band. The block is
+        // ABSENT whenever the engine could not measure it (a required return
+        // pinned at the top of the solver bracket, a variant that would not
+        // score, a sweep over its time budget). Nothing is computed here — if
+        // the block is missing, these panels hide.
+        // ===================================================================
+        var prec = data.precision || null;
+        var precision = prec ? prec.precisionPct : null;
 
-        // Status pill / CTA / headline / body
-        var pill = document.getElementById('statusPill');
-        pill.className = 'status-pill ' + tier;
-        document.getElementById('statusPillLabel').textContent = copy.pill;
-        var cta = document.getElementById('statusCta');
-        cta.className = 'status-cta ' + tier;
-        cta.textContent = copy.cta;
-        var hl = document.getElementById('statusHeadline');
-        hl.className = 'status-headline ' + tier;
-        var body = document.getElementById('statusBody');
+        var precCard = document.getElementById('rzPrecisionCard');
+        var rangeLabel = document.getElementById('rzRangeLabel');
+        var rangeRow = document.getElementById('rzRangeRow');
+        var accLine = document.getElementById('rzAccLine');
+        var sharpenList = document.getElementById('rzSharpenList');
+        var totalRow = document.getElementById('rzTotalRow');
+        [precCard, rangeLabel, rangeRow, accLine, sharpenList, totalRow].forEach(function (el) {
+          if (el) el.style.display = prec ? '' : 'none';
+        });
 
+        if (prec) {
+          document.getElementById('rzPrecisionPct').textContent = precision + '%';
+          // Goal-gradient framing: progress already earned + concrete distance to goal
+          var lockedCount = prec.sharpen.filter(function (s) { return s.impactPp >= 0.05; }).length;
+          document.getElementById('rzPrecisionNote').innerHTML = lockedCount > 0
+            ? ('You’re ' + precision + '% of the way to your exact number — <strong>' + lockedCount +
+               ' more input' + (lockedCount === 1 ? '' : 's') + ' close' + (lockedCount === 1 ? 's' : '') + ' the gap</strong>.')
+            : ('You’re ' + precision + '% of the way to your exact number.');
+          var precPos = Math.max(4, Math.min(96, precision / 96 * 100));
+          document.getElementById('rzPrecBarFill').style.width = precPos + '%';
+          document.getElementById('rzPrecMarker').style.left = precPos + '%';
+          document.getElementById('rzPrecYou').textContent = precision + '%';
+        }
+
+        // Required-return card + range bar
+        document.getElementById('rzCard2').setAttribute('data-tier', tier);
+        document.getElementById('rzIrr').textContent = irrText;
+        document.getElementById('rzIrrSub').textContent =
+          'That’s the return your whole portfolio needs every year for the plan to last to age ' + endAge + '.';
+        if (prec) {
+          var rangeLo = prec.requiredIRRLow, rangeHi = prec.requiredIRRHigh;
+          document.getElementById('rzRangeLo').textContent = rangeLo.toFixed(1) + '%';
+          // highOpen: a swept variant hit the top of the solver bracket, so the
+          // upper edge is a floor on the real number, not the number itself.
+          document.getElementById('rzRangeHi').textContent =
+            prec.highOpen ? rangeHi.toFixed(1) + '%+' : rangeHi.toFixed(1) + '%';
+          document.getElementById('rzRangeYour').textContent = irrText;
+          var rSpan = rangeHi - rangeLo;
+          var rPos = rSpan > 0 ? ((irrPct - rangeLo) / rSpan) * 100 : 50;
+          document.getElementById('rzRangeMarker').style.left = Math.max(3, Math.min(97, rPos)) + '%';
+        }
+
+        // Mix-priced note (Path B): how the requirement compares to what the
+        // household's mix is priced to earn.
+        var mixNote = document.getElementById('rzMixNote');
+        var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
+        if (v.showReturn && typeof g === 'number' && typeof mx === 'number') {
+          var mp = (mx * 100).toFixed(1), gp = Math.abs(g * 100).toFixed(1);
+          mixNote.textContent = g > 0.001 ? ('Your mix is priced for ~' + mp + '% — short ~' + gp + ' pp.')
+                              : g < -0.001 ? ('Your mix is priced for ~' + mp + '% — ahead ~' + gp + ' pp.')
+                              : ('Right on what your mix is priced for (~' + mp + '%).');
+        } else { mixNote.textContent = ''; }
+        // Mix note now lives in the card's tooltip instead of a visible line
+        var infoEl = document.querySelector('#rzCard2 .rz-info');
+        if (infoEl && mixNote.textContent) infoEl.title = infoEl.title.split(' — ')[0] + ' — ' + mixNote.textContent;
+
+        // Verdict card — the emotional centerpiece.
+        var vc = document.getElementById('rzVerdict');
+        vc.setAttribute('data-tier', tier);
+        document.getElementById('rzVerdictPill').textContent =
+          tier === 'at_risk' ? 'AT RISK' : tier === 'stretch' ? 'NEEDS ATTENTION' : 'ON TRACK';
+        var glyphEl = document.getElementById('rzVerdictGlyph');
+        if (tier === 'stretch') {
+          glyphEl.innerHTML = '<svg viewBox="0 0 24 24" style="width:88px;height:88px;display:block;"><path d="M12 2.6 L22.6 20.6 H1.4 Z" fill="#F59E0B" stroke="#F59E0B" stroke-width="2.6" stroke-linejoin="round"/><rect x="10.9" y="8.6" width="2.2" height="6.4" rx="1.1" fill="#3A2703"/><circle cx="12" cy="17.5" r="1.35" fill="#3A2703"/></svg>';
+        } else {
+          glyphEl.textContent = tier === 'on_track' ? '✓' : '!';
+        }
+        var vh = document.getElementById('rzVerdictHead');
+        var vb = document.getElementById('rzVerdictBody');
+        var vcta = document.getElementById('rzVerdictCta');
         if (tier === 'at_risk') {
-          hl.textContent = 'Savings may not last to age ' + endAge + '.';
-          body.textContent = 'Your plan could fall short if markets underperform, inflation runs higher, or unexpected costs arise. Let’s close the gap and strengthen your plan.';
+          vh.textContent = 'Savings may not last to age ' + endAge + '.';
+          vb.innerHTML = '<strong style="color:var(--text);">The good news: this is fixable.</strong> Your plan could fall short if markets underperform, inflation runs higher, or unexpected costs arise. Let’s close the gap and strengthen your plan.';
+          vcta.innerHTML = 'Let’s close the gap &nbsp;&rarr;';
         } else if (tier === 'stretch') {
           if (data.depletionAge && data.depletionAge < endAge) {
-            hl.textContent = 'Savings run out at age ' + data.depletionAge + '.';
+            vh.textContent = 'Savings may run out by age ' + data.depletionAge + '.';
           } else {
-            hl.textContent = 'Savings last through age ' + endAge + '.';
+            vh.textContent = 'Savings last through age ' + endAge + ' — barely.';
           }
-          body.textContent = 'Your plan looks solid, but there’s not much room for error. Let’s make sure your plan stays on solid ground—no matter what the markets do.';
+          vb.textContent = 'Your plan looks solid, but there’s not much room for error. Let’s make sure it stays on solid ground — no matter what the markets do.';
+          vcta.innerHTML = 'Let’s strengthen the plan &nbsp;&rarr;';
         } else {
-          hl.textContent = 'Savings last through age ' + endAge + '.';
-          body.textContent = 'Your plan looks good. You have a healthy margin for market ups and downs and unexpected costs.';
+          vh.textContent = 'Savings last through age ' + endAge + '.';
+          vb.textContent = 'Your plan looks good — within the range we can see. A healthy margin for market swings and unexpected costs, worth confirming with the full picture.';
+          vcta.innerHTML = 'Let’s make it bulletproof &nbsp;&rarr;';
         }
+
+        // Recommended action bar — reuses the engine's additionalSavings.
+        (function () {
+          var bar = document.getElementById('rzAction');
+          var amt = document.getElementById('rzActionAmt');
+          var exp = document.getElementById('rzActionExplainer');
+          var cur = document.getElementById('rzActionCur');
+          var note = document.getElementById('rzActionNote');
+          var add = data.additionalSavings || {};
+          bar.style.display = '';
+          bar.setAttribute('data-ok', add.onTrack ? '1' : '0');
+          cur.textContent = irrText;
+          if (add.onTrack) {
+            amt.textContent = '$0 / year';
+            exp.textContent = (add.currentContributionRate > 0)
+              ? 'You’re set — your current ' + fmtPct(add.currentContributionRate) + ' savings rate is enough. No extra saving needed.'
+              : 'You’re set — your plan is funded as it stands. No extra saving needed.';
+            note.textContent = 'Already at or below the safe 5% return — with margin for the future.';
+          } else if (add.capped) {
+            var lockSm2 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            var cappedAmt = Number.isFinite(add.additionalAnnualDollars) ? fmt$(add.additionalAnnualDollars) : '$—,———';
+            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
+              '<span class="rz-blur">+ ' + cappedAmt + ' / year</span>' +
+              '<span class="rz-blur-lock">' + lockSm2 + '</span></a>';
+            exp.textContent = 'Saving alone won’t close the gap — the levers are lower spending, working longer, or both.';
+            note.textContent = 'A full profile finds which combination gets you there.';
+          } else if (Number.isFinite(add.additionalAnnualDollars) && Number.isFinite(add.additionalRate)) {
+            // Computed magnitudes are premium: blurred with an amber lock,
+            // clicking through to pricing. The user's own input (current
+            // contribution rate) and the current/target returns stay visible.
+            var lockSm = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:15px;height:15px;"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            amt.innerHTML = '<a class="rz-blurwrap" href="pricing.html" title="Unlock with Full Profile">' +
+              '<span class="rz-blur">+ ' + fmt$(add.additionalAnnualDollars) + ' / year</span>' +
+              '<span class="rz-blur-lock">' + lockSm + '</span></a>';
+            exp.innerHTML = 'Increase savings by <span class="rz-blur rz-blur-sm">' + fmtPct(add.additionalRate) +
+              '</span> of salary on top of your current ' + fmtPct(add.currentContributionRate) + '.';
+            note.textContent = 'This gets you to a safe 5% return with more margin for the future.';
+          } else {
+            bar.style.display = 'none';
+          }
+        })();
+
+        // Confirmed chips — what they already gave us (progress framing).
+        (function () {
+          var chips = [];
+          var ageV = parseInt(document.getElementById('age').value, 10);
+          if (Number.isFinite(ageV)) chips.push('Age ' + ageV);
+          chips.push(filing === 'mfj' ? 'Married' : 'Single');
+          var sav = parseFloat(document.getElementById('currentSavings').value);
+          if (Number.isFinite(sav)) chips.push(fmtK$(sav) + ' saved');
+          var spendToday = data.currentSpendingEstimate || data.projectedRetirementSpending;
+          if (Number.isFinite(spendToday)) chips.push(fmtK$(spendToday) + ' spend');
+          var extra = 3; // state, retirement age, contribution rate
+          var el = document.getElementById('ssBenefit');
+          if (el && el.value.trim() !== '') extra++;
+          el = document.getElementById('monthlyPension');
+          if (el && parseFloat(el.value) > 0) extra++;
+          el = document.getElementById('customSpendOverride');
+          if (el && el.value.trim() !== '') extra++;
+          chips.push('+' + extra + ' more');
+          document.getElementById('rzChips').innerHTML = chips.map(function (c) {
+            return '<span class="rz-chip">✓ ' + c + '</span>';
+          }).join('');
+          // Ledger framing: inputs already given → value already delivered.
+          document.getElementById('rzChipsNote').textContent = prec
+            ? 'These confirmed inputs built the first ' + precision + '% of your precision.'
+            : 'These are the inputs your result was built from.';
+        })();
+
+        // ===================================================================
+        // SHARPEN / IMPACT — the locked value, quantified by the engine.
+        // Each row's number is data.precision.sharpen[].impactPp: how far the
+        // measured band narrows once that one input is known, in percentage
+        // points of required return. The `impact` values below are only a
+        // stable display order for the rows the engine has not sized; every
+        // rendered number comes from the engine.
+        // ===================================================================
+        var RZ_SHARPEN = [
+          { key: 'spouse', name: 'Spouse’s income and Social Security', short: 'Spouse’s income & Social Security', impact: 1.1, color: 'imp-blue', bg: 'bg-blue',
+            desc: 'Joint timing and benefits change the math.',
+            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+          { key: 'ssopt',  name: 'Social Security claiming optimizer', short: 'Social Security claiming', impact: 0.9, color: 'imp-blue', bg: 'bg-blue',
+            desc: 'Choosing when to claim can move your outcome.',
+            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>' },
+          { key: 'health', name: 'Healthcare and long-term care', short: 'Healthcare & long-term care', impact: 0.8, color: 'imp-green', bg: 'bg-green',
+            desc: 'Costs and coverage choices create uncertainty.',
+            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>' },
+          { key: 'mix',    name: 'Account mix (pre-tax / Roth / taxable)', short: 'Account mix', impact: 4.1, color: 'imp-purple', bg: 'bg-purple',
+            // Was: "This input has the largest impact on narrowing your range."
+            // It is not. Measured across ten households, account mix is the
+            // smallest of the six (0.00-0.14pp) and healthcare is the largest
+            // in nine of them. The rows are ordered by measured impact, so
+            // ranking is carried by position rather than by a fixed sentence.
+            desc: 'Where the money sits changes what the tax code takes.',
+            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>' },
+          { key: 'roth',   name: 'Roth conversion modeling', short: 'Roth conversion modeling', impact: 0, na: true, color: 'imp-purple', bg: 'bg-purple',
+            naText: 'Doesn’t change your number for this household',
+            desc: 'Timing conversions can cut lifetime taxes.',
+            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg>' },
+          { key: 'other',  name: 'Other retirement income', short: 'Other retirement income', impact: 0.3, color: 'imp-amber', bg: 'bg-amber',
+            desc: 'Pensions, rental income, part-time work and other sources.',
+            ico: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>' }
+        ];
+        var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+
+        // ONE unit system: accuracy in ±percentage-points of required return.
+        // Today's ± and every row's number come from the engine. The rows are
+        // NOT rescaled to sum to the total: uncertainties combine in
+        // quadrature, so a set of independent inputs narrows the band by less
+        // than the sum of their individual effects. Each row is a true
+        // standalone statement — "tell us this one thing and the band narrows
+        // by X" — and rows worth nothing to this household are dropped.
+        if (prec) {
+          var accNow = prec.halfWidthPp;
+          var impactOf = {};
+          prec.sharpen.forEach(function (s) { impactOf[s.key] = s.impactPp; });
+          // Drop rows worth nothing to THIS household. The bar is the displayed
+          // precision, not zero: a row that renders "Sharpens by 0.0%" is an
+          // empty promise on the page whatever the underlying float says.
+          var pool = RZ_SHARPEN.filter(function (it) {
+            return (impactOf[it.key] || 0) >= 0.05;
+          }).slice().sort(function (a, b) { return (impactOf[b.key] || 0) - (impactOf[a.key] || 0); });
+          pool.forEach(function (it) { it.scaled = impactOf[it.key]; });
+
+          document.getElementById('rzAccNow').textContent = accNow.toFixed(1);
+          // Translate the abstract percentage into dollars on THEIR balance —
+          // "off by 2.6%" reads like nothing; "$23,000 a year" doesn't.
+          (function () {
+            var el = document.getElementById('rzAccDollar');
+            var proj = data.projectedRetirementBalance;
+            if (el && typeof proj === 'number' && proj > 0) {
+              var swing = Math.round(accNow / 100 * proj / 1000) * 1000;
+              el.innerHTML = ' — about <b class="money">' + fmt$(swing) + ' a year</b> on the savings you’re projected to have';
+            } else if (el) { el.textContent = ''; }
+          })();
+          document.getElementById('rzTotalPts').textContent = prec.floorPp.toFixed(1) + '%';
+          var totalRowEl = document.getElementById('rzTotalRow');
+          if (totalRowEl) {
+            totalRowEl.querySelector('span').textContent = pool.length > 0
+              ? 'Unlock all ' + pool.length + ' and your number is accurate to within'
+              : 'A full profile takes your number to within';
+          }
+
+          var listEl = document.getElementById('rzSharpenList');
+          listEl.innerHTML = pool.map(function (it) {
+            return '<a class="rz-item" href="pricing.html" title="Unlock with Full Profile">' +
+              '<div class="rz-imp-ico ' + it.color + ' ' + it.bg + '">' + it.ico + '</div>' +
+              '<div class="rz-item-main"><div class="rz-item-name">' + it.name + '</div>' +
+              '<div class="rz-item-sub">' + it.desc + '</div></div>' +
+              '<div class="rz-imp-val"><span class="lab">Sharpens by</span>' +
+              '<span class="num ' + it.color + '">' + it.scaled.toFixed(1) + '%</span></div>' +
+              '<span class="rz-imp-lk">' + lockSvg + '</span></a>';
+          }).join('');
+        }
+
+
 
         // ===== Detail panel =====
         var ebriCard = document.getElementById('ebriCard');
@@ -1510,28 +2671,150 @@
         document.getElementById('projBalanceSub').textContent = yrs > 0
           ? 'projected ' + yrs + ' year' + (yrs === 1 ? '' : 's') + ' forward at ' + fmtPct(data.assumptions.preRetReturn) + '/yr'
           : 'no projection (retiring now)';
-        document.getElementById('ssAnnual').textContent = fmt$(data.estimatedAnnualSS) + ' / yr';
+        var ssTxt = fmt$(data.estimatedAnnualSS) + ' / yr';
+        if (typeof data.ssClaimAgeUsed === 'number') {
+          ssTxt += ' (claimed at ' + data.ssClaimAgeUsed + ')';
+          if (data.ssBridgeForced) {
+            ssTxt += ' — savings can’t fund the years to your chosen claim age, so we modeled claiming at retirement';
+          }
+        }
+        document.getElementById('ssAnnual').textContent = ssTxt;
+        var _ssLbl = document.getElementById('ssAnnualLabel');
+        var _ssNote = document.getElementById('ssAnnualNote');
+        if (filing === 'mfj') {
+          if (_ssLbl) _ssLbl.textContent = 'Estimated annual Social Security (household)';
+          if (_ssNote) _ssNote.textContent = "Household total. Includes an estimated spousal benefit at 50% of the primary's; spouse claims at the age you set.";
+        } else {
+          if (_ssLbl) _ssLbl.textContent = 'Estimated annual Social Security';
+          if (_ssNote) _ssNote.textContent = 'at retirement age, today’s dollars equivalent';
+        }
 
         // Spending table
         var tbody = document.getElementById('spendingTbody');
         tbody.innerHTML = '';
-        var totalDollars = data.projectedRetirementSpending;
+        var nomTotal = data.projectedRetirementSpending;            // nominal $ at retirement
+        var todayTotal = data.currentSpendingEstimate || nomTotal;  // today's dollars
+        var toToday = nomTotal > 0 ? (todayTotal / nomTotal) : 1;
         CATEGORIES.forEach(function (cat) {
-          var dollars = (data.spendingBreakdown && data.spendingBreakdown[cat.key]) || 0;
-          var pct = totalDollars > 0 ? (dollars / totalDollars * 100) : 0;
+          var nom = (data.spendingBreakdown && data.spendingBreakdown[cat.key]) || 0;
+          var pct = nomTotal > 0 ? (nom / nomTotal * 100) : 0;
           var tr = document.createElement('tr');
           tr.innerHTML =
             '<td><span class="cat-swatch" style="background:' + cat.color + ';"></span>' + cat.label + '</td>' +
             '<td>' + pct.toFixed(0) + '%</td>' +
-            '<td>' + fmt$(dollars) + '</td>';
+            '<td>' + fmt$(nom * toToday) + '</td>';
           tbody.appendChild(tr);
         });
-        document.getElementById('spendingTotal').textContent = fmt$(totalDollars);
+        document.getElementById('spendingTotal').textContent = fmt$(todayTotal);
+        var nomNote = document.getElementById('spendingNominalNote');
+        if (nomNote) {
+          var yrs = data.yearsToRetirement;
+          nomNote.textContent = '≈ ' + fmt$(nomTotal) + '/yr at retirement' +
+            (yrs != null ? ' (after ' + yrs + ' years of inflation)' : '') +
+            ' — the same buying power as ' + fmt$(todayTotal) + ' today.';
+        }
 
         // Show results section
+        var demoNote = document.getElementById('rzDemoNote');
+        if (demoNote) demoNote.style.display = data.__demo ? '' : 'none';
         document.getElementById('formSection').style.display = 'none';
         document.getElementById('resultsSection').classList.add('visible');
         window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // Commerce switch. Off for everyone; ?upsell=1 turns it on and
+      // remembers it for this browser, ?upsell=0 turns it off again.
+      try {
+        var uq = new URLSearchParams(location.search).get('upsell');
+        if (uq === '1') localStorage.setItem('gh2_upsell', '1');
+        if (uq === '0') localStorage.removeItem('gh2_upsell');
+        if (localStorage.getItem('gh2_upsell') === '1') document.body.classList.add('upsell-on');
+
+
+
+      } catch (e) { /* storage blocked: stays off, which is the safe default */ }
+
+    /* Shopify is the source of truth for what the tiers say and cost (Founder,
+       2026-08-31). Content syncs on every load; fails silently while the store
+       is locked, so the copy below is only the fallback. Buy binding is a
+       separate, still-parked concern. */
+    (function () {
+      var SHOP = '43itxk-wa.myshopify.com';
+      function lines(html) {
+        try {
+          var doc = new DOMParser().parseFromString(html || '', 'text/html');
+          var ns = doc.querySelectorAll('li, p'); var out = [];
+          (ns.length ? [].slice.call(ns) : [doc.body]).forEach(function (n) {
+            n.textContent.split(/\n+/).forEach(function (t) { t = t.trim(); if (t) out.push(t); });
+          });
+          return out;
+        } catch (e) { return []; }
+      }
+      fetch('https://' + SHOP + '/products.json?limit=50', { cache: 'no-store' })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (data) {
+          if (!data || !data.products) return;
+          document.querySelectorAll('.tier-card[data-shopify-tier]').forEach(function (card) {
+            var tier = card.getAttribute('data-shopify-tier');
+            var m = data.products.filter(function (p) { return (p.title || '').indexOf(tier) !== -1; })[0];
+            if (!m) return;
+            var nameEl = card.querySelector('.tier-name');
+            if (nameEl && m.title) nameEl.textContent = m.title;
+            var ls = lines(m.body_html);
+            var ul = card.querySelector('.tier-features');
+            if (ul && ls.length) {
+              ul.textContent = '';
+              ls.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); });
+            }
+            // Prices: variants titled with "month" / "year" feed the shared
+            // billing toggle. Jae: name the Shopify variants Monthly / Yearly.
+            var p = card.querySelector('.tier-price');
+            if (p) {
+              var vs = m.variants || [], titled = false;
+              vs.forEach(function (v) {
+                var t = (v.title || '').toLowerCase();
+                if (t.indexOf('month') > -1) { p.setAttribute('data-month', v.price); titled = true; }
+                else if (t.indexOf('year') > -1 || t.indexOf('annual') > -1) { p.setAttribute('data-year', v.price); titled = true; }
+              });
+              if (!titled && vs[0]) {
+                // A single untitled variant: show it plainly, no toggle claim.
+                p.setAttribute('data-month', vs[0].price); p.removeAttribute('data-year');
+                var lone = p.querySelector('.tp-opt[data-billing="monthly"] .tp-unit'); if (lone) lone.textContent = '';
+              }
+              if (window.GH2_BP_APPLY) window.GH2_BP_APPLY();
+            }
+          });
+        })
+        .catch(function () { /* locked or offline: fallback copy stands */ });
+    })();
+
+      // The engine is always called for real (see API_BASE above). If it
+      // cannot be reached the page says so; it does not invent a projection.
+      // A sample-result object used to live here and rendered through the
+      // normal pipeline on any host that was not production. Removed
+      // deliberately -- a household cannot tell a sample from a result.
+
+      // ===== "Computing" theater (labor illusion — honest steps, ~2.6s) =====
+      // Ends on "some inputs unavailable — using wide estimates", pre-seeding
+      // the Full Profile upsell before the verdict appears.
+      function runCalcTheater(payload) {
+        var ov = document.getElementById('rzCalc');
+        if (!ov) { renderResult(payload); return; }
+        var steps = ov.querySelectorAll('.rz-calc-step');
+        ov.classList.add('on');
+        var i = 0;
+        (function next() {
+          if (i < steps.length) {
+            steps[i].classList.add('on'); i++;
+            setTimeout(next, 560);
+          } else {
+            setTimeout(function () {
+              ov.classList.remove('on');
+              Array.prototype.forEach.call(steps, function (s) { s.classList.remove('on'); });
+              renderResult(payload);
+            }, 520);
+          }
+        })();
       }
 
       // ===== Adjust inputs =====
@@ -1549,67 +2832,142 @@
       document.getElementById('ballparkForm').addEventListener('submit', function (e) {
         e.preventDefault();
         showError('');
+        clearMarks();
 
         var age = parseInt(document.getElementById('age').value, 10);
         var retirementAge = parseInt(document.getElementById('retirementAge').value, 10);
+        var ssClaimAge = parseInt(document.getElementById('ssClaimAge').value, 10);
         var state = document.getElementById('state').value;
         var currentSalary = parseFloat(document.getElementById('currentSalary').value);
         var currentSavings = parseFloat(document.getElementById('currentSavings').value);
         var contributionRatePct = parseFloat(document.getElementById('contributionRate').value);
         var monthlyPensionRaw = document.getElementById('monthlyPension').value;
         var monthlyPension = monthlyPensionRaw === '' ? 0 : parseFloat(monthlyPensionRaw);
+        var ssFraRaw = document.getElementById('ssMonthlyFRA').value;
+        var ssMonthlyFRA = ssFraRaw === '' ? 0 : Math.max(0, parseFloat(ssFraRaw) || 0);
+        var customSpendOverrideRaw = document.getElementById('customSpendOverride').value;
+        var customSpendOverride = customSpendOverrideRaw.trim() === '' ? null : parseFloat(customSpendOverrideRaw);
 
-        if (!Number.isFinite(age) || age < 50 || age > 80) { showError('Enter a current age between 50 and 80.'); return; }
-        if (!Number.isFinite(retirementAge) || retirementAge < 50 || retirementAge > 80) { showError('Enter a retirement age between 50 and 80 (use the age you retired if already retired).'); return; }
-        if (filing === null) { showError('Choose a filing status.'); return; }
+        // ---- Anything required still blank? Mark them all, say how many, stop. ----
+        var missing = [];
+        var blank = function (id) { var el = document.getElementById(id); return !el || String(el.value).trim() === ''; };
+        if (blank('age')) missing.push(['age', 'your current age']);
+        if (blank('retirementAge')) missing.push(['retirementAge', 'your retirement age']);
+        if (filing === null) missing.push(['filingToggle', 'filing status']);
+        if (filing === 'mfj') {
+          if (blank('spouseAge')) missing.push(['spouseAge', 'your spouse\u2019s current age']);
+          if (blank('spouseRetirementAge')) missing.push(['spouseRetirementAge', 'your spouse\u2019s retirement age']);
+        }
+        if (blank('state')) missing.push(['state', 'your state']);
+        if (blank('currentSalary')) missing.push(['currentSalary', 'your annual salary']);
+        if (blank('currentSavings')) missing.push(['currentSavings', 'your retirement savings']);
+        if (blank('contributionRate')) missing.push(['contributionRate', 'your contribution rate']);
+        if (selectedProfile === null && customSpendOverride === null) missing.push(['profileGroup', 'a spending level']);
+        if (missing.length) {
+          missing.forEach(function (m) { mark(m[0], m[0] === 'profileGroup' ? 'Pick one of the four, or enter your own amount below.' : 'Needed for your number.'); });
+          var names = missing.map(function (m) { return m[1]; });
+          var list = names.length === 1 ? names[0] : names.slice(0, -1).join(', ') + ' and ' + names[names.length - 1];
+          showError((missing.length === 1 ? 'One thing is missing: ' : missing.length + ' things are missing: ') + list + '.');
+          scrollToMark(missing[0][0]);
+          return;
+        }
+
+        if (!Number.isFinite(age) || age < 35 || age > 80) { fail('age', 'Enter a current age between 35 and 80.'); return; }
+        if (!Number.isFinite(retirementAge) || retirementAge < 35 || retirementAge > 80) { fail('retirementAge', 'Enter a retirement age between 35 and 80 (use the age you retired if already retired).'); return; }
 
         // Spouse fields required when MFJ
         var spouseAge = null;
         var spouseRetirementAge = null;
+        var spouseSsClaimAge = null;
         if (filing === 'mfj') {
           spouseAge = parseInt(document.getElementById('spouseAge').value, 10);
           spouseRetirementAge = parseInt(document.getElementById('spouseRetirementAge').value, 10);
-          if (!Number.isFinite(spouseAge) || spouseAge < 50 || spouseAge > 80) {
-            showError("Enter your spouse's current age between 50 and 80."); return;
+          spouseSsClaimAge = parseInt(document.getElementById('spouseSsClaimAge').value, 10);
+          if (!Number.isFinite(spouseAge) || spouseAge < 35 || spouseAge > 80) {
+            fail('spouseAge', "Enter your spouse's current age between 35 and 80."); return;
           }
-          if (!Number.isFinite(spouseRetirementAge) || spouseRetirementAge < 50 || spouseRetirementAge > 80) {
-            showError("Enter your spouse's retirement age between 50 and 80 (use the age they retired if already retired)."); return;
+          if (!Number.isFinite(spouseRetirementAge) || spouseRetirementAge < 35 || spouseRetirementAge > 80) {
+            fail('spouseRetirementAge', "Enter your spouse's retirement age between 35 and 80 (use the age they retired if already retired)."); return;
           }
         }
 
-        if (!state) { showError('Choose your state.'); return; }
-        if (!Number.isFinite(currentSalary) || currentSalary < 0) { showError('Enter your current annual salary.'); return; }
-        if (!Number.isFinite(currentSavings) || currentSavings < 0) { showError('Enter your current retirement savings.'); return; }
-        if (!Number.isFinite(contributionRatePct) || contributionRatePct < 0 || contributionRatePct > 50) { showError('Enter a contribution rate between 0 and 50 (%).'); return; }
-        if (!Number.isFinite(monthlyPension) || monthlyPension < 0) { showError('Pension must be a non-negative number.'); return; }
-        if (selectedProfile === null) { showError('Pick a spending profile.'); return; }
+        if (!state) { fail('state', 'Choose your state.'); return; }
+        if (!Number.isFinite(currentSalary) || currentSalary < 0) { fail('currentSalary', 'Enter your current annual salary.'); return; }
+        if (!Number.isFinite(currentSavings) || currentSavings < 0) { fail('currentSavings', 'Enter your current retirement savings.'); return; }
+        if (!Number.isFinite(contributionRatePct) || contributionRatePct < 0 || contributionRatePct > 50) { fail('contributionRate', 'Enter a contribution rate between 0 and 50 (%).'); return; }
+        if (!Number.isFinite(monthlyPension) || monthlyPension < 0) { fail('monthlyPension', 'Pension must be a non-negative number.'); return; }
+        if (customSpendOverride !== null && (!Number.isFinite(customSpendOverride) || customSpendOverride <= 0)) { fail('customSpendOverride', 'Enter a positive annual spending amount, or leave the override blank.'); return; }
+
+        // Send the engine the SAME dollar shown on the selected card (today's-dollars,
+        // projected from salary at real wage growth; Premium = 100%, uncapped). Falls
+        // back to the profile key if the dollar can't be computed (e.g. salary blank).
+        var _selP = null;
+        for (var _i = 0; _i < PROFILES.length; _i++) { if (PROFILES[_i].key === selectedProfile) { _selP = PROFILES[_i]; break; } }
+        var _projBase = projectedSalary(currentSalary, age, retirementAge);
+        var customSpending = (_selP && Number.isFinite(_projBase)) ? Math.round(_projBase * _selP.pct) : null;
+        if (customSpendOverride !== null) customSpending = Math.round(customSpendOverride);
 
         var salaryGrowth     = parseFloat(document.getElementById('salaryGrowth').value)     / 100;
         var preRetReturn     = parseFloat(document.getElementById('preRetReturn').value)     / 100;
         var preRetInflation  = parseFloat(document.getElementById('preRetInflation').value)  / 100;
         var postRetReturn    = parseFloat(document.getElementById('postRetReturn').value)    / 100;
         var postRetInflation = parseFloat(document.getElementById('postRetInflation').value) / 100;
-        var yearsOfRetirement = parseInt(document.getElementById('yearsOfRetirement').value, 10);
+        var planThroughAge = parseInt(document.getElementById('planThroughAge').value, 10);
+        if (!(planThroughAge >= 80 && planThroughAge <= 110)) planThroughAge = 100;
 
         var btn = document.getElementById('submitBtn');
         var orig = btn.innerHTML;
         btn.disabled = true;
         btn.innerHTML = 'Calculating…';
 
-        fetch('/api/optimize-quick', {
+        // Results live on results.html (the three-layer verdict page). After the
+        // engine answers, the calculating card plays and we hand off there.
+        var IS_LOCAL = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname) || location.protocol === 'file:';
+        function goToResults() {
+          var ov = document.getElementById('rzCalc'), steps = ov ? ov.querySelectorAll('.rz-calc-step') : [];
+          if (!ov) { window.location.href = 'results.html'; return; }
+          ov.classList.add('on');
+          var k = 0;
+          (function next() {
+            if (k < steps.length) { steps[k].classList.add('on'); k++; setTimeout(next, 560); }
+            else setTimeout(function () { window.location.href = 'results.html'; }, 520);
+          })();
+        }
+        function storeResult(body, extra) {
+          var rec = {
+            inputs: { age: age, retirementAge: retirementAge, planThroughAge: planThroughAge, filingStatus: filing,
+                      spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge, state: state,
+                      currentSalary: currentSalary, currentSavings: currentSavings,
+                      contributionRate: contributionRatePct / 100,
+                      spendingProfile: customSpending != null ? 'custom' : selectedProfile, customSpending: customSpending, monthlyPension: monthlyPension },
+            result: body, savedAt: Date.now()
+          };
+          if (extra) for (var k2 in extra) rec[k2] = extra[k2];
+          try { sessionStorage.setItem('gh2_ballpark_last_result', JSON.stringify(rec)); } catch (e) {}
+        }
+
+        // Local preview has no /api — use the public CORS-open production API
+        // there (per README); same-origin relative path everywhere else.
+        // Always call the real engine. /api/optimize-quick is public and
+        // answers cross-origin, so a laptop, a preview link and
+        // gh2benefits.com all get real numbers. Only the site that hosts
+        // the engine uses a relative path.
+        var API_BASE = (location.hostname === 'edge.gh2benefits.com')
+          ? '' : 'https://edge.gh2benefits.com';
+        fetch(API_BASE + '/api/optimize-quick', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             mode: 'ballpark',
-            age: age, retirementAge: retirementAge, filingStatus: filing,
-            spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge,
+            age: age, retirementAge: retirementAge, ssClaimAge: ssClaimAge, filingStatus: filing,
+            spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge, spouseSsClaimAge: spouseSsClaimAge,
             state: state,
             currentSalary: currentSalary, currentSavings: currentSavings,
             contributionRate: contributionRatePct / 100,
-            spendingProfile: selectedProfile, monthlyPension: monthlyPension,
+            spendingProfile: customSpending != null ? 'custom' : selectedProfile, customSpending: customSpending, monthlyPension: monthlyPension,
             salaryGrowth: salaryGrowth, preRetReturn: preRetReturn, preRetInflation: preRetInflation,
-            postRetReturn: postRetReturn, postRetInflation: postRetInflation,
-            yearsOfRetirement: yearsOfRetirement
+            postRetReturn: postRetReturn, postRetInflation: postRetInflation, targetEndAge: planThroughAge,
+            ssMonthlyFRA: ssMonthlyFRA
           })
         }).then(function (r) {
           if (r.status === 401) { window.location.href = '/login.html?next=' + encodeURIComponent('/ballpark.html'); return null; }
@@ -1618,28 +2976,116 @@
           if (out === null) return;
           if (out.status !== 200) {
             btn.disabled = false; btn.innerHTML = orig;
-            showError(out.body && out.body.message ? out.body.message : (out.body && out.body.error) || 'Something went wrong. Try again.');
+            var msg = out.body && out.body.message ? out.body.message : (out.body && out.body.error) || 'Something went wrong. Try again.';
+            // Local preview only: show the results page on sample numbers with a
+            // banner saying why. Production says so and stops (see catch below).
+            if (IS_LOCAL) { storeResult(null, { sample: true, why: 'the engine said \u201c' + msg + '\u201d' }); goToResults(); return; }
+            showError(msg);
             return;
           }
           btn.disabled = false; btn.innerHTML = orig;
-          try {
-            sessionStorage.setItem('gh2_ballpark_last_result', JSON.stringify({
-              inputs: { age: age, retirementAge: retirementAge, filingStatus: filing,
-                        spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge,
-                        state: state,
-                        currentSalary: currentSalary, currentSavings: currentSavings,
-                        contributionRate: contributionRatePct / 100,
-                        spendingProfile: selectedProfile, monthlyPension: monthlyPension },
-              result: out.body, savedAt: Date.now()
-            }));
-          } catch (e) {}
-          renderResult(out.body);
+          storeResult(out.body);
+          goToResults();
         }).catch(function () {
           btn.disabled = false; btn.innerHTML = orig;
-          showError('Network error. Please try again.');
+          if (IS_LOCAL) { storeResult(null, { sample: true, why: 'the engine could not be reached' }); goToResults(); return; }
+          // The engine could not be reached. Say so. Never render a number
+          // the engine did not produce -- an invented projection someone can
+          // act on is worse than an error they can retry.
+          showError('We could not reach the calculation engine. Please try again.');
         });
       });
     })();
+  </script>
+<script>try{history.scrollRestoration="manual";}catch(e){}addEventListener("load",function(){window.scrollTo(0,0);});</script>
+  <!-- "Computing" overlay -->
+  <div class="rz-calc" id="rzCalc" aria-hidden="true">
+    <div class="rz-calc-card">
+      <img class="rz-calc-mascot" src="assets/edge-abacus.png" alt="" />
+      <div class="rz-calc-title">EDGE is running your projection&hellip;</div>
+      <div class="rz-calc-step">Projecting your portfolio year by year&hellip;</div>
+      <div class="rz-calc-step">Applying federal + state + Medicare tax math&hellip;</div>
+      <div class="rz-calc-step">Checking your confirmed data points&hellip;</div>
+      <div class="rz-calc-step warn" id="rzCalcWarn">&#9888; Some data points unavailable &mdash; using wide estimates.</div>
+    </div>
+  </div>
+
+  <!-- ===================================================================
+       Answers carried over from /quick.
+
+       Someone who filled in the basic check should not retype it here.
+       quick.html writes what is on screen when they click through; this
+       reads it once and clears it, so a later visit in the same tab starts
+       clean rather than silently pre-filled.
+
+       Filing status is applied by clicking the toggle rather than setting a
+       variable -- the click is what shows or hides the spouse fields, and
+       setting the variable alone would leave the two out of step.
+       =================================================================== -->
+  <script>
+  (function () {
+    // Read now, clear only once it has actually been applied. Clearing first
+    // means a parse failure silently eats what they typed and they arrive at
+    // an empty form with no idea why.
+    var raw;
+    try { raw = sessionStorage.getItem('gh2_quick_handoff'); }
+    catch (e) { return; }
+    if (!raw) return;
+
+    var d;
+    try { d = JSON.parse(raw); } catch (e) { return; }
+    if (!d || d.v !== 1) return;
+
+    var set = function (id, val) {
+      if (val === null || val === undefined || val === '') return false;
+      var el = document.getElementById(id);
+      if (!el) return false;
+      el.value = String(val);
+      // A select silently keeps its old value if the option does not exist.
+      if (el.tagName === 'SELECT' && String(el.value) !== String(val)) return false;
+      el.dispatchEvent(new Event('input',  { bubbles: true }));
+      el.dispatchEvent(new Event('change', { bubbles: true }));
+      return true;
+    };
+
+    var filled = 0;
+    if (set('age', d.age)) filled++;
+    if (set('retirementAge', d.retirementAge)) filled++;
+    if (set('state', d.state)) filled++;
+    if (set('currentSalary', d.currentSalary)) filled++;
+    if (set('currentSavings', d.currentSavings)) filled++;
+    if (set('contributionRate', d.contributionRate)) filled++;
+    // Quick Check now asks spending as the same four tiers, so the tier card
+    // carries the choice (below). Only fill the override when no tier came
+    // over; filling both dims the cards and reads as "you typed a number".
+    if (!d.spendingProfile && set('customSpendOverride', d.customSpending)) filled++;
+    if (set('ssMonthlyFRA', d.ssMonthlyFRA)) filled++;
+    if (set('planThroughAge', d.targetEndAge)) filled++;
+
+    if (d.filingStatus) {
+      var btn = document.querySelector('.toggle [data-filing="' + d.filingStatus + '"]');
+      if (btn) { btn.click(); filled++; }
+    }
+    // Quick Check now asks spending as the same four tiers; land on the same card.
+    if (d.spendingProfile) {
+      var card = document.querySelector('.profile-card[data-profile="' + d.spendingProfile + '"]');
+      if (card) { card.click(); filled++; }
+    }
+
+    if (!filled) return;   // nothing landed: leave the handoff for a retry
+
+    try { sessionStorage.removeItem('gh2_quick_handoff'); } catch (e) {}
+
+    {
+      var note = document.createElement('div');
+      note.textContent = 'Carried over from your quick check — change anything that is not right.';
+      note.style.cssText = 'max-width:1080px;margin:0 auto 10px;padding:9px 14px;border-radius:10px;'
+        + 'background:rgba(96,165,250,0.10);border:1px solid rgba(96,165,250,0.30);'
+        + 'color:#93C5FD;font-size:13px;';
+      var form = document.querySelector('form');
+      if (form && form.parentNode) form.parentNode.insertBefore(note, form);
+    }
+  })();
   </script>
 </body>
 </html>

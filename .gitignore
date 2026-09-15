@@ -5,3 +5,6 @@ node_modules/
 .env
 .env.*
 Thumbs.db
+
+# Local page archive (Paul) — never ships
+archive/

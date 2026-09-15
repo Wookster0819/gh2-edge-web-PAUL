@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EDGE — Loading Card</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <!-- STATIC MOCKUP of the ballpark "calculating" overlay, frozen with every step lit. Same CSS as ballpark.html. -->
+  <style>
+    :root { --bg: #0A0E1A; --card-bg: #11172A; --border: #1F2940; --text: #F5F7FA; --text-muted: #8693AC; --text-faint: #5A6680; --purple-2: #A78BFA; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); min-height: 100%; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+    .topbar { display: flex; align-items: center; gap: 18px; padding: 16px 32px; border-bottom: 1px solid #18213B; }
+    .wordmark { font-weight: 800; letter-spacing: 0.32em; font-size: 15px; }
+    .topbar .tag { margin-left: auto; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--purple-2); border: 1px dashed rgba(139,92,246,0.4); padding: 5px 10px; border-radius: 999px; }
+
+    /* faux page behind the overlay, dimmed exactly like the real one */
+    .stage { position: relative; min-height: calc(100vh - 62px); display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .stage::before { content: ''; position: absolute; inset: 0; background: rgba(4,6,14,0.88); }
+    .ghost { position: absolute; inset: 0; padding: 60px 32px; color: var(--text-faint); font-size: 28px; font-weight: 800; text-align: center; }
+
+    /* the card, verbatim from ballpark.html */
+    .rz-calc-card { position: relative; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; padding: 30px 36px; width: min(440px, 90vw); }
+    .rz-calc-mascot { display: block; width: 132px; height: auto; margin: -6px auto 12px; filter: drop-shadow(0 10px 24px rgba(139,92,246,0.35)); animation: rzBob 2.6s ease-in-out infinite; }
+    @keyframes rzBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    @media (prefers-reduced-motion: reduce) { .rz-calc-mascot { animation: none; } }
+    .rz-calc-title { font-weight: 800; font-size: 16.5px; margin-bottom: 14px; text-align: center; }
+    .rz-calc-step { font-size: 14px; color: var(--text-muted); padding: 5.5px 0; }
+    .rz-calc-step.warn { color: #FBBF24; font-weight: 600; }
+
+    .note { text-align: center; color: var(--text-faint); font-size: 12.5px; padding: 18px 0 40px; }
+  </style>
+</head>
+<body>
+  <div class="topbar"><span class="wordmark">EDGE</span><span class="tag">Mockup · calculating card, frozen</span></div>
+
+  <div class="stage">
+    <div class="ghost">Discover Your Required Portfolio Return&trade;</div>
+    <div class="rz-calc-card">
+      <img class="rz-calc-mascot" src="assets/edge-abacus.png" alt="EDGE working an abacus" />
+      <div class="rz-calc-title">EDGE is running your projection&hellip;</div>
+      <div class="rz-calc-step">Projecting your portfolio year by year&hellip;</div>
+      <div class="rz-calc-step">Applying federal + state + Medicare tax math&hellip;</div>
+      <div class="rz-calc-step">Checking your confirmed data points&hellip;</div>
+      <div class="rz-calc-step warn">&#9888; Some data points unavailable &mdash; using wide estimates.</div>
+    </div>
+  </div>
+  <div class="note">On the live page the steps fade in one at a time over about 2.5 seconds and the amber line only shows when the engine reports missing data. The mascot bobs gently the whole time.</div>
+</body>
+</html>

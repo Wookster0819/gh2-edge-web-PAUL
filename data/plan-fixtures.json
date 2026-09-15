@@ -1,0 +1,2510 @@
+{
+  "fixture": true,
+  "note": "TEST DATA. Value-added = EDGE coupled-optimal vs a genuinely good conventional plan (SS 70/67, fill-bracket-24, taxable-first), both priced through the full engine at the household's full stated spending. Kept-dollars in today's dollars, qualified net of 35% heir tax. EDGE plan locked on the current snapshot, re-run frozen on earlier markets.",
+  "generated": "2026-09-01T18:24:48.546Z",
+  "source": "in-process runOptimization (api/optimize.ts)",
+  "baseline": {
+    "claimPrimary": 70,
+    "claimSpouse": 67,
+    "roth": "fill-bracket-24",
+    "wd": "traditional"
+  },
+  "snapshotDesign": [
+    {
+      "id": "signup",
+      "asOf": "2026-03-01",
+      "marketFactor": 0.9615384615384615
+    },
+    {
+      "id": "lastMonth",
+      "asOf": "2026-08-01",
+      "marketFactor": 0.9900990099009901
+    },
+    {
+      "id": "current",
+      "asOf": "2026-09-01",
+      "marketFactor": 1
+    }
+  ],
+  "households": {
+    "H1": {
+      "label": "Mahoney (test household)",
+      "profile": {
+        "primary": {
+          "name": "Paul",
+          "age": 62,
+          "gender": "male",
+          "healthScore": 6
+        },
+        "spouse": {
+          "name": "Anne",
+          "age": 60,
+          "gender": "female",
+          "healthScore": 7
+        },
+        "filingStatus": "mfj",
+        "stateOfResidence": "NY",
+        "zipCode": "10001"
+      },
+      "accounts": [
+        {
+          "id": "q1",
+          "name": "Paul Trad 401(k)",
+          "type": "qualified",
+          "owner": "primary",
+          "balance": 720000
+        },
+        {
+          "id": "q2",
+          "name": "Anne Trad IRA",
+          "type": "qualified",
+          "owner": "spouse",
+          "balance": 380000
+        },
+        {
+          "id": "r1",
+          "name": "Paul Roth IRA",
+          "type": "roth",
+          "owner": "primary",
+          "balance": 145000
+        },
+        {
+          "id": "n1",
+          "name": "Joint Taxable",
+          "type": "taxable",
+          "owner": "joint",
+          "balance": 220000
+        },
+        {
+          "id": "c1",
+          "name": "Cash",
+          "type": "cash",
+          "owner": "joint",
+          "balance": 35000
+        }
+      ],
+      "expenses": {
+        "essential": 67200,
+        "discretionary": 28800,
+        "healthcare": 0,
+        "debts": []
+      },
+      "snapshots": {
+        "signup": {
+          "asOf": "2026-03-01",
+          "marketFactor": 0.9615384615384615,
+          "dashboard": {
+            "projectedLiquidNetWorth": 1228088,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 1425765
+              },
+              {
+                "year": 2028,
+                "value": 1261192
+              },
+              {
+                "year": 2030,
+                "value": 1163454
+              },
+              {
+                "year": 2032,
+                "value": 1119429
+              },
+              {
+                "year": 2034,
+                "value": 1145306
+              },
+              {
+                "year": 2036,
+                "value": 1184011
+              },
+              {
+                "year": 2038,
+                "value": 1220744
+              },
+              {
+                "year": 2040,
+                "value": 1254655
+              },
+              {
+                "year": 2042,
+                "value": 1284775
+              },
+              {
+                "year": 2044,
+                "value": 1309970
+              },
+              {
+                "year": 2046,
+                "value": 1329510
+              },
+              {
+                "year": 2048,
+                "value": 1345062
+              },
+              {
+                "year": 2050,
+                "value": 1352261
+              },
+              {
+                "year": 2052,
+                "value": 1349416
+              },
+              {
+                "year": 2054,
+                "value": 1334554
+              },
+              {
+                "year": 2056,
+                "value": 1305223
+              },
+              {
+                "year": 2058,
+                "value": 1258711
+              },
+              {
+                "year": 2059,
+                "value": 1228088
+              }
+            ],
+            "hot": [
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "No action required",
+              "sub": "The plan holds as computed",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "April 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 50344
+              },
+              {
+                "label": "3 Year",
+                "value": 45337
+              },
+              {
+                "label": "Lifetime",
+                "value": 82660
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 290198,
+                "share": 0.1
+              },
+              {
+                "name": "Social Security received",
+                "amount": 2808757,
+                "share": 0.98
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 275736,
+                "share": 0.1
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 2862087,
+                "share": 1
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2059,
+              "conventionalFundedThrough": 2059,
+              "yearsGained": 0,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 1057691,
+                  "conventional": 1012875
+                },
+                {
+                  "year": 2028,
+                  "edge": 921902,
+                  "conventional": 870476
+                },
+                {
+                  "year": 2030,
+                  "edge": 838306,
+                  "conventional": 799784
+                },
+                {
+                  "year": 2032,
+                  "edge": 793118,
+                  "conventional": 788202
+                },
+                {
+                  "year": 2034,
+                  "edge": 790209,
+                  "conventional": 699749
+                },
+                {
+                  "year": 2036,
+                  "edge": 795044,
+                  "conventional": 689355
+                },
+                {
+                  "year": 2038,
+                  "edge": 799645,
+                  "conventional": 677839
+                },
+                {
+                  "year": 2040,
+                  "edge": 803921,
+                  "conventional": 665107
+                },
+                {
+                  "year": 2042,
+                  "edge": 807801,
+                  "conventional": 651063
+                },
+                {
+                  "year": 2044,
+                  "edge": 811208,
+                  "conventional": 635598
+                },
+                {
+                  "year": 2046,
+                  "edge": 811361,
+                  "conventional": 618598
+                },
+                {
+                  "year": 2048,
+                  "edge": 781298,
+                  "conventional": 599938
+                },
+                {
+                  "year": 2050,
+                  "edge": 747632,
+                  "conventional": 579483
+                },
+                {
+                  "year": 2052,
+                  "edge": 710110,
+                  "conventional": 557087
+                },
+                {
+                  "year": 2054,
+                  "edge": 668448,
+                  "conventional": 532592
+                },
+                {
+                  "year": 2056,
+                  "edge": 622256,
+                  "conventional": 505828
+                },
+                {
+                  "year": 2058,
+                  "edge": 571166,
+                  "conventional": 476610
+                },
+                {
+                  "year": 2059,
+                  "edge": 543678,
+                  "conventional": 461018
+                }
+              ],
+              "crossoverYear": 2032,
+              "endGap": 82660
+            }
+          },
+          "chatGrounding": {
+            "strategy": "none + horan-bracket-fill, SS at 67/67",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 82660,
+            "spending": {
+              "essential": 67200,
+              "discretionary": 28800,
+              "stated": 96000,
+              "planSpendsYearOne": 96000
+            },
+            "roth": {
+              "years": 0,
+              "firstYear": 0,
+              "total": 0
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": 67
+            }
+          }
+        },
+        "lastMonth": {
+          "asOf": "2026-08-01",
+          "marketFactor": 0.9900990099009901,
+          "dashboard": {
+            "projectedLiquidNetWorth": 2574621,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 1470367
+              },
+              {
+                "year": 2028,
+                "value": 1311876
+              },
+              {
+                "year": 2030,
+                "value": 1221049
+              },
+              {
+                "year": 2032,
+                "value": 1184878
+              },
+              {
+                "year": 2034,
+                "value": 1219680
+              },
+              {
+                "year": 2036,
+                "value": 1268525
+              },
+              {
+                "year": 2038,
+                "value": 1316783
+              },
+              {
+                "year": 2040,
+                "value": 1363789
+              },
+              {
+                "year": 2042,
+                "value": 1453142
+              },
+              {
+                "year": 2044,
+                "value": 1501295
+              },
+              {
+                "year": 2046,
+                "value": 1605384
+              },
+              {
+                "year": 2048,
+                "value": 1720408
+              },
+              {
+                "year": 2050,
+                "value": 1889305
+              },
+              {
+                "year": 2052,
+                "value": 2089649
+              },
+              {
+                "year": 2054,
+                "value": 2313537
+              },
+              {
+                "year": 2056,
+                "value": 2417225
+              },
+              {
+                "year": 2058,
+                "value": 2522027
+              },
+              {
+                "year": 2059,
+                "value": 2574621
+              }
+            ],
+            "hot": [
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "No action required",
+              "sub": "The plan holds as computed",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 51177
+              },
+              {
+                "label": "3 Year",
+                "value": 46237
+              },
+              {
+                "label": "Lifetime",
+                "value": 553679
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 229724,
+                "share": 0.08
+              },
+              {
+                "name": "Social Security received",
+                "amount": 2808757,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 275736,
+                "share": 0.1
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 2366368,
+                "share": 0.84
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2059,
+              "conventionalFundedThrough": 2059,
+              "yearsGained": 0,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 1090572,
+                  "conventional": 1045696
+                },
+                {
+                  "year": 2028,
+                  "edge": 957466,
+                  "conventional": 905174
+                },
+                {
+                  "year": 2030,
+                  "edge": 876772,
+                  "conventional": 835912
+                },
+                {
+                  "year": 2032,
+                  "edge": 834723,
+                  "conventional": 835122
+                },
+                {
+                  "year": 2034,
+                  "edge": 835209,
+                  "conventional": 746674
+                },
+                {
+                  "year": 2036,
+                  "edge": 843717,
+                  "conventional": 740110
+                },
+                {
+                  "year": 2038,
+                  "edge": 852288,
+                  "conventional": 732735
+                },
+                {
+                  "year": 2040,
+                  "edge": 860861,
+                  "conventional": 724483
+                },
+                {
+                  "year": 2042,
+                  "edge": 888807,
+                  "conventional": 715283
+                },
+                {
+                  "year": 2044,
+                  "edge": 898824,
+                  "conventional": 705059
+                },
+                {
+                  "year": 2046,
+                  "edge": 932254,
+                  "conventional": 693727
+                },
+                {
+                  "year": 2048,
+                  "edge": 969105,
+                  "conventional": 681197
+                },
+                {
+                  "year": 2050,
+                  "edge": 1024576,
+                  "conventional": 667373
+                },
+                {
+                  "year": 2052,
+                  "edge": 1088591,
+                  "conventional": 652148
+                },
+                {
+                  "year": 2054,
+                  "edge": 1157544,
+                  "conventional": 635411
+                },
+                {
+                  "year": 2056,
+                  "edge": 1152394,
+                  "conventional": 617037
+                },
+                {
+                  "year": 2058,
+                  "edge": 1144421,
+                  "conventional": 596893
+                },
+                {
+                  "year": 2059,
+                  "edge": 1139792,
+                  "conventional": 586114
+                }
+              ],
+              "crossoverYear": 2033,
+              "endGap": 553679
+            }
+          },
+          "chatGrounding": {
+            "strategy": "none + horan-bracket-fill, SS at 67/67",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 553679,
+            "spending": {
+              "essential": 67200,
+              "discretionary": 28800,
+              "stated": 96000,
+              "planSpendsYearOne": 96000
+            },
+            "roth": {
+              "years": 0,
+              "firstYear": 0,
+              "total": 0
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": 67
+            }
+          }
+        },
+        "current": {
+          "asOf": "2026-09-01",
+          "marketFactor": 1,
+          "dashboard": {
+            "projectedLiquidNetWorth": 2602548,
+            "throughAge": 95,
+            "deltaSinceLastMonth": 27927,
+            "deltaSinceSignup": 1374460,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 1485830
+              },
+              {
+                "year": 2028,
+                "value": 1329447
+              },
+              {
+                "year": 2030,
+                "value": 1241016
+              },
+              {
+                "year": 2032,
+                "value": 1207567
+              },
+              {
+                "year": 2034,
+                "value": 1245463
+              },
+              {
+                "year": 2036,
+                "value": 1297824
+              },
+              {
+                "year": 2038,
+                "value": 1350076
+              },
+              {
+                "year": 2040,
+                "value": 1401623
+              },
+              {
+                "year": 2042,
+                "value": 1451770
+              },
+              {
+                "year": 2044,
+                "value": 1556356
+              },
+              {
+                "year": 2046,
+                "value": 1609085
+              },
+              {
+                "year": 2048,
+                "value": 1785612
+              },
+              {
+                "year": 2050,
+                "value": 1907035
+              },
+              {
+                "year": 2052,
+                "value": 2109369
+              },
+              {
+                "year": 2054,
+                "value": 2333779
+              },
+              {
+                "year": 2056,
+                "value": 2440279
+              },
+              {
+                "year": 2058,
+                "value": 2548225
+              },
+              {
+                "year": 2059,
+                "value": 2602548
+              }
+            ],
+            "hot": [
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "No action required",
+              "sub": "The plan holds as computed",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": 51482
+              },
+              {
+                "label": "3 Year",
+                "value": 46565
+              },
+              {
+                "label": "Lifetime",
+                "value": 578220
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 235039,
+                "share": 0.08
+              },
+              {
+                "name": "Social Security received",
+                "amount": 2808757,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 275736,
+                "share": 0.1
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 2398309,
+                "share": 0.85
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2059,
+              "conventionalFundedThrough": 2059,
+              "yearsGained": 0,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 1101971,
+                  "conventional": 1057060
+                },
+                {
+                  "year": 2028,
+                  "edge": 969795,
+                  "conventional": 917187
+                },
+                {
+                  "year": 2030,
+                  "edge": 890108,
+                  "conventional": 848904
+                },
+                {
+                  "year": 2032,
+                  "edge": 849145,
+                  "conventional": 830899
+                },
+                {
+                  "year": 2034,
+                  "edge": 850810,
+                  "conventional": 742106
+                },
+                {
+                  "year": 2036,
+                  "edge": 860589,
+                  "conventional": 735169
+                },
+                {
+                  "year": 2038,
+                  "edge": 870539,
+                  "conventional": 727391
+                },
+                {
+                  "year": 2040,
+                  "edge": 880601,
+                  "conventional": 718703
+                },
+                {
+                  "year": 2042,
+                  "edge": 890731,
+                  "conventional": 709031
+                },
+                {
+                  "year": 2044,
+                  "edge": 924502,
+                  "conventional": 698297
+                },
+                {
+                  "year": 2046,
+                  "edge": 936676,
+                  "conventional": 686413
+                },
+                {
+                  "year": 2048,
+                  "edge": 996918,
+                  "conventional": 673287
+                },
+                {
+                  "year": 2050,
+                  "edge": 1034404,
+                  "conventional": 658817
+                },
+                {
+                  "year": 2052,
+                  "edge": 1099075,
+                  "conventional": 642895
+                },
+                {
+                  "year": 2054,
+                  "edge": 1168178,
+                  "conventional": 625402
+                },
+                {
+                  "year": 2056,
+                  "edge": 1163386,
+                  "conventional": 606211
+                },
+                {
+                  "year": 2058,
+                  "edge": 1156309,
+                  "conventional": 585184
+                },
+                {
+                  "year": 2059,
+                  "edge": 1152156,
+                  "conventional": 573936
+                }
+              ],
+              "crossoverYear": 2032,
+              "endGap": 578220
+            }
+          },
+          "chatGrounding": {
+            "strategy": "none + horan-bracket-fill, SS at 67/67",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 578220,
+            "spending": {
+              "essential": 67200,
+              "discretionary": 28800,
+              "stated": 96000,
+              "planSpendsYearOne": 96000
+            },
+            "roth": {
+              "years": 0,
+              "firstYear": 0,
+              "total": 0
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": 67
+            }
+          }
+        }
+      }
+    },
+    "H2": {
+      "label": "Reyes (test household)",
+      "profile": {
+        "primary": {
+          "name": "Linda",
+          "age": 62,
+          "gender": "female",
+          "healthScore": 7
+        },
+        "filingStatus": "single",
+        "stateOfResidence": "AZ",
+        "zipCode": "85001"
+      },
+      "accounts": [
+        {
+          "id": "q1",
+          "name": "Trad IRA",
+          "type": "qualified",
+          "owner": "primary",
+          "balance": 340200
+        },
+        {
+          "id": "r1",
+          "name": "Roth IRA",
+          "type": "roth",
+          "owner": "primary",
+          "balance": 47800
+        },
+        {
+          "id": "c1",
+          "name": "Cash",
+          "type": "cash",
+          "owner": "primary",
+          "balance": 22150
+        }
+      ],
+      "expenses": {
+        "essential": 29400,
+        "discretionary": 12600,
+        "healthcare": 0,
+        "debts": []
+      },
+      "snapshots": {
+        "signup": {
+          "asOf": "2026-03-01",
+          "marketFactor": 0.9615384615384615,
+          "dashboard": {
+            "projectedLiquidNetWorth": 0,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 376540
+              },
+              {
+                "year": 2028,
+                "value": 331925
+              },
+              {
+                "year": 2030,
+                "value": 260340
+              },
+              {
+                "year": 2032,
+                "value": 237293
+              },
+              {
+                "year": 2034,
+                "value": 226389
+              },
+              {
+                "year": 2036,
+                "value": 211358
+              },
+              {
+                "year": 2038,
+                "value": 191498
+              },
+              {
+                "year": 2040,
+                "value": 166150
+              },
+              {
+                "year": 2042,
+                "value": 134095
+              },
+              {
+                "year": 2044,
+                "value": 94407
+              },
+              {
+                "year": 2046,
+                "value": 45869
+              },
+              {
+                "year": 2048,
+                "value": 0
+              },
+              {
+                "year": 2050,
+                "value": 0
+              },
+              {
+                "year": 2052,
+                "value": 0
+              },
+              {
+                "year": 2054,
+                "value": 0
+              },
+              {
+                "year": 2056,
+                "value": 0
+              },
+              {
+                "year": 2058,
+                "value": 0
+              },
+              {
+                "year": 2059,
+                "value": 0
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $22,097 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$22,097 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "April 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -6892
+              },
+              {
+                "label": "3 Year",
+                "value": -31528
+              },
+              {
+                "label": "Lifetime",
+                "value": 0
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 21324,
+                "share": 0.02
+              },
+              {
+                "name": "Social Security received",
+                "amount": 1328616,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 141022,
+                "share": 0.11
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 680227,
+                "share": 0.51
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2047,
+              "conventionalFundedThrough": 2036,
+              "yearsGained": 11,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 262738,
+                  "conventional": 266879
+                },
+                {
+                  "year": 2028,
+                  "edge": 209055,
+                  "conventional": 251573
+                },
+                {
+                  "year": 2030,
+                  "edge": 153907,
+                  "conventional": 173207
+                },
+                {
+                  "year": 2032,
+                  "edge": 133725,
+                  "conventional": 89727
+                },
+                {
+                  "year": 2034,
+                  "edge": 121464,
+                  "conventional": 21573
+                },
+                {
+                  "year": 2036,
+                  "edge": 107980,
+                  "conventional": 3010
+                },
+                {
+                  "year": 2038,
+                  "edge": 93177,
+                  "conventional": 0
+                },
+                {
+                  "year": 2040,
+                  "edge": 76781,
+                  "conventional": 0
+                },
+                {
+                  "year": 2042,
+                  "edge": 59068,
+                  "conventional": 0
+                },
+                {
+                  "year": 2044,
+                  "edge": 39716,
+                  "conventional": 0
+                },
+                {
+                  "year": 2046,
+                  "edge": 18602,
+                  "conventional": 0
+                },
+                {
+                  "year": 2048,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2050,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2052,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2054,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2056,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2058,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2059,
+                  "edge": 0,
+                  "conventional": 0
+                }
+              ],
+              "crossoverYear": 2031,
+              "endGap": 0
+            }
+          },
+          "chatGrounding": {
+            "strategy": "none + roth-first, SS at 67",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 0,
+            "spending": {
+              "essential": 29400,
+              "discretionary": 12600,
+              "stated": 42000,
+              "planSpendsYearOne": 42000
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 22097,
+              "total": 52943
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": null
+            }
+          }
+        },
+        "lastMonth": {
+          "asOf": "2026-08-01",
+          "marketFactor": 0.9900990099009901,
+          "dashboard": {
+            "projectedLiquidNetWorth": 0,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 388353
+              },
+              {
+                "year": 2028,
+                "value": 345349
+              },
+              {
+                "year": 2030,
+                "value": 275916
+              },
+              {
+                "year": 2032,
+                "value": 254991
+              },
+              {
+                "year": 2034,
+                "value": 246501
+              },
+              {
+                "year": 2036,
+                "value": 234213
+              },
+              {
+                "year": 2038,
+                "value": 217468
+              },
+              {
+                "year": 2040,
+                "value": 195687
+              },
+              {
+                "year": 2042,
+                "value": 167664
+              },
+              {
+                "year": 2044,
+                "value": 132562
+              },
+              {
+                "year": 2046,
+                "value": 89235
+              },
+              {
+                "year": 2048,
+                "value": 36375
+              },
+              {
+                "year": 2050,
+                "value": 0
+              },
+              {
+                "year": 2052,
+                "value": 0
+              },
+              {
+                "year": 2054,
+                "value": 0
+              },
+              {
+                "year": 2056,
+                "value": 0
+              },
+              {
+                "year": 2058,
+                "value": 0
+              },
+              {
+                "year": 2059,
+                "value": 0
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $22,097 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$22,097 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -6145
+              },
+              {
+                "label": "3 Year",
+                "value": -48683
+              },
+              {
+                "label": "Lifetime",
+                "value": 0
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 24110,
+                "share": 0.02
+              },
+              {
+                "name": "Social Security received",
+                "amount": 1328616,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 141022,
+                "share": 0.11
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 730473,
+                "share": 0.55
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2049,
+              "conventionalFundedThrough": 2039,
+              "yearsGained": 10,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 270926,
+                  "conventional": 275066
+                },
+                {
+                  "year": 2028,
+                  "edge": 217910,
+                  "conventional": 276559
+                },
+                {
+                  "year": 2030,
+                  "edge": 163079,
+                  "conventional": 197167
+                },
+                {
+                  "year": 2032,
+                  "edge": 143645,
+                  "conventional": 115643
+                },
+                {
+                  "year": 2034,
+                  "edge": 132194,
+                  "conventional": 49604
+                },
+                {
+                  "year": 2036,
+                  "edge": 119584,
+                  "conventional": 33328
+                },
+                {
+                  "year": 2038,
+                  "edge": 105729,
+                  "conventional": 15586
+                },
+                {
+                  "year": 2040,
+                  "edge": 90330,
+                  "conventional": 0
+                },
+                {
+                  "year": 2042,
+                  "edge": 73722,
+                  "conventional": 0
+                },
+                {
+                  "year": 2044,
+                  "edge": 55565,
+                  "conventional": 0
+                },
+                {
+                  "year": 2046,
+                  "edge": 35741,
+                  "conventional": 0
+                },
+                {
+                  "year": 2048,
+                  "edge": 14122,
+                  "conventional": 0
+                },
+                {
+                  "year": 2050,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2052,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2054,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2056,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2058,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2059,
+                  "edge": 0,
+                  "conventional": 0
+                }
+              ],
+              "crossoverYear": 2032,
+              "endGap": 0
+            }
+          },
+          "chatGrounding": {
+            "strategy": "none + roth-first, SS at 67",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 0,
+            "spending": {
+              "essential": 29400,
+              "discretionary": 12600,
+              "stated": 42000,
+              "planSpendsYearOne": 42000
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 22097,
+              "total": 54716
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": null
+            }
+          }
+        },
+        "current": {
+          "asOf": "2026-09-01",
+          "marketFactor": 1,
+          "dashboard": {
+            "projectedLiquidNetWorth": 0,
+            "throughAge": 95,
+            "deltaSinceLastMonth": 0,
+            "deltaSinceSignup": 0,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 392448
+              },
+              {
+                "year": 2028,
+                "value": 350002
+              },
+              {
+                "year": 2030,
+                "value": 281315
+              },
+              {
+                "year": 2032,
+                "value": 261127
+              },
+              {
+                "year": 2034,
+                "value": 253473
+              },
+              {
+                "year": 2036,
+                "value": 242136
+              },
+              {
+                "year": 2038,
+                "value": 226472
+              },
+              {
+                "year": 2040,
+                "value": 205926
+              },
+              {
+                "year": 2042,
+                "value": 179300
+              },
+              {
+                "year": 2044,
+                "value": 145786
+              },
+              {
+                "year": 2046,
+                "value": 104266
+              },
+              {
+                "year": 2048,
+                "value": 53459
+              },
+              {
+                "year": 2050,
+                "value": 0
+              },
+              {
+                "year": 2052,
+                "value": 0
+              },
+              {
+                "year": 2054,
+                "value": 0
+              },
+              {
+                "year": 2056,
+                "value": 0
+              },
+              {
+                "year": 2058,
+                "value": 0
+              },
+              {
+                "year": 2059,
+                "value": 0
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $22,097 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$22,097 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -6071
+              },
+              {
+                "label": "3 Year",
+                "value": -52820
+              },
+              {
+                "label": "Lifetime",
+                "value": 0
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 24535,
+                "share": 0.02
+              },
+              {
+                "name": "Social Security received",
+                "amount": 1328616,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 141022,
+                "share": 0.11
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 747609,
+                "share": 0.56
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2049,
+              "conventionalFundedThrough": 2040,
+              "yearsGained": 9,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 273764,
+                  "conventional": 277904
+                },
+                {
+                  "year": 2028,
+                  "edge": 220980,
+                  "conventional": 283479
+                },
+                {
+                  "year": 2030,
+                  "edge": 166259,
+                  "conventional": 204652
+                },
+                {
+                  "year": 2032,
+                  "edge": 147084,
+                  "conventional": 123739
+                },
+                {
+                  "year": 2034,
+                  "edge": 135913,
+                  "conventional": 58360
+                },
+                {
+                  "year": 2036,
+                  "edge": 123607,
+                  "conventional": 42799
+                },
+                {
+                  "year": 2038,
+                  "edge": 110081,
+                  "conventional": 25829
+                },
+                {
+                  "year": 2040,
+                  "edge": 95026,
+                  "conventional": 7336
+                },
+                {
+                  "year": 2042,
+                  "edge": 78801,
+                  "conventional": 0
+                },
+                {
+                  "year": 2044,
+                  "edge": 61058,
+                  "conventional": 0
+                },
+                {
+                  "year": 2046,
+                  "edge": 41682,
+                  "conventional": 0
+                },
+                {
+                  "year": 2048,
+                  "edge": 20546,
+                  "conventional": 0
+                },
+                {
+                  "year": 2050,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2052,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2054,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2056,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2058,
+                  "edge": 0,
+                  "conventional": 0
+                },
+                {
+                  "year": 2059,
+                  "edge": 0,
+                  "conventional": 0
+                }
+              ],
+              "crossoverYear": 2032,
+              "endGap": 0
+            }
+          },
+          "chatGrounding": {
+            "strategy": "none + roth-first, SS at 67",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 0,
+            "spending": {
+              "essential": 29400,
+              "discretionary": 12600,
+              "stated": 42000,
+              "planSpendsYearOne": 42000
+            },
+            "roth": {
+              "years": 3,
+              "firstYear": 22097,
+              "total": 55330
+            },
+            "ssClaim": {
+              "primary": 67,
+              "spouse": null
+            }
+          }
+        }
+      }
+    },
+    "H3": {
+      "label": "Henderson (test household)",
+      "profile": {
+        "primary": {
+          "name": "Robert",
+          "age": 71,
+          "gender": "male",
+          "healthScore": 4
+        },
+        "spouse": {
+          "name": "Sandra",
+          "age": 68,
+          "gender": "female",
+          "healthScore": 5
+        },
+        "filingStatus": "mfj",
+        "stateOfResidence": "OH",
+        "zipCode": "44001"
+      },
+      "accounts": [
+        {
+          "id": "q1",
+          "name": "Trad IRA P",
+          "type": "qualified",
+          "owner": "primary",
+          "balance": 250000
+        },
+        {
+          "id": "q2",
+          "name": "Trad IRA S",
+          "type": "qualified",
+          "owner": "spouse",
+          "balance": 150000
+        },
+        {
+          "id": "r1",
+          "name": "Roth",
+          "type": "roth",
+          "owner": "primary",
+          "balance": 45000
+        },
+        {
+          "id": "n1",
+          "name": "Taxable",
+          "type": "taxable",
+          "owner": "joint",
+          "balance": 40000
+        },
+        {
+          "id": "c1",
+          "name": "Cash",
+          "type": "cash",
+          "owner": "joint",
+          "balance": 15000
+        }
+      ],
+      "expenses": {
+        "essential": 63000,
+        "discretionary": 27000,
+        "healthcare": 0,
+        "debts": []
+      },
+      "snapshots": {
+        "signup": {
+          "asOf": "2026-03-01",
+          "marketFactor": 0.9615384615384615,
+          "dashboard": {
+            "projectedLiquidNetWorth": 539791,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 437833
+              },
+              {
+                "year": 2028,
+                "value": 450803
+              },
+              {
+                "year": 2030,
+                "value": 466430
+              },
+              {
+                "year": 2032,
+                "value": 481518
+              },
+              {
+                "year": 2034,
+                "value": 495842
+              },
+              {
+                "year": 2036,
+                "value": 509137
+              },
+              {
+                "year": 2038,
+                "value": 521094
+              },
+              {
+                "year": 2040,
+                "value": 531350
+              },
+              {
+                "year": 2042,
+                "value": 539484
+              },
+              {
+                "year": 2044,
+                "value": 545008
+              },
+              {
+                "year": 2046,
+                "value": 547354
+              },
+              {
+                "year": 2048,
+                "value": 545868
+              },
+              {
+                "year": 2050,
+                "value": 539791
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $122,898 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$122,898 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "April 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -17765
+              },
+              {
+                "label": "3 Year",
+                "value": 12714
+              },
+              {
+                "label": "Lifetime",
+                "value": 266506
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 33277,
+                "share": 0.01
+              },
+              {
+                "name": "Social Security received",
+                "amount": 2525405,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 195750,
+                "share": 0.08
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 720837,
+                "share": 0.29
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2050,
+              "conventionalFundedThrough": 2050,
+              "yearsGained": 0,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 360938,
+                  "conventional": 390418
+                },
+                {
+                  "year": 2028,
+                  "edge": 399363,
+                  "conventional": 399543
+                },
+                {
+                  "year": 2030,
+                  "edge": 404957,
+                  "conventional": 378813
+                },
+                {
+                  "year": 2032,
+                  "edge": 410810,
+                  "conventional": 356114
+                },
+                {
+                  "year": 2034,
+                  "edge": 406961,
+                  "conventional": 331285
+                },
+                {
+                  "year": 2036,
+                  "edge": 397737,
+                  "conventional": 304154
+                },
+                {
+                  "year": 2038,
+                  "edge": 387463,
+                  "conventional": 274533
+                },
+                {
+                  "year": 2040,
+                  "edge": 376051,
+                  "conventional": 242219
+                },
+                {
+                  "year": 2042,
+                  "edge": 363410,
+                  "conventional": 206993
+                },
+                {
+                  "year": 2044,
+                  "edge": 349441,
+                  "conventional": 168618
+                },
+                {
+                  "year": 2046,
+                  "edge": 334034,
+                  "conventional": 126839
+                },
+                {
+                  "year": 2048,
+                  "edge": 317075,
+                  "conventional": 81376
+                },
+                {
+                  "year": 2050,
+                  "edge": 298437,
+                  "conventional": 31931
+                }
+              ],
+              "crossoverYear": 2029,
+              "endGap": 266506
+            }
+          },
+          "chatGrounding": {
+            "strategy": "fill-to-irmaa + horan-bracket-fill, SS at 70/70",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 266506,
+            "spending": {
+              "essential": 63000,
+              "discretionary": 27000,
+              "stated": 90000,
+              "planSpendsYearOne": 90000
+            },
+            "roth": {
+              "years": 2,
+              "firstYear": 122898,
+              "total": 222973
+            },
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            }
+          }
+        },
+        "lastMonth": {
+          "asOf": "2026-08-01",
+          "marketFactor": 0.9900990099009901,
+          "dashboard": {
+            "projectedLiquidNetWorth": 608247,
+            "throughAge": 95,
+            "deltaSinceLastMonth": null,
+            "deltaSinceSignup": null,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 452598
+              },
+              {
+                "year": 2028,
+                "value": 467581
+              },
+              {
+                "year": 2030,
+                "value": 485496
+              },
+              {
+                "year": 2032,
+                "value": 503184
+              },
+              {
+                "year": 2034,
+                "value": 520463
+              },
+              {
+                "year": 2036,
+                "value": 537115
+              },
+              {
+                "year": 2038,
+                "value": 552886
+              },
+              {
+                "year": 2040,
+                "value": 567477
+              },
+              {
+                "year": 2042,
+                "value": 580538
+              },
+              {
+                "year": 2044,
+                "value": 591660
+              },
+              {
+                "year": 2046,
+                "value": 600367
+              },
+              {
+                "year": 2048,
+                "value": 606109
+              },
+              {
+                "year": 2050,
+                "value": 608247
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $122,898 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$122,898 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -24694
+              },
+              {
+                "label": "3 Year",
+                "value": 1380
+              },
+              {
+                "label": "Lifetime",
+                "value": 251606
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 33277,
+                "share": 0.01
+              },
+              {
+                "name": "Social Security received",
+                "amount": 2525405,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 195750,
+                "share": 0.08
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 721528,
+                "share": 0.29
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2050,
+              "conventionalFundedThrough": 2050,
+              "yearsGained": 0,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 371441,
+                  "conventional": 400023
+                },
+                {
+                  "year": 2028,
+                  "edge": 410724,
+                  "conventional": 421800
+                },
+                {
+                  "year": 2030,
+                  "edge": 417244,
+                  "conventional": 402886
+                },
+                {
+                  "year": 2032,
+                  "edge": 424100,
+                  "conventional": 382152
+                },
+                {
+                  "year": 2034,
+                  "edge": 427168,
+                  "conventional": 359448
+                },
+                {
+                  "year": 2036,
+                  "edge": 419593,
+                  "conventional": 334615
+                },
+                {
+                  "year": 2038,
+                  "edge": 411102,
+                  "conventional": 307478
+                },
+                {
+                  "year": 2040,
+                  "edge": 401619,
+                  "conventional": 277853
+                },
+                {
+                  "year": 2042,
+                  "edge": 391065,
+                  "conventional": 245536
+                },
+                {
+                  "year": 2044,
+                  "edge": 379352,
+                  "conventional": 210306
+                },
+                {
+                  "year": 2046,
+                  "edge": 366387,
+                  "conventional": 171927
+                },
+                {
+                  "year": 2048,
+                  "edge": 352067,
+                  "conventional": 130144
+                },
+                {
+                  "year": 2050,
+                  "edge": 336285,
+                  "conventional": 84679
+                }
+              ],
+              "crossoverYear": 2029,
+              "endGap": 251606
+            }
+          },
+          "chatGrounding": {
+            "strategy": "fill-to-irmaa + horan-bracket-fill, SS at 70/70",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 251606,
+            "spending": {
+              "essential": 63000,
+              "discretionary": 27000,
+              "stated": 90000,
+              "planSpendsYearOne": 90000
+            },
+            "roth": {
+              "years": 2,
+              "firstYear": 122898,
+              "total": 222973
+            },
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            }
+          }
+        },
+        "current": {
+          "asOf": "2026-09-01",
+          "marketFactor": 1,
+          "dashboard": {
+            "projectedLiquidNetWorth": 631980,
+            "throughAge": 95,
+            "deltaSinceLastMonth": 23733,
+            "deltaSinceSignup": 92189,
+            "trajectory": [
+              {
+                "year": 2026,
+                "value": 457717
+              },
+              {
+                "year": 2028,
+                "value": 473398
+              },
+              {
+                "year": 2030,
+                "value": 492106
+              },
+              {
+                "year": 2032,
+                "value": 510696
+              },
+              {
+                "year": 2034,
+                "value": 528998
+              },
+              {
+                "year": 2036,
+                "value": 546814
+              },
+              {
+                "year": 2038,
+                "value": 563908
+              },
+              {
+                "year": 2040,
+                "value": 580002
+              },
+              {
+                "year": 2042,
+                "value": 594771
+              },
+              {
+                "year": 2044,
+                "value": 607833
+              },
+              {
+                "year": 2046,
+                "value": 618746
+              },
+              {
+                "year": 2048,
+                "value": 626995
+              },
+              {
+                "year": 2050,
+                "value": 631980
+              }
+            ],
+            "hot": [
+              {
+                "level": "hot",
+                "title": "Roth conversion this year",
+                "sub": "The plan converts $122,898 in 2026",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "IRMAA",
+                "sub": "No year enters an IRMAA tier through 95",
+                "href": "#"
+              },
+              {
+                "level": "ok",
+                "title": "All other regimes",
+                "sub": "Stable",
+                "href": "#"
+              }
+            ],
+            "nextAction": {
+              "title": "Roth conversion window",
+              "sub": "$122,898 scheduled for 2026",
+              "href": "#"
+            },
+            "nextCheckin": {
+              "title": "October 1, 2026",
+              "sub": "Quarterly re-check",
+              "href": "#"
+            },
+            "outcomes": [
+              {
+                "label": "1 Year",
+                "value": -27093
+              },
+              {
+                "label": "3 Year",
+                "value": -1215
+              },
+              {
+                "label": "Lifetime",
+                "value": 249479
+              }
+            ],
+            "drivers": [
+              {
+                "name": "Taxes paid",
+                "amount": 33277,
+                "share": 0.01
+              },
+              {
+                "name": "Social Security received",
+                "amount": 2525405,
+                "share": 1
+              },
+              {
+                "name": "Medicare premiums",
+                "amount": 195750,
+                "share": 0.08
+              },
+              {
+                "name": "Portfolio withdrawals",
+                "amount": 721010,
+                "share": 0.29
+              }
+            ],
+            "comparison": {
+              "edgeFundedThrough": 2050,
+              "conventionalFundedThrough": 2050,
+              "yearsGained": 0,
+              "edgeLabel": "Your EDGE plan",
+              "baselineLabel": "A well-executed conventional plan",
+              "basis": "Dollars kept, in today's dollars",
+              "series": [
+                {
+                  "year": 2026,
+                  "edge": 375083,
+                  "conventional": 403354
+                },
+                {
+                  "year": 2028,
+                  "edge": 414661,
+                  "conventional": 428235
+                },
+                {
+                  "year": 2030,
+                  "edge": 421504,
+                  "conventional": 409846
+                },
+                {
+                  "year": 2032,
+                  "edge": 428708,
+                  "conventional": 389679
+                },
+                {
+                  "year": 2034,
+                  "edge": 434174,
+                  "conventional": 367589
+                },
+                {
+                  "year": 2036,
+                  "edge": 427170,
+                  "conventional": 343420
+                },
+                {
+                  "year": 2038,
+                  "edge": 419297,
+                  "conventional": 317002
+                },
+                {
+                  "year": 2040,
+                  "edge": 410483,
+                  "conventional": 288155
+                },
+                {
+                  "year": 2042,
+                  "edge": 400653,
+                  "conventional": 256677
+                },
+                {
+                  "year": 2044,
+                  "edge": 389722,
+                  "conventional": 222357
+                },
+                {
+                  "year": 2046,
+                  "edge": 377603,
+                  "conventional": 184962
+                },
+                {
+                  "year": 2048,
+                  "edge": 364199,
+                  "conventional": 144243
+                },
+                {
+                  "year": 2050,
+                  "edge": 349406,
+                  "conventional": 99927
+                }
+              ],
+              "crossoverYear": 2030,
+              "endGap": 249479
+            }
+          },
+          "chatGrounding": {
+            "strategy": "fill-to-irmaa + horan-bracket-fill, SS at 70/70",
+            "baseline": "good advisor: fill-bracket-24 + traditional, SS at 70/67",
+            "metric": "dollars kept in today's dollars, qualified net of 35% heir tax, deflated 2.5%/yr",
+            "valueAddedLifetime": 249479,
+            "spending": {
+              "essential": 63000,
+              "discretionary": 27000,
+              "stated": 90000,
+              "planSpendsYearOne": 90000
+            },
+            "roth": {
+              "years": 2,
+              "firstYear": 122898,
+              "total": 222973
+            },
+            "ssClaim": {
+              "primary": 70,
+              "spouse": 70
+            }
+          }
+        }
+      }
+    }
+  }
+}

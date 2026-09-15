@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="index,follow" />
+  <title>GH2 EDGE™ — Ballpark Premium</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="apple-touch-icon" href="/favicon.svg" />
+  <meta name="description" content="A friendly retirement ballpark check, with the GH2 EDGE™ Required Portfolio Return — the one number most calculators don't compute." />
+  <style>
+    :root {
+      --bg: #0A0E1A;
+      --bg-soft: #0E1424;
+      --card-bg: #11172A;
+      --card-bg-2: #161D33;
+      --border: #1F2940;
+      --border-soft: #18213B;
+      --text: #F5F7FA;
+      --text-dim: #B6BFD0;
+      --text-muted: #8693AC;
+      --text-faint: #5A6680;
+      --accent-purple: #8B5CF6;
+      --accent-purple-soft: rgba(139,92,246,0.14);
+      --accent-blue: #3B82F6;
+      --accent-blue-soft: rgba(59,130,246,0.14);
+      --accent-green: #22C55E;
+      --accent-green-soft: rgba(34,197,94,0.12);
+      --accent-green-ring: rgba(34,197,94,0.45);
+      --accent-amber: #F97316;
+      --accent-amber-soft: rgba(249,115,22,0.12);
+      --accent-amber-ring: rgba(249,115,22,0.45);
+      --accent-red: #FF3B30;
+      --accent-red-soft: rgba(255,59,48,0.12);
+      --accent-red-ring: rgba(255,59,48,0.45);
+      --accent-money: #10B981;
+      --accent-money-soft: rgba(16,185,129,0.14);
+      --grad-cta: linear-gradient(90deg, #4F46E5 0%, #8B5CF6 50%, #EC4899 100%);
+      --grad-rpr: linear-gradient(90deg, #6366F1 0%, #A855F7 100%);
+      --grad-rpr-amber: linear-gradient(90deg, #F97316 0%, #F59E0B 100%);
+      --grad-rpr-green: linear-gradient(90deg, #16A34A 0%, #22C55E 100%);
+      --grad-rpr-red: linear-gradient(90deg, #E0291F 0%, #FF3B30 100%);
+      --shadow-card: 0 1px 2px rgba(0,0,0,0.4), 0 8px 32px rgba(0,0,0,0.3);
+      --shadow-glow-green: 0 0 24px rgba(34,197,94,0.25), 0 0 1px rgba(34,197,94,0.6) inset;
+      --shadow-glow-amber: 0 0 24px rgba(249,115,22,0.25), 0 0 1px rgba(249,115,22,0.6) inset;
+      --shadow-glow-red: 0 0 24px rgba(255,59,48,0.25), 0 0 1px rgba(255,59,48,0.6) inset;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ===== Top bar: wordmark + stepper + secure chip ===== */
+    .topbar {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 22px 40px 0;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .wordmark {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.32em;
+      color: var(--text);
+    }
+    .stepper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      position: relative;
+    }
+    .stepper .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 0 26px;
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .stepper .step .dot {
+      width: 24px; height: 24px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px; font-weight: 700;
+      background: var(--card-bg-2);
+      border: 1.5px solid var(--border);
+      color: var(--text-muted);
+    }
+    .stepper .step.done .dot {
+      background: var(--bg);
+      border-color: var(--text-muted);
+      color: var(--text);
+    }
+    .stepper .step.done .dot::before {
+      content: '✓';
+      font-size: 13px;
+      color: var(--text);
+    }
+    .stepper .step.done .dot span { display: none; }
+    .stepper .step.active { color: var(--text); }
+    .stepper .step.active .dot {
+      background: var(--accent-purple);
+      border-color: var(--accent-purple);
+      color: #FFF;
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.18);
+    }
+    .stepper .step.active.results .dot {
+      background: var(--accent-red);
+      border-color: var(--accent-red);
+      box-shadow: 0 0 0 4px rgba(255,59,48,0.18);
+    }
+    .stepper .step.active.results-on-track .dot {
+      background: var(--accent-green);
+      border-color: var(--accent-green);
+      box-shadow: 0 0 0 4px rgba(34,197,94,0.18);
+    }
+    .stepper .step.active.results-stretch .dot {
+      background: var(--accent-amber);
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 0 4px rgba(249,115,22,0.18);
+    }
+    .stepper::before {
+      content: '';
+      position: absolute;
+      top: 12px; left: 12%; right: 12%;
+      height: 1.5px;
+      background: var(--border);
+      z-index: -1;
+    }
+    .stepper.results-active::before {
+      background: linear-gradient(90deg, var(--text-muted) 0%, var(--text-muted) 33%, var(--text-muted) 66%, var(--accent-red) 66%, var(--accent-red) 100%);
+    }
+    .stepper.results-on-track-active::before {
+      background: linear-gradient(90deg, var(--text-muted) 0%, var(--text-muted) 33%, var(--text-muted) 66%, var(--accent-green) 66%, var(--accent-green) 100%);
+    }
+    .stepper.results-stretch-active::before {
+      background: linear-gradient(90deg, var(--text-muted) 0%, var(--text-muted) 33%, var(--text-muted) 66%, var(--accent-amber) 66%, var(--accent-amber) 100%);
+    }
+    .stepper.profile-active::before {
+      background: linear-gradient(90deg, var(--text-muted) 0%, var(--text-muted) 50%, var(--border) 50%, var(--border) 100%);
+    }
+    .ebook-cta {
+      max-width: 760px; margin: 28px auto 0;
+      padding: 18px 22px; border: 1px solid var(--border);
+      border-radius: 14px; background: var(--bg-soft);
+      display: flex; flex-wrap: wrap; align-items: center;
+      justify-content: space-between; gap: 16px;
+    }
+    .ebook-cta .ec-text { font-size: 15px; color: var(--text-muted); max-width: 430px; line-height: 1.45; }
+    .ebook-cta .ec-text strong { color: var(--text); }
+    .ebook-cta .ec-actions { display: flex; flex-direction: column; gap: 7px; align-items: flex-start; }
+    .ebook-cta .ec-dl {
+      display: inline-block; padding: 10px 18px; border-radius: 10px;
+      background: var(--accent-purple); color: #fff; font-weight: 600;
+      text-decoration: none; font-size: 14px;
+    }
+    .ebook-cta .ec-dl:hover { filter: brightness(1.08); }
+    .ebook-cta .ec-email { font-size: 13px; color: var(--text-muted); }
+    .ebook-cta .ec-email a { color: var(--accent-purple); text-decoration: none; }
+    .secure-chip {
+      display: flex;
+      justify-self: end;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--text);
+      line-height: 1.35;
+    }
+    .secure-chip .lock {
+      width: 16px; height: 16px;
+      display: inline-flex;
+      color: var(--text-dim);
+    }
+    .secure-chip strong { display: block; font-weight: 600; }
+    .secure-chip span { display: block; color: var(--text-muted); font-size: 12px; }
+
+    /* ===== Main wrap ===== */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 36px 40px 60px; }
+    .step-eyebrow {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    h1.page-title {
+      text-align: center;
+      font-size: clamp(27px, 5.2vw, 44px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 8px 0 14px;
+      line-height: 1.15;
+    }
+    h1.page-title .accent { color: var(--accent-purple); background: var(--grad-rpr); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .page-sub {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: clamp(15px, 2.2vw, 17px);
+      max-width: 720px;
+      margin: 0 auto 36px;
+      line-height: 1.55;
+    }
+
+    /* ===== Card layout ===== */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 28px;
+      box-shadow: var(--shadow-card);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+    .form-grid > .span2 { grid-column: span 2; }
+    .spouse-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .section-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .section-card.lifestyle { background: linear-gradient(180deg, var(--card-bg) 0%, var(--bg-soft) 100%); }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+    }
+    .section-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .section-icon.purple { background: var(--accent-purple-soft); color: var(--accent-purple); }
+    .section-icon.green  { background: var(--accent-money-soft); color: var(--accent-money); }
+    .section-icon.blue   { background: var(--accent-blue-soft); color: var(--accent-blue); }
+    .section-num {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--text);
+    }
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    /* ===== Form fields ===== */
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field-label-row { display: flex; align-items: center; gap: 10px; }
+    .field-label-row .field-icon {
+      width: 24px; height: 24px;
+      color: var(--text-dim);
+      flex-shrink: 0;
+    }
+    .field label, .field .field-text { color: var(--text); font-size: 14px; font-weight: 600; }
+    .field .field-hint { color: var(--text-muted); font-size: 12.5px; font-weight: 400; line-height: 1.4; margin-top: 2px; }
+
+    select, input[type="text"], input[type="number"] {
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 12px 14px;
+      font-size: 15px;
+      font-family: inherit;
+      width: 100%;
+      transition: border-color 120ms, box-shadow 120ms;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.2);
+    }
+    select { appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238693AC' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+    select option { background: var(--card-bg); color: var(--text); }
+
+    .input-with-prefix { position: relative; }
+    .input-with-prefix .prefix {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 15px; pointer-events: none;
+    }
+    .input-with-prefix input { padding-left: 28px; text-align: left; }
+    .input-with-suffix { position: relative; }
+    .input-with-suffix .suffix {
+      position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); font-size: 14px; pointer-events: none;
+    }
+    .input-with-suffix input { padding-right: 30px; text-align: left; }
+
+    /* No spinner arrows on number inputs — users type the value */
+    input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+    /* Toggle (Single/Married) */
+    .toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .toggle button {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-dim);
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 100ms, color 100ms, border-color 100ms;
+    }
+    .toggle button[aria-pressed="true"] {
+      background: rgba(139,92,246,0.18);
+      color: var(--text);
+      border-color: var(--accent-purple);
+    }
+
+    /* Lifestyle target cards */
+    .lifestyle-prompt { font-size: 15px; font-weight: 600; color: var(--text); }
+    .lifestyle-sub { font-size: 13px; color: var(--text-muted); margin-top: -6px; }
+    .lifestyle-note { font-size: 11.5px; color: var(--text-faint); margin-top: 2px; line-height: 1.35; }
+    .profiles {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .profile-card {
+      background: var(--bg-soft);
+      border: 1.5px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 14px 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: border-color 120ms, background 120ms, transform 120ms;
+      text-align: center;
+      position: relative;
+    }
+    .profile-card:hover { border-color: var(--accent-purple); background: rgba(139,92,246,0.06); }
+    .profile-card[aria-checked="true"] {
+      border-color: var(--accent-purple);
+      background: rgba(139,92,246,0.10);
+      box-shadow: 0 0 0 1px var(--accent-purple) inset, 0 4px 16px rgba(139,92,246,0.18);
+    }
+    .profile-card .pf-icon {
+      width: 56px; height: 56px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+    }
+    .profile-card[data-profile="struggling"]  .pf-icon { color: #94A3B8; }
+    .profile-card[data-profile="average"]     .pf-icon { color: #60A5FA; }
+    .profile-card[data-profile="comfortable"] .pf-icon { color: #22C55E; }
+    .profile-card[data-profile="affluent"]    .pf-icon { color: #F59E0B; }
+    .profile-card .pf-label { font-size: 15px; font-weight: 700; color: var(--text); }
+    .profile-card .pf-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
+    .profile-card .pf-dollars { font-size: 18px; font-weight: 700; color: var(--text); margin-top: 4px; letter-spacing: -0.01em; }
+    .profile-card .pf-name { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.03em; margin-top: 1px; }
+    .profile-card .pf-accent {
+      width: 30px; height: 2px; border-radius: 2px;
+      background: var(--border); margin-top: 4px;
+      transition: background 120ms;
+    }
+    .profile-card[aria-checked="true"] .pf-accent { background: var(--accent-purple); }
+    .profile-card .pf-badge {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--accent-amber);
+      margin-top: 4px;
+    }
+    .lifestyle-foot {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12.5px; color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .lifestyle-foot .shield { width: 14px; height: 14px; color: var(--text-faint); }
+
+    /* Advanced collapsible */
+    details.advanced {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 22px;
+    }
+    details.advanced summary {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      list-style: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    details.advanced summary::-webkit-details-marker { display: none; }
+    details.advanced summary .summary-chev {
+      margin-left: auto;
+      transition: transform 200ms;
+      color: var(--text-muted);
+    }
+    details[open].advanced summary .summary-chev { transform: rotate(180deg); }
+    details.advanced .adv-sub {
+      color: var(--text-muted);
+      font-size: 13px;
+      margin: 12px 0 0;
+      line-height: 1.55;
+    }
+    .advanced-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    /* Submit CTA */
+    .submit-row { display: flex; flex-direction: column; align-items: center; margin-top: 26px; }
+    .submit-cta {
+      background: var(--grad-cta);
+      border: none;
+      color: #FFF;
+      padding: 18px 28px;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      max-width: 560px;
+      letter-spacing: 0.01em;
+      box-shadow: 0 12px 32px rgba(139,92,246,0.35), 0 1px 2px rgba(0,0,0,0.4);
+      transition: transform 80ms, box-shadow 120ms, filter 120ms;
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .submit-cta:hover { filter: brightness(1.05); transform: translateY(-1px); }
+    .submit-cta:active { transform: translateY(0); }
+    .submit-cta:disabled { cursor: not-allowed; opacity: 0.6; }
+    .submit-foot { color: var(--text-muted); font-size: 13px; margin-top: 14px; display: inline-flex; align-items: center; gap: 8px; }
+    .submit-foot .shield { width: 14px; height: 14px; color: var(--text-faint); }
+
+    .err { color: var(--accent-red); font-size: 14px; margin-top: 12px; text-align: center; }
+    .persist-note { color: var(--text-faint); font-size: 12px; margin: 14px 0 0; text-align: center; }
+
+    /* ===== RESULTS PAGE (hidden until submit) ===== */
+    #resultsSection { display: none; }
+    #resultsSection.visible { display: block; }
+
+    .results-title {
+      text-align: center;
+      font-size: 44px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin: 8px 0 14px;
+      line-height: 1.15;
+    }
+    .results-title .accent.red    { background: var(--grad-rpr-red);    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .results-title .accent.amber  { background: var(--grad-rpr-amber);  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .results-title .accent.green  { background: var(--grad-rpr-green);  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .results-title .accent.purple { background: var(--grad-rpr);        -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .results-sub {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 17px;
+      max-width: 760px;
+      margin: 0 auto 28px;
+      line-height: 1.5;
+    }
+
+    .result-hero {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px 32px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .result-hero[data-tier="at_risk"]  { border-color: rgba(255,59,48,0.35); }
+    .result-hero[data-tier="stretch"]  { border-color: rgba(249,115,22,0.35); }
+    .result-hero[data-tier="on_track"] { border-color: rgba(34,197,94,0.35); }
+
+    .result-hero-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    /* Ring */
+    .result-ring {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      display: inline-flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .result-ring > svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+    .result-ring .ring-track { fill: none; stroke: var(--border-soft); stroke-width: 4; }
+    .result-ring .ring-arc   { fill: none; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 535; stroke-dashoffset: 0; transition: stroke-dashoffset 800ms cubic-bezier(0.22,1,0.36,1); }
+    .result-ring[data-tier="at_risk"]  .ring-arc { stroke: var(--accent-red);   filter: drop-shadow(0 0 6px rgba(255,59,48,0.7)); }
+    .result-ring[data-tier="stretch"]  .ring-arc { stroke: var(--accent-amber); filter: drop-shadow(0 0 6px rgba(249,115,22,0.7)); }
+    .result-ring[data-tier="on_track"] .ring-arc { stroke: var(--accent-green); filter: drop-shadow(0 0 6px rgba(34,197,94,0.7)); }
+    .result-ring .ring-check {
+      width: 60px; height: 60px;
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--text);
+    }
+    .result-ring[data-tier="at_risk"]  .ring-check { color: var(--accent-red); }
+    .result-ring[data-tier="stretch"]  .ring-check { color: var(--accent-amber); }
+    .result-ring[data-tier="on_track"] .ring-check { color: var(--accent-green); }
+
+    .result-readout .result-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--accent-red);
+      text-transform: uppercase;
+    }
+    .result-readout[data-tier="at_risk"]  .result-eyebrow { color: var(--accent-red); }
+    .result-readout[data-tier="stretch"]  .result-eyebrow { color: var(--accent-amber); }
+    .result-readout[data-tier="on_track"] .result-eyebrow { color: var(--accent-green); }
+    .result-readout .result-eyebrow .you { color: var(--text-muted); margin-left: 8px; }
+    .result-readout .result-label { font-size: 15px; color: var(--text); margin: 6px 0 0; }
+    .result-readout .result-value {
+      font-size: 88px;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.025em;
+      margin: 6px 0 12px;
+    }
+    .result-readout[data-tier="at_risk"]  .result-value { color: var(--accent-red); }
+    .result-readout[data-tier="stretch"]  .result-value { color: var(--accent-amber); }
+    .result-readout[data-tier="on_track"] .result-value { color: var(--accent-green); }
+    .result-readout .result-explainer {
+      color: var(--text-dim);
+      font-size: 13.5px;
+      line-height: 1.55;
+      max-width: 380px;
+    }
+    .result-readout .result-explainer .age-accent { font-weight: 700; }
+    .result-readout[data-tier="at_risk"]  .result-explainer .age-accent { color: var(--accent-red); }
+    .result-readout[data-tier="stretch"]  .result-explainer .age-accent { color: var(--accent-amber); }
+    .result-readout[data-tier="on_track"] .result-explainer .age-accent { color: var(--accent-green); }
+
+    .result-status { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+    .status-row { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+    .status-pill .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .status-pill.at_risk  { border-color: rgba(255,59,48,0.45); }
+    .status-pill.at_risk  .pill-dot { background: var(--accent-red); box-shadow: 0 0 8px var(--accent-red); }
+    .status-pill.stretch  { border-color: rgba(249,115,22,0.45); }
+    .status-pill.stretch  .pill-dot { background: var(--accent-amber); box-shadow: 0 0 8px var(--accent-amber); }
+    .status-pill.on_track { border-color: rgba(34,197,94,0.45); }
+    .status-pill.on_track .pill-dot { background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green); }
+    .status-cta {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-dim);
+      display: inline-flex; align-items: center; gap: 4px;
+    }
+    .status-cta.at_risk  { color: var(--accent-red); }
+    .status-cta.stretch  { color: var(--accent-amber); }
+    .status-cta.on_track { color: var(--accent-green); }
+    .status-headline {
+      font-size: 30px;
+      font-weight: 700;
+      line-height: 1.2;
+      color: var(--text);
+    }
+    .status-headline.at_risk  { color: var(--accent-red); }
+    .status-headline.stretch  { color: var(--accent-amber); }
+    .status-headline.on_track { color: var(--accent-green); }
+    .status-body {
+      color: var(--text-dim);
+      font-size: 14.5px;
+      line-height: 1.55;
+      max-width: 460px;
+    }
+
+    .result-move {
+      display: flex; align-items: flex-start; gap: 11px;
+      margin-top: 22px; padding-top: 18px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 16.5px; font-weight: 600; line-height: 1.45;
+      color: var(--text);
+    }
+    .result-move .rm-arrow { flex: 0 0 auto; font-size: 19px; font-weight: 800; line-height: 1.35; }
+    .result-move[data-tier="at_risk"]  .rm-arrow { color: var(--accent-red); }
+    .result-move[data-tier="stretch"]  .rm-arrow { color: var(--accent-amber); }
+    .result-move[data-tier="on_track"] .rm-arrow { color: var(--accent-green); }
+    .result-move .rm-text strong { color: var(--text); font-weight: 800; }
+
+    .result-foot {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-soft);
+    }
+    .result-foot-tax { display: flex; align-items: center; gap: 10px; color: var(--text-muted); font-size: 13px; }
+    .result-foot-tax .shield { width: 16px; height: 16px; color: var(--text-faint); }
+    .adjust-inputs-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 120ms, border-color 120ms;
+    }
+    .adjust-inputs-btn:hover { background: var(--card-bg-2); border-color: var(--text-muted); }
+
+    /* Pricing cadence */
+    .cadence-head { text-align: center; margin: 48px 0 6px; }
+    .cadence-head h2 { font-size: 22px; font-weight: 700; margin: 0; color: var(--text); }
+    .cadence-head p  { font-size: 13.5px; color: var(--text-muted); margin: 6px 0 0; line-height: 1.55; }
+    .tier-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+    .tier-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 26px 26px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      box-shadow: var(--shadow-card);
+    }
+    .tier-card.popular {
+      border-color: rgba(139,92,246,0.5);
+      box-shadow: 0 0 0 1px var(--accent-purple) inset, 0 12px 36px rgba(139,92,246,0.18), 0 1px 2px rgba(0,0,0,0.4);
+    }
+    .tier-card.ultra {
+      border-color: rgba(245,158,11,0.4);
+    }
+    .tier-badge {
+      position: absolute;
+      top: -12px; left: 50%; transform: translateX(-50%);
+      background: var(--accent-purple);
+      color: #FFF;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(139,92,246,0.4);
+    }
+    .tier-head { display: flex; align-items: center; gap: 14px; }
+    .tier-icon {
+      width: 56px; height: 56px;
+      border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .tier-icon.jae   { background: radial-gradient(circle at 30% 30%, #2A2520, #0a0a0a); border: 1px solid #3A3530; color: #C9A876; }
+    .tier-icon.edge  { background: radial-gradient(circle at 30% 30%, #1E1B4B, #0a0a1a); border: 1px solid #312E5B; color: #A78BFA; }
+    .tier-icon.ultra { background: radial-gradient(circle at 30% 30%, #292015, #0a0905); border: 1px solid #3A2F1F; color: #FCD34D; }
+    .tier-name { font-size: 19px; font-weight: 700; color: var(--text); margin: 0; }
+    .tier-tag  { font-size: 13.5px; font-weight: 600; margin: 2px 0 0; }
+    .tier-card.popular .tier-tag { color: var(--accent-purple); }
+    .tier-card.ultra .tier-tag   { color: #FCD34D; }
+    .tier-card:not(.popular):not(.ultra) .tier-tag { color: var(--text-muted); }
+
+    .tier-features {
+      list-style: none;
+      padding: 0;
+      margin: 6px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--border-soft);
+      padding-top: 16px;
+    }
+    .tier-features li {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 10px;
+      align-items: start;
+    }
+    .tier-features li .feat-icon {
+      width: 18px; height: 18px;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+    .tier-card.popular .feat-icon { color: var(--accent-purple); }
+    .tier-card.ultra .feat-icon { color: #FCD34D; }
+    .tier-features li .feat-text { color: var(--text); font-size: 13.5px; line-height: 1.45; }
+    .tier-features li .feat-text strong { display: block; font-weight: 600; }
+    .tier-features li .feat-text span { display: block; color: var(--text-muted); font-size: 12.5px; margin-top: 2px; }
+
+    .tier-billing { margin-top: 4px; }
+    .billing-toggle {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+    }
+    .billing-toggle button {
+      background: transparent;
+      border: none;
+      color: var(--text-dim);
+      padding: 8px 12px;
+      border-radius: 7px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .billing-toggle button[aria-pressed="true"] { background: rgba(255,255,255,0.06); color: var(--text); }
+    .tier-card.popular .billing-toggle button[aria-pressed="true"] { background: rgba(139,92,246,0.18); }
+    .tier-card.ultra .billing-toggle button[aria-pressed="true"] { background: rgba(252,211,77,0.15); }
+
+    .tier-prices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 6px; }
+    .tier-price-cell {
+      display: flex; align-items: baseline; gap: 6px;
+    }
+    .tier-price-amount { font-size: 28px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+    .tier-price-unit { font-size: 13.5px; color: var(--text-muted); }
+
+    .tier-cta-btn {
+      background: var(--grad-cta);
+      border: none;
+      color: #FFF;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      width: 100%;
+      margin-top: 8px;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+    .tier-card:not(.popular) .tier-cta-btn { display: none; }
+
+    /* Detail section */
+    .detail-panel { margin-top: 36px; }
+    details.details { background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px; padding: 20px 24px; }
+    details.details summary { cursor: pointer; list-style: none; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 10px; }
+    details.details summary::-webkit-details-marker { display: none; }
+    details.details summary .summary-chev { margin-left: auto; transition: transform 200ms; color: var(--text-muted); }
+    details[open].details summary .summary-chev { transform: rotate(180deg); }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 18px; }
+    .detail-cell { background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: 10px; padding: 16px 18px; }
+    .detail-cell .dl { font-size: 12px; color: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+    .detail-cell .dv { font-size: 22px; font-weight: 700; color: var(--text); margin-top: 4px; }
+    .detail-cell .ds { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+    .ebri-card { background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: 12px; padding: 18px 20px; margin-top: 18px; }
+    .ebri-card.ok { border-color: rgba(34,197,94,0.35); background: rgba(34,197,94,0.06); }
+    .ebri-card.capped { border-color: rgba(255,59,48,0.4); background: rgba(255,59,48,0.06); }
+    .ebri-headline { font-size: 13px; font-weight: 700; color: var(--text-muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .ebri-value { font-size: 28px; font-weight: 700; color: var(--text); margin-top: 6px; }
+    .ebri-value.ok { color: var(--accent-green); }
+    .ebri-value.capped { color: var(--accent-red); }
+    .ebri-sub { font-size: 13px; color: var(--text-dim); margin-top: 8px; line-height: 1.55; }
+
+    .spending-table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+    .spending-table th, .spending-table td { padding: 10px 14px; text-align: left; font-size: 13.5px; }
+    .spending-table thead th { color: var(--text-muted); font-weight: 600; text-transform: uppercase; font-size: 11.5px; letter-spacing: 0.08em; border-bottom: 1px solid var(--border); }
+    .spending-table tbody tr { border-bottom: 1px solid var(--border-soft); }
+    .spending-table tfoot td { font-weight: 700; color: var(--text); padding-top: 14px; border-top: 1px solid var(--border); }
+    .cat-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 8px; vertical-align: middle; }
+
+    /* Footer */
+    .results-foot {
+      margin-top: 36px;
+      padding: 18px 24px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .results-foot .left { display: flex; align-items: center; gap: 10px; }
+    .results-foot .left .shield { width: 16px; height: 16px; color: var(--text-faint); }
+    .results-foot .right { color: var(--text-muted); }
+
+    footer.page-footer {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+    footer.page-footer p { margin: 0 0 8px; }
+    footer.page-footer p:last-child { margin-bottom: 0; }
+
+    @media (max-width: 880px) {
+      .topbar { grid-template-columns: 1fr; gap: 14px; padding: 18px 20px 0; }
+      .stepper { justify-content: center; overflow-x: auto; }
+      .secure-chip { justify-self: center; }
+      .wrap { padding: 24px 20px 40px; }
+      .results-title { font-size: 30px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid > .span2 { grid-column: span 1; }
+      .profiles { grid-template-columns: repeat(2, 1fr); }
+      .advanced-grid { grid-template-columns: 1fr; }
+      .result-hero-grid { grid-template-columns: 1fr; text-align: center; }
+      .result-readout .result-value { font-size: 64px; }
+      .tier-grid { grid-template-columns: 1fr; }
+      .detail-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Phones ===== */
+    @media (max-width: 560px) {
+      .topbar { padding: 14px 14px 0; }
+      .stepper .step { padding: 0 12px; font-size: 12.5px; gap: 7px; }
+      .wrap { padding: 20px 14px 36px; }
+      .card { padding: 20px 16px; }
+      .section-card { padding: 18px 16px; }
+      .profiles { gap: 10px; }
+      .profile-card { padding: 16px 8px 14px; }
+      .profile-card .pf-dollars { font-size: 15px; }
+      .result-readout .result-value { font-size: 48px; }
+      .tier-prices { grid-template-columns: 1fr; }
+      .spouse-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+<style id="pp-style">
+#premiumPanel{--pp-panel:#161922;--pp-panel2:#12151d;--pp-card:#20242e;--pp-cardlock:#191c24;
+  --pp-line:#2a2f3a;--pp-text:#e9ecf2;--pp-muted:#9aa2af;--pp-dim:#6b7280;
+  --pp-green:#4ade80;--pp-teal:#2ee6c6;--pp-purple:#7c6cf0;--pp-amber:#f5b74d;
+  max-width:100%;margin:24px auto 0;padding:0;
+  font-family:"Segoe UI",system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased}
+#premiumPanel[hidden]{display:none}
+#premiumPanel .pp-card{background:linear-gradient(180deg,var(--pp-panel),var(--pp-panel2));border:1px solid var(--pp-line);
+  border-radius:18px;padding:20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.45);color:var(--pp-text)}
+#premiumPanel .pp-eyebrow{font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--pp-teal);margin-bottom:14px}
+#premiumPanel .pp-phead{display:flex;justify-content:space-between;align-items:baseline}
+#premiumPanel .pp-lbl{font-size:15px;font-weight:600}
+#premiumPanel .pp-pct{font-size:15px;font-weight:700;color:var(--pp-teal)}
+#premiumPanel .pp-pbar{position:relative;height:6px;border-radius:6px;background:#242a35;margin:10px 0 4px;overflow:hidden}
+#premiumPanel .pp-pbar>i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;
+  background:linear-gradient(90deg,var(--pp-teal),var(--pp-green));transition:width .35s cubic-bezier(.4,0,.2,1)}
+#premiumPanel .pp-pticks{display:flex;justify-content:space-between;font-size:11px;color:var(--pp-dim);margin-top:6px}
+#premiumPanel .pp-pticks .pp-cur{color:var(--pp-muted)}
+#premiumPanel .pp-sub{font-size:13px;color:var(--pp-muted);margin:20px 0 9px}
+#premiumPanel .pp-pills{display:flex;flex-wrap:wrap;gap:7px}
+#premiumPanel .pp-pill{display:inline-flex;align-items:center;gap:5px;background:#173322;border:1px solid #245c39;
+  color:#9ff0b6;font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:20px}
+#premiumPanel .pp-rows{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+#premiumPanel .pp-row{display:block;background:var(--pp-card);border:1px solid var(--pp-line);
+  border-radius:12px;padding:13px 14px;transition:background .2s,border-color .2s}
+#premiumPanel .pp-row.pp-locked{background:var(--pp-cardlock)}
+#premiumPanel .pp-row.pp-done{border-color:#2c5c3e}
+#premiumPanel .pp-row.pp-inert{opacity:.55}
+#premiumPanel .pp-txt{flex:1;min-width:0}
+#premiumPanel .pp-t1{font-size:14px;font-weight:600}
+#premiumPanel .pp-t2{font-size:12px;color:var(--pp-muted);margin-top:2px}
+#premiumPanel .pp-t2 b{color:var(--pp-teal);font-weight:600}
+#premiumPanel .pp-row.pp-locked .pp-t1,#premiumPanel .pp-row.pp-locked .pp-t2{color:var(--pp-dim)}
+#premiumPanel select{appearance:none;background:#2a2f3a url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%239aa2af'/></svg>") no-repeat right 10px center;
+  color:var(--pp-text);border:1px solid #363c48;border-radius:9px;padding:9px 30px 9px 12px;font-size:13px;font-family:inherit;min-width:118px;cursor:pointer}
+#premiumPanel select.pp-set{border-color:#2c5c3e;color:#bff3cf}
+#premiumPanel .pp-fp{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid #3a3f66;
+  color:#a9a5f5;font-size:12px;font-weight:600;padding:8px 12px;border-radius:9px;cursor:pointer;white-space:nowrap;font-family:inherit}
+#premiumPanel .pp-fp:hover{background:#20213a}
+/* Locked tier affordance. Carries the .pp-fp shape so the row reads as a real control the
+   user does not have yet, but is inert by construction — no hover lift, no pointer. The
+   only path to resolving these is the Full-profile tier named in the tick strip above. */
+#premiumPanel .pp-fp-locked{cursor:default;color:var(--pp-dim);border-color:#2f3350}
+#premiumPanel .pp-fp-locked:hover{background:transparent}
+#premiumPanel .pp-row select,#premiumPanel .pp-row .pp-fp{width:100%;margin-top:10px;box-sizing:border-box}
+#premiumPanel .pp-row .pp-fp{justify-content:center}
+#premiumPanel .pp-rr{margin-top:24px}
+#premiumPanel .pp-cap{font-size:13px;color:var(--pp-muted);margin-bottom:6px}
+#premiumPanel .pp-val{font-size:34px;font-weight:800;letter-spacing:-.5px}
+#premiumPanel .pp-val .pp-u{font-size:15px;font-weight:600;color:var(--pp-muted);margin-left:6px}
+#premiumPanel .pp-center{font-size:12.5px;color:var(--pp-dim);margin-top:4px}
+#premiumPanel .pp-band{position:relative;height:12px;border-radius:8px;margin-top:16px;
+  background:linear-gradient(90deg,#1c6f4a,#2e7d5c 40%,#8a6a2e 72%,#8a3b3b);opacity:.35}
+#premiumPanel .pp-bandhi{position:absolute;top:-3px;height:18px;border-radius:6px;background:rgba(124,108,240,.85);
+  box-shadow:0 0 0 1px rgba(124,108,240,.5),0 4px 14px rgba(124,108,240,.4);transition:left .4s,width .4s}
+#premiumPanel .pp-bandhi>i{position:absolute;top:2px;bottom:2px;width:4px;border-radius:3px;background:#c7bffb}
+#premiumPanel .pp-bandhi>i.l{left:0}#premiumPanel .pp-bandhi>i.r{right:0}
+#premiumPanel .pp-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--pp-dim);margin-top:8px}
+#premiumPanel .pp-note{margin-top:16px;font-size:12.5px;color:var(--pp-muted);line-height:1.5}
+#premiumPanel .pp-note .pp-dark{color:#c7bffb;font-weight:600}
+#premiumPanel .pp-warn{display:flex;gap:7px;margin-top:9px;font-size:12.5px;color:var(--pp-amber);line-height:1.45}
+#premiumPanel .pp-warn.pp-hidden{display:none}
+#premiumPanel .pp-warn svg{flex:none;width:15px;height:15px;margin-top:1px}
+#premiumPanel .pp-infeasible{font-size:13px;color:var(--pp-muted);line-height:1.55;margin-top:6px}
+#premiumPanel .pp-flag{margin:14px auto 0;font-size:11px;color:var(--pp-dim);text-align:center}
+#premiumPanel .pp-loading{text-align:center;color:var(--pp-muted);padding:30px 0;font-size:13px}
+/* result hero keeps its native responsive layout: side-by-side on desktop, stacks under 880px */
+#premiumPanel #resultHero{width:100%;max-width:100%;margin:16px 0 6px}
+#premiumPanel .pp-card{max-width:100%}
+#premiumPanel .result-foot{flex-wrap:wrap;gap:10px}
+#premiumPanel img,#premiumPanel svg{max-width:100%}
+#premiumPanel .pp-txt{min-width:0}
+/* Keep the sharpen section a readable width even when the panel fills the full wrap */
+#premiumPanel .pp-sub,#premiumPanel .pp-pills,#premiumPanel .pp-rows,#premiumPanel .pp-rr{max-width:100%}
+@media (max-width:560px){
+  #premiumPanel .pp-card{padding:16px 13px}
+  #premiumPanel .pp-val{font-size:26px}
+  #premiumPanel .result-readout .result-value{font-size:44px}
+  #premiumPanel .result-status .status-headline{font-size:21px;line-height:1.2}
+  #premiumPanel .result-ring{width:126px;height:126px}
+  #premiumPanel .pp-row{padding:11px 12px;gap:8px}
+  #premiumPanel select{font-size:12.5px}
+}
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wordmark">EDGE</div>
+    <nav class="stepper" id="stepper" aria-label="Progress">
+      <div class="step done" data-step="quick"><span class="dot"><span>1</span></span> Quick Check</div>
+      <div class="step active" id="stepProfile" data-step="profile"><span class="dot"><span>2</span></span> Your Profile</div>
+      <div class="step" id="stepResults" data-step="results"><span class="dot"><span>3</span></span> Your Results</div>
+    </nav>
+    <div class="secure-chip">
+      <svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      <div>
+        <strong>Secure. Private.</strong>
+        <span>No login required.</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- ============== FORM (visible by default) ============== -->
+    <section id="formSection">
+      <h1 class="page-title">Discover Your <span class="accent">Required Portfolio Return<sup>™</sup></span></h1>
+      <p class="page-sub">We&rsquo;ll run a complete retirement projection to calculate the one number your portfolio actually needs to support your lifestyle through retirement.</p>
+
+      <form id="ballparkForm" class="form-grid" novalidate autocomplete="off" data-form-type="other">
+
+        <!-- 1. ABOUT YOU -->
+        <section class="section-card">
+          <div class="section-head">
+            <div class="section-icon purple">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <span class="section-num">1. ABOUT YOU</span>
+          </div>
+          <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:14px;">
+            <div class="field">
+              <label for="age">Your current age</label>
+              <select id="age" required autocomplete="off">
+                <option value="">Select age</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="retirementAge">Your retirement age</label>
+              <select id="retirementAge" required autocomplete="off">
+                <option value="">Select age</option>
+              </select>
+            </div>
+            <div class="field span2">
+              <label>Filing status</label>
+              <div class="toggle" role="group" aria-label="Filing status">
+                <button type="button" data-filing="single" aria-pressed="false">Single</button>
+                <button type="button" data-filing="mfj" aria-pressed="false">Married</button>
+              </div>
+            </div>
+            <!-- Spouse fields: hidden by default, revealed on "Married" -->
+            <div class="field span2" id="spouseFields" style="display:none;">
+              <div class="spouse-grid" style="background:var(--accent-purple-soft); border:1px solid rgba(139,92,246,0.3); border-radius:12px; padding:14px 16px;">
+                <div class="field" style="margin:0;">
+                  <label for="spouseAge" style="font-size:13px;">Spouse&rsquo;s current age</label>
+                  <select id="spouseAge" autocomplete="off">
+                    <option value="">Select age</option>
+                  </select>
+                </div>
+                <div class="field" style="margin:0;">
+                  <label for="spouseRetirementAge" style="font-size:13px;">Spouse&rsquo;s retirement age</label>
+                  <select id="spouseRetirementAge" autocomplete="off">
+                    <option value="">Select age</option>
+                  </select>
+                </div>
+                <div class="field" style="margin:0; grid-column:1 / -1;">
+                  <label for="spouseSsClaimAge" style="font-size:13px;">Spouse&rsquo;s Social Security claim age</label>
+                  <select id="spouseSsClaimAge" autocomplete="off">
+                    <option value="62">62 (earliest)</option>
+                    <option value="63">63</option>
+                    <option value="64">64</option>
+                    <option value="65">65</option>
+                    <option value="66">66</option>
+                    <option value="67" selected>67 &mdash; full retirement age</option>
+                    <option value="68">68</option>
+                    <option value="69">69</option>
+                    <option value="70">70 (maximum)</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field span2">
+              <label for="state">State of residence</label>
+              <div style="position:relative;">
+                <select id="state" required autocomplete="off">
+                  <option value="">Choose your state...</option>
+                </select>
+              </div>
+            </div>
+            <div class="field span2">
+              <label for="ssClaimAge">Claim Social Security at</label>
+              <select id="ssClaimAge" autocomplete="off">
+                <option value="62">62 (earliest)</option>
+                <option value="63">63</option>
+                <option value="64">64</option>
+                <option value="65">65</option>
+                <option value="66">66</option>
+                <option value="67" selected>67 &mdash; full retirement age</option>
+                <option value="68">68</option>
+                <option value="69">69</option>
+                <option value="70">70 (maximum)</option>
+              </select>
+              <div class="ds" style="margin-top:4px;">When you turn benefits on &mdash; a separate decision from when you retire. Waiting raises the check. If your savings can&rsquo;t cover the years between retiring and claiming, we&rsquo;ll model claiming at retirement instead.</div>
+            </div>
+            <div class="field span2">
+              <label for="ssMonthlyFRA">SS benefit at full retirement age (optional)</label>
+              <div class="input-with-prefix">
+                <span class="prefix">$</span>
+                <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="ssMonthlyFRA" placeholder="" />
+              </div>
+              <div class="ds" style="margin-top:4px;">Know your number from ssa.gov? Enter $/month &mdash; otherwise we estimate it.</div>
+            </div>
+            <div class="field span2">
+              <label for="planThroughAge">Plan through age</label>
+              <input type="number" id="planThroughAge" min="80" max="110" step="1" inputmode="numeric" value="100" />
+              <div class="ds" style="margin-top:4px;">How long the money needs to last. Default 100.</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 3. LIFESTYLE TARGET (right column top) -->
+        <section class="section-card">
+          <div class="section-head">
+            <div class="section-icon green">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <span class="section-num">2. MONEY</span>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+              <label for="currentSalary" class="field-text">Current annual salary</label>
+            </div>
+            <div class="field-hint">Gross household salary, before tax.</div>
+            <div class="input-with-prefix">
+              <span class="prefix">$</span>
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="currentSalary" min="0" step="1000" inputmode="numeric" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l4 6h-3v7a3 3 0 0 1-3 3 3 3 0 0 1-3-3V8H4z" transform="translate(2 0)"/></svg>
+              <label for="currentSavings" class="field-text">Current retirement savings</label>
+            </div>
+            <div class="field-hint">All accounts combined &mdash; 401(k), IRA, Roth, taxable, cash.</div>
+            <div class="input-with-prefix">
+              <span class="prefix">$</span>
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="currentSavings" min="0" step="1000" inputmode="numeric" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              <label for="contributionRate" class="field-text">Total contribution rate</label>
+            </div>
+            <div class="field-hint">What share of your salary you currently save each year.</div>
+            <div class="input-with-suffix">
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="contributionRate" min="0" max="50" step="0.5" inputmode="decimal" required />
+              <span class="suffix">%</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field-label-row">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <label for="monthlyPension" class="field-text">Monthly pension (optional)</label>
+            </div>
+            <div class="field-hint">Leave blank if you don&rsquo;t have a pension.</div>
+            <div class="input-with-prefix">
+              <span class="prefix">$</span>
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="monthlyPension" min="0" step="50" inputmode="numeric" />
+            </div>
+          </div>
+
+        </section>
+
+        <!-- 4. ADVANCED ASSUMPTIONS (full width below) -->
+        <section class="section-card lifestyle" style="grid-row: span 1;">
+          <div class="section-head">
+            <div class="section-icon blue">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>
+            </div>
+            <span class="section-num">3. LIFESTYLE TARGET</span>
+          </div>
+          <div class="lifestyle-prompt">What yearly spending should we plan for in retirement?*</div>
+          <div class="lifestyle-sub">Pick the yearly spending that fits the retirement you want.</div>
+          <div class="profiles" id="profileGroup" role="radiogroup" aria-label="Spending profile">
+            <!-- injected by JS -->
+          </div>
+          <div class="lifestyle-note">*Projected from your current salary at typical wage growth through retirement.</div>
+          <div class="field" id="customSpendWrap" style="margin-top:16px;">
+            <label for="customSpendOverride" class="field-text">Or enter your own annual spending (optional)</label>
+            <div class="input-with-prefix">
+              <span class="prefix">$</span>
+              <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="customSpendOverride" min="0" step="1000" inputmode="numeric" />
+            </div>
+            <div class="lifestyle-note">Overrides the cards above when filled. Today&rsquo;s dollars.</div>
+          </div>
+          <div class="lifestyle-foot">
+            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Your lifestyle target drives your Required Portfolio Return&trade;.
+          </div>
+        </section>
+
+        <!-- 2. MONEY (left column second) -->
+        <details class="advanced span2">
+          <summary>
+            <div class="section-icon purple" style="width:32px;height:32px;border-radius:8px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            </div>
+            <div style="display:flex;flex-direction:column;">
+              <span style="font-size:13px;font-weight:700;letter-spacing:0.14em;">4. ADVANCED ASSUMPTIONS (OPTIONAL)</span>
+            </div>
+            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+          <p class="adv-sub">Standard assumptions are shown. Expand to edit if you have stronger beliefs about inflation, returns, or how long retirement will last.</p>
+          <div class="advanced-grid">
+            <div class="field">
+              <label for="salaryGrowth" class="field-text">Annual salary growth</label>
+              <div class="input-with-suffix">
+                <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="salaryGrowth" min="0" max="20" step="0.1" inputmode="decimal" value="3.5" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="preRetReturn" class="field-text">Pre-retirement return</label>
+              <div class="input-with-suffix">
+                <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="preRetReturn" min="0" max="20" step="0.1" inputmode="decimal" value="6.0" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="preRetInflation" class="field-text">Pre-retirement inflation</label>
+              <div class="input-with-suffix">
+                <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="preRetInflation" min="0" max="15" step="0.1" inputmode="decimal" value="3.5" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="postRetReturn" class="field-text">Post-retirement return</label>
+              <div class="input-with-suffix">
+                <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="postRetReturn" min="0" max="15" step="0.1" inputmode="decimal" value="4.0" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="postRetInflation" class="field-text">Post-retirement inflation</label>
+              <div class="input-with-suffix">
+                <input type="number" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" id="postRetInflation" min="0" max="15" step="0.1" inputmode="decimal" value="3.5" />
+                <span class="suffix">%</span>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <!-- SUBMIT -->
+        <div class="submit-row span2">
+          <button type="submit" class="submit-cta" id="submitBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            Check My Plan
+          </button>
+          <div class="submit-foot">
+            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Runs in seconds. No impact on your credit.
+          </div>
+          <div id="formErr" class="err" role="alert" aria-live="polite"></div>
+          <p class="persist-note" id="persistNote">Your inputs stay in this tab until you close it or hit Start over.</p>
+        </div>
+      </form>
+    </section>
+
+    <!-- ============== RESULTS (hidden until submit) ============== -->
+    <section id="resultsSection" aria-live="polite">
+      <h1 class="results-title">Here&rsquo;s Your <span class="accent purple" id="resultsAccent">Required Portfolio Return<sup>™</sup></span></h1>
+      <p class="results-sub">This is the average annual return your portfolio needs to earn to support your lifestyle through retirement.</p>
+
+      <div class="result-hero" id="resultHero" data-tier="on_track">
+        <div class="result-hero-grid">
+          <div class="result-ring" id="resultRing" data-tier="on_track">
+            <svg viewBox="0 0 200 200">
+              <circle class="ring-track" cx="100" cy="100" r="85"/>
+              <circle class="ring-arc" cx="100" cy="100" r="85"/>
+            </svg>
+            <div class="ring-check">
+              <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+          </div>
+
+          <div class="result-readout" id="resultReadout" data-tier="on_track">
+            <div class="result-eyebrow"><strong>GH2 EDGE&trade;</strong> <span class="you">YOUR RESULT</span></div>
+            <div class="result-label">Required Portfolio Return</div>
+            <div class="result-value" id="irr">0.00%</div>
+            <div class="result-explainer" id="irrTagline">This is the return your portfolio has to earn every year of retirement for your plan to last to age <span class="age-accent" id="endAgeLabel">100</span>.</div>
+            <!-- The same requirement in dollars. Filled by the three verdict branches in
+                 renderResult so a solver-bound sentinel is never printed as a dollar figure. -->
+            <div class="result-explainer result-dollars" id="irrDollars"></div>
+            <div class="result-explainer result-dollars" id="irrGapDollars"></div>
+          </div>
+
+          <div class="result-status">
+            <div class="status-row">
+              <div class="status-pill" id="statusPill"><span class="pill-dot"></span><span id="statusPillLabel">ON TRACK</span></div>
+              <div class="status-cta" id="statusCta">Let&rsquo;s keep it that way. &darr;</div>
+            </div>
+            <div class="status-headline" id="statusHeadline">Savings last through age 100.</div>
+            <div class="status-body" id="statusBody">Your plan looks good. You have a healthy margin for market ups and downs and unexpected costs.</div>
+          </div>
+        </div>
+
+        <div class="result-move" id="resultMove" data-tier="on_track">
+          <span class="rm-arrow" aria-hidden="true">&rarr;</span>
+          <span class="rm-text" id="resultMoveText">&mdash;</span>
+        </div>
+
+        <div class="result-foot">
+          <div class="result-foot-tax">
+            <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Assumptions include the full federal + state + Medicare tax math.
+          </div>
+          <button type="button" class="adjust-inputs-btn" id="adjustInputsBtn">Adjust inputs</button>
+        </div>
+      </div>
+
+      <div style="max-width:560px;margin:20px auto 0;padding:13px 18px;border-left:3px solid var(--accent-purple,#8B5CF6);background:rgba(139,92,246,0.06);border-radius:8px;font-size:14.5px;line-height:1.5;color:var(--text-muted);">
+        <strong style="color:var(--text);font-weight:700;">Most calculators stop at a green light.</strong> EDGE gives you the number they can&rsquo;t &mdash; the return your plan actually needs, and how far your mix is from delivering it. <em style="color:var(--text);">&ldquo;Will it last?&rdquo;</em> isn&rsquo;t <em style="color:var(--text);">&ldquo;what does it need?&rdquo;</em>
+      </div>
+
+      <!-- Free beginner's e-book -->
+      <div class="ebook-cta">
+        <div class="ec-text"><strong>New to all this?</strong> The free <em>GH2 EDGE&trade; Beginner&rsquo;s Guide</em> walks you through your number in plain English &mdash; no login, no jargon.</div>
+        <div class="ec-actions">
+          <a class="ec-dl" href="https://jaeoh.com/api/edge-library/Book9-Start-Where-You-Are-Beginners-Edition-v1.1.pdf" target="_blank" rel="noopener">Download the guide (PDF)</a>
+          <span class="ec-email">Questions? <a href="mailto:info@gh2benefits.com">info@gh2benefits.com</a></span>
+        </div>
+      </div>
+
+      <!-- Cadence pricing — hidden for now -->
+      <div class="cadence-head" style="display:none">
+        <h2>Choose the cadence that fits your life.</h2>
+        <p>All consumer tiers include the full federal + state + Medicare tax math,<br/>year-by-year projections, and a downloadable PDF plan.</p>
+      </div>
+
+      <div class="tier-grid" style="display:none">
+        <!-- Jae's Corner -->
+        <div class="tier-card jae">
+          <div class="tier-head">
+            <div class="tier-icon jae">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+            </div>
+            <div>
+              <h3 class="tier-name">Jae&rsquo;s Corner</h3>
+              <p class="tier-tag">Stay informed</p>
+            </div>
+          </div>
+          <ul class="tier-features">
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 7 13.03 12.7 2 7"/></svg><span class="feat-text">Weekly insights</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10"/><path d="M20.49 15a9 9 0 0 1-14.85 3.36L1 14"/></svg><span class="feat-text">Annual rerun of key episodes</span></li>
+          </ul>
+          <div class="tier-billing">
+            <div class="billing-toggle" data-tier="jae" role="group" aria-label="Billing cadence">
+              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly (Save 17%)</button>
+            </div>
+          </div>
+          <div class="tier-prices">
+            <div class="tier-price-cell"><span class="tier-price-amount">$50</span><span class="tier-price-unit">/ month</span></div>
+            <div class="tier-price-cell"><span class="tier-price-amount">$500</span><span class="tier-price-unit">/ year</span></div>
+          </div>
+          <a href="mailto:jae@gh2benefits.com?subject=Jae%27s%20Corner%20inquiry" class="tier-cta-btn">Get Jae&rsquo;s Corner</a>
+        </div>
+
+        <!-- GH2 EDGE (Most Popular) -->
+        <div class="tier-card popular">
+          <span class="tier-badge">Most Popular</span>
+          <div class="tier-head">
+            <div class="tier-icon edge">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M22 12c-2.667 4-6 6-10 6s-7.333-2-10-6c2.667-4 6-6 10-6s7.333 2 10 6z"/></svg>
+            </div>
+            <div>
+              <h3 class="tier-name">GH2 EDGE&trade;</h3>
+              <p class="tier-tag">Improve Your Number.</p>
+            </div>
+          </div>
+          <ul class="tier-features">
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.739-8-4.585 0-4.585 8 0 8 5.606 0 7.644-8 12.739-8z"/></svg><div class="feat-text"><strong>Continuous monitoring</strong><span>We monitor the markets and your plan 24/7.</span></div></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="feat-text">Updates with every market move</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span class="feat-text">Life-event driven recalcs</span></li>
+          </ul>
+          <div class="tier-billing">
+            <div class="billing-toggle" data-tier="edge" role="group" aria-label="Billing cadence">
+              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly (Save 17%)</button>
+            </div>
+          </div>
+          <div class="tier-prices">
+            <div class="tier-price-cell"><span class="tier-price-amount">$250</span><span class="tier-price-unit">/ month</span></div>
+            <div class="tier-price-cell"><span class="tier-price-amount">$2,500</span><span class="tier-price-unit">/ year</span></div>
+          </div>
+          <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20inquiry" class="tier-cta-btn">View details</a>
+        </div>
+
+        <!-- GH2 EDGE Ultra -->
+        <div class="tier-card ultra">
+          <div class="tier-head">
+            <div class="tier-icon ultra">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 22h20"/><path d="M6 22V8"/><path d="M18 22V8"/><path d="M10 22V12h4v10"/><circle cx="12" cy="4" r="3" fill="currentColor" stroke="none"/></svg>
+            </div>
+            <div>
+              <h3 class="tier-name">GH2 EDGE&trade; Ultra</h3>
+              <p class="tier-tag">Protect Your Number.</p>
+            </div>
+          </div>
+          <ul class="tier-features">
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg><span class="feat-text">Priority continuous monitoring</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="feat-text">Direct alerts for critical changes</span></li>
+            <li><svg class="feat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span class="feat-text">Concierge-level guidance</span></li>
+          </ul>
+          <div class="tier-billing">
+            <div class="billing-toggle" data-tier="ultra" role="group" aria-label="Billing cadence">
+              <button type="button" data-billing="monthly" aria-pressed="true">Monthly</button>
+              <button type="button" data-billing="yearly"  aria-pressed="false">Yearly (Save 17%)</button>
+            </div>
+          </div>
+          <div class="tier-prices">
+            <div class="tier-price-cell"><span class="tier-price-amount">$2,500</span><span class="tier-price-unit">/ month</span></div>
+            <div class="tier-price-cell"><span class="tier-price-amount">$25,000</span><span class="tier-price-unit">/ year</span></div>
+          </div>
+          <a href="mailto:jae@gh2benefits.com?subject=GH2%20EDGE%20Ultra%20inquiry" class="tier-cta-btn">Get Ultra</a>
+        </div>
+      </div>
+
+      <!-- Details collapsible (projected balance, SS, spending) -->
+      <div class="detail-panel">
+        <details class="details">
+          <summary>
+            <span>See the math behind your number</span>
+            <svg class="summary-chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </summary>
+
+          <div id="ebriCard" class="ebri-card">
+            <div class="ebri-headline">Additional savings per year</div>
+            <div class="ebri-value" id="ebriValue"></div>
+            <div class="ebri-sub" id="ebriSub"></div>
+          </div>
+
+          <div class="detail-grid">
+            <div class="detail-cell">
+              <div class="dl">Projected balance at retirement</div>
+              <div class="dv" id="projBalance"></div>
+              <div class="ds" id="projBalanceSub"></div>
+            </div>
+            <div class="detail-cell">
+              <div class="dl" id="ssAnnualLabel">Estimated annual Social Security</div>
+              <div class="dv" id="ssAnnual"></div>
+              <div class="ds" id="ssAnnualNote">at retirement age, today&rsquo;s dollars equivalent</div>
+            </div>
+          </div>
+
+          <table class="spending-table" id="spendingTable">
+            <thead>
+              <tr><th>Category</th><th>% of total</th><th>$/yr (today's $)</th></tr>
+            </thead>
+            <tbody id="spendingTbody"></tbody>
+            <tfoot>
+              <tr><td colspan="2">Total annual spending (today's dollars)</td><td id="spendingTotal"></td></tr>
+              <tr><td colspan="3" id="spendingNominalNote" style="font-weight:400;color:var(--text-muted);font-size:12px;padding-top:6px;"></td></tr>
+            </tfoot>
+          </table>
+        </details>
+      </div>
+
+      <div class="results-foot">
+        <div class="left">
+          <svg class="shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Your data is secure and encrypted. We never sell your information.
+        </div>
+        <div class="right">
+          Required Portfolio Return&trade; is a patent-pending retirement metric developed by GH2 EDGE.
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <p>GH2 EDGE&trade; is a financial analysis tool for educational and informational purposes only. It is not investment advice, tax advice, or a recommendation to buy, sell, or hold any security. Consult a qualified financial advisor and tax professional before making financial decisions. GH2 Benefits is not a registered investment adviser. Patent Pending.</p>
+      </footer>
+    </section>
+
+    <section id="premiumPanel" hidden aria-live="polite">
+      <div class="pp-card">
+        <div class="pp-eyebrow">GH2 EDGE™ · PRECISION</div>
+        <div class="pp-phead"><span class="pp-lbl">Precision</span><span class="pp-pct" id="ppPct">—</span></div>
+        <div class="pp-pbar"><i id="ppBar" style="width:71%"></i></div>
+        <div class="pp-pticks"><span>Quick check</span><span class="pp-cur">Ballpark</span><span class="pp-lock">🔒 Full profile</span></div>
+
+        <div class="pp-sub">From your ballpark — confirmed</div>
+        <div class="pp-pills" id="ppPills"></div>
+
+        <div id="ppResultHost"></div>
+
+        <!-- The range sits immediately below the required-return figure (#irr, inside the
+             hero folded into #ppResultHost) so the number and its range read as one unit.
+             IDs unchanged — the premium script addresses these by id, not position. -->
+        <div class="pp-rr">
+          <div class="pp-cap">Your required portfolio return</div>
+          <div class="pp-val"><span id="ppRrlo">—</span><span id="ppDash"> – </span><span id="ppRrhi">—</span><span class="pp-u" id="ppU">per year</span></div>
+          <div class="pp-center" id="ppRrcenter"></div>
+          <div class="pp-band" id="ppBandRow"><div class="pp-bandhi" id="ppBandhi" style="left:0;width:0"><i class="l"></i><i class="r"></i></div></div>
+          <div class="pp-scale" id="ppScaleRow"><span id="ppSl">3%</span><span id="ppSm">7%</span><span id="ppSh">11%</span></div>
+          <div class="pp-note" id="ppNoteRow">Full profile pinpoints this to <span class="pp-dark">±0.2% — the dark band</span>. Where you actually sit depends on the locked inputs.</div>
+          <div class="pp-warn pp-hidden" id="ppWarnbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4m0 4h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span id="ppWarn"></span></div>
+          <div class="pp-infeasible" id="ppInfeasible" style="display:none"></div>
+        </div>
+
+        <div class="pp-sub">Sharpen your number — each field tightens your range</div>
+        <div class="pp-rows" id="ppRows"><div class="pp-loading">Computing your sensitivity…</div></div>
+
+        <div class="pp-flag">Every number is live GH2 EDGE™ engine output · Patent Pending</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      // ===== States =====
+      var STATES = [
+        ['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],
+        ['CO','Colorado'],['CT','Connecticut'],['DE','Delaware'],['DC','District of Columbia'],
+        ['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],
+        ['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],
+        ['ME','Maine'],['MD','Maryland'],['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],
+        ['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],['NV','Nevada'],
+        ['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],
+        ['NC','North Carolina'],['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],
+        ['PA','Pennsylvania'],['RI','Rhode Island'],['SC','South Carolina'],['SD','South Dakota'],
+        ['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
+        ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
+      ];
+      var stateSel = document.getElementById('state');
+      STATES.forEach(function (s) {
+        var opt = document.createElement('option');
+        opt.value = s[0]; opt.textContent = s[1];
+        stateSel.appendChild(opt);
+      });
+
+      // Ages 35-80 — populate all four age selects (primary + spouse). Floor 35 matches the v7 grid's youngest cohort (accumulation-phase engine wired).
+      var ageSel = document.getElementById('age');
+      var retSel = document.getElementById('retirementAge');
+      var spouseAgeSel = document.getElementById('spouseAge');
+      var spouseRetSel = document.getElementById('spouseRetirementAge');
+      for (var a = 35; a <= 80; a++) {
+        var o1 = document.createElement('option'); o1.value = a; o1.textContent = a; ageSel.appendChild(o1);
+        var o2 = document.createElement('option'); o2.value = a; o2.textContent = a; retSel.appendChild(o2);
+        var o3 = document.createElement('option'); o3.value = a; o3.textContent = a; spouseAgeSel.appendChild(o3);
+        var o4 = document.createElement('option'); o4.value = a; o4.textContent = a; spouseRetSel.appendChild(o4);
+      }
+
+      // ===== 9 spending categories — must match api/optimize-quick.ts =====
+      var CATEGORIES = [
+        { key: 'housing',        label: 'Housing',        color: '#3B82F6' },
+        { key: 'food',           label: 'Food',           color: '#10B981' },
+        { key: 'healthCare',     label: 'Health Care',    color: '#06B6D4' },
+        { key: 'transportation', label: 'Transportation', color: '#8B5CF6' },
+        { key: 'entertainment',  label: 'Entertainment',  color: '#F97316' },
+        { key: 'gifts',          label: 'Gifts, Contributions, etc.', color: '#EC4899' },
+        { key: 'clothing',       label: 'Clothing',       color: '#84CC16' },
+        { key: 'other',          label: 'Other',          color: '#A8A29E' },
+        { key: 'taxes',          label: 'Taxes',          color: '#64748B' }
+      ];
+
+      // ===== 4 profiles =====
+      var PROFILES = [
+        { key: 'struggling',  pct: 0.25, label: 'Essentials' },
+        { key: 'average',     pct: 0.50, label: 'Secure' },
+        { key: 'comfortable', pct: 0.75, label: 'Comfortable' },
+        { key: 'affluent',    pct: 1.00, plus: true, label: 'Premium' }
+      ];
+
+      var PROFILE_ICONS = {
+        struggling:  '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><circle cx="15" cy="5" r="1"/><path d="M12 17.5V14l-3-3 4-3 2 3h2"/></svg>',
+        average:     '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>',
+        comfortable: '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 18H2a4 4 0 0 0 4 4h12a4 4 0 0 0 4-4Z"/><path d="M21 14 10 2 3 14h18Z"/><path d="M10 2v16"/></svg>',
+        affluent:    '<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg>'
+      };
+
+      var grp = document.getElementById('profileGroup');
+      var selectedProfile = null;
+      var profileAmtEls = []; // { p, el, card } for live dollar updates
+      PROFILES.forEach(function (p) {
+        var card = document.createElement('button');
+        card.type = 'button';
+        card.className = 'profile-card';
+        card.setAttribute('role', 'radio');
+        card.setAttribute('aria-checked', 'false');
+        card.setAttribute('data-profile', p.key);
+        var amt = document.createElement('div');
+        amt.className = 'pf-dollars';
+        amt.textContent = '—';
+        card.innerHTML = '<div class="pf-icon">' + (PROFILE_ICONS[p.key] || '') + '</div>';
+        card.appendChild(amt);
+        if (p.label) {
+          var name = document.createElement('div');
+          name.className = 'pf-name';
+          name.textContent = p.label;
+          card.appendChild(name);
+        }
+        var accent = document.createElement('div');
+        accent.className = 'pf-accent';
+        card.appendChild(accent);
+        profileAmtEls.push({ p: p, el: amt, card: card });
+        card.addEventListener('click', function () {
+          selectedProfile = p.key;
+          Array.prototype.forEach.call(grp.querySelectorAll('.profile-card'), function (c) {
+            c.setAttribute('aria-checked', c === card ? 'true' : 'false');
+          });
+        });
+        grp.appendChild(card);
+      });
+
+      // ===== Age-adjusted salary → live dollar targets on the profile cards =====
+      function realWageGrowth(a) {
+        if (a < 30) return 0.040;
+        if (a < 40) return 0.025;
+        if (a < 50) return 0.015;
+        if (a < 55) return 0.010;
+        if (a < 60) return 0.006;
+        if (a < 65) return 0.003;
+        return 0.001;
+      }
+      function projectedSalary(salary, ageNow, retAge) {
+        if (!Number.isFinite(salary) || salary <= 0) return NaN;
+        var s = salary;
+        if (Number.isFinite(ageNow)) {
+          var end = (Number.isFinite(retAge) && retAge > ageNow) ? retAge : 65;
+          for (var a = ageNow; a < end; a++) s *= (1 + realWageGrowth(a));
+        }
+        return s;
+      }
+      function refreshProfileAmounts() {
+        var salary = parseFloat(document.getElementById('currentSalary').value);
+        var ageNow = parseInt(document.getElementById('age').value, 10);
+        var retAge = parseInt(document.getElementById('retirementAge').value, 10);
+        var base = projectedSalary(salary, ageNow, retAge);
+        profileAmtEls.forEach(function (item) {
+          if (!Number.isFinite(base)) {
+            item.el.textContent = '—';
+            item.card.setAttribute('aria-label', 'Spending target');
+            return;
+          }
+          var dollars = base * item.p.pct;
+          var text = fmt$(dollars) + (item.p.plus ? '+' : '');
+          item.el.textContent = text;
+          item.card.setAttribute('aria-label', 'Annual spending target ' + text);
+        });
+      }
+      document.getElementById('currentSalary').addEventListener('input', refreshProfileAmounts);
+      document.getElementById('age').addEventListener('change', refreshProfileAmounts);
+      document.getElementById('retirementAge').addEventListener('change', refreshProfileAmounts);
+      refreshProfileAmounts();
+      var _ovrEl = document.getElementById('customSpendOverride');
+      if (_ovrEl) _ovrEl.addEventListener('input', function () { if (grp) grp.style.opacity = _ovrEl.value.trim() !== '' ? '0.45' : ''; });
+
+      // ===== Filing toggle (toggles spouse fields visibility) =====
+      var filing = null;
+      var spouseFields = document.getElementById('spouseFields');
+      var filingBtns = document.querySelectorAll('.toggle [data-filing]');
+      filingBtns.forEach(function (b) {
+        b.addEventListener('click', function () {
+          filing = b.getAttribute('data-filing');
+          filingBtns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          spouseFields.style.display = (filing === 'mfj') ? '' : 'none';
+        });
+      });
+
+      // ===== Billing toggle (per-tier) =====
+      var billingGroups = document.querySelectorAll('.billing-toggle');
+      billingGroups.forEach(function (g) {
+        var btns = g.querySelectorAll('button');
+        btns.forEach(function (b) {
+          b.addEventListener('click', function () {
+            btns.forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+          });
+        });
+      });
+
+      // ===== Formatters =====
+      function fmt$(n) { if (!Number.isFinite(n)) return '—'; return '$' + Math.round(n).toLocaleString('en-US'); }
+      function fmtPct(r) { if (!Number.isFinite(r)) return '—'; return (r * 100).toFixed(1) + '%'; }
+
+      // ===== Tier mapping =====
+      // map feasibility tier → on_track / stretch / at_risk visual
+      function visualTier(feasibility, irr) {
+        // Path B: map the engine's GAP-based tier (required return vs what YOUR mix is
+        // priced to earn) to the 3 visual tiers — never re-derive from absolute IRR bands.
+        if (feasibility === 'well_funded' || feasibility === 'conservative') return 'on_track';
+        if (feasibility === 'moderate') return 'stretch';
+        if (feasibility === 'aggressive' || feasibility === 'extremely_aggressive') return 'at_risk';
+        // Fallback only if the engine tier is missing.
+        if (Number.isFinite(irr)) return irr < 0.045 ? 'on_track' : irr < 0.07 ? 'stretch' : 'at_risk';
+        return 'stretch';
+      }
+
+      // Path B: pills describe how far the required return reaches past YOUR mix — not a
+      // safe/at-risk verdict. Color/accent still key off the 3 visual tiers.
+      var TIER_COPY = {
+        on_track: {
+          pill: 'WITHIN YOUR MIX',
+          cta: 'Let’s keep it that way. ↓',
+          accentClass: 'green',
+          stepperState: 'results-on-track',
+          stepperLine: 'results-on-track-active'
+        },
+        stretch: {
+          pill: 'A REACH',
+          cta: 'Let’s look at the gap. ↓',
+          accentClass: 'amber',
+          stepperState: 'results-stretch',
+          stepperLine: 'results-stretch-active'
+        },
+        at_risk: {
+          pill: 'BEYOND YOUR MIX',
+          cta: 'Let’s close the gap. ↓',
+          accentClass: 'red',
+          stepperState: 'results',
+          stepperLine: 'results-active'
+        }
+      };
+
+      function showError(msg) { document.getElementById('formErr').textContent = msg || ''; }
+
+      // ===== Render results =====
+      function renderResult(data) {
+        var irr = Number(data.requiredIRR);
+        var feas = data.feasibilityRating;
+        var tier = visualTier(feas, irr);
+        var copy = TIER_COPY[tier];
+
+        // Update stepper
+        var stepper = document.getElementById('stepper');
+        stepper.className = 'stepper ' + copy.stepperLine;
+        document.getElementById('stepProfile').className = 'step done';
+        var resStep = document.getElementById('stepResults');
+        resStep.className = 'step active ' + copy.stepperState;
+
+        // Update accent on title
+        var accent = document.getElementById('resultsAccent');
+        accent.className = 'accent ' + copy.accentClass;
+
+        // Hero / ring / readout / status — set data-tier so CSS applies
+        document.getElementById('resultHero').setAttribute('data-tier', tier);
+        var ring = document.getElementById('resultRing');
+        ring.setAttribute('data-tier', tier);
+        // Ring badge icon by tier: on_track = check, stretch = !, at_risk = X (color keys off data-tier)
+        var ringCheckSvg = ring.querySelector('.ring-check svg');
+        if (ringCheckSvg) {
+          ringCheckSvg.innerHTML = tier === 'on_track' ? '<polyline points="20 6 9 17 4 12"></polyline>'
+            : tier === 'at_risk' ? '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>'
+            : '<line x1="12" y1="7" x2="12" y2="13"></line><line x1="12" y1="17" x2="12" y2="17"></line>';
+        }
+        document.getElementById('resultReadout').setAttribute('data-tier', tier);
+
+        // Ring arc: longer arc for higher IRR (more "filling")
+        var arc = ring.querySelector('.ring-arc');
+        var circumference = 2 * Math.PI * 85; // ~534
+        var pct = tier === 'on_track' ? 0.25 : tier === 'stretch' ? 0.6 : 0.92;
+        var dashOffset = circumference * (1 - pct);
+        arc.setAttribute('stroke-dasharray', circumference);
+        arc.setAttribute('stroke-dashoffset', dashOffset);
+
+        // IRR number — driven by the verdict so an unachievable solver-ceiling rate is
+        // never shown as "the return you need". showReturn=false means either over-funded
+        // (on track) or not fundable at any realistic return (not feasible).
+        var v = data.verdict || {};
+        var irrEl = document.getElementById('irr');
+        if (v.showReturn) {
+          irrEl.textContent = (irr * 100).toFixed(1) + '%';
+          irrEl.style.fontSize = '';
+        } else if (v.feasible === false) {
+          // Ballpark is the "Required Portfolio Return" tool — show the actual number even when
+          // it's unrealistically high. At the solver's +30% ceiling the true figure is "≥30%"
+          // (even 30% won't carry the plan), so show 30%+. The red tier + "Savings may not last"
+          // context makes the infeasibility clear.
+          irrEl.textContent = (irr >= 0.2999) ? '30%+' : (irr * 100).toFixed(1) + '%';
+          irrEl.style.fontSize = '';
+        } else {
+          // Over-funded: savings + SS fund the plan with no market growth. The engine
+          // returns its -10% solver floor here (a sentinel, not a real "required" return),
+          // so report the meaningful actual number: 0% (you need no positive return).
+          irrEl.textContent = '0%';
+          irrEl.style.fontSize = '';
+        }
+
+        // The same requirement, in dollars. A percentage is abstract; the dollars on the
+        // household's own balance are not. Mirrors the three branches above exactly, so a
+        // solver-bound sentinel is never multiplied out into a dollar figure: at the -10%
+        // floor that would print a negative requirement, and at the +30% ceiling a precise-
+        // looking number that is really "off the top of the scale".
+        //
+        // Base is projectedRetirementBalance, NOT today's savings: the required return
+        // applies to the retirement-phase portfolio, and for anyone still working those
+        // differ. It is a first-year figure — the balance moves every year after that —
+        // and the copy says so rather than implying a fixed annual obligation.
+        (function(){
+          var dolEl = document.getElementById('irrDollars');
+          var gapDolEl = document.getElementById('irrGapDollars');
+          var proj = data.projectedRetirementBalance;
+          var haveProj = (typeof proj === 'number' && proj > 0);
+
+          if (dolEl) {
+            if (v.showReturn && haveProj) {
+              dolEl.innerHTML = 'That is about <strong>' + fmt$(Math.round(irr * proj)) +
+                '</strong> in the first year, on the <strong>' + fmt$(proj) +
+                '</strong> your savings are projected to reach by retirement.';
+            } else if (v.feasible === false && haveProj) {
+              // Cap the multiplier at the solver ceiling — beyond it the rate is not a
+              // measured number, so neither is any dollar figure derived from it.
+              dolEl.innerHTML = 'That is more than <strong>' + fmt$(Math.round(Math.min(irr, 0.30) * proj)) +
+                '</strong> in the first year. No portfolio earns that reliably.';
+            } else if (!v.showReturn && v.feasible !== false) {
+              dolEl.textContent = 'Your savings and Social Security carry this plan without any market growth.';
+            } else {
+              dolEl.textContent = '';
+            }
+          }
+
+          // Second figure: the gap the household can actually act on. additionalAnnualDollars
+          // is contribution-rate x CURRENT SALARY, so it is 0 for an already-retired household
+          // as well as for an on-track one. Suppress on 0 rather than print "save $0 more" —
+          // for a retiree the real lever is spending, which this surface does not yet size.
+          if (gapDolEl) {
+            var addg = data.additionalSavings || {};
+            var addDollars = addg.additionalAnnualDollars;
+            if (!addg.onTrack && typeof addDollars === 'number' && addDollars > 0) {
+              gapDolEl.innerHTML = 'To close the gap: about <strong>' + fmt$(addDollars) +
+                ' a year</strong> more saved' + (addg.capped ? ', and even the maximum does not fully close it.' : '.');
+            } else {
+              gapDolEl.textContent = '';
+            }
+          }
+        })();
+
+        // §4 gap vs the plan's assumed return (ballpark uses a default mix, not a user allocation)
+        (function(){
+          var gapEl = document.getElementById('irrGap');
+          if (!gapEl && irrEl && irrEl.parentNode) { gapEl = document.createElement('div'); gapEl.id = 'irrGap'; gapEl.style.cssText = 'font-size:0.8rem;opacity:0.72;margin-top:6px;'; irrEl.parentNode.appendChild(gapEl); }
+          var g = data.requiredReturnGap, mx = data.expectedPortfolioReturn;
+          if (gapEl && v.showReturn && typeof g === 'number' && typeof mx === 'number') {
+            var mp = (mx*100).toFixed(1), gp = Math.abs(g*100).toFixed(1);
+            gapEl.textContent = g > 0.001 ? ('your mix is priced for ~' + mp + '% — short ~' + gp + '%')
+                              : g < -0.001 ? ('your mix is priced for ~' + mp + '% — ahead ~' + gp + '%')
+                              : ('right on what your mix is priced for (~' + mp + '%)');
+          } else if (gapEl) { gapEl.textContent = ''; }
+        })();
+
+        // Tagline — the verdict's plain-English detail (no "earn 30%" nonsense).
+        var endAge = (data.assumptions && data.assumptions.targetEndAge) || 100;
+        var _endLbl = document.getElementById('endAgeLabel'); if (_endLbl) _endLbl.textContent = endAge;
+        document.getElementById('irrTagline').textContent = v.detail || '';
+
+        // Status pill / CTA / headline / body
+        var pill = document.getElementById('statusPill');
+        pill.className = 'status-pill ' + tier;
+        document.getElementById('statusPillLabel').textContent = copy.pill;
+        var cta = document.getElementById('statusCta');
+        cta.className = 'status-cta ' + tier;
+        cta.textContent = copy.cta;
+        var hl = document.getElementById('statusHeadline');
+        hl.className = 'status-headline ' + tier;
+        var body = document.getElementById('statusBody');
+
+        if (tier === 'at_risk') {
+          hl.textContent = 'Savings may not last to age ' + endAge + '.';
+          body.textContent = 'Your plan could fall short if markets underperform, inflation runs higher, or unexpected costs arise. Let’s close the gap and strengthen your plan.';
+        } else if (tier === 'stretch') {
+          if (data.depletionAge && data.depletionAge < endAge) {
+            hl.textContent = 'Savings run out at age ' + data.depletionAge + '.';
+          } else {
+            hl.textContent = 'Savings last through age ' + endAge + '.';
+          }
+          body.textContent = 'Your plan looks solid, but there’s not much room for error. Let’s make sure your plan stays on solid ground—no matter what the markets do.';
+        } else {
+          hl.textContent = 'Savings last through age ' + endAge + '.';
+          body.textContent = 'Your plan looks good. You have a healthy margin for market ups and downs and unexpected costs.';
+        }
+
+        // ===== Your move — the single statement, in the hero =====
+        var move = document.getElementById('resultMove');
+        var moveText = document.getElementById('resultMoveText');
+        move.setAttribute('data-tier', tier);
+        var addMv = data.additionalSavings || {};
+        if (addMv.onTrack) {
+          moveText.textContent = (addMv.currentContributionRate > 0)
+            ? 'You’re set — your current ' + fmtPct(addMv.currentContributionRate) + ' savings rate is enough. No extra saving needed.'
+            : 'You’re set — your plan is funded as it stands. No extra saving needed.';
+          move.style.display = '';
+        } else if (addMv.capped) {
+          moveText.textContent = 'Saving alone won’t close the gap — the levers are lower spending or working longer.';
+          move.style.display = '';
+        } else if (Number.isFinite(addMv.additionalAnnualDollars) && Number.isFinite(addMv.additionalRate)) {
+          moveText.innerHTML = 'Save <strong>' + fmt$(addMv.additionalAnnualDollars) + '/yr</strong> more (' +
+            fmtPct(addMv.additionalRate) + ' of salary, on top of your ' + fmtPct(addMv.currentContributionRate) +
+            ') to reach a safe 5% return.';
+          move.style.display = '';
+        } else {
+          move.style.display = 'none';
+        }
+
+        // ===== Detail panel =====
+        var ebriCard = document.getElementById('ebriCard');
+        var ebriVal = document.getElementById('ebriValue');
+        var ebriSub = document.getElementById('ebriSub');
+        var add = data.additionalSavings || {};
+        ebriCard.className = 'ebri-card';
+        ebriVal.className = 'ebri-value';
+        if (add.onTrack) {
+          ebriCard.classList.add('ok');
+          ebriVal.classList.add('ok');
+          ebriVal.textContent = '$0 / 0%';
+          ebriSub.textContent = 'You’re on track at the 5%/yr in-retirement target. Your current ' +
+            fmtPct(add.currentContributionRate) + ' contribution rate is sufficient.';
+        } else if (add.capped) {
+          ebriCard.classList.add('capped');
+          ebriVal.classList.add('capped');
+          ebriVal.textContent = fmt$(add.additionalAnnualDollars) + ' / ' + fmtPct(add.additionalRate);
+          ebriSub.textContent = 'Even at a 50% contribution rate, the plan can’t be brought to a 5%/yr in-retirement target. Consider lowering retirement spending, working longer, or both.';
+        } else {
+          ebriVal.textContent = fmt$(add.additionalAnnualDollars) + ' / ' + fmtPct(add.additionalRate);
+          ebriSub.textContent = 'Save an additional ' + fmtPct(add.additionalRate) +
+            ' of salary per year (≈ ' + fmt$(add.additionalAnnualDollars) + '/yr at your current salary) on top of your current ' +
+            fmtPct(add.currentContributionRate) + ' contribution rate. Brings your projected retirement plan to a 5%/yr required return.';
+        }
+
+        document.getElementById('projBalance').textContent = fmt$(data.projectedRetirementBalance);
+        var yrs = data.yearsToRetirement || 0;
+        document.getElementById('projBalanceSub').textContent = yrs > 0
+          ? 'projected ' + yrs + ' year' + (yrs === 1 ? '' : 's') + ' forward at ' + fmtPct(data.assumptions.preRetReturn) + '/yr'
+          : 'no projection (retiring now)';
+        var ssTxt = fmt$(data.estimatedAnnualSS) + ' / yr';
+        if (typeof data.ssClaimAgeUsed === 'number') {
+          ssTxt += ' (claimed at ' + data.ssClaimAgeUsed + ')';
+          if (data.ssBridgeForced) {
+            ssTxt += ' — savings can’t fund the years to your chosen claim age, so we modeled claiming at retirement';
+          }
+        }
+        document.getElementById('ssAnnual').textContent = ssTxt;
+        var _ssLbl = document.getElementById('ssAnnualLabel');
+        var _ssNote = document.getElementById('ssAnnualNote');
+        if (filing === 'mfj') {
+          if (_ssLbl) _ssLbl.textContent = 'Estimated annual Social Security (household)';
+          if (_ssNote) _ssNote.textContent = "Household total. Includes an estimated spousal benefit at 50% of the primary's; spouse claims at the age you set.";
+        } else {
+          if (_ssLbl) _ssLbl.textContent = 'Estimated annual Social Security';
+          if (_ssNote) _ssNote.textContent = 'at retirement age, today’s dollars equivalent';
+        }
+
+        // Spending table
+        var tbody = document.getElementById('spendingTbody');
+        tbody.innerHTML = '';
+        var nomTotal = data.projectedRetirementSpending;            // nominal $ at retirement
+        var todayTotal = data.currentSpendingEstimate || nomTotal;  // today's dollars
+        var toToday = nomTotal > 0 ? (todayTotal / nomTotal) : 1;
+        CATEGORIES.forEach(function (cat) {
+          var nom = (data.spendingBreakdown && data.spendingBreakdown[cat.key]) || 0;
+          var pct = nomTotal > 0 ? (nom / nomTotal * 100) : 0;
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td><span class="cat-swatch" style="background:' + cat.color + ';"></span>' + cat.label + '</td>' +
+            '<td>' + pct.toFixed(0) + '%</td>' +
+            '<td>' + fmt$(nom * toToday) + '</td>';
+          tbody.appendChild(tr);
+        });
+        document.getElementById('spendingTotal').textContent = fmt$(todayTotal);
+        var nomNote = document.getElementById('spendingNominalNote');
+        if (nomNote) {
+          var yrs = data.yearsToRetirement;
+          nomNote.textContent = '≈ ' + fmt$(nomTotal) + '/yr at retirement' +
+            (yrs != null ? ' (after ' + yrs + ' years of inflation)' : '') +
+            ' — the same buying power as ' + fmt$(todayTotal) + ' today.';
+        }
+
+        // Show results section
+        document.getElementById('formSection').style.display = 'none';
+        document.getElementById('resultsSection').classList.add('visible');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      // ===== Adjust inputs =====
+      document.getElementById('adjustInputsBtn').addEventListener('click', function () {
+        document.getElementById('resultsSection').classList.remove('visible');
+        document.getElementById('formSection').style.display = '';
+        // Reset stepper
+        document.getElementById('stepper').className = 'stepper profile-active';
+        document.getElementById('stepProfile').className = 'step active';
+        document.getElementById('stepResults').className = 'step';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // ===== Submit =====
+      document.getElementById('ballparkForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        showError('');
+
+        var age = parseInt(document.getElementById('age').value, 10);
+        var retirementAge = parseInt(document.getElementById('retirementAge').value, 10);
+        var ssClaimAge = parseInt(document.getElementById('ssClaimAge').value, 10);
+        var state = document.getElementById('state').value;
+        var currentSalary = parseFloat(document.getElementById('currentSalary').value);
+        var currentSavings = parseFloat(document.getElementById('currentSavings').value);
+        var contributionRatePct = parseFloat(document.getElementById('contributionRate').value);
+        var monthlyPensionRaw = document.getElementById('monthlyPension').value;
+        var monthlyPension = monthlyPensionRaw === '' ? 0 : parseFloat(monthlyPensionRaw);
+        var ssFraRaw = document.getElementById('ssMonthlyFRA').value;
+        var ssMonthlyFRA = ssFraRaw === '' ? 0 : Math.max(0, parseFloat(ssFraRaw) || 0);
+        var customSpendOverrideRaw = document.getElementById('customSpendOverride').value;
+        var customSpendOverride = customSpendOverrideRaw.trim() === '' ? null : parseFloat(customSpendOverrideRaw);
+
+        if (!Number.isFinite(age) || age < 35 || age > 80) { showError('Enter a current age between 35 and 80.'); return; }
+        if (!Number.isFinite(retirementAge) || retirementAge < 35 || retirementAge > 80) { showError('Enter a retirement age between 35 and 80 (use the age you retired if already retired).'); return; }
+        if (filing === null) { showError('Choose a filing status.'); return; }
+
+        // Spouse fields required when MFJ
+        var spouseAge = null;
+        var spouseRetirementAge = null;
+        var spouseSsClaimAge = null;
+        if (filing === 'mfj') {
+          spouseAge = parseInt(document.getElementById('spouseAge').value, 10);
+          spouseRetirementAge = parseInt(document.getElementById('spouseRetirementAge').value, 10);
+          spouseSsClaimAge = parseInt(document.getElementById('spouseSsClaimAge').value, 10);
+          if (!Number.isFinite(spouseAge) || spouseAge < 35 || spouseAge > 80) {
+            showError("Enter your spouse's current age between 35 and 80."); return;
+          }
+          if (!Number.isFinite(spouseRetirementAge) || spouseRetirementAge < 35 || spouseRetirementAge > 80) {
+            showError("Enter your spouse's retirement age between 35 and 80 (use the age they retired if already retired)."); return;
+          }
+        }
+
+        if (!state) { showError('Choose your state.'); return; }
+        if (!Number.isFinite(currentSalary) || currentSalary < 0) { showError('Enter your current annual salary.'); return; }
+        if (!Number.isFinite(currentSavings) || currentSavings < 0) { showError('Enter your current retirement savings.'); return; }
+        if (!Number.isFinite(contributionRatePct) || contributionRatePct < 0 || contributionRatePct > 50) { showError('Enter a contribution rate between 0 and 50 (%).'); return; }
+        if (!Number.isFinite(monthlyPension) || monthlyPension < 0) { showError('Pension must be a non-negative number.'); return; }
+        if (customSpendOverride !== null && (!Number.isFinite(customSpendOverride) || customSpendOverride <= 0)) { showError('Enter a positive annual spending amount, or leave the override blank.'); return; }
+        if (selectedProfile === null && customSpendOverride === null) { showError('Pick a spending profile, or enter your own annual spending.'); return; }
+
+        // Send the engine the SAME dollar shown on the selected card (today's-dollars,
+        // projected from salary at real wage growth; Premium = 100%, uncapped). Falls
+        // back to the profile key if the dollar can't be computed (e.g. salary blank).
+        var _selP = null;
+        for (var _i = 0; _i < PROFILES.length; _i++) { if (PROFILES[_i].key === selectedProfile) { _selP = PROFILES[_i]; break; } }
+        var _projBase = projectedSalary(currentSalary, age, retirementAge);
+        var customSpending = (_selP && Number.isFinite(_projBase)) ? Math.round(_projBase * _selP.pct) : null;
+        if (customSpendOverride !== null) customSpending = Math.round(customSpendOverride);
+
+        var salaryGrowth     = parseFloat(document.getElementById('salaryGrowth').value)     / 100;
+        var preRetReturn     = parseFloat(document.getElementById('preRetReturn').value)     / 100;
+        var preRetInflation  = parseFloat(document.getElementById('preRetInflation').value)  / 100;
+        var postRetReturn    = parseFloat(document.getElementById('postRetReturn').value)    / 100;
+        var postRetInflation = parseFloat(document.getElementById('postRetInflation').value) / 100;
+        var planThroughAge = parseInt(document.getElementById('planThroughAge').value, 10);
+        if (!(planThroughAge >= 80 && planThroughAge <= 110)) planThroughAge = 100;
+
+        var btn = document.getElementById('submitBtn');
+        var orig = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Calculating…';
+
+        var reqBody = {
+            mode: 'ballpark',
+            age: age, retirementAge: retirementAge, ssClaimAge: ssClaimAge, filingStatus: filing,
+            spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge, spouseSsClaimAge: spouseSsClaimAge,
+            state: state,
+            currentSalary: currentSalary, currentSavings: currentSavings,
+            contributionRate: contributionRatePct / 100,
+            spendingProfile: customSpending != null ? 'custom' : selectedProfile, customSpending: customSpending, monthlyPension: monthlyPension,
+            salaryGrowth: salaryGrowth, preRetReturn: preRetReturn, preRetInflation: preRetInflation,
+            postRetReturn: postRetReturn, postRetInflation: postRetInflation, targetEndAge: planThroughAge,
+            ssMonthlyFRA: ssMonthlyFRA
+        };
+
+        fetch('/api/optimize-quick', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reqBody)
+        }).then(function (r) {
+          if (r.status === 401) { window.location.href = '/login.html?next=' + encodeURIComponent('/ballpark.html'); return null; }
+          return r.json().then(function (j) { return { status: r.status, body: j }; });
+        }).then(function (out) {
+          if (out === null) return;
+          if (out.status !== 200) {
+            btn.disabled = false; btn.innerHTML = orig;
+            showError(out.body && out.body.message ? out.body.message : (out.body && out.body.error) || 'Something went wrong. Try again.');
+            return;
+          }
+          btn.disabled = false; btn.innerHTML = orig;
+          try {
+            sessionStorage.setItem('gh2_ballpark_last_result', JSON.stringify({
+              inputs: { age: age, retirementAge: retirementAge, filingStatus: filing,
+                        spouseAge: spouseAge, spouseRetirementAge: spouseRetirementAge,
+                        state: state,
+                        currentSalary: currentSalary, currentSavings: currentSavings,
+                        contributionRate: contributionRatePct / 100,
+                        spendingProfile: customSpending != null ? 'custom' : selectedProfile, customSpending: customSpending, monthlyPension: monthlyPension },
+              result: out.body, savedAt: Date.now()
+            }));
+          } catch (e) {}
+          renderResult(out.body);
+          if (window.__initPremium) { try { window.__initPremium(reqBody, out.body); } catch (e) {} }
+        }).catch(function () {
+          btn.disabled = false; btn.innerHTML = orig;
+          showError('Network error. Please try again.');
+        });
+      });
+    })();
+  </script>
+<script>
+/* Ballpark Premium — Stage 2 precision layer. Seeded from the user's own ballpark
+   inputs + result (no hardcoded sample). Center is anchored to the exact required
+   return Stage 1 displayed, so the two stages never disagree; Premium only adds the
+   band + per-field tighteners around it. GH2 EDGE™ · Patent Pending. */
+window.__initPremium = (function(){
+  var ROW_META = {
+    // All six render LOCKED. The household SEES every variable and what each is worth
+    // in precision, but resolves none of them at this tier — the lock is the upsell to
+    // Full profile. `opts` retained (unused while locked) so this is one-line reversible.
+    spouse:{kind:'lock',t1:"🔒 Spouse's income and Social Security",opts:['Select…','Similar earner','Lower earner','Not working']},
+    mix:{kind:'lock',t1:'🔒 Account mix (pre-tax / Roth / taxable)',opts:['Select…','Mostly pre-tax','Even split','Mostly Roth']},
+    other:{kind:'lock',t1:'🔒 Other retirement income',opts:['Select…','None','Some ($10–30k)','Meaningful ($30k+)']},
+    roth:{kind:'lock',t1:'🔒 Roth conversion modeling'},
+    ssopt:{kind:'lock',t1:'🔒 Social Security claiming optimizer'},
+    hcltc:{kind:'lock',t1:'🔒 Healthcare and long-term care'}
+  };
+  // Founder-set order. NOT sorted by tightening size — this is the sequence a planner
+  // works the household in, so it stays fixed regardless of each row's measured value.
+  // spouse leads: it is the household-structure question everything else depends on, and
+  // for MFJ it is usually the largest single unknown. It self-labels "not applicable" for
+  // single filers rather than showing a fabricated zero.
+  var ORDER=['spouse','ssopt','hcltc','mix','roth','other'];
+  var MODEL=null, locked={}, AXIS={lo:3,hi:11}, REQ={};
+  function $(id){return document.getElementById(id);}
+  function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+  function pctToX(p){return ((p-AXIS.lo)/(AXIS.hi-AXIS.lo))*100;}
+  function tier(pp){var g=pp-MODEL.expected;return g<=0?'well funded':g<=1?'conservative':g<=2?'moderate':g<=3?'aggressive':'extremely aggressive';}
+  function render(){
+    // NOTE ON `locked`: at the Ballpark tier nothing is resolvable, so `locked` stays empty
+    // for the life of the panel — the band renders at full RSS width and Precision holds at
+    // the 71% "Ballpark" tick. The shrink path below is intentionally KEPT INTACT but
+    // UNREACHABLE here: it is the Full-profile tier's math, and it is the same code that
+    // proves the ±X% per-field figures are real rather than decorative. Do not read this as
+    // a control the user can reach at this tier — no row writes to `locked` (see buildRows).
+    var rss2=0,i,k;
+    for(i=0;i<ORDER.length;i++){k=ORDER[i];if(!(k in locked))rss2+=MODEL.fields[k]*MODEL.fields[k];}
+    var half=Math.max(MODEL.floor,Math.sqrt(rss2));
+    var lo=clamp(MODEL.center-half,0,30),hi=Math.max(lo,clamp(MODEL.center+half,0,30));
+    $('ppRrlo').textContent=lo.toFixed(1)+'%';$('ppRrhi').textContent=hi.toFixed(1)+'%';
+    var xl=pctToX(lo),xr=pctToX(hi),b=$('ppBandhi');
+    b.style.left=clamp(xl,0,100)+'%';b.style.width=clamp(xr-xl,0,100)+'%';
+    var resolvedT=0,kk;for(kk in locked)resolvedT+=locked[kk];
+    var base=71,span=100-base,prog=MODEL.totalT>0?resolvedT/MODEL.totalT:0,pct=Math.round(base+span*prog);
+    $('ppPct').textContent=pct+'%';$('ppBar').style.width=pct+'%';
+    var flips=tier(lo)!==tier(hi),wb=$('ppWarnbox');
+    if(flips){wb.classList.remove('pp-hidden');$('ppWarn').textContent='Your feasibility verdict flips inside this range ('+tier(lo)+' → '+tier(hi)+').';}
+    else wb.classList.add('pp-hidden');
+  }
+  function buildRows(){
+    var host=$('ppRows');host.innerHTML='';
+    ORDER.forEach(function(key){
+      // EVERY variable renders LOCKED at this tier. The user sees all six unknowns and what
+      // each one is worth in precision — that measured ±X% IS the product being sold here —
+      // but cannot resolve any of them. Resolution is the Full-profile tier (tick strip above).
+      // Nothing here writes to `locked`: these rows are un-settable by design, not by omission.
+      // ROW_META.opts is deliberately unused at this tier — retained for Full profile, which
+      // is where those choices actually get made.
+      var meta=ROW_META[key],t=MODEL.fields[key]||0,zero=t<=0;
+      // A variable that cannot apply to this household at all (spouse row, single filer).
+      var na=(key==='spouse'&&MODEL.filingStatus!=='mfj');
+      var row=document.createElement('div');row.className='pp-row pp-locked';
+      var txt=document.createElement('div');txt.className='pp-txt';
+      var t1=document.createElement('div');t1.className='pp-t1';
+      // ROW_META already prefixes the three original lock rows; prefix the rest so all six match.
+      t1.textContent=(meta.t1.charAt(0)==='\uD83D'?meta.t1:'🔒 '+meta.t1);
+      var t2=document.createElement('div');t2.className='pp-t2';
+      if(na)        t2.textContent='Not applicable — you filed as single';
+      else if(zero) t2.textContent="Doesn't change your number for this household";
+      else          t2.innerHTML='Tightens range by <b>±'+t.toFixed(1)+'%</b>';
+      txt.appendChild(t1);txt.appendChild(t2);row.appendChild(txt);
+      // A variable worth nothing for this household is not an upsell — state the fact and show
+      // no CTA. Only variables that would actually buy precision carry the Full-profile
+      // affordance, so the tease is never manufactured.
+      if(!zero&&!na){
+        var cta=document.createElement('div');cta.className='pp-fp pp-fp-locked';
+        cta.setAttribute('aria-disabled','true');
+        cta.textContent='🔒 Unlock with Full profile';
+        row.appendChild(cta);
+      }
+      host.appendChild(row);
+    });
+  }
+  function chrome(on){
+    ['ppBandRow','ppScaleRow','ppNoteRow','ppRows'].forEach(function(id){$(id).style.display=on?'':'none';});
+    $('ppDash').style.display=on?'':'none';$('ppRrhi').style.display=on?'':'none';$('ppU').style.display=on?'':'none';
+    $('ppInfeasible').style.display=on?'none':'block';
+  }
+  function paintFeasible(prem,anchorPP,mixPP){
+    chrome(true);
+    var fields={},totalT=0;(prem.fields||[]).forEach(function(f){fields[f.key]=f.tighten;totalT+=Math.max(0,f.tighten);});
+    var bh=(prem.bandHigh!=null?prem.bandHigh:anchorPP),bl=(prem.bandLow!=null?prem.bandLow:anchorPP);
+    var half=Math.max(0,(bh-bl)/2);
+    MODEL={center:anchorPP,expected:mixPP,floor:prem.floor||0.2,fields:fields,totalT:totalT,filingStatus:REQ.filingStatus};
+    AXIS.lo=clamp(Math.floor(anchorPP-half-1),0,30);AXIS.hi=clamp(Math.ceil(anchorPP+half+1),0,30);
+    if(AXIS.hi-AXIS.lo<4)AXIS.hi=Math.min(30,AXIS.lo+4);
+    $('ppSl').textContent=AXIS.lo+'%';$('ppSm').textContent=Math.round((AXIS.lo+AXIS.hi)/2)+'%';$('ppSh').textContent=AXIS.hi+'%';
+    $('ppRrcenter').textContent='Your ballpark: '+anchorPP.toFixed(1)+'%/yr — the range is how far that could move as the locked inputs resolve.';
+    buildRows();render();
+  }
+  function paintInfeasible(){
+    chrome(false);$('ppWarnbox').classList.add('pp-hidden');
+    $('ppRrlo').textContent='30%+';$('ppRrcenter').textContent='';$('ppPct').textContent='—';$('ppBar').style.width='0%';
+    $('ppInfeasible').textContent="At these inputs the plan isn't fundable at a realistic return, so there's no range to tighten yet. The precision layer sharpens feasible plans — spend less, work longer, or add savings above and it will pinpoint your number.";
+  }
+  function pills(req){
+    var host=$('ppPills');host.innerHTML='';
+    var items=['Age '+req.age, req.filingStatus==='mfj'?'Married':'Single'];
+    if(req.currentSavings!=null)items.push('$'+Math.round(req.currentSavings/1000)+'k saved');
+    if(req.customSpending!=null)items.push('$'+Math.round(req.customSpending/1000)+'k spend');
+    if(req.state)items.push(req.state);
+    var shown=items.slice(0,4),extra=items.length-shown.length;
+    shown.forEach(function(x){var s=document.createElement('span');s.className='pp-pill';s.textContent='✓ '+x;host.appendChild(s);});
+    if(extra>0){var e=document.createElement('span');e.className='pp-pill';e.textContent='✓ +'+extra+' more';host.appendChild(e);}
+  }
+  return function(reqBody,ballparkBody){
+    locked={};REQ=reqBody||{};
+    var panel=$('premiumPanel');panel.hidden=false;
+    // Fold the full ballpark result (verdict, ring, required return, gap, levers, assumptions)
+    // into the precision panel, and hide the rest of the standalone result section. On Ballpark
+    // Premium the precision panel is the single, complete deliverable.
+    var hero=$('resultHero'),host=$('ppResultHost'),rs=$('resultsSection');
+    if(hero&&host&&hero.parentNode!==host){host.innerHTML='';host.appendChild(hero);hero.style.margin='16px 0 2px';}
+    if(rs)rs.style.display='none';
+    $('ppRows').innerHTML='<div class="pp-loading">Computing your sensitivity…</div>';
+    pills(reqBody);
+    setTimeout(function(){panel.scrollIntoView({behavior:'smooth',block:'start'});},80);
+    var irr=Number(ballparkBody.requiredIRR);
+    var anchorPP=clamp((isFinite(irr)?irr:0)*100,0,30);
+    var mixFrac=Number(ballparkBody.expectedPortfolioReturn);
+    var mixPP=(isFinite(mixFrac)&&mixFrac>0)?mixFrac*100:0;
+    // Always render the full precision layout (rows + band), feasible or not.
+    var body=Object.assign({},reqBody,{mode:'premium'});
+    fetch('/api/optimize-quick',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      .then(function(r){if(!r.ok)throw 0;return r.json();})
+      .then(function(prem){paintFeasible(prem||{},anchorPP,mixPP>0?mixPP:(Number((prem||{}).expectedPortfolioReturn)||anchorPP));})
+      .catch(function(){paintFeasible({fields:[]},anchorPP,mixPP||anchorPP);});
+  };
+})();
+</script>
+<script>try{history.scrollRestoration="manual";}catch(e){}addEventListener("load",function(){window.scrollTo(0,0);});</script>
+</body>
+</html>
