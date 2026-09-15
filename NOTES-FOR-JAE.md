@@ -50,6 +50,19 @@ honest options: (a) define the comparison on a basis where EDGE leads from
 day one (lifetime value rather than dollars-kept-to-date), or (b) keep the
 basis and accept the early dip, with the rows matching. Front-end will
 follow whichever you pick; please don't leave it to the chart to fake.
+
+**IMPORTANT (Paul, Sept 14) — the Net Outcome Trend must reflect the tier.**
+The projection EDGE draws for a member has to be computed from what that
+member's tier actually does, not one curve for everyone. Quick Check runs on
+numbers the member types in and re-runs only when they do, so its projection
+should carry the lower efficacy of a plan that is checked occasionally.
+Autopilot re-runs on every market move, rule change, and life event with
+linked accounts, so its curve should sit higher. Concierge adds the four
+proprietary strategies on top, so higher again. Same household, three
+different "EDGE" lines, and the dashboard shows the one for the member's tier.
+This is also the honest basis for the upgrade prompts: the gap between the
+tiers is the pitch. Front-end needs nothing new for it — `comparison.series`
+per tier is enough — but the engine has to produce it.
 Standing rule from Paul: whenever EDGE shows behind (a negative window row
 or the conventional line above EDGE), the card shows an amber asterisk note
 explaining why in one sentence. The current wording assumes the reason is
@@ -193,10 +206,12 @@ dashboard, the profile form with "Save & re-run", Ask EDGE, Jae's Corner, the
 PDF. What it does NOT get is anything that needs connectors or automatic work:
 linked accounts, re-runs on market moves / rule changes / life events, the
 email alert when the answer changes, the ranked strategies, the change feed,
-and the heat map. Those are Autopilot and up. On Quick Check the heat map page
-still loads and computes, then blurs behind an upgrade veil, so people see
-what they are missing. Same on the dashboard for the heat-map card, the change
-feed, and the rankings. Tier bullets on pricing.html and results.html say the
+and the heat map's detail. Those are Autopilot and up. On Quick Check the heat
+map is fully open: every tile shows its colour and its status (AT RISK / NEEDS
+ATTENTION / ON TRACK), and the numbers and labels on the tile are blurred, with
+one line under the header pointing at Autopilot. The dashboard's heat-map card
+works the same way (dots and colours visible, words blurred); the change feed
+and the rankings are veiled. Tier bullets on pricing.html and results.html say the
 same thing. Engine side: Quick Check members will need the profile endpoint
 (`POST /api/profile` + a re-run) but never a connector.
 

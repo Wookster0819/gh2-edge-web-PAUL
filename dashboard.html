@@ -514,6 +514,8 @@
 
     /* Locked preview (lower tiers) */
     .locked { position: relative; overflow: hidden; }
+    /* Quick Check: heat-map rows keep their dot and colour; titles and subs blur (Paul, Sept 14). */
+    .tier-blur .hot-title, .tier-blur .hot-sub { filter: blur(5px); user-select: none; }
     .locked .veil { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; background: linear-gradient(180deg, rgba(10,14,26,0.35), rgba(10,14,26,0.85)); border-radius: 16px; }
     .locked .veil .lk { width: 38px; height: 38px; border-radius: 50%; background: var(--card-bg-2); border: 1px solid var(--border); display: grid; place-items: center; margin: 0 auto 10px; color: var(--text-dim); }
     .locked .veil .lk svg { width: 16px; height: 16px; }
@@ -1010,6 +1012,10 @@
       document.getElementById('checkinLink').href = DATA.nextCheckin.href;
 
       // ===== Net outcome trend =====
+      // Jae — IMPORTANT (Paul, Sept 14): this projection must be computed per tier. Quick Check
+      // (typed-in numbers, re-run by hand) has lower efficacy than Autopilot (linked accounts,
+      // automatic re-runs), which has lower efficacy than Concierge (plus the four proprietary
+      // strategies). Send comparison.series for the member's tier; the chart draws what it gets.
       // The rows are EDGE's extra kept-dollars vs a conventional plan at each
       // horizon — say so, in plain words, before the numbers.
       // Windows roll with the calendar: "next year" is always the year ahead
@@ -1283,7 +1289,8 @@
           // Quick Check (Paul, Sept 14): the full plan on the numbers you type in yourself. Everything is
           // computed and shown; only what needs connectors or automatic re-runs is blurred behind a veil.
           quick.style.display = 'none';
-          lockSection(document.querySelector('[aria-label="What\'s hot right now"]'), 'Heat map', 'Autopilot and up. Your seven regimes are computed on your numbers.');
+          // The heat-map card stays open and clickable; the words on each row blur, the colours stay.
+          var hotCard = document.querySelector('[aria-label="What\'s hot right now"]'); if (hotCard) hotCard.classList.add('tier-blur');
         }
 
         // Autopilot / Concierge: change feed + rankings
