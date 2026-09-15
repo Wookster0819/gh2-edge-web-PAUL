@@ -1316,9 +1316,11 @@
         });
         document.getElementById('strategiesCard').innerHTML = rk + '</tbody></table><a class="foot-link" href="#strategies">See all 80 strategies \u2192</a>';
         if (TIER === 1) {
-          // Quick Check pays too: no veil. Dates, chips, rank numbers, and status stay readable;
-          // only the specifics (what changed, the dollars, the strategy names) blur (Paul, Sept 14).
-          ['changedCard', 'strategiesCard'].forEach(function (id) {
+          // Quick Check pays too: no veil. The ranked strategies are fully open (the four Concierge
+          // proprietary rows blur for every tier below Concierge, as before). On the change feed the
+          // dates and chips stay readable; the specifics blur, because the feed is what automatic
+          // re-runs produce (Paul, Sept 14).
+          ['changedCard'].forEach(function (id) {
             var card = document.getElementById(id); if (!card) return;
             card.classList.add('tier-blur');
             var lbl = card.querySelector('.card-label');
