@@ -158,6 +158,11 @@
     }
     .tw-upgrade:hover { transform: translateY(-1px); box-shadow: 0 10px 26px rgba(139,92,246,0.5); }
     .trend-row .v.pos { color: #4ADE80; }
+    .ap-tease { margin-top: 12px; padding: 10px 14px 4px; border-radius: 12px; background: var(--accent-purple-soft); border: 1px solid rgba(139,92,246,0.35); }
+    .ap-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+    .ap-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #fff; background: var(--accent-purple); padding: 2px 8px; border-radius: 999px; }
+    .ap-tease .trend-row { border-color: rgba(139,92,246,0.25); }
+    .ap-tease .trend-row .v.ap { color: #C4B5FD; }
     .trend-legend { display: flex; flex-wrap: wrap; gap: 5px 18px; margin-top: 8px; font-size: 12px; color: var(--text-muted); align-items: center; }
     .tl-item { display: inline-flex; align-items: center; gap: 7px; white-space: nowrap; }
     .tl-swatch { width: 17px; height: 0; border-top: 2.5px solid #A78BFA; display: inline-block; }
@@ -1148,10 +1153,36 @@
             msg = 'Coordination bought ' + cmp.yearsGained + ' more year' + (cmp.yearsGained === 1 ? '' : 's') +
               ' of funded retirement, through ' + cmp.edgeFundedThrough + '. ';
           }
-          // The tier hook, Founder-ruled: LTSS pricing is the next tier's work.
-          // Accent asterisk marks it as the upgrade item.
-          var hook = 'Long-term care is not yet priced into this plan. Pricing it in — and planning through it — is what the next tier adds.';
-          tw.innerHTML = (msg ? msg.replace(/</g, '&lt;') : '') + '<span class="tw-star">*</span>' + hook;
+          var upBtn = tw.parentElement.querySelector('.tw-upgrade');
+          var safeMsg = msg ? msg.replace(/</g, '&lt;') : '';
+          if (TIER === 1) {
+            // Quick Check (Paul, Sept 14): the projection they see is the manual-tier one. Show what
+            // the same household does on Autopilot, as the reason to upgrade.
+            // Jae: send comparison.tiers.autopilot.outcomes (same shape as outcomes) computed with
+            // Autopilot's efficacy. Until then the tease scales the Quick Check rows (sample only).
+            var apo = (cmp.tiers && cmp.tiers.autopilot && cmp.tiers.autopilot.outcomes) ||
+              DATA.outcomes.map(function (o) { return { label: o.label, value: Math.round(o.value * 1.45) }; });
+            var tease = '<div class="ap-tease"><div class="ap-head"><span class="ap-tag">Autopilot</span><span>Same household, re-run for you automatically</span></div>';
+            apo.forEach(function (o) {
+              var sign = o.value > 0 ? '+' : (o.value < 0 ? '−' : '');
+              tease += '<div class="trend-row"><span class="k">' + (ROW_LABELS[o.label] || o.label) + '</span><span class="v ap">' + sign + fmtK(Math.abs(o.value)) + '</span></div>';
+            });
+            tease += '</div>';
+            var hookEl = tw.parentElement; hookEl.insertAdjacentHTML('beforebegin', tease);
+            tw.innerHTML = safeMsg + 'This is your Quick Check projection, run on the numbers you typed in and re-run when you update them. On Autopilot, EDGE links your accounts and re-runs the plan on every market move, rule change, and life event.';
+            if (upBtn) upBtn.innerHTML = 'Upgrade to Autopilot <span aria-hidden="true">&rarr;</span>';
+          } else if (TIER === 2) {
+            // The tier hook, Founder-ruled: LTSS pricing is the next tier's work.
+            // Accent asterisk marks it as the upgrade item.
+            var hook = 'Long-term care is not yet priced into this plan. Pricing it in — and planning through it — is what the next tier adds.';
+            tw.innerHTML = safeMsg + '<span class="tw-star">*</span>' + hook;
+            if (upBtn) upBtn.innerHTML = 'Upgrade to Concierge <span aria-hidden="true">&rarr;</span>';
+          } else {
+            // Concierge: nothing above it to sell (Paul, Sept 14).
+            tw.innerHTML = safeMsg;
+            if (upBtn) upBtn.style.display = 'none';
+            if (!safeMsg) tw.parentElement.style.display = 'none';
+          }
         }
       })();
 
@@ -1296,8 +1327,6 @@
           // Quick Check (Paul, Sept 14): the full plan on the numbers you type in yourself. Everything is
           // computed and shown; only what needs connectors or automatic re-runs is blurred behind a veil.
           quick.style.display = 'none';
-          // The heat-map card stays open and clickable; the words on each row blur, the colours stay.
-          var hotCard = document.querySelector('[aria-label="What\'s hot right now"]'); if (hotCard) hotCard.classList.add('tier-blur');
         }
 
         // Autopilot / Concierge: change feed + rankings

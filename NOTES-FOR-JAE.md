@@ -201,22 +201,28 @@ form is a small addition.
 
 ## 1e. Quick Check is the manual tier (Paul, Sept 14, after the PR went up)
 
-Quick Check = the full plan on numbers the member types in themselves: the
-dashboard, the profile form with "Save & re-run", Ask EDGE, Jae's Corner, the
-PDF. What it does NOT get is anything that needs connectors or automatic work:
-linked accounts, re-runs on market moves / rule changes / life events, the
-email alert when the answer changes, the change feed, and the heat map's
-detail. The ranked strategies are open on every tier (the four Concierge
-rows stay blurred below Concierge, as before). Those are Autopilot and up. On Quick Check the heat
-map is fully open: every tile shows its colour and its status (AT RISK / NEEDS
-ATTENTION / ON TRACK), and the numbers and labels on the tile are blurred, with
-one line under the header pointing at Autopilot. The dashboard's attention card
-works the same way (dots and colours visible, words blurred). The change feed
-is fully open with a note that on Quick Check it grows only when the member
-updates their info and re-runs, and that Autopilot does that for them.
-Nothing is veiled. Tier bullets on pricing.html and results.html say the
-same thing. Engine side: Quick Check members will need the profile endpoint
-(`POST /api/profile` + a re-run) but never a connector.
+Quick Check = the whole standard product on numbers the member types in
+themselves: dashboard, heat map, attention list, ranked strategies, change
+feed, profile form with "Save & re-run", PDF, Ask EDGE, Jae's Corner. Nothing
+is veiled or blurred except the four Concierge rows in the rankings (as on
+Autopilot). What Quick Check does NOT get is anything automatic: linked
+accounts, re-runs on market moves / rule changes / life events, and the email
+alert when the answer changes. The member has to do all of that by hand, and
+the pages say so in one quiet line each (heat map header, change feed foot,
+profile alerts).
+
+The sell is the Net Outcome Trend. On Quick Check the trend card shows the
+member's own projection, then an "Autopilot — same household, re-run for you
+automatically" block with the three horizons at Autopilot's efficacy. Send
+`comparison.tiers.autopilot.outcomes` (same shape as `outcomes`); until you
+do, the front-end scales the Quick Check rows by 1.45 as a sample. See the
+IMPORTANT note in section 0: the projection itself must be computed per tier.
+The trend card's upgrade hook is now tier-aware: Quick Check sees the
+Autopilot tease, Autopilot sees the long-term-care hook for Concierge, and
+Concierge sees no upgrade button at all.
+
+Engine side: Quick Check members need the profile endpoint (`POST
+/api/profile` + a re-run) but never a connector.
 
 ## 1d. Small things fixed in the final check (Sept 14 evening)
 
