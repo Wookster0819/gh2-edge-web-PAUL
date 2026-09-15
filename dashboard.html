@@ -516,6 +516,10 @@
     .locked { position: relative; overflow: hidden; }
     /* Quick Check: heat-map rows keep their dot and colour; titles and subs blur (Paul, Sept 14). */
     .tier-blur .hot-title, .tier-blur .hot-sub { filter: blur(5px); user-select: none; }
+    .tier-blur .feed .t, .tier-blur .feed .s, .tier-blur .feed .amt, .tier-blur .ledger .big,
+    .tier-blur .rank .name, .tier-blur .rank .imp { filter: blur(5px); user-select: none; }
+    .tier-tag { margin-left: 10px; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-purple); background: var(--accent-purple-soft); border: 1px solid rgba(139,92,246,0.35); padding: 2px 8px; border-radius: 999px; text-decoration: none; vertical-align: middle; }
+    .tier-tag:hover { background: rgba(139,92,246,0.25); }
     .locked .veil { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; padding: 24px; background: linear-gradient(180deg, rgba(10,14,26,0.35), rgba(10,14,26,0.85)); border-radius: 16px; }
     .locked .veil .lk { width: 38px; height: 38px; border-radius: 50%; background: var(--card-bg-2); border: 1px solid var(--border); display: grid; place-items: center; margin: 0 auto 10px; color: var(--text-dim); }
     .locked .veil .lk svg { width: 16px; height: 16px; }
@@ -1312,8 +1316,14 @@
         });
         document.getElementById('strategiesCard').innerHTML = rk + '</tbody></table><a class="foot-link" href="#strategies">See all 80 strategies \u2192</a>';
         if (TIER === 1) {
-          lockSection(document.getElementById('changedCard'), 'What changed since your last visit', 'Autopilot re-runs your plan on every market move, rule change, and life event.');
-          lockSection(document.getElementById('strategiesCard'), 'Your strategies, ranked', 'Autopilot ranks all 80 strategies for your household.');
+          // Quick Check pays too: no veil. Dates, chips, rank numbers, and status stay readable;
+          // only the specifics (what changed, the dollars, the strategy names) blur (Paul, Sept 14).
+          ['changedCard', 'strategiesCard'].forEach(function (id) {
+            var card = document.getElementById(id); if (!card) return;
+            card.classList.add('tier-blur');
+            var lbl = card.querySelector('.card-label');
+            if (lbl) lbl.insertAdjacentHTML('beforeend', '<a class="tier-tag" href="pricing.html" title="Autopilot re-runs your plan and ranks all 80 strategies">Autopilot &rarr;</a>');
+          });
         }
       }
 
