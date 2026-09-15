@@ -377,3 +377,4 @@ bullets. If LTC stays Concierge, nothing changes.
   preference.
 
 *Questions → Paul.*
+- results.html lock chips read "Members" (Sept 15): every locked item on the results page unlocks with any paid tier, including Quick Check, so the chips no longer name Autopilot.
